@@ -44,31 +44,31 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity omsp_clock_mux is
   port (
-    clk_out   : out std_ulogic;
-    clk_in0   : in  std_ulogic;
-    clk_in1   : in  std_ulogic;
-    reset     : in  std_ulogic;
-    scan_mode : in  std_ulogic;
-    selection : in  std_ulogic);
+    clk_out   : out std_logic;
+    clk_in0   : in  std_logic;
+    clk_in1   : in  std_logic;
+    reset     : in  std_logic;
+    scan_mode : in  std_logic;
+    selection : in  std_logic);
 end omsp_clock_mux;
 
 architecture omsp_clock_mux_ARQ of omsp_clock_mux is
 
-  signal in0_select    : std_ulogic;
-  signal in0_select_s  : std_ulogic;
-  signal in0_select_ss : std_ulogic;
-  signal in0_enable    : std_ulogic;
+  signal in0_select    : std_logic;
+  signal in0_select_s  : std_logic;
+  signal in0_select_ss : std_logic;
+  signal in0_enable    : std_logic;
 
-  signal in1_select    : std_ulogic;
-  signal in1_select_s  : std_ulogic;
-  signal in1_select_ss : std_ulogic;
-  signal in1_enable    : std_ulogic;
+  signal in1_select    : std_logic;
+  signal in1_select_s  : std_logic;
+  signal in1_select_ss : std_logic;
+  signal in1_enable    : std_logic;
 
-  signal clk_in0_inv : std_ulogic;
-  signal clk_in1_inv : std_ulogic;
+  signal clk_in0_inv : std_logic;
+  signal clk_in1_inv : std_logic;
 
-  signal gated_clk_in0 : std_ulogic;
-  signal gated_clk_in1 : std_ulogic;
+  signal gated_clk_in0 : std_logic;
+  signal gated_clk_in1 : std_logic;
 
 begin
   --CLK_IN0 Selection

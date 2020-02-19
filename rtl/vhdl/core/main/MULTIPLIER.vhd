@@ -46,22 +46,22 @@ use WORK.MSP430_PACK .all;
 
 entity MULTIPLIER is
   port (
-    scan_enable : in std_ulogic;
+    scan_enable : in std_logic;
 
-    per_dout : out std_ulogic_vector (15 downto 0);
-    mclk     : in  std_ulogic;
-    per_en   : in  std_ulogic;
-    puc_rst  : in  std_ulogic;
-    per_we   : in  std_ulogic_vector (1 downto 0);
-    per_addr : in  std_ulogic_vector (13 downto 0);
-    per_din  : in  std_ulogic_vector (15 downto 0));
+    per_dout : out std_logic_vector (15 downto 0);
+    mclk     : in  std_logic;
+    per_en   : in  std_logic;
+    puc_rst  : in  std_logic;
+    per_we   : in  std_logic_vector (1 downto 0);
+    per_addr : in  std_logic_vector (13 downto 0);
+    per_din  : in  std_logic_vector (15 downto 0));
 end MULTIPLIER;
 
 architecture MULTIPLIER_ARQ of MULTIPLIER is
 
   --0.          PARAMETER_DECLARATION
   --0.1.                Register base address (must be aligned to decoder bit width)
-  constant BASE_ADDR_M : std_ulogic_vector (14 downto 0) := "000000100110000";
+  constant BASE_ADDR_M : std_logic_vector (14 downto 0) := "000000100110000";
 
   --0.2.                Decoder bit width (defines how many bits are considered for address decoding)
   constant DEC_WD_M : integer := 4;
@@ -76,138 +76,138 @@ architecture MULTIPLIER_ARQ of MULTIPLIER is
   constant RESHIC   : integer := 12;
   constant SUMEXTC  : integer := 14;
 
-  constant OP1_MPYB  : std_ulogic_vector (DEC_WD_M - 1 downto 0) := std_ulogic_vector(to_unsigned(OP1_MPY, DEC_WD_M));
-  constant OP1_MPYSB : std_ulogic_vector (DEC_WD_M - 1 downto 0) := std_ulogic_vector(to_unsigned(OP1_MPYS, DEC_WD_M));
-  constant OP1_MACB  : std_ulogic_vector (DEC_WD_M - 1 downto 0) := std_ulogic_vector(to_unsigned(OP1_MAC, DEC_WD_M));
-  constant OP1_MACSB : std_ulogic_vector (DEC_WD_M - 1 downto 0) := std_ulogic_vector(to_unsigned(OP1_MACS, DEC_WD_M));
-  constant OP2CB     : std_ulogic_vector (DEC_WD_M - 1 downto 0) := std_ulogic_vector(to_unsigned(OP2C, DEC_WD_M));
-  constant RESLOCB   : std_ulogic_vector (DEC_WD_M - 1 downto 0) := std_ulogic_vector(to_unsigned(RESLOC, DEC_WD_M));
-  constant RESHICB   : std_ulogic_vector (DEC_WD_M - 1 downto 0) := std_ulogic_vector(to_unsigned(RESHIC, DEC_WD_M));
-  constant SUMEXTCB  : std_ulogic_vector (DEC_WD_M - 1 downto 0) := std_ulogic_vector(to_unsigned(SUMEXTC, DEC_WD_M));
+  constant OP1_MPYB  : std_logic_vector (DEC_WD_M - 1 downto 0) := std_logic_vector(to_unsigned(OP1_MPY, DEC_WD_M));
+  constant OP1_MPYSB : std_logic_vector (DEC_WD_M - 1 downto 0) := std_logic_vector(to_unsigned(OP1_MPYS, DEC_WD_M));
+  constant OP1_MACB  : std_logic_vector (DEC_WD_M - 1 downto 0) := std_logic_vector(to_unsigned(OP1_MAC, DEC_WD_M));
+  constant OP1_MACSB : std_logic_vector (DEC_WD_M - 1 downto 0) := std_logic_vector(to_unsigned(OP1_MACS, DEC_WD_M));
+  constant OP2CB     : std_logic_vector (DEC_WD_M - 1 downto 0) := std_logic_vector(to_unsigned(OP2C, DEC_WD_M));
+  constant RESLOCB   : std_logic_vector (DEC_WD_M - 1 downto 0) := std_logic_vector(to_unsigned(RESLOC, DEC_WD_M));
+  constant RESHICB   : std_logic_vector (DEC_WD_M - 1 downto 0) := std_logic_vector(to_unsigned(RESHIC, DEC_WD_M));
+  constant SUMEXTCB  : std_logic_vector (DEC_WD_M - 1 downto 0) := std_logic_vector(to_unsigned(SUMEXTC, DEC_WD_M));
 
   --0.4.                Register one-hot decoder utilities
   constant DEC_SZ_M   : integer                                   := 2**DEC_WD_M;
-  constant BASE_REG_M : std_ulogic_vector (DEC_SZ_M - 1 downto 0) := std_ulogic_vector(to_unsigned(1, DEC_SZ_M));
+  constant BASE_REG_M : std_logic_vector (DEC_SZ_M - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_M));
 
   --0.5.                Register one-hot decoder
-  constant OP1_MPY_D  : std_ulogic_vector (DEC_SZ_M - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_M) sll OP1_MPY);
-  constant OP1_MPYS_D : std_ulogic_vector (DEC_SZ_M - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_M) sll OP1_MPYS);
-  constant OP1_MAC_D  : std_ulogic_vector (DEC_SZ_M - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_M) sll OP1_MAC);
-  constant OP1_MACS_D : std_ulogic_vector (DEC_SZ_M - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_M) sll OP1_MACS);
-  constant OP2C_D     : std_ulogic_vector (DEC_SZ_M - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_M) sll OP2C);
-  constant RESLOC_D   : std_ulogic_vector (DEC_SZ_M - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_M) sll RESLOC);
-  constant RESHIC_D   : std_ulogic_vector (DEC_SZ_M - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_M) sll RESHIC);
-  constant SUMEXTC_D  : std_ulogic_vector (DEC_SZ_M - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_M) sll SUMEXTC);
+  constant OP1_MPY_D  : std_logic_vector (DEC_SZ_M - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_M) sll OP1_MPY);
+  constant OP1_MPYS_D : std_logic_vector (DEC_SZ_M - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_M) sll OP1_MPYS);
+  constant OP1_MAC_D  : std_logic_vector (DEC_SZ_M - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_M) sll OP1_MAC);
+  constant OP1_MACS_D : std_logic_vector (DEC_SZ_M - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_M) sll OP1_MACS);
+  constant OP2C_D     : std_logic_vector (DEC_SZ_M - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_M) sll OP2C);
+  constant RESLOC_D   : std_logic_vector (DEC_SZ_M - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_M) sll RESLOC);
+  constant RESHIC_D   : std_logic_vector (DEC_SZ_M - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_M) sll RESHIC);
+  constant SUMEXTC_D  : std_logic_vector (DEC_SZ_M - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_M) sll SUMEXTC);
 
   --0.6.        Wire pre-declarations
-  signal result_wr  : std_ulogic;
-  signal result_clr : std_ulogic;
-  signal early_read : std_ulogic;
+  signal result_wr  : std_logic;
+  signal result_clr : std_logic;
+  signal early_read : std_logic;
 
   --1.  REGISTER_DECODER
   --1.1.        Local register selection
-  signal reg_sel_m : std_ulogic;
+  signal reg_sel_m : std_logic;
 
   --1.2.        Register local address
-  signal reg_addr_m : std_ulogic_vector (DEC_WD_M - 1 downto 0);
+  signal reg_addr_m : std_logic_vector (DEC_WD_M - 1 downto 0);
 
   --1.3.        Register address decode
-  signal reg_dec_m : std_ulogic_vector (DEC_SZ_M - 1 downto 0);
+  signal reg_dec_m : std_logic_vector (DEC_SZ_M - 1 downto 0);
 
   --1.4.        Read/Write probes
-  signal reg_write_m : std_ulogic;
-  signal reg_read_m  : std_ulogic;
+  signal reg_write_m : std_logic;
+  signal reg_read_m  : std_logic;
 
   --1.5.        Read/Write vectors
-  signal reg_wr_m : std_ulogic_vector (DEC_SZ_M - 1 downto 0);
-  signal reg_rd_m : std_ulogic_vector (DEC_SZ_M - 1 downto 0);
+  signal reg_wr_m : std_logic_vector (DEC_SZ_M - 1 downto 0);
+  signal reg_rd_m : std_logic_vector (DEC_SZ_M - 1 downto 0);
 
   --1.6.        Masked input data for byte access
-  signal per_din_msk : std_ulogic_vector (15 downto 0);
+  signal per_din_msk : std_logic_vector (15 downto 0);
 
   --2.  REGISTERS
   --2.1.        OP1 Register    
-  signal op_wr   : std_ulogic_vector (1 downto 0);
-  signal mclk_op : std_ulogic_vector (1 downto 0);
+  signal op_wr   : std_logic_vector (1 downto 0);
+  signal mclk_op : std_logic_vector (1 downto 0);
   signal op      : M_01_15;
   signal op_rd   : M_01_15;
 
   --2.2.        OP2C Register
 
   --2.3.        RESLOC Register
-  signal reslo_en   : std_ulogic;
-  signal reslo_wr   : std_ulogic;
-  signal mclk_reslo : std_ulogic;
-  signal reslo      : std_ulogic_vector (15 downto 0);
-  signal reslo_nxt  : std_ulogic_vector (15 downto 0);
-  signal reslo_rd   : std_ulogic_vector (15 downto 0);
+  signal reslo_en   : std_logic;
+  signal reslo_wr   : std_logic;
+  signal mclk_reslo : std_logic;
+  signal reslo      : std_logic_vector (15 downto 0);
+  signal reslo_nxt  : std_logic_vector (15 downto 0);
+  signal reslo_rd   : std_logic_vector (15 downto 0);
 
   --2.4.        RESHIC Register
-  signal reshi_en   : std_ulogic;
-  signal reshi_wr   : std_ulogic;
-  signal mclk_reshi : std_ulogic;
-  signal reshi      : std_ulogic_vector (15 downto 0);
+  signal reshi_en   : std_logic;
+  signal reshi_wr   : std_logic;
+  signal mclk_reshi : std_logic;
+  signal reshi      : std_logic_vector (15 downto 0);
 
-  signal reshi_nxt : std_ulogic_vector (15 downto 0);
-  signal reshi_rd  : std_ulogic_vector (15 downto 0);
+  signal reshi_nxt : std_logic_vector (15 downto 0);
+  signal reshi_rd  : std_logic_vector (15 downto 0);
 
   --2.5.        SUMEXTC Register
-  signal sumext_s     : std_ulogic_vector (1 downto 0);
-  signal sumext_s_nxt : std_ulogic_vector (1 downto 0);
-  signal sumext_nxt   : std_ulogic_vector (15 downto 0);
-  signal sumext       : std_ulogic_vector (15 downto 0);
-  signal sumext_rd    : std_ulogic_vector (15 downto 0);
+  signal sumext_s     : std_logic_vector (1 downto 0);
+  signal sumext_s_nxt : std_logic_vector (1 downto 0);
+  signal sumext_nxt   : std_logic_vector (15 downto 0);
+  signal sumext       : std_logic_vector (15 downto 0);
+  signal sumext_rd    : std_logic_vector (15 downto 0);
 
   --3.  DATA_OUTPUT_GENERATION
   --3.1.        Data output mux
-  signal op1_mux    : std_ulogic_vector (15 downto 0);
-  signal op2_mux    : std_ulogic_vector (15 downto 0);
-  signal reslo_mux  : std_ulogic_vector (15 downto 0);
-  signal reshi_mux  : std_ulogic_vector (15 downto 0);
-  signal sumext_mux : std_ulogic_vector (15 downto 0);
+  signal op1_mux    : std_logic_vector (15 downto 0);
+  signal op2_mux    : std_logic_vector (15 downto 0);
+  signal reslo_mux  : std_logic_vector (15 downto 0);
+  signal reshi_mux  : std_logic_vector (15 downto 0);
+  signal sumext_mux : std_logic_vector (15 downto 0);
 
   --4.  HARDWARE_MULTIPLIER_FUNCTIONAL_LOGIC
   --4.1.        Multiplier configuration        
   --Detect signed mode
-  signal sign_sel : std_ulogic;
+  signal sign_sel : std_logic;
 
   --Detect accumulate mode
-  signal acc_sel : std_ulogic;
+  signal acc_sel : std_logic;
 
   --Detect whenever the RESHIC and RESLOC registers should be cleared
 
   --Combine RESHIC & RESLOC
-  signal result : std_ulogic_vector (31 downto 0);
+  signal result : std_logic_vector (31 downto 0);
 
   --4.2.        16x16 Multiplier (result computed in 1 clock cycle1)
   --Detect start of a multiplication
-  signal cycle1 : std_ulogic;
+  signal cycle1 : std_logic;
 
   --Expand the operands to support signed & unsigned operations
-  signal op1_xp : std_ulogic_vector (16 downto 0);
-  signal op2_xp : std_ulogic_vector (16 downto 0);
+  signal op1_xp : std_logic_vector (16 downto 0);
+  signal op2_xp : std_logic_vector (16 downto 0);
 
   --17x17 signed multiplication
-  signal product1 : std_ulogic_vector (33 downto 0);
+  signal product1 : std_logic_vector (33 downto 0);
 
   --Accumulate
-  signal result_nxt : std_ulogic_vector (32 downto 0);
+  signal result_nxt : std_logic_vector (32 downto 0);
 
   --Next register values        
   --Since the MAC is completed within 1 clock cycle1, an early read can't happen
 
   --4.3.        16x8 Multiplier (result computed in 2 clock cycle1s)
   --Detect start of a multiplication
-  signal cycle2 : std_ulogic_vector (1 downto 0);
+  signal cycle2 : std_logic_vector (1 downto 0);
 
   --Expand the operands to support signed & unsigned operations
-  signal op2_hi_xp : std_ulogic_vector (8 downto 0);
-  signal op2_lo_xp : std_ulogic_vector (8 downto 0);
-  signal op2_xp9   : std_ulogic_vector (8 downto 0);
+  signal op2_hi_xp : std_logic_vector (8 downto 0);
+  signal op2_lo_xp : std_logic_vector (8 downto 0);
+  signal op2_xp9   : std_logic_vector (8 downto 0);
 
   --17x9 signed multiplication
-  signal product2   : std_ulogic_vector (25 downto 0);
-  signal product_xp : std_ulogic_vector (31 downto 0);
+  signal product2   : std_logic_vector (25 downto 0);
+  signal product_xp : std_logic_vector (31 downto 0);
 
   --Accumulate
   --Next register values
@@ -223,25 +223,25 @@ begin
     reg_addr_m <= per_addr(DEC_WD_M - 2 downto 0) & '0';
 
     --1.3.      Register address decode
-    reg_dec_m <= (OP1_MPY_D and (reg_dec_m'range => to_stdlogic(reg_addr_m = OP1_MPYB))) or
-                 (OP1_MPYS_D and (reg_dec_m'range => to_stdlogic(reg_addr_m = OP1_MPYSB))) or
-                 (OP1_MAC_D and (reg_dec_m'range  => to_stdlogic(reg_addr_m = OP1_MACB))) or
-                 (OP1_MACS_D and (reg_dec_m'range => to_stdlogic(reg_addr_m = OP1_MACSB))) or
-                 (OP2C_D and (reg_dec_m'range     => to_stdlogic(reg_addr_m = OP2CB))) or
-                 (RESLOC_D and (reg_dec_m'range   => to_stdlogic(reg_addr_m = RESLOCB))) or
-                 (RESHIC_D and (reg_dec_m'range   => to_stdlogic(reg_addr_m = RESHICB))) or
-                 (SUMEXTC_D and (reg_dec_m'range  => to_stdlogic(reg_addr_m = SUMEXTCB)));
+    reg_dec_m <= (OP1_MPY_D and (0 to DEC_SZ_M - 1 => to_stdlogic(reg_addr_m = OP1_MPYB))) or
+                 (OP1_MPYS_D and (0 to DEC_SZ_M - 1 => to_stdlogic(reg_addr_m = OP1_MPYSB))) or
+                 (OP1_MAC_D and (0 to DEC_SZ_M - 1  => to_stdlogic(reg_addr_m = OP1_MACB))) or
+                 (OP1_MACS_D and (0 to DEC_SZ_M - 1 => to_stdlogic(reg_addr_m = OP1_MACSB))) or
+                 (OP2C_D and (0 to DEC_SZ_M - 1     => to_stdlogic(reg_addr_m = OP2CB))) or
+                 (RESLOC_D and (0 to DEC_SZ_M - 1   => to_stdlogic(reg_addr_m = RESLOCB))) or
+                 (RESHIC_D and (0 to DEC_SZ_M - 1   => to_stdlogic(reg_addr_m = RESHICB))) or
+                 (SUMEXTC_D and (0 to DEC_SZ_M - 1  => to_stdlogic(reg_addr_m = SUMEXTCB)));
 
     --1.4.      Read/Write probes
     reg_write_m <= or_reduce(per_we) and reg_sel_m;
     reg_read_m  <= not or_reduce(per_we) and reg_sel_m;
 
     --1.5.      Read/Write vectors
-    reg_wr_m <= reg_dec_m and (reg_dec_m'range => reg_write_m);
-    reg_rd_m <= reg_dec_m and (reg_dec_m'range => reg_read_m);
+    reg_wr_m <= reg_dec_m and (0 to DEC_SZ_M - 1 => reg_write_m);
+    reg_rd_m <= reg_dec_m and (0 to DEC_SZ_M - 1 => reg_read_m);
 
     --1.6.      Masked input data for byte access
-    per_din_msk <= per_din and (15 downto 8 => per_we(1), 7 downto 0 => '1');
+    per_din_msk <= per_din and (8 to 15 => per_we(1), 0 to 7 => '1');
   end block REGISTER_DECODER;
 
   REGISTERS : block
@@ -396,19 +396,19 @@ begin
       end if;
     end process R_1c_2c;
 
-    sumext_nxt <= (15 downto 2 => sumext_s_nxt (1)) & sumext_s_nxt;
-    sumext     <= (15 downto 2 => sumext_s (1)) & sumext_s;
+    sumext_nxt <= (2 to 15 => sumext_s_nxt (1)) & sumext_s_nxt;
+    sumext     <= (2 to 15 => sumext_s (1)) & sumext_s;
     sumext_rd  <= sumext_nxt when early_read = '1' else sumext;
   end block REGISTERS;
 
   DATA_OUTPUT_GENERATION : block
   begin
     --3.1.      Data output mux
-    op1_mux    <= op_rd(0) and (15 downto 0  => reg_rd_m(OP1_MPY) or reg_rd_m(OP1_MPYS) or reg_rd_m(OP1_MAC) or reg_rd_m(OP1_MACS));
-    op2_mux    <= op_rd(1) and (15 downto 0  => reg_rd_m(OP2C));
-    reslo_mux  <= reslo_rd and (15 downto 0  => reg_rd_m(RESLOC));
-    reshi_mux  <= reshi_rd and (15 downto 0  => reg_rd_m(RESHIC));
-    sumext_mux <= sumext_rd and (15 downto 0 => reg_rd_m(SUMEXTC));
+    op1_mux    <= op_rd(0) and (0 to 15  => reg_rd_m(OP1_MPY) or reg_rd_m(OP1_MPYS) or reg_rd_m(OP1_MAC) or reg_rd_m(OP1_MACS));
+    op2_mux    <= op_rd(1) and (0 to 15  => reg_rd_m(OP2C));
+    reslo_mux  <= reslo_rd and (0 to 15  => reg_rd_m(RESLOC));
+    reshi_mux  <= reshi_rd and (0 to 15  => reg_rd_m(RESHIC));
+    sumext_mux <= sumext_rd and (0 to 15 => reg_rd_m(SUMEXTC));
     per_dout   <= op1_mux or op2_mux or reslo_mux or reshi_mux or sumext_mux;
   end block DATA_OUTPUT_GENERATION;
 
@@ -469,10 +469,10 @@ begin
       op2_xp <= (sign_sel and op(1)(15)) & op(1);
 
       --17x17 signed multiplication
-      product1 <= std_ulogic_vector(signed(op1_xp) * signed(op2_xp));
+      product1 <= std_logic_vector(signed(op1_xp) * signed(op2_xp));
 
       --Accumulate
-      result_nxt <= std_ulogic_vector(('0' & unsigned(result)) + ('0' & unsigned(product1(31 downto 0))));
+      result_nxt <= std_logic_vector(('0' & unsigned(result)) + ('0' & unsigned(product1(31 downto 0))));
 
       --Next register values
       reslo_nxt    <= result_nxt(15 downto 0);
@@ -505,12 +505,12 @@ begin
       op2_xp9   <= op2_hi_xp when cycle2(0) = '1' else op2_lo_xp;
 
       --17x9 signed multiplication
-      product2   <= std_ulogic_vector(signed(op1_xp) * signed(op2_xp9));
+      product2   <= std_logic_vector(signed(op1_xp) * signed(op2_xp9));
       product_xp <= product2(23 downto 0) & X"00"
                     when cycle2(0) = '1' else (31 downto 24 => (sign_sel and product2(23))) & product2(23 downto 0);
 
       --Accumulate
-      result_nxt <= std_ulogic_vector(('0' & unsigned(result)) + ('0' & unsigned(product_xp(31 downto 0))));
+      result_nxt <= std_logic_vector(('0' & unsigned(result)) + ('0' & unsigned(product_xp(31 downto 0))));
 
       --Next register values
       reslo_nxt    <= result_nxt(15 downto 0);

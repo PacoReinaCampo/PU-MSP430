@@ -46,43 +46,43 @@ use WORK.MSP430_PACK .all;
 
 entity omsp_interrupt is
   port (
-    inst_irq_rst : out std_ulogic;
-    irq_detect   : out std_ulogic;
-    nmi_acc      : out std_ulogic;
-    irq_num      : out std_ulogic_vector (5 downto 0);
-    irq_addr     : out std_ulogic_vector (15 downto 0);
-    irq_acc      : out std_ulogic_vector (IRQ_NR - 3 downto 0);
+    inst_irq_rst : out std_logic;
+    irq_detect   : out std_logic;
+    nmi_acc      : out std_logic;
+    irq_num      : out std_logic_vector (5 downto 0);
+    irq_addr     : out std_logic_vector (15 downto 0);
+    irq_acc      : out std_logic_vector (IRQ_NR - 3 downto 0);
 
-    mclk         : in std_ulogic;
-    puc_rst      : in std_ulogic;
-    exec_done    : in std_ulogic;
-    nmi_pnd      : in std_ulogic;
-    dbg_halt_st  : in std_ulogic;
-    gie          : in std_ulogic;
-    scan_enable  : in std_ulogic;
-    wdt_irq      : in std_ulogic;
-    cpu_halt_cmd : in std_ulogic;
-    i_state      : in std_ulogic_vector (2 downto 0);
-    irq          : in std_ulogic_vector (IRQ_NR - 3 downto 0));
+    mclk         : in std_logic;
+    puc_rst      : in std_logic;
+    exec_done    : in std_logic;
+    nmi_pnd      : in std_logic;
+    dbg_halt_st  : in std_logic;
+    gie          : in std_logic;
+    scan_enable  : in std_logic;
+    wdt_irq      : in std_logic;
+    cpu_halt_cmd : in std_logic;
+    i_state      : in std_logic_vector (2 downto 0);
+    irq          : in std_logic_vector (IRQ_NR - 3 downto 0));
 end omsp_interrupt;
 
 architecture CONTROL_B2_ARQ of omsp_interrupt is
 
   --SIGNAL INOUT
-  signal inst_irq_rst_omsp : std_ulogic;
-  signal irq_detect_omsp   : std_ulogic;
-  signal irq_num_omsp      : std_ulogic_vector (5 downto 0);
+  signal inst_irq_rst_omsp : std_logic;
+  signal irq_detect_omsp   : std_logic;
+  signal irq_num_omsp      : std_logic_vector (5 downto 0);
 
   --2.INTERRUPT HANDLING & SYSTEM WAKEUP
   --2.1.INTERRUPT HANDLING
   --Detect other interrupts
-  signal mclk_irq_num : std_ulogic;
+  signal mclk_irq_num : std_logic;
 
   --Combine all IRQs
-  signal irq_all : std_ulogic_vector (62 downto 0);
+  signal irq_all : std_logic_vector (62 downto 0);
 
   --Interrupt request accepted
-  signal irq_acc_all : std_ulogic_vector (63 downto 0);
+  signal irq_acc_all : std_logic_vector (63 downto 0);
 
   function to_natural (entrada : unsigned) return natural is
     constant ARG_LEFT : integer := entrada'length - 1;
@@ -95,7 +95,7 @@ architecture CONTROL_B2_ARQ of omsp_interrupt is
     if (XARG(XARG'left) = 'X') then
       return 0;
     end if;
-    for i in XARG'reverse_range loop
+    for i in ARG_LEFT downto 0 loop
       if (XARG(i) = '1') then
         RESULT := RESULT + w;
       end if;
@@ -106,33 +106,33 @@ architecture CONTROL_B2_ARQ of omsp_interrupt is
     return RESULT;
   end to_natural;
 
-  function one_hot64 (binary : std_ulogic_vector (5 downto 0)) return std_ulogic_vector is
-    variable v : std_ulogic_vector (63 downto 0) := (others => '0');
+  function one_hot64 (binary : std_logic_vector (5 downto 0)) return std_logic_vector is
+    variable v : std_logic_vector (63 downto 0) := (others => '0');
   begin
     v(to_natural(unsigned(binary))) := '1';
     return v;
   end one_hot64;
 
-  function one_hot16 (binary : std_ulogic_vector (3 downto 0)) return std_ulogic_vector is
-    variable v : std_ulogic_vector (15 downto 0) := (others => '0');
+  function one_hot16 (binary : std_logic_vector (3 downto 0)) return std_logic_vector is
+    variable v : std_logic_vector (15 downto 0) := (others => '0');
   begin
     v(to_natural(unsigned(binary))) := '1';
     return v;
   end one_hot16;
 
-  function one_hot8 (binary : std_ulogic_vector (2 downto 0)) return std_ulogic_vector is
-    variable v : std_ulogic_vector (7 downto 0) := (others => '0');
+  function one_hot8 (binary : std_logic_vector (2 downto 0)) return std_logic_vector is
+    variable v : std_logic_vector (7 downto 0) := (others => '0');
   begin
     v(to_natural(unsigned(binary))) := '1';
     return v;
   end one_hot8;
 
-  function get_irq_num (irq_all : std_ulogic_vector (62 downto 0)) return std_ulogic_vector is
-    variable v : std_ulogic_vector (5 downto 0) := (others => '1');
+  function get_irq_num (irq_all : std_logic_vector (62 downto 0)) return std_logic_vector is
+    variable v : std_logic_vector (5 downto 0) := (others => '1');
   begin
     for i in 62 downto 0 loop
       if((v(0) and v(1) and v(2) and v(3) and v(4) and v(5) and irq_all(i)) = '1') then
-        v := std_ulogic_vector(to_unsigned(i, 6));
+        v := std_logic_vector(to_unsigned(i, 6));
       end if;
     end loop;
     return v;
@@ -175,11 +175,11 @@ begin
 
     --Combine all IRQs
     combine_irq_16 : if (IRQ_16 = '1' and IRQ_32 = '0' and IRQ_64 = '0') generate
-      irq_all <= (nmi_pnd & irq & (47 downto 0 => '0')) or ("0000" & wdt_irq & (57 downto 0 => '0'));
+      irq_all <= (nmi_pnd & irq & (0 to 47 => '0')) or ("0000" & wdt_irq & (0 to 57 => '0'));
     end generate combine_irq_16;
 
     combine_irq_32 : if (IRQ_16 = '0' and IRQ_32 = '1' and IRQ_64 = '0') generate
-      irq_all <= (nmi_pnd & irq & (31 downto 0 => '0')) or ("0000" & wdt_irq & (57 downto 0 => '0'));
+      irq_all <= (nmi_pnd & irq & (0 to 31 => '0')) or ("0000" & wdt_irq & (0 to 57 => '0'));
     end generate combine_irq_32;
 
     combine_irq_64 : if (IRQ_16 = '0' and IRQ_32 = '0' and IRQ_64 = '1') generate
@@ -201,10 +201,10 @@ begin
     irq_num <= irq_num_omsp;
 
     --Generate selected IRQ vector address
-    irq_addr <= (15 downto 7 => '1') & irq_num_omsp & '0';
+    irq_addr <= (7 to 15 => '1') & irq_num_omsp & '0';
 
     --Interrupt request accepted
-    irq_acc_all <= one_hot64(irq_num_omsp) and (irq_acc_all'range => to_stdlogic(i_state = I_IRQ_FETCH));
+    irq_acc_all <= one_hot64(irq_num_omsp) and (0 to 63 => to_stdlogic(i_state = I_IRQ_FETCH));
     irq_acc     <= irq_acc_all(61 downto 64 - IRQ_NR);
     nmi_acc     <= irq_acc_all(62);
   end block C2_INTERRUPT_HANDLING_AND_SYSTEM_WAKEUP;

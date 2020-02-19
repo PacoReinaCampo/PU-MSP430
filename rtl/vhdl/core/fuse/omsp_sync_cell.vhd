@@ -44,10 +44,10 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity omsp_sync_cell is
   port (
-    data_out : out std_ulogic;
-    clk      : in  std_ulogic;
-    data_in  : in  std_ulogic;
-    rst      : in  std_ulogic);
+    data_out : out std_logic;
+    clk      : in  std_logic;
+    data_in  : in  std_logic;
+    rst      : in  std_logic);
 end omsp_sync_cell;
 
 architecture omsp_sync_cell_ARQ of omsp_sync_cell is

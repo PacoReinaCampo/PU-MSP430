@@ -46,242 +46,242 @@ use WORK.MSP430_PACK .all;
 
 entity BCM is
   port (
-    aclk          : out std_ulogic;
-    aclk_en       : out std_ulogic;
-    cpu_en_s      : out std_ulogic;
-    dbg_clk       : out std_ulogic;
-    dbg_en_s      : out std_ulogic;
-    dbg_rst       : out std_ulogic;
-    dco_enable    : out std_ulogic;
-    dco_wkup      : out std_ulogic;
-    lfxt_enable   : out std_ulogic;
-    lfxt_wkup     : out std_ulogic;
-    por           : out std_ulogic;
-    puc_pnd_set   : out std_ulogic;
-    smclk         : out std_ulogic;
-    smclk_en      : out std_ulogic;
-    cpu_en        : in  std_ulogic;
-    cpuoff        : in  std_ulogic;
-    dbg_cpu_reset : in  std_ulogic;
-    dbg_en        : in  std_ulogic;
-    dco_clk       : in  std_ulogic;
-    lfxt_clk      : in  std_ulogic;
-    mclk_enable   : in  std_ulogic;
-    mclk_wkup     : in  std_ulogic;
-    oscoff        : in  std_ulogic;
-    reset_n       : in  std_ulogic;
-    scan_enable   : in  std_ulogic;
-    scan_mode     : in  std_ulogic;
-    wdt_reset     : in  std_ulogic;
-    scg0          : in  std_ulogic;
-    scg1          : in  std_ulogic;
+    aclk          : out std_logic;
+    aclk_en       : out std_logic;
+    cpu_en_s      : out std_logic;
+    dbg_clk       : out std_logic;
+    dbg_en_s      : out std_logic;
+    dbg_rst       : out std_logic;
+    dco_enable    : out std_logic;
+    dco_wkup      : out std_logic;
+    lfxt_enable   : out std_logic;
+    lfxt_wkup     : out std_logic;
+    por           : out std_logic;
+    puc_pnd_set   : out std_logic;
+    smclk         : out std_logic;
+    smclk_en      : out std_logic;
+    cpu_en        : in  std_logic;
+    cpuoff        : in  std_logic;
+    dbg_cpu_reset : in  std_logic;
+    dbg_en        : in  std_logic;
+    dco_clk       : in  std_logic;
+    lfxt_clk      : in  std_logic;
+    mclk_enable   : in  std_logic;
+    mclk_wkup     : in  std_logic;
+    oscoff        : in  std_logic;
+    reset_n       : in  std_logic;
+    scan_enable   : in  std_logic;
+    scan_mode     : in  std_logic;
+    wdt_reset     : in  std_logic;
+    scg0          : in  std_logic;
+    scg1          : in  std_logic;
 
-    nodiv_smclk : out std_ulogic;
+    nodiv_smclk : out std_logic;
 
-    per_dout : out std_ulogic_vector (15 downto 0);
+    per_dout : out std_logic_vector (15 downto 0);
 
-    mclk     : out std_ulogic;
-    puc_rst  : out std_ulogic;
-    per_en   : in  std_ulogic;
-    per_we   : in  std_ulogic_vector (1 downto 0);
-    per_addr : in  std_ulogic_vector (13 downto 0);
-    per_din  : in  std_ulogic_vector (15 downto 0));
+    mclk     : out std_logic;
+    puc_rst  : out std_logic;
+    per_en   : in  std_logic;
+    per_we   : in  std_logic_vector (1 downto 0);
+    per_addr : in  std_logic_vector (13 downto 0);
+    per_din  : in  std_logic_vector (15 downto 0));
 end BCM;
 
 architecture BCM_ARQ of BCM is
 
   --SIGNAL INOUT
-  signal cpu_en_s_omsp    : std_ulogic;
-  signal dbg_en_s_omsp    : std_ulogic;
-  signal dbg_rst_omsp     : std_ulogic;
-  signal dco_enable_omsp  : std_ulogic;
-  signal lfxt_enable_omsp : std_ulogic;
-  signal mclk_omsp        : std_ulogic;
-  signal por_omsp         : std_ulogic;
-  signal puc_rst_omsp     : std_ulogic;
+  signal cpu_en_s_omsp    : std_logic;
+  signal dbg_en_s_omsp    : std_logic;
+  signal dbg_rst_omsp     : std_logic;
+  signal dco_enable_omsp  : std_logic;
+  signal lfxt_enable_omsp : std_logic;
+  signal mclk_omsp        : std_logic;
+  signal por_omsp         : std_logic;
+  signal puc_rst_omsp     : std_logic;
 
   --0.  PARAMETER DECLARATION
   --0.1.        Register base address (must be aligned to decoder bit width)
-  constant BASE_ADDR_B : std_ulogic_vector (14 downto 0) := "000000001010000";
+  constant BASE_ADDR_B : std_logic_vector (14 downto 0) := "000000001010000";
 
   --0.2.        Decoder bit width (defines how many bits are considered for address decoding)
   constant DEC_WD_B : integer := 4;
 
   --0.3.        Register addresses offset
-  constant BCSCTL1B : std_ulogic_vector (DEC_WD_B - 1 downto 0) := X"7";
-  constant BCSCTL2B : std_ulogic_vector (DEC_WD_B - 1 downto 0) := X"8";
+  constant BCSCTL1B : std_logic_vector (DEC_WD_B - 1 downto 0) := X"7";
+  constant BCSCTL2B : std_logic_vector (DEC_WD_B - 1 downto 0) := X"8";
 
   constant BCSCTL1C : integer := to_integer(unsigned(BCSCTL1B));
   constant BCSCTL2C : integer := to_integer(unsigned(BCSCTL2B));
 
   --0.4.        Register one-hot decoder utilities
   constant DEC_SZ_B   : integer                                   := 2**DEC_WD_B;
-  constant BASE_REG_B : std_ulogic_vector (DEC_SZ_B - 1 downto 0) := std_ulogic_vector(to_unsigned(1, DEC_SZ_B));
+  constant BASE_REG_B : std_logic_vector (DEC_SZ_B - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_B));
 
   --0.5.        Register one-hot decoder        
-  constant BCSCTL1C_D : std_ulogic_vector (DEC_SZ_B - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_B) sll BCSCTL1C);
-  constant BCSCTL2C_D : std_ulogic_vector (DEC_SZ_B - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_B) sll BCSCTL2C);
+  constant BCSCTL1C_D : std_logic_vector (DEC_SZ_B - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_B) sll BCSCTL1C);
+  constant BCSCTL2C_D : std_logic_vector (DEC_SZ_B - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_B) sll BCSCTL2C);
 
   --0.6.        Local wire declarations
-  signal nodiv_mclk       : std_ulogic;
-  signal nodiv_mclk_n     : std_ulogic;
-  signal nodiv_smclk_omsp : std_ulogic;
+  signal nodiv_mclk       : std_logic;
+  signal nodiv_mclk_n     : std_logic;
+  signal nodiv_smclk_omsp : std_logic;
 
   --1.  REGISTER DECODER
   --1.1.        Local register selection
-  signal reg_sel_b : std_ulogic;
+  signal reg_sel_b : std_logic;
 
   --1.2.        Register local address
-  signal reg_addr_b : std_ulogic_vector (DEC_WD_B - 1 downto 0);
+  signal reg_addr_b : std_logic_vector (DEC_WD_B - 1 downto 0);
 
   --1.3.        Register address decode
-  signal reg_dec_b : std_ulogic_vector (DEC_SZ_B - 1 downto 0);
+  signal reg_dec_b : std_logic_vector (DEC_SZ_B - 1 downto 0);
 
   --1.4.        Read/Write probes
-  signal reg_lo_write_b : std_ulogic;
-  signal reg_hi_write_b : std_ulogic;
-  signal reg_read_b     : std_ulogic;
+  signal reg_lo_write_b : std_logic;
+  signal reg_hi_write_b : std_logic;
+  signal reg_read_b     : std_logic;
 
   --1.5.        Read/Write vectors
-  signal reg_hi_wr_b : std_ulogic_vector (DEC_SZ_B - 1 downto 0);
-  signal reg_lo_wr_b : std_ulogic_vector (DEC_SZ_B - 1 downto 0);
-  signal reg_rd_b    : std_ulogic_vector (DEC_SZ_B - 1 downto 0);
+  signal reg_hi_wr_b : std_logic_vector (DEC_SZ_B - 1 downto 0);
+  signal reg_lo_wr_b : std_logic_vector (DEC_SZ_B - 1 downto 0);
+  signal reg_rd_b    : std_logic_vector (DEC_SZ_B - 1 downto 0);
 
   --2.  REGISTERS
   --2.1.        BCSCTL1C Register
-  signal bcsctl_wr  : std_ulogic_vector (1 downto 0);
-  signal divax_mask : std_ulogic_vector (7 downto 0);
+  signal bcsctl_wr  : std_logic_vector (1 downto 0);
+  signal divax_mask : std_logic_vector (7 downto 0);
   signal bcsctl     : M_01_07;
   signal bcsctl_nxt : M_01_07;
 
   --2.2.        BCSCTL2C Register
-  signal selmx_mask : std_ulogic_vector (7 downto 0);
-  signal divmx_mask : std_ulogic_vector (7 downto 0);
-  signal sels_mask  : std_ulogic_vector (7 downto 0);
-  signal divsx_mask : std_ulogic_vector (7 downto 0);
+  signal selmx_mask : std_logic_vector (7 downto 0);
+  signal divmx_mask : std_logic_vector (7 downto 0);
+  signal sels_mask  : std_logic_vector (7 downto 0);
+  signal divsx_mask : std_logic_vector (7 downto 0);
 
   --3.  DATA OUTPUT GENERATION
   --3.1.        Data output mux
   signal bcsctl_rd : M_01_15;
 
   --4.  DCO_CLK / LFXT_CLK INTERFACES (WAKEUP, ENABLE, ...)
-  signal cpuoff_and_mclk_enable : std_ulogic;
+  signal cpuoff_and_mclk_enable : std_logic;
 
   --4.1.        HIGH SPEED SYSTEM CLOCK GENERATOR (DCO_CLK)
-  signal por_a                  : std_ulogic;
-  signal cpu_en_wkup            : std_ulogic;
-  signal cpu_enabled_with_dco   : std_ulogic;
-  signal dco_not_enabled_by_dbg : std_ulogic;
-  signal dco_disable_by_scg0    : std_ulogic;
-  signal dco_disable_by_cpu_en  : std_ulogic;
-  signal dco_enable_nxt         : std_ulogic;
-  signal dco_disable            : std_ulogic;
-  signal dco_clk_n              : std_ulogic;
-  signal dco_mclk_wkup          : std_ulogic;
-  signal dco_en_wkup            : std_ulogic;
-  signal dco_wkup_set           : std_ulogic;
-  signal dco_wkup_set_scan      : std_ulogic;
-  signal dco_wkup_clear         : std_ulogic;
-  signal dco_wkup_n             : std_ulogic;
-  signal not_dco_disable        : std_ulogic;
+  signal por_a                  : std_logic;
+  signal cpu_en_wkup            : std_logic;
+  signal cpu_enabled_with_dco   : std_logic;
+  signal dco_not_enabled_by_dbg : std_logic;
+  signal dco_disable_by_scg0    : std_logic;
+  signal dco_disable_by_cpu_en  : std_logic;
+  signal dco_enable_nxt         : std_logic;
+  signal dco_disable            : std_logic;
+  signal dco_clk_n              : std_logic;
+  signal dco_mclk_wkup          : std_logic;
+  signal dco_en_wkup            : std_logic;
+  signal dco_wkup_set           : std_logic;
+  signal dco_wkup_set_scan      : std_logic;
+  signal dco_wkup_clear         : std_logic;
+  signal dco_wkup_n             : std_logic;
+  signal not_dco_disable        : std_logic;
 
   --4.2.        LOW FREQUENCY CRYSTAL CLOCK GENERATOR (LFXT_CLK)
   --            ASIC MODE
-  signal cpu_enabled_with_lfxt   : std_ulogic;
-  signal lfxt_not_enabled_by_dbg : std_ulogic;
-  signal lfxt_disable_by_oscoff  : std_ulogic;
-  signal lfxt_disable_by_cpu_en  : std_ulogic;
-  signal lfxt_enable_nxt         : std_ulogic;
-  signal lfxt_disable            : std_ulogic;
-  signal lfxt_clk_n              : std_ulogic;
-  signal lfxt_mclk_wkup          : std_ulogic;
-  signal lfxt_en_wkup            : std_ulogic;
-  signal lfxt_wkup_set           : std_ulogic;
-  signal lfxt_wkup_set_scan      : std_ulogic;
-  signal lfxt_wkup_clear         : std_ulogic;
-  signal lfxt_wkup_n             : std_ulogic;
-  signal not_lfxt_disable        : std_ulogic;
+  signal cpu_enabled_with_lfxt   : std_logic;
+  signal lfxt_not_enabled_by_dbg : std_logic;
+  signal lfxt_disable_by_oscoff  : std_logic;
+  signal lfxt_disable_by_cpu_en  : std_logic;
+  signal lfxt_enable_nxt         : std_logic;
+  signal lfxt_disable            : std_logic;
+  signal lfxt_clk_n              : std_logic;
+  signal lfxt_mclk_wkup          : std_logic;
+  signal lfxt_en_wkup            : std_logic;
+  signal lfxt_wkup_set           : std_logic;
+  signal lfxt_wkup_set_scan      : std_logic;
+  signal lfxt_wkup_clear         : std_logic;
+  signal lfxt_wkup_n             : std_logic;
+  signal not_lfxt_disable        : std_logic;
 
   --            FPGA MODE
-  signal lfxt_clk_s   : std_ulogic;
-  signal lfxt_clk_dly : std_ulogic;
-  signal lfxt_clk_en  : std_ulogic;
+  signal lfxt_clk_s   : std_logic;
+  signal lfxt_clk_dly : std_logic;
+  signal lfxt_clk_en  : std_logic;
 
   --5.  CLOCK GENERATION
   --5.1.        GLOBAL CPU ENABLE
   --            Synchronize CPU_EN signal to the MCLK domain
   --            Synchronize CPU_EN signal to the ACLK domain
-  signal cpu_en_aux_s : std_ulogic;
+  signal cpu_en_aux_s : std_logic;
 
   --            Synchronize CPU_EN signal to the SMCLK domain
-  signal cpu_en_sm_s : std_ulogic;
+  signal cpu_en_sm_s : std_logic;
 
   --5.2.        MCLK GENERATION
   --            Clock MUX
   --            Wakeup synchronizer
-  signal mclk_wkup_s : std_ulogic;
+  signal mclk_wkup_s : std_logic;
 
   --            Clock Divider
-  signal mclk_active     : std_ulogic;
-  signal mclk_div_en     : std_ulogic;
-  signal mclk_div_en_and : std_ulogic;
-  signal mclk_div        : std_ulogic_vector (2 downto 0);
+  signal mclk_active     : std_logic;
+  signal mclk_div_en     : std_logic;
+  signal mclk_div_en_and : std_logic;
+  signal mclk_div        : std_logic_vector (2 downto 0);
 
   --            Generate main system clock
   --5.3.        ACLK GENERATION
   --            ASIC MODE
-  signal nodiv_aclk        : std_ulogic;
-  signal puc_lfxt_rst      : std_ulogic;
-  signal puc_lfxt_noscan_n : std_ulogic;
-  signal oscoff_s          : std_ulogic;
-  signal aclk_div_en       : std_ulogic;
-  signal aclk_div_en_and   : std_ulogic;
-  signal divax_s           : std_ulogic_vector (1 downto 0);
-  signal divax_ss          : std_ulogic_vector (1 downto 0);
+  signal nodiv_aclk        : std_logic;
+  signal puc_lfxt_rst      : std_logic;
+  signal puc_lfxt_noscan_n : std_logic;
+  signal oscoff_s          : std_logic;
+  signal aclk_div_en       : std_logic;
+  signal aclk_div_en_and   : std_logic;
+  signal divax_s           : std_logic_vector (1 downto 0);
+  signal divax_ss          : std_logic_vector (1 downto 0);
 
   --            FPGA MODE
-  signal aclk_en_nxt     : std_ulogic;
-  signal aclk_en_nxt_and : std_ulogic;
-  signal aclk_div        : std_ulogic_vector (2 downto 0);
+  signal aclk_en_nxt     : std_logic;
+  signal aclk_en_nxt_and : std_logic;
+  signal aclk_div        : std_logic_vector (2 downto 0);
 
   --5.4.        SMCLK GENERATION
   --            ASIC MODE
-  signal puc_sm_noscan_n  : std_ulogic;
-  signal puc_sm_rst       : std_ulogic;
-  signal scg1_s           : std_ulogic;
-  signal smclk_div_en     : std_ulogic;
-  signal smclk_div_en_and : std_ulogic;
-  signal divsx_s          : std_ulogic_vector (1 downto 0);
-  signal divsx_ss         : std_ulogic_vector (1 downto 0);
+  signal puc_sm_noscan_n  : std_logic;
+  signal puc_sm_rst       : std_logic;
+  signal scg1_s           : std_logic;
+  signal smclk_div_en     : std_logic;
+  signal smclk_div_en_and : std_logic;
+  signal divsx_s          : std_logic_vector (1 downto 0);
+  signal divsx_ss         : std_logic_vector (1 downto 0);
 
   --            FPGA MODE
-  signal smclk_in         : std_ulogic;
-  signal smclk_in_and     : std_ulogic;
-  signal smclk_en_nxt     : std_ulogic;
-  signal smclk_en_nxt_and : std_ulogic;
-  signal smclk_div        : std_ulogic_vector (2 downto 0);
+  signal smclk_in         : std_logic;
+  signal smclk_in_and     : std_logic;
+  signal smclk_en_nxt     : std_logic;
+  signal smclk_en_nxt_and : std_logic;
+  signal smclk_div        : std_logic_vector (2 downto 0);
 
   --5.5.        DEBUG INTERFACE CLOCK GENERATION (DBG_CLK)
   --            Synchronize DBG_EN signal to MCLK domain
-  signal dbg_en_n_s  : std_ulogic;
-  signal dbg_rst_nxt : std_ulogic;
-  signal not_dbg_en  : std_ulogic;
+  signal dbg_en_n_s  : std_logic;
+  signal dbg_rst_nxt : std_logic;
+  signal not_dbg_en  : std_logic;
 
   --            Serial Debug Interface Clock gate
 
   --6.  RESET GENERATION
   --6.1.        Generate synchronized POR to MCLK domain
-  signal por_noscan : std_ulogic;
+  signal por_noscan : std_logic;
 
   --6.2.        Generate synchronized reset for the SDI
-  signal dbg_rst_noscan : std_ulogic;
+  signal dbg_rst_noscan : std_logic;
 
   --6.3.        Generate main system reset (PUC_RST)
-  signal puc_noscan_n : std_ulogic;
-  signal puc_a_scan   : std_ulogic;
-  signal puc_a        : std_ulogic;
-  signal puc_s        : std_ulogic;
-  signal not_puc_s    : std_ulogic;
+  signal puc_noscan_n : std_logic;
+  signal puc_a_scan   : std_logic;
+  signal puc_a        : std_logic;
+  signal puc_s        : std_logic;
+  signal not_puc_s    : std_logic;
 
 begin
   REGISTER_DECODER : block
@@ -293,8 +293,8 @@ begin
     reg_addr_b <= '0' & per_addr(DEC_WD_B - 2 downto 0);
 
     --1.3.      Register address decode
-    reg_dec_b <= (BCSCTL1C_D and (reg_dec_b'range => to_stdlogic(reg_addr_b = std_ulogic_vector(unsigned(BCSCTL1B) srl 1)))) or
-                 (BCSCTL2C_D and (reg_dec_b'range => to_stdlogic(reg_addr_b = std_ulogic_vector(unsigned(BCSCTL2B) srl 1))));
+    reg_dec_b <= (BCSCTL1C_D and (0 to DEC_SZ_B - 1 => to_stdlogic(reg_addr_b = std_logic_vector(unsigned(BCSCTL1B) srl 1)))) or
+                 (BCSCTL2C_D and (0 to DEC_SZ_B - 1 => to_stdlogic(reg_addr_b = std_logic_vector(unsigned(BCSCTL2B) srl 1))));
 
     --1.4.      Read/Write probes
     reg_lo_write_b <= per_we(0) and reg_sel_b;
@@ -302,9 +302,9 @@ begin
     reg_read_b     <= not (per_we(0) or per_we(1)) and reg_sel_b;
 
     --1.5.      Read/Write vectors
-    reg_hi_wr_b <= reg_dec_b and (reg_dec_b'range => reg_hi_write_b);
-    reg_lo_wr_b <= reg_dec_b and (reg_dec_b'range => reg_lo_write_b);
-    reg_rd_b    <= reg_dec_b and (reg_dec_b'range => reg_read_b);
+    reg_hi_wr_b <= reg_dec_b and (0 to DEC_SZ_B - 1 => reg_hi_write_b);
+    reg_lo_wr_b <= reg_dec_b and (0 to DEC_SZ_B - 1 => reg_lo_write_b);
+    reg_rd_b    <= reg_dec_b and (0 to DEC_SZ_B - 1 => reg_read_b);
   end block REGISTER_DECODER;
 
   REGISTERS : block
@@ -364,10 +364,10 @@ begin
   DATA_OUTPUT_GENERATION : block
   begin
     --3.1.      Data output mux
-    bcsctl_rd(0) <= std_ulogic_vector((X"00" & (unsigned(bcsctl(0)) and (7 downto 0 => reg_rd_b(BCSCTL1C))))
-                                      sll to_integer((3 downto 0                    => BCSCTL1B(0)) and to_unsigned(8, 4)));
-    bcsctl_rd(1) <= std_ulogic_vector((X"00" & (unsigned(bcsctl(1)) and (7 downto 0 => reg_rd_b(BCSCTL2C))))
-                                      sll to_integer((3 downto 0                    => BCSCTL2B(0)) and to_unsigned(8, 4)));
+    bcsctl_rd(0) <= std_logic_vector((X"00" & (unsigned(bcsctl(0)) and (0 to 7 => reg_rd_b(BCSCTL1C))))
+                                      sll to_integer((0 to 3                    => BCSCTL1B(0)) and to_unsigned(8, 4)));
+    bcsctl_rd(1) <= std_logic_vector((X"00" & (unsigned(bcsctl(1)) and (0 to 7 => reg_rd_b(BCSCTL2C))))
+                                      sll to_integer((0 to 3                    => BCSCTL2B(0)) and to_unsigned(8, 4)));
     per_dout <= bcsctl_rd(0) or bcsctl_rd(1);
   end block DATA_OUTPUT_GENERATION;
 
@@ -620,7 +620,7 @@ begin
           mclk_div <= "000";
         elsif (rising_edge(nodiv_mclk)) then
           if (bcsctl(1)(5 downto 4) /= "00") then
-            mclk_div <= std_ulogic_vector(unsigned(mclk_div) + "001");
+            mclk_div <= std_logic_vector(unsigned(mclk_div) + "001");
           end if;
         end if;
       end process R1_1c;
@@ -705,7 +705,7 @@ begin
             aclk_div <= "000";
           elsif (rising_edge(nodiv_aclk)) then
             if (divax_ss /= "00") then
-              aclk_div <= std_ulogic_vector(unsigned(aclk_div) + "001");
+              aclk_div <= std_logic_vector(unsigned(aclk_div) + "001");
             end if;
           end if;
         end process R1_1c;
@@ -753,7 +753,7 @@ begin
           aclk_div <= "000";
         elsif (rising_edge(mclk_omsp)) then
           if (bcsctl(0)(5 downto 4) /= "00" and lfxt_clk_en = '1') then
-            aclk_div <= std_ulogic_vector(unsigned(aclk_div) + "001");
+            aclk_div <= std_logic_vector(unsigned(aclk_div) + "001");
           end if;
         end if;
       end process R1_1c;
@@ -838,7 +838,7 @@ begin
             smclk_div <= "000";
           elsif (rising_edge(nodiv_smclk_omsp)) then
             if (divsx_ss /= "00") then
-              smclk_div <= std_ulogic_vector(unsigned(smclk_div) + "001");
+              smclk_div <= std_logic_vector(unsigned(smclk_div) + "001");
             end if;
           end if;
         end process R1_1c;
@@ -906,7 +906,7 @@ begin
           smclk_div <= "000";
         elsif (rising_edge(mclk_omsp)) then
           if (bcsctl(1)(2 downto 1) /= "00" and smclk_in = '1') then
-            smclk_div <= std_ulogic_vector(unsigned(smclk_div) + "001");
+            smclk_div <= std_logic_vector(unsigned(smclk_div) + "001");
           end if;
         end if;
       end process R1_1c;

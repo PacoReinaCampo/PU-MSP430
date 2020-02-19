@@ -46,38 +46,38 @@ use WORK.MSP430_PACK .all;
 
 entity UART is
   port (
-    uart_txd : out std_ulogic;
-    uart_rxd : in  std_ulogic;
-    smclk_en : in  std_ulogic;
+    uart_txd : out std_logic;
+    uart_rxd : in  std_logic;
+    smclk_en : in  std_logic;
 
-    irq_uart_rx : out std_ulogic;
-    irq_uart_tx : out std_ulogic;
+    irq_uart_rx : out std_logic;
+    irq_uart_tx : out std_logic;
 
-    per_dout : out std_ulogic_vector (15 downto 0);
-    mclk     : in  std_ulogic;
-    per_en   : in  std_ulogic;
-    puc_rst  : in  std_ulogic;
-    per_we   : in  std_ulogic_vector (1 downto 0);
-    per_addr : in  std_ulogic_vector (13 downto 0);
-    per_din  : in  std_ulogic_vector (15 downto 0));
+    per_dout : out std_logic_vector (15 downto 0);
+    mclk     : in  std_logic;
+    per_en   : in  std_logic;
+    puc_rst  : in  std_logic;
+    per_we   : in  std_logic_vector (1 downto 0);
+    per_addr : in  std_logic_vector (13 downto 0);
+    per_din  : in  std_logic_vector (15 downto 0));
 end UART;
 
 architecture UART_ARQ of UART is
 
   --0.  PARAMETER_DECLARATION
   --0.1.        Register base address (must be aligned to decoder bit width)
-  constant BASE_ADDR_U : std_ulogic_vector (14 downto 0) := "000000010000000";
+  constant BASE_ADDR_U : std_logic_vector (14 downto 0) := "000000010000000";
 
   --0.2.        Decoder bit width (defines how many bits are considered for address decoding)
   constant DEC_WD_U : integer := 3;
 
   --0.3.        Register addresses offset
-  constant CTRLB    : std_ulogic_vector (DEC_WD_U - 1 downto 0) := std_ulogic_vector(to_unsigned(0, DEC_WD_U));
-  constant STATUSB  : std_ulogic_vector (DEC_WD_U - 1 downto 0) := std_ulogic_vector(to_unsigned(1, DEC_WD_U));
-  constant BAUD_LOB : std_ulogic_vector (DEC_WD_U - 1 downto 0) := std_ulogic_vector(to_unsigned(2, DEC_WD_U));
-  constant BAUD_HIB : std_ulogic_vector (DEC_WD_U - 1 downto 0) := std_ulogic_vector(to_unsigned(3, DEC_WD_U));
-  constant DATA_TXB : std_ulogic_vector (DEC_WD_U - 1 downto 0) := std_ulogic_vector(to_unsigned(4, DEC_WD_U));
-  constant DATA_RXB : std_ulogic_vector (DEC_WD_U - 1 downto 0) := std_ulogic_vector(to_unsigned(5, DEC_WD_U));
+  constant CTRLB    : std_logic_vector (DEC_WD_U - 1 downto 0) := std_logic_vector(to_unsigned(0, DEC_WD_U));
+  constant STATUSB  : std_logic_vector (DEC_WD_U - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_WD_U));
+  constant BAUD_LOB : std_logic_vector (DEC_WD_U - 1 downto 0) := std_logic_vector(to_unsigned(2, DEC_WD_U));
+  constant BAUD_HIB : std_logic_vector (DEC_WD_U - 1 downto 0) := std_logic_vector(to_unsigned(3, DEC_WD_U));
+  constant DATA_TXB : std_logic_vector (DEC_WD_U - 1 downto 0) := std_logic_vector(to_unsigned(4, DEC_WD_U));
+  constant DATA_RXB : std_logic_vector (DEC_WD_U - 1 downto 0) := std_logic_vector(to_unsigned(5, DEC_WD_U));
 
   constant CTRLC    : integer := to_integer(unsigned(CTRLB));
   constant STATUSC  : integer := to_integer(unsigned(STATUSB));
@@ -88,150 +88,150 @@ architecture UART_ARQ of UART is
 
   --0.4.        Register one-hot decoder utilities
   constant DEC_SZ_U   : integer                                   := 2**DEC_WD_U;
-  constant BASE_REG_U : std_ulogic_vector (DEC_SZ_U - 1 downto 0) := std_ulogic_vector(to_unsigned(1, DEC_SZ_U));
+  constant BASE_REG_U : std_logic_vector (DEC_SZ_U - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_U));
 
   --0.5.        Register one-hot decoder
-  constant CTRL_D    : std_ulogic_vector (DEC_SZ_U - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_U) sll CTRLC);
-  constant STATUS_D  : std_ulogic_vector (DEC_SZ_U - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_U) sll STATUSC);
-  constant BAUD_LO_D : std_ulogic_vector (DEC_SZ_U - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_U) sll BAUD_LOC);
-  constant BAUD_HI_D : std_ulogic_vector (DEC_SZ_U - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_U) sll BAUD_HIC);
-  constant DATA_TX_D : std_ulogic_vector (DEC_SZ_U - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_U) sll DATA_TXC);
-  constant DATA_RX_D : std_ulogic_vector (DEC_SZ_U - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_U) sll DATA_RXC);
+  constant CTRL_D    : std_logic_vector (DEC_SZ_U - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_U) sll CTRLC);
+  constant STATUS_D  : std_logic_vector (DEC_SZ_U - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_U) sll STATUSC);
+  constant BAUD_LO_D : std_logic_vector (DEC_SZ_U - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_U) sll BAUD_LOC);
+  constant BAUD_HI_D : std_logic_vector (DEC_SZ_U - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_U) sll BAUD_HIC);
+  constant DATA_TX_D : std_logic_vector (DEC_SZ_U - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_U) sll DATA_TXC);
+  constant DATA_RX_D : std_logic_vector (DEC_SZ_U - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_U) sll DATA_RXC);
 
   --1.  REGISTER_DECODER
   --1.1.        Local register selection
-  signal reg_sel_u : std_ulogic;
+  signal reg_sel_u : std_logic;
 
   --1.2.        Register local address
-  signal reg_addr_u : std_ulogic_vector (DEC_WD_U - 1 downto 0);
+  signal reg_addr_u : std_logic_vector (DEC_WD_U - 1 downto 0);
 
   --1.3.        Register address decode
-  signal reg_dec_u : std_ulogic_vector (DEC_SZ_U - 1 downto 0);
+  signal reg_dec_u : std_logic_vector (DEC_SZ_U - 1 downto 0);
 
   --1.4.        Read/Write probes
-  signal reg_read_u     : std_ulogic;
-  signal reg_hi_write_u : std_ulogic;
-  signal reg_lo_write_u : std_ulogic;
+  signal reg_read_u     : std_logic;
+  signal reg_hi_write_u : std_logic;
+  signal reg_lo_write_u : std_logic;
 
   --1.5.        Read/Write vectors
-  signal reg_rd_u    : std_ulogic_vector (DEC_SZ_U - 1 downto 0);
-  signal reg_hi_wr_u : std_ulogic_vector (DEC_SZ_U - 1 downto 0);
-  signal reg_lo_wr_u : std_ulogic_vector (DEC_SZ_U - 1 downto 0);
+  signal reg_rd_u    : std_logic_vector (DEC_SZ_U - 1 downto 0);
+  signal reg_hi_wr_u : std_logic_vector (DEC_SZ_U - 1 downto 0);
+  signal reg_lo_wr_u : std_logic_vector (DEC_SZ_U - 1 downto 0);
 
   --2.  REGISTERS
   --2.1.        CTRL Register
-  signal ctrl_wr           : std_ulogic;
-  signal ctrl_ien_tx_empty : std_ulogic;
-  signal ctrl_ien_tx       : std_ulogic;
-  signal ctrl_ien_rx_ovflw : std_ulogic;
-  signal ctrl_ien_rx       : std_ulogic;
-  signal ctrl_smclk_sel    : std_ulogic;
-  signal ctrl_en           : std_ulogic;
-  signal ctrl              : std_ulogic_vector (7 downto 0);
-  signal ctrl_nxt          : std_ulogic_vector (7 downto 0);
+  signal ctrl_wr           : std_logic;
+  signal ctrl_ien_tx_empty : std_logic;
+  signal ctrl_ien_tx       : std_logic;
+  signal ctrl_ien_rx_ovflw : std_logic;
+  signal ctrl_ien_rx       : std_logic;
+  signal ctrl_smclk_sel    : std_logic;
+  signal ctrl_en           : std_logic;
+  signal ctrl              : std_logic_vector (7 downto 0);
+  signal ctrl_nxt          : std_logic_vector (7 downto 0);
 
   --2.2.        STATUS Register
-  signal status_tx_empty_pnd     : std_ulogic;
-  signal status_tx_pnd           : std_ulogic;
-  signal status_rx_ovflw_pnd     : std_ulogic;
-  signal status_rx_pnd           : std_ulogic;
-  signal status_tx_full          : std_ulogic;
-  signal status_tx_busy          : std_ulogic;
-  signal status_rx_busy          : std_ulogic;
-  signal status_wr               : std_ulogic;
-  signal status_tx_empty_pnd_clr : std_ulogic;
-  signal status_tx_pnd_clr       : std_ulogic;
-  signal status_rx_ovflw_pnd_clr : std_ulogic;
-  signal status_rx_pnd_clr       : std_ulogic;
-  signal status_tx_empty_pnd_set : std_ulogic;
-  signal status_tx_pnd_set       : std_ulogic;
-  signal status_rx_ovflw_pnd_set : std_ulogic;
-  signal status_rx_pnd_set       : std_ulogic;
-  signal status_u                : std_ulogic_vector (7 downto 0);
-  signal status_nxt              : std_ulogic_vector (7 downto 0);
+  signal status_tx_empty_pnd     : std_logic;
+  signal status_tx_pnd           : std_logic;
+  signal status_rx_ovflw_pnd     : std_logic;
+  signal status_rx_pnd           : std_logic;
+  signal status_tx_full          : std_logic;
+  signal status_tx_busy          : std_logic;
+  signal status_rx_busy          : std_logic;
+  signal status_wr               : std_logic;
+  signal status_tx_empty_pnd_clr : std_logic;
+  signal status_tx_pnd_clr       : std_logic;
+  signal status_rx_ovflw_pnd_clr : std_logic;
+  signal status_rx_pnd_clr       : std_logic;
+  signal status_tx_empty_pnd_set : std_logic;
+  signal status_tx_pnd_set       : std_logic;
+  signal status_rx_ovflw_pnd_set : std_logic;
+  signal status_rx_pnd_set       : std_logic;
+  signal status_u                : std_logic_vector (7 downto 0);
+  signal status_nxt              : std_logic_vector (7 downto 0);
 
   --2.3.        BAUD_LO Register
-  signal baud_lo_wr  : std_ulogic;
-  signal baud_lo     : std_ulogic_vector (7 downto 0);
-  signal baud_lo_nxt : std_ulogic_vector (7 downto 0);
+  signal baud_lo_wr  : std_logic;
+  signal baud_lo     : std_logic_vector (7 downto 0);
+  signal baud_lo_nxt : std_logic_vector (7 downto 0);
 
   --2.4.        BAUD_HI Register
-  signal baud_hi_wr  : std_ulogic;
-  signal baud_hi     : std_ulogic_vector (7 downto 0);
-  signal baud_hi_nxt : std_ulogic_vector (7 downto 0);
-  signal baudrate    : std_ulogic_vector (15 downto 0);
+  signal baud_hi_wr  : std_logic;
+  signal baud_hi     : std_logic_vector (7 downto 0);
+  signal baud_hi_nxt : std_logic_vector (7 downto 0);
+  signal baudrate    : std_logic_vector (15 downto 0);
 
   --2.5.        DATA_TX Register
-  signal data_tx_wr  : std_ulogic;
-  signal data_tx     : std_ulogic_vector (7 downto 0);
-  signal data_tx_nxt : std_ulogic_vector (7 downto 0);
+  signal data_tx_wr  : std_logic;
+  signal data_tx     : std_logic_vector (7 downto 0);
+  signal data_tx_nxt : std_logic_vector (7 downto 0);
 
   --2.6.        DATA_RX Register
-  signal data_rx   : std_ulogic_vector (7 downto 0);
-  signal rxfer_buf : std_ulogic_vector (7 downto 0);
+  signal data_rx   : std_logic_vector (7 downto 0);
+  signal rxfer_buf : std_logic_vector (7 downto 0);
 
   --3.  DATA_OUTPUT_GENERATION
   --3.1.        Data output mux
-  signal ctrl_rd    : std_ulogic_vector (15 downto 0);
-  signal status_rd  : std_ulogic_vector (15 downto 0);
-  signal baud_lo_rd : std_ulogic_vector (15 downto 0);
-  signal baud_hi_rd : std_ulogic_vector (15 downto 0);
-  signal data_tx_rd : std_ulogic_vector (15 downto 0);
-  signal data_rx_rd : std_ulogic_vector (15 downto 0);
+  signal ctrl_rd    : std_logic_vector (15 downto 0);
+  signal status_rd  : std_logic_vector (15 downto 0);
+  signal baud_lo_rd : std_logic_vector (15 downto 0);
+  signal baud_hi_rd : std_logic_vector (15 downto 0);
+  signal data_tx_rd : std_logic_vector (15 downto 0);
+  signal data_rx_rd : std_logic_vector (15 downto 0);
 
   --4.  UART_CLOCK_SELECTION
-  signal uclk_en : std_ulogic;
+  signal uclk_en : std_logic;
 
   --5.  LINE_SYNCHRONIZTION_FILTERING
   --5.1.        Synchronize RXD input
-  signal uart_rxd_sync_n : std_ulogic;
-  signal not_uart_rxd    : std_ulogic;
-  signal uart_rxd_sync   : std_ulogic;
+  signal uart_rxd_sync_n : std_logic;
+  signal not_uart_rxd    : std_logic;
+  signal uart_rxd_sync   : std_logic;
 
   --5.2.        RXD input buffer
-  signal rxd_buf_u : std_ulogic_vector (1 downto 0);
+  signal rxd_buf_u : std_logic_vector (1 downto 0);
 
   --5.3.        Majority decision
-  signal rxd_maj_u     : std_ulogic;
-  signal rxd_maj_nxt_u : std_ulogic;
-  signal rxd_s_u       : std_ulogic;
-  signal rxd_fe_u      : std_ulogic;
-  signal rxd_maj_cnt   : std_ulogic_vector (1 downto 0);
-  signal zero_sync     : std_ulogic_vector (1 downto 0);
-  signal zero_buf_u_0  : std_ulogic_vector (1 downto 0);
-  signal zero_buf_u_1  : std_ulogic_vector (1 downto 0);
+  signal rxd_maj_u     : std_logic;
+  signal rxd_maj_nxt_u : std_logic;
+  signal rxd_s_u       : std_logic;
+  signal rxd_fe_u      : std_logic;
+  signal rxd_maj_cnt   : std_logic_vector (1 downto 0);
+  signal zero_sync     : std_logic_vector (1 downto 0);
+  signal zero_buf_u_0  : std_logic_vector (1 downto 0);
+  signal zero_buf_u_1  : std_logic_vector (1 downto 0);
 
   --6.  UART_RECEIVE
   --6.1.        RX Transfer counter
-  signal rxfer_start   : std_ulogic;
-  signal rxfer_bit_inc : std_ulogic;
-  signal rxfer_done    : std_ulogic;
-  signal rxfer_bit     : std_ulogic_vector (3 downto 0);
-  signal rxfer_cnt     : std_ulogic_vector (15 downto 0);
+  signal rxfer_start   : std_logic;
+  signal rxfer_bit_inc : std_logic;
+  signal rxfer_done    : std_logic;
+  signal rxfer_bit     : std_logic_vector (3 downto 0);
+  signal rxfer_cnt     : std_logic_vector (15 downto 0);
 
   --6.2.        Receive buffer
-  signal rxfer_buf_nxt : std_ulogic_vector (7 downto 0);
+  signal rxfer_buf_nxt : std_logic_vector (7 downto 0);
 
   --6.3.        Status flags
-  signal rxfer_done_dly : std_ulogic;
+  signal rxfer_done_dly : std_logic;
 
   --7.  UART_TRANSMIT
   --7.1.        TX Transfer start detection
-  signal txfer_triggered : std_ulogic;
-  signal txfer_start     : std_ulogic;
+  signal txfer_triggered : std_logic;
+  signal txfer_start     : std_logic;
 
   --7.2.        TX Transfer counter
-  signal txfer_bit_inc : std_ulogic;
-  signal txfer_done    : std_ulogic;
-  signal txfer_bit     : std_ulogic_vector (3 downto 0);
-  signal txfer_cnt     : std_ulogic_vector (15 downto 0);
+  signal txfer_bit_inc : std_logic;
+  signal txfer_done    : std_logic;
+  signal txfer_bit     : std_logic_vector (3 downto 0);
+  signal txfer_cnt     : std_logic_vector (15 downto 0);
 
   --7.3.        Transmit buffer
-  signal txfer_buf     : std_ulogic_vector (8 downto 0);
-  signal txfer_buf_nxt : std_ulogic_vector (8 downto 0);
+  signal txfer_buf     : std_logic_vector (8 downto 0);
+  signal txfer_buf_nxt : std_logic_vector (8 downto 0);
 
   --7.4.        Status flags
-  signal txfer_done_dly : std_ulogic;
+  signal txfer_done_dly : std_logic;
 
   --8.  INTERRUPTS
   --8.1.        Receive interrupt
@@ -247,18 +247,18 @@ begin
     reg_addr_u <= '0' & per_addr(DEC_WD_U - 2 downto 0);
 
     --1.3.      Register address decode
-    reg_dec_u <= (CTRL_D and (reg_dec_u'range => to_stdlogic(reg_addr_u =
-                                                             std_ulogic_vector(unsigned(CTRLB) srl 1)))) or
-                 (STATUS_D and (reg_dec_u'range => to_stdlogic(reg_addr_u =
-                                                               std_ulogic_vector(unsigned(STATUSB) srl 1)))) or
-                 (BAUD_LO_D and (reg_dec_u'range => to_stdlogic(reg_addr_u =
-                                                                std_ulogic_vector(unsigned(BAUD_LOB) srl 1)))) or
-                 (BAUD_HI_D and (reg_dec_u'range => to_stdlogic(reg_addr_u =
-                                                                std_ulogic_vector(unsigned(BAUD_HIB) srl 1)))) or
-                 (DATA_TX_D and (reg_dec_u'range => to_stdlogic(reg_addr_u =
-                                                                std_ulogic_vector(unsigned(DATA_TXB) srl 1)))) or
-                 (DATA_RX_D and (reg_dec_u'range => to_stdlogic(reg_addr_u =
-                                                                std_ulogic_vector(unsigned(DATA_RXB) srl 1))));
+    reg_dec_u <= (CTRL_D and (0 to DEC_SZ_U - 1 => to_stdlogic(reg_addr_u =
+                                                             std_logic_vector(unsigned(CTRLB) srl 1)))) or
+                 (STATUS_D and (0 to DEC_SZ_U - 1 => to_stdlogic(reg_addr_u =
+                                                               std_logic_vector(unsigned(STATUSB) srl 1)))) or
+                 (BAUD_LO_D and (0 to DEC_SZ_U - 1 => to_stdlogic(reg_addr_u =
+                                                                std_logic_vector(unsigned(BAUD_LOB) srl 1)))) or
+                 (BAUD_HI_D and (0 to DEC_SZ_U - 1 => to_stdlogic(reg_addr_u =
+                                                                std_logic_vector(unsigned(BAUD_HIB) srl 1)))) or
+                 (DATA_TX_D and (0 to DEC_SZ_U - 1 => to_stdlogic(reg_addr_u =
+                                                                std_logic_vector(unsigned(DATA_TXB) srl 1)))) or
+                 (DATA_RX_D and (0 to DEC_SZ_U - 1 => to_stdlogic(reg_addr_u =
+                                                                std_logic_vector(unsigned(DATA_RXB) srl 1))));
 
     --1.4.      Read/Write probes
     reg_hi_write_u <= per_we(0) and reg_sel_u;
@@ -266,9 +266,9 @@ begin
     reg_read_u     <= not or_reduce(per_we) and reg_sel_u;
 
     --1.5.      Read/Write vectors
-    reg_hi_wr_u <= reg_dec_u and (reg_dec_u'range => reg_hi_write_u);
-    reg_lo_wr_u <= reg_dec_u and (reg_dec_u'range => reg_lo_write_u);
-    reg_rd_u    <= reg_dec_u and (reg_dec_u'range => reg_read_u);
+    reg_hi_wr_u <= reg_dec_u and (0 to DEC_SZ_U - 1 => reg_hi_write_u);
+    reg_lo_wr_u <= reg_dec_u and (0 to DEC_SZ_U - 1 => reg_lo_write_u);
+    reg_rd_u    <= reg_dec_u and (0 to DEC_SZ_U - 1 => reg_read_u);
   end block REGISTER_DECODER;
 
   REGISTERS : block
@@ -420,23 +420,23 @@ begin
   DATA_OUTPUT_GENERATION : block
   begin
     --3.1.      Data output mux
-    ctrl_rd <= std_ulogic_vector((X"00" & (unsigned(ctrl) and (7 downto 0 => reg_rd_u(CTRLC))))
-                                 sll to_integer((3 downto 0               => CTRLB (0)) and to_unsigned(8, 4)));
+    ctrl_rd <= std_logic_vector((X"00" & (unsigned(ctrl) and (0 to 7 => reg_rd_u(CTRLC))))
+                                 sll to_integer((0 to 3 => CTRLB (0)) and to_unsigned(8, 4)));
 
-    status_rd <= std_ulogic_vector((X"00" & (unsigned(status_u) and (7 downto 0 => reg_rd_u(STATUSC))))
-                                   sll to_integer((3 downto 0                   => STATUSB (0)) and to_unsigned(8, 4)));
+    status_rd <= std_logic_vector((X"00" & (unsigned(status_u) and (0 to 7 => reg_rd_u(STATUSC))))
+                                   sll to_integer((0 to 3 => STATUSB (0)) and to_unsigned(8, 4)));
 
-    baud_lo_rd <= std_ulogic_vector((X"00" & (unsigned(baud_lo) and (7 downto 0 => reg_rd_u(BAUD_LOC))))
-                                    sll to_integer((3 downto 0                  => BAUD_LOB (0)) and to_unsigned(8, 4)));
+    baud_lo_rd <= std_logic_vector((X"00" & (unsigned(baud_lo) and (0 to 7 => reg_rd_u(BAUD_LOC))))
+                                    sll to_integer((0 to 3 => BAUD_LOB (0)) and to_unsigned(8, 4)));
 
-    baud_hi_rd <= std_ulogic_vector((X"00" & (unsigned(baud_hi) and (7 downto 0 => reg_rd_u(BAUD_HIC))))
-                                    sll to_integer((3 downto 0                  => BAUD_HIB (0)) and to_unsigned(8, 4)));
+    baud_hi_rd <= std_logic_vector((X"00" & (unsigned(baud_hi) and (0 to 7 => reg_rd_u(BAUD_HIC))))
+                                    sll to_integer((0 to 3 => BAUD_HIB (0)) and to_unsigned(8, 4)));
 
-    data_tx_rd <= std_ulogic_vector((X"00" & (unsigned(data_tx) and (7 downto 0 => reg_rd_u(DATA_TXC))))
-                                    sll to_integer((3 downto 0                  => DATA_TXB (0)) and to_unsigned(8, 4)));
+    data_tx_rd <= std_logic_vector((X"00" & (unsigned(data_tx) and (0 to 7 => reg_rd_u(DATA_TXC))))
+                                    sll to_integer((0 to 3 => DATA_TXB (0)) and to_unsigned(8, 4)));
 
-    data_rx_rd <= std_ulogic_vector((X"00" & (unsigned(data_rx) and (7 downto 0 => reg_rd_u(DATA_RXC))))
-                                    sll to_integer((3 downto 0                  => DATA_RXB (0)) and to_unsigned(8, 4)));
+    data_rx_rd <= std_logic_vector((X"00" & (unsigned(data_rx) and (0 to 7 => reg_rd_u(DATA_RXC))))
+                                    sll to_integer((0 to 3 => DATA_RXB (0)) and to_unsigned(8, 4)));
 
 
     per_dout <= ctrl_rd or status_rd or baud_lo_rd or baud_hi_rd or data_tx_rd or data_rx_rd;
@@ -475,7 +475,7 @@ begin
     zero_buf_u_0 <= '0' & rxd_buf_u(0);
     zero_buf_u_1 <= '0' & rxd_buf_u(1);
 
-    rxd_maj_cnt <= std_ulogic_vector(unsigned(zero_sync) +
+    rxd_maj_cnt <= std_logic_vector(unsigned(zero_sync) +
                                      unsigned(zero_buf_u_0) +
                                      unsigned(zero_buf_u_1));
 
@@ -514,7 +514,7 @@ begin
           if (rxfer_done = '1') then
             rxfer_bit <= X"0";
           elsif (rxfer_bit_inc = '1') then
-            rxfer_bit <= std_ulogic_vector(unsigned(rxfer_bit) + X"1");
+            rxfer_bit <= std_logic_vector(unsigned(rxfer_bit) + X"1");
           end if;
         end if;
       end if;
@@ -533,7 +533,7 @@ begin
           if (rxfer_bit_inc = '1') then
             rxfer_cnt <= baudrate;
           elsif (or_reduce(rxfer_cnt) = '1') then
-            rxfer_cnt <= std_ulogic_vector(unsigned(rxfer_cnt) + X"FFFF");
+            rxfer_cnt <= std_logic_vector(unsigned(rxfer_cnt) + X"FFFF");
           end if;
         end if;
       end if;
@@ -607,7 +607,7 @@ begin
           if (txfer_done = '1') then
             txfer_bit <= X"0";
           elsif (txfer_bit_inc = '1') then
-            txfer_bit <= std_ulogic_vector(unsigned(txfer_bit) + X"1");
+            txfer_bit <= std_logic_vector(unsigned(txfer_bit) + X"1");
           end if;
         end if;
       end if;
@@ -626,7 +626,7 @@ begin
           if (txfer_bit_inc = '1') then
             txfer_cnt <= baudrate;
           elsif (or_reduce(txfer_cnt) = '1') then
-            txfer_cnt <= std_ulogic_vector(unsigned(txfer_cnt) + X"FFFF");
+            txfer_cnt <= std_logic_vector(unsigned(txfer_cnt) + X"FFFF");
           end if;
         end if;
       end if;

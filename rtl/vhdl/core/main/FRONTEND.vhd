@@ -392,7 +392,7 @@ begin
   begin
     --3.1.PROGRAM COUNTER & MEMORY INTERFACE
     --Compute next PC value
-    pc_incr     <= std_ulogic_vector(unsigned(pc_omsp) + ((15 downto 2 => '0') & fetch & '0'));
+    pc_incr     <= std_ulogic_vector(unsigned(pc_omsp) + ((1 to 14 => '0') & fetch & '0'));
     pc_nxt_omsp <= pc_sw
                    when pc_sw_wr = '1'             else irq_addr
                    when i_state_omsp = I_IRQ_FETCH else mdb_in
@@ -476,7 +476,7 @@ begin
         if ((decode_omsp and is_const) = '1') then
           inst_sext <= sconst_nxt;
         elsif ((decode_omsp and inst_type_nxt(INST_JMPC)) = '1') then
-          inst_sext <= (15 downto 11 => ir_omsp(9)) & ir_omsp(9 downto 0) & '0';
+          inst_sext <= (11 to 15 => ir_omsp(9)) & ir_omsp(9 downto 0) & '0';
         elsif (CLOCK_GATING = '1') then
           inst_sext <= ext_nxt;
         elsif ((i_state_omsp = I_EXT1) and is_sext = '1' and CLOCK_GATING = '0') then
@@ -544,7 +544,7 @@ begin
     inst_type_nxt <= (to_stdlogic(ir_omsp(15 downto 14) /= "00") &
                       to_stdlogic(ir_omsp(15 downto 13) = "001") &
                       to_stdlogic(ir_omsp(15 downto 13) = "000"))
-                     and (2 downto 0 => not irq_detect_omsp);
+                     and (0 to 2 => not irq_detect_omsp);
 
     R_1_1i_2ci : process (mclk_decode, puc_rst)
     begin
@@ -562,7 +562,7 @@ begin
     --4.2.OPCODE: SINGLE-OPERAND ARITHMETIC
     --Instructions are encoded in a one hot fashion as following:
     inst_so_nxt <= "10000000"
-                   when irq_detect_omsp = '1' else (one_hot8(ir_omsp(9 downto 7)) and (inst_so_nxt'range => inst_type_nxt(INST_SOC)));
+                   when irq_detect_omsp = '1' else (one_hot8(ir_omsp(9 downto 7)) and (0 to 7 => inst_type_nxt(INST_SOC)));
 
     R_2_1i_2ci : process (mclk_decode, puc_rst)
     begin
@@ -592,11 +592,11 @@ begin
       end if;
     end process R_3_1i_2ci;
 
-    inst_jmp <= one_hot8(inst_jmp_bin) and (inst_jmp'range => inst_type_omsp(INST_JMPC));
+    inst_jmp <= one_hot8(inst_jmp_bin) and (0 to 7 => inst_type_omsp(INST_JMPC));
 
     --4.4.OPCODE: TWO-OPERAND ARITHMETIC
     --Instructions are encoded in a one hot fashion as following:
-    inst_to_1hot <= one_hot16(ir_omsp(15 downto 12)) and (inst_to_1hot'range => inst_type_nxt(INST_TOC));
+    inst_to_1hot <= one_hot16(ir_omsp(15 downto 12)) and (0 to 15 => inst_type_nxt(INST_TOC));
     inst_to_nxt  <= inst_to_1hot(15 downto 4);
 
     R_1_1i_2ci_e : process (mclk_decode, puc_rst)

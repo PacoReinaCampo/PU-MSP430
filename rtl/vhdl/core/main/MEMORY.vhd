@@ -46,109 +46,109 @@ use WORK.MSP430_PACK .all;
 
 entity MEMORY is
   port (
-    dmem_cen     : out std_ulogic;
-    fe_pmem_wait : out std_ulogic;
-    per_en       : out std_ulogic;
-    pmem_cen     : out std_ulogic;
-    dmem_wen     : out std_ulogic_vector (1 downto 0);
-    per_we       : out std_ulogic_vector (1 downto 0);
-    pmem_wen     : out std_ulogic_vector (1 downto 0);
-    per_addr     : out std_ulogic_vector (13 downto 0);
-    dbg_mem_din  : out std_ulogic_vector (15 downto 0);
-    dmem_din     : out std_ulogic_vector (15 downto 0);
-    eu_mdb_in    : out std_ulogic_vector (15 downto 0);
-    fe_mdb_in    : out std_ulogic_vector (15 downto 0);
-    per_din      : out std_ulogic_vector (15 downto 0);
-    pmem_din     : out std_ulogic_vector (15 downto 0);
-    dmem_addr    : out std_ulogic_vector (DMEM_MSB downto 0);
-    pmem_addr    : out std_ulogic_vector (PMEM_MSB downto 0);
+    dmem_cen     : out std_logic;
+    fe_pmem_wait : out std_logic;
+    per_en       : out std_logic;
+    pmem_cen     : out std_logic;
+    dmem_wen     : out std_logic_vector (1 downto 0);
+    per_we       : out std_logic_vector (1 downto 0);
+    pmem_wen     : out std_logic_vector (1 downto 0);
+    per_addr     : out std_logic_vector (13 downto 0);
+    dbg_mem_din  : out std_logic_vector (15 downto 0);
+    dmem_din     : out std_logic_vector (15 downto 0);
+    eu_mdb_in    : out std_logic_vector (15 downto 0);
+    fe_mdb_in    : out std_logic_vector (15 downto 0);
+    per_din      : out std_logic_vector (15 downto 0);
+    pmem_din     : out std_logic_vector (15 downto 0);
+    dmem_addr    : out std_logic_vector (DMEM_MSB downto 0);
+    pmem_addr    : out std_logic_vector (PMEM_MSB downto 0);
 
-    dbg_halt_st  : in std_ulogic;
-    dbg_mem_en   : in std_ulogic;
-    eu_mb_en     : in std_ulogic;
-    fe_mb_en     : in std_ulogic;
-    mclk         : in std_ulogic;
-    puc_rst      : in std_ulogic;
-    scan_enable  : in std_ulogic;
-    dbg_mem_wr   : in std_ulogic_vector (1 downto 0);
-    eu_mb_wr     : in std_ulogic_vector (1 downto 0);
-    eu_mab       : in std_ulogic_vector (14 downto 0);
-    fe_mab       : in std_ulogic_vector (14 downto 0);
-    dbg_mem_addr : in std_ulogic_vector (15 downto 0);
-    dbg_mem_dout : in std_ulogic_vector (15 downto 0);
-    dmem_dout    : in std_ulogic_vector (15 downto 0);
-    eu_mdb_out   : in std_ulogic_vector (15 downto 0);
-    per_dout     : in std_ulogic_vector (15 downto 0);
-    pmem_dout    : in std_ulogic_vector (15 downto 0));
+    dbg_halt_st  : in std_logic;
+    dbg_mem_en   : in std_logic;
+    eu_mb_en     : in std_logic;
+    fe_mb_en     : in std_logic;
+    mclk         : in std_logic;
+    puc_rst      : in std_logic;
+    scan_enable  : in std_logic;
+    dbg_mem_wr   : in std_logic_vector (1 downto 0);
+    eu_mb_wr     : in std_logic_vector (1 downto 0);
+    eu_mab       : in std_logic_vector (14 downto 0);
+    fe_mab       : in std_logic_vector (14 downto 0);
+    dbg_mem_addr : in std_logic_vector (15 downto 0);
+    dbg_mem_dout : in std_logic_vector (15 downto 0);
+    dmem_dout    : in std_logic_vector (15 downto 0);
+    eu_mdb_out   : in std_logic_vector (15 downto 0);
+    per_dout     : in std_logic_vector (15 downto 0);
+    pmem_dout    : in std_logic_vector (15 downto 0));
 end MEMORY;
 
 architecture MEMORY_ARQ of MEMORY is
 
-  constant PMEM_OFFSET : std_ulogic_vector (15 downto 0) := std_ulogic_vector(to_unsigned(65536 - PMEM_SIZE, 16) srl 1);
+  constant PMEM_OFFSET : std_logic_vector (15 downto 0) := std_logic_vector(to_unsigned(65536 - PMEM_SIZE, 16) srl 1);
 
   --SIGNAL INOUT
-  signal per_en_omsp : std_ulogic;
+  signal per_en_omsp : std_logic;
 
   --1.RAM INTERFACE
   --Execution unit access
-  signal eu_dmem_cen  : std_ulogic;
-  signal eu_dmem_addr : std_ulogic_vector (15 downto 0);
+  signal eu_dmem_cen  : std_logic;
+  signal eu_dmem_addr : std_logic_vector (15 downto 0);
 
   --Debug interface access
-  signal dbg_dmem_cen  : std_ulogic;
-  signal dbg_dmem_addr : std_ulogic_vector (15 downto 0);
+  signal dbg_dmem_cen  : std_logic;
+  signal dbg_dmem_addr : std_logic_vector (15 downto 0);
 
   --2.ROM INTERFACE
   --Execution unit access (only read access are accepted)
-  signal eu_pmem_cen  : std_ulogic;
-  signal eu_pmem_addr : std_ulogic_vector (15 downto 0);
+  signal eu_pmem_cen  : std_logic;
+  signal eu_pmem_addr : std_logic_vector (15 downto 0);
 
   --Front-end access
-  signal fe_pmem_cen  : std_ulogic;
-  signal fe_pmem_addr : std_ulogic_vector (15 downto 0);
+  signal fe_pmem_cen  : std_logic;
+  signal fe_pmem_addr : std_logic_vector (15 downto 0);
 
   --Debug interface access
-  signal dbg_pmem_cen  : std_ulogic;
-  signal dbg_pmem_addr : std_ulogic_vector (15 downto 0);
+  signal dbg_pmem_cen  : std_logic;
+  signal dbg_pmem_addr : std_logic_vector (15 downto 0);
 
   --3.PERIPHERALS
-  signal dbg_per_en   : std_ulogic;
-  signal eu_per_en    : std_ulogic;
-  signal per_addr_ful : std_ulogic_vector (14 downto 0);
-  signal per_dout_val : std_ulogic_vector (15 downto 0);
-  signal per_addr_mux : std_ulogic_vector (PER_MSB downto 0);
+  signal dbg_per_en   : std_logic;
+  signal eu_per_en    : std_logic;
+  signal per_addr_ful : std_logic_vector (14 downto 0);
+  signal per_dout_val : std_logic_vector (15 downto 0);
+  signal per_addr_mux : std_logic_vector (PER_MSB downto 0);
 
   --4.FRONTEND DATA MUX
   --Detect whenever the data should be backuped and restored
-  signal fe_pmem_cen_dly : std_ulogic;
-  signal fe_pmem_save    : std_ulogic;
-  signal fe_pmem_restore : std_ulogic;
-  signal mclk_bckup      : std_ulogic;
-  signal pmem_dout_bckup : std_ulogic_vector (15 downto 0);
+  signal fe_pmem_cen_dly : std_logic;
+  signal fe_pmem_save    : std_logic;
+  signal fe_pmem_restore : std_logic;
+  signal mclk_bckup      : std_logic;
+  signal pmem_dout_bckup : std_logic_vector (15 downto 0);
 
   --Mux between the ROM data and the backup
-  signal pmem_dout_bckup_sel : std_ulogic;
+  signal pmem_dout_bckup_sel : std_logic;
 
   --5.EXECUTION - UNIT DATA MUX
   --Select between peripherals, RAM and ROM     
-  signal eu_mdb_in_sel : std_ulogic_vector (1 downto 0);
+  signal eu_mdb_in_sel : std_logic_vector (1 downto 0);
 
   --6.DEBUG INTERFACE DATA MUX
   --Select between peripherals, RAM and ROM
-  signal dbg_mem_din_sel : std_ulogic_vector (1 downto 0);
+  signal dbg_mem_din_sel : std_logic_vector (1 downto 0);
 
 begin
   M1_RAM_INTERFACE : block
   begin
     --Execution unit access
-    eu_dmem_cen <= not (eu_mb_en and to_stdlogic(eu_mab >= std_ulogic_vector(to_unsigned(DMEM_BASE, 15) srl 1))
-                        and to_stdlogic(eu_mab < std_ulogic_vector(to_unsigned(DMEM_BASE + DMEM_SIZE, 15) srl 1)));
-    eu_dmem_addr <= std_ulogic_vector(('0' & unsigned(eu_mab)) - (to_unsigned(DMEM_BASE, 15) srl 1));
+    eu_dmem_cen <= not (eu_mb_en and to_stdlogic(eu_mab >= std_logic_vector(to_unsigned(DMEM_BASE, 15) srl 1))
+                        and to_stdlogic(eu_mab < std_logic_vector(to_unsigned(DMEM_BASE + DMEM_SIZE, 15) srl 1)));
+    eu_dmem_addr <= std_logic_vector(('0' & unsigned(eu_mab)) - (to_unsigned(DMEM_BASE, 15) srl 1));
 
     --Debug interface access    
-    dbg_dmem_cen <= not (dbg_mem_en and to_stdlogic(dbg_mem_addr(15 downto 1) >= std_ulogic_vector(to_unsigned(DMEM_BASE, 15) srl 1))
-                         and to_stdlogic(dbg_mem_addr(15 downto 1) < std_ulogic_vector(to_unsigned(DMEM_BASE + DMEM_SIZE, 15) srl 1)));
-    dbg_dmem_addr <= std_ulogic_vector(('0' & unsigned(dbg_mem_addr(15 downto 1))) - (to_unsigned(DMEM_BASE, 15) srl 1));
+    dbg_dmem_cen <= not (dbg_mem_en and to_stdlogic(dbg_mem_addr(15 downto 1) >= std_logic_vector(to_unsigned(DMEM_BASE, 15) srl 1))
+                         and to_stdlogic(dbg_mem_addr(15 downto 1) < std_logic_vector(to_unsigned(DMEM_BASE + DMEM_SIZE, 15) srl 1)));
+    dbg_dmem_addr <= std_logic_vector(('0' & unsigned(dbg_mem_addr(15 downto 1))) - (to_unsigned(DMEM_BASE, 15) srl 1));
 
     --RAM Interface
     dmem_addr <= dbg_dmem_addr(DMEM_MSB downto 0) when dbg_dmem_cen = '0' else eu_dmem_addr(DMEM_MSB downto 0);
@@ -161,15 +161,15 @@ begin
   begin
     --Execution unit access (only read access are accepted)     
     eu_pmem_cen  <= not (eu_mb_en and not or_reduce(eu_mb_wr) and to_stdlogic(eu_mab >= PMEM_OFFSET));
-    eu_pmem_addr <= std_ulogic_vector(unsigned(eu_mab) - unsigned(PMEM_OFFSET));
+    eu_pmem_addr <= std_logic_vector(unsigned(eu_mab) - unsigned(PMEM_OFFSET));
 
     --Front-end access
     fe_pmem_cen  <= not (fe_mb_en and to_stdlogic(fe_mab >= PMEM_OFFSET));
-    fe_pmem_addr <= std_ulogic_vector(unsigned(fe_mab) - unsigned(PMEM_OFFSET));
+    fe_pmem_addr <= std_logic_vector(unsigned(fe_mab) - unsigned(PMEM_OFFSET));
 
     --Debug interface access
     dbg_pmem_cen  <= not (dbg_mem_en and to_stdlogic(dbg_mem_addr(15 downto 1) >= PMEM_OFFSET));
-    dbg_pmem_addr <= std_ulogic_vector(('0' & unsigned(dbg_mem_addr(15 downto 1))) - unsigned(PMEM_OFFSET));
+    dbg_pmem_addr <= std_logic_vector(('0' & unsigned(dbg_mem_addr(15 downto 1))) - unsigned(PMEM_OFFSET));
 
     --ROM Interface (Execution unit has priority)
     pmem_addr <= dbg_pmem_addr(PMEM_MSB downto 0)
@@ -187,13 +187,13 @@ begin
 
   M3_PERIPHERALS : block
   begin
-    dbg_per_en   <= dbg_mem_en and to_stdlogic(dbg_mem_addr(15 downto 1) < std_ulogic_vector(to_unsigned(PER_SIZE, 15) srl 1));
-    eu_per_en    <= eu_mb_en and to_stdlogic(eu_mab < std_ulogic_vector(to_unsigned(PER_SIZE, 15) srl 1));
+    dbg_per_en   <= dbg_mem_en and to_stdlogic(dbg_mem_addr(15 downto 1) < std_logic_vector(to_unsigned(PER_SIZE, 15) srl 1));
+    eu_per_en    <= eu_mb_en and to_stdlogic(eu_mab < std_logic_vector(to_unsigned(PER_SIZE, 15) srl 1));
     per_din      <= dbg_mem_dout                       when dbg_mem_en = '1' else eu_mdb_out;
     per_we       <= dbg_mem_wr                         when dbg_mem_en = '1' else eu_mb_wr;
     per_en_omsp  <= dbg_per_en                         when dbg_mem_en = '1' else eu_per_en;
     per_addr_mux <= dbg_mem_addr(PER_MSB + 1 downto 1) when dbg_mem_en = '1' else eu_mab(PER_MSB downto 0);
-    per_addr_ful <= (14 downto PER_AWIDTH => '0') & per_addr_mux;
+    per_addr_ful <= (PER_AWIDTH to 14 => '0') & per_addr_mux;
     per_addr     <= per_addr_ful(13 downto 0);
     per_en       <= per_en_omsp;
 

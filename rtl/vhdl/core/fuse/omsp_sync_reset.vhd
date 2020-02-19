@@ -44,9 +44,9 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity omsp_sync_reset is
   port (
-    rst_s : out std_ulogic;
-    clk   : in  std_ulogic;
-    rst_a : in  std_ulogic);
+    rst_s : out std_logic;
+    clk   : in  std_logic;
+    rst_a : in  std_logic);
 end omsp_sync_reset;
 
 architecture omsp_sync_reset_ARQ of omsp_sync_reset is

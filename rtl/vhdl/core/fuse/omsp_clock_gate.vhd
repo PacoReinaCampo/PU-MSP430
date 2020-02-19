@@ -44,16 +44,16 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity omsp_clock_gate is
   port (
-    gclk        : out std_ulogic;
-    clk         : in  std_ulogic;
-    enable      : in  std_ulogic;
-    scan_enable : in  std_ulogic);
+    gclk        : out std_logic;
+    clk         : in  std_logic;
+    enable      : in  std_logic;
+    scan_enable : in  std_logic);
 end omsp_clock_gate;
 
 architecture omsp_clock_gate_ARQ of omsp_clock_gate is
 
-  signal enable_in    : std_ulogic;
-  signal enable_latch : std_ulogic;
+  signal enable_in    : std_logic;
+  signal enable_latch : std_logic;
 
 begin
   enable_in <= enable or scan_enable;

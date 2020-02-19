@@ -41,7 +41,7 @@
 `include "openMSP430_defines.v"
 `endif
 
-module  tb_openMSP430;
+module tb_openMSP430;
 
 wire        [15:0] r0;
 wire        [15:0] r1;
@@ -388,7 +388,7 @@ ram #(`DMEM_MSB, `DMEM_SIZE) dmem_0 (
 // openMSP430 Instance
 //----------------------------------
 
-MSP_QF dut (
+MSP430_CORE dut (
 
 // OUTPUTs
     .r0                (r0),
@@ -397,8 +397,8 @@ MSP_QF dut (
     .r3                (r3),
     .r4                (r4),
     .r5                (r5),
-    .r6		           (r6),
-    .r7		           (r7),
+    .r6	               (r6),
+    .r7                (r7),
     .r8                (r8),
     .r9                (r9),
     .r10               (r10),
@@ -582,7 +582,7 @@ UART UART_0 (
 // Peripheral templates
 //----------------------------------
 
-PLANTILLA_08 PLANTILLA_08_0 (
+TEMPLATE_08 TEMPLATE_08_0 (
 
 // OUTPUTs
     .per_dout     (per_dout_temp_8b),  // Peripheral data output
@@ -596,7 +596,7 @@ PLANTILLA_08 PLANTILLA_08_0 (
     .puc_rst      (puc_rst)            // Main system reset
 );
 
-PLANTILLA_16 PLANTILLA_16_0 (
+TEMPLATE_16 TEMPLATE_16_0 (
 // OUTPUTs
     .per_dout     (per_dout_temp_16b), // Peripheral data output
     .cntrl2_16b   (cntrl2_16b),

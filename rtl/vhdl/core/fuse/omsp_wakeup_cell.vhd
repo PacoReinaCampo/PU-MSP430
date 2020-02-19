@@ -45,18 +45,18 @@ use WORK.MSP430_PACK .all;
 
 entity omsp_wakeup_cell is
   port (
-    wkup_out   : out std_ulogic;
-    scan_clk   : in  std_ulogic;
-    scan_mode  : in  std_ulogic;
-    scan_rst   : in  std_ulogic;
-    wkup_clear : in  std_ulogic;
-    wkup_event : in  std_ulogic);
+    wkup_out   : out std_logic;
+    scan_clk   : in  std_logic;
+    scan_mode  : in  std_logic;
+    scan_rst   : in  std_logic;
+    wkup_clear : in  std_logic;
+    wkup_event : in  std_logic);
 end omsp_wakeup_cell;
 
 architecture omsp_wakeup_cell_ARQ of omsp_wakeup_cell is
 
-  signal wkup_rst : std_ulogic;
-  signal wkup_clk : std_ulogic;
+  signal wkup_rst : std_logic;
+  signal wkup_clk : std_logic;
 
 begin
   --Scan stuff for the ASIC mode

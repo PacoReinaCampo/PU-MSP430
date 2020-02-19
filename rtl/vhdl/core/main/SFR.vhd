@@ -184,15 +184,15 @@ begin
     reg_addr_s <= '0' & per_addr(DEC_WD_S - 2 downto 0);
 
     --1.3.      Register address decode
-    reg_dec_s <= (IE1_D and (reg_dec_s'range => to_stdlogic(reg_addr_s =
+    reg_dec_s <= (IE1_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
                                                             std_ulogic_vector(unsigned(IE1B) srl 1)))) or
-                 (IFG1_D and (reg_dec_s'range => to_stdlogic(reg_addr_s =
+                 (IFG1_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
                                                              std_ulogic_vector(unsigned(IFG1B) srl 1)))) or
-                 (CPU_ID_LO_D and (reg_dec_s'range => to_stdlogic(reg_addr_s =
+                 (CPU_ID_LO_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
                                                                   std_ulogic_vector(unsigned(CPU_ID_LOB) srl 1)))) or
-                 (CPU_ID_HI_D and (reg_dec_s'range => to_stdlogic(reg_addr_s =
+                 (CPU_ID_HI_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
                                                                   std_ulogic_vector(unsigned(CPU_ID_HIB) srl 1)))) or
-                 (CPU_NRC_D and (reg_dec_s'range => to_stdlogic(reg_addr_s =
+                 (CPU_NRC_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
                                                                 std_ulogic_vector(unsigned(CPU_NRB) srl 1))));
 
     --1.4.      Read/Write probes
@@ -201,9 +201,9 @@ begin
     reg_read_s     <= not or_reduce(per_we) and reg_sel_s;
 
     --1.5.      Read/Write vectors
-    reg_hi_wr_s <= reg_dec_s and (reg_dec_s'range => reg_hi_write_s);
-    reg_lo_wr_s <= reg_dec_s and (reg_dec_s'range => reg_lo_write_s);
-    reg_rd_s    <= reg_dec_s and (reg_dec_s'range => reg_read_s);
+    reg_hi_wr_s <= reg_dec_s and (0 to DEC_SZ_S - 1 => reg_hi_write_s);
+    reg_lo_wr_s <= reg_dec_s and (0 to DEC_SZ_S - 1 => reg_lo_write_s);
+    reg_rd_s    <= reg_dec_s and (0 to DEC_SZ_S - 1 => reg_read_s);
   end block REGISTER_DECODER;
 
   REGISTERS : block
@@ -321,13 +321,13 @@ begin
   DATA_OUTPUT_GENERATION : block
   begin
     --3.1.      Data output mux
-    ie1_rd <= std_ulogic_vector((X"00" & (unsigned(ie1) and (7 downto 0 => reg_rd_s(IE1C))))
-                                sll to_integer((3 downto 0              => IE1B(0)) and to_unsigned(8, 4)));
-    ifg1_rd <= std_ulogic_vector((X"00" & (unsigned(ifg1) and (7 downto 0 => reg_rd_s(IFG1C))))
-                                 sll to_integer((3 downto 0               => IFG1B(0)) and to_unsigned(8, 4)));
-    cpu_id_lo_rd_s <= cpu_id_lo and (cpu_nr_s'range => reg_rd_s(CPU_ID_LOC));
-    cpu_id_hi_rd_s <= cpu_id_hi and (cpu_nr_s'range => reg_rd_s(CPU_ID_HIC));
-    cpu_nr_rd_s    <= cpu_nr_s and (cpu_nr_s'range  => reg_rd_s(CPU_NRC));
+    ie1_rd <= std_ulogic_vector((X"00" & (unsigned(ie1) and (0 to 7 => reg_rd_s(IE1C))))
+                                sll to_integer((0 to 3              => IE1B(0)) and to_unsigned(8, 4)));
+    ifg1_rd <= std_ulogic_vector((X"00" & (unsigned(ifg1) and (0 to 7 => reg_rd_s(IFG1C))))
+                                 sll to_integer((0 to 3               => IFG1B(0)) and to_unsigned(8, 4)));
+    cpu_id_lo_rd_s <= cpu_id_lo and (0 to 15 => reg_rd_s(CPU_ID_LOC));
+    cpu_id_hi_rd_s <= cpu_id_hi and (0 to 15 => reg_rd_s(CPU_ID_HIC));
+    cpu_nr_rd_s    <= cpu_nr_s and (0 to 15  => reg_rd_s(CPU_NRC));
     per_dout       <= ie1_rd or ifg1_rd or cpu_id_lo_rd_s or cpu_id_hi_rd_s or cpu_nr_rd_s;
   end block DATA_OUTPUT_GENERATION;
 

@@ -44,10 +44,10 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity omsp_scan_mux is
   port (
-    data_out     : out std_ulogic;
-    data_in_scan : in  std_ulogic;
-    data_in_func : in  std_ulogic;
-    scan_mode    : in  std_ulogic);
+    data_out     : out std_logic;
+    data_in_scan : in  std_logic;
+    data_in_func : in  std_logic;
+    scan_mode    : in  std_logic);
 end omsp_scan_mux;
 
 architecture omsp_scan_mux_ARQ of omsp_scan_mux is

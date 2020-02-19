@@ -46,120 +46,120 @@ use WORK.MSP430_PACK .all;
 
 entity EXECUTION is
   port (
-    r0  : out std_ulogic_vector (15 downto 0);
-    r1  : out std_ulogic_vector (15 downto 0);
-    r2  : out std_ulogic_vector (15 downto 0);
-    r3  : out std_ulogic_vector (15 downto 0);
-    r4  : out std_ulogic_vector (15 downto 0);
-    r5  : out std_ulogic_vector (15 downto 0);
-    r6  : out std_ulogic_vector (15 downto 0);
-    r7  : out std_ulogic_vector (15 downto 0);
-    r8  : out std_ulogic_vector (15 downto 0);
-    r9  : out std_ulogic_vector (15 downto 0);
-    r10 : out std_ulogic_vector (15 downto 0);
-    r11 : out std_ulogic_vector (15 downto 0);
-    r12 : out std_ulogic_vector (15 downto 0);
-    r13 : out std_ulogic_vector (15 downto 0);
-    r14 : out std_ulogic_vector (15 downto 0);
-    r15 : out std_ulogic_vector (15 downto 0);
+    r0  : out std_logic_vector (15 downto 0);
+    r1  : out std_logic_vector (15 downto 0);
+    r2  : out std_logic_vector (15 downto 0);
+    r3  : out std_logic_vector (15 downto 0);
+    r4  : out std_logic_vector (15 downto 0);
+    r5  : out std_logic_vector (15 downto 0);
+    r6  : out std_logic_vector (15 downto 0);
+    r7  : out std_logic_vector (15 downto 0);
+    r8  : out std_logic_vector (15 downto 0);
+    r9  : out std_logic_vector (15 downto 0);
+    r10 : out std_logic_vector (15 downto 0);
+    r11 : out std_logic_vector (15 downto 0);
+    r12 : out std_logic_vector (15 downto 0);
+    r13 : out std_logic_vector (15 downto 0);
+    r14 : out std_logic_vector (15 downto 0);
+    r15 : out std_logic_vector (15 downto 0);
 
-    cpuoff      : out std_ulogic;
-    gie         : out std_ulogic;
-    mb_en       : out std_ulogic;
-    oscoff      : out std_ulogic;
-    pc_sw_wr    : out std_ulogic;
-    scg0        : out std_ulogic;
-    scg1        : out std_ulogic;
-    mb_wr       : out std_ulogic_vector (1 downto 0);
-    dbg_reg_din : out std_ulogic_vector (15 downto 0);
-    mab         : out std_ulogic_vector (15 downto 0);
-    mdb_out     : out std_ulogic_vector (15 downto 0);
-    pc_sw       : out std_ulogic_vector (15 downto 0);
+    cpuoff      : out std_logic;
+    gie         : out std_logic;
+    mb_en       : out std_logic;
+    oscoff      : out std_logic;
+    pc_sw_wr    : out std_logic;
+    scg0        : out std_logic;
+    scg1        : out std_logic;
+    mb_wr       : out std_logic_vector (1 downto 0);
+    dbg_reg_din : out std_logic_vector (15 downto 0);
+    mab         : out std_logic_vector (15 downto 0);
+    mdb_out     : out std_logic_vector (15 downto 0);
+    pc_sw       : out std_logic_vector (15 downto 0);
 
-    dbg_halt_st  : in std_ulogic;
-    dbg_reg_wr   : in std_ulogic;
-    exec_done    : in std_ulogic;
-    inst_bw      : in std_ulogic;
-    inst_irq_rst : in std_ulogic;
-    inst_mov     : in std_ulogic;
-    mclk         : in std_ulogic;
-    puc_rst      : in std_ulogic;
-    scan_enable  : in std_ulogic;
-    inst_type    : in std_ulogic_vector (2 downto 0);
-    e_state      : in std_ulogic_vector (3 downto 0);
-    inst_ad      : in std_ulogic_vector (7 downto 0);
-    inst_as      : in std_ulogic_vector (7 downto 0);
-    inst_jmp     : in std_ulogic_vector (7 downto 0);
-    inst_so      : in std_ulogic_vector (7 downto 0);
-    inst_alu     : in std_ulogic_vector (11 downto 0);
-    dbg_mem_dout : in std_ulogic_vector (15 downto 0);
-    inst_dest    : in std_ulogic_vector (15 downto 0);
-    inst_dext    : in std_ulogic_vector (15 downto 0);
-    inst_sext    : in std_ulogic_vector (15 downto 0);
-    inst_src     : in std_ulogic_vector (15 downto 0);
-    mdb_in       : in std_ulogic_vector (15 downto 0);
-    pc           : in std_ulogic_vector (15 downto 0);
-    pc_nxt       : in std_ulogic_vector (15 downto 0));
+    dbg_halt_st  : in std_logic;
+    dbg_reg_wr   : in std_logic;
+    exec_done    : in std_logic;
+    inst_bw      : in std_logic;
+    inst_irq_rst : in std_logic;
+    inst_mov     : in std_logic;
+    mclk         : in std_logic;
+    puc_rst      : in std_logic;
+    scan_enable  : in std_logic;
+    inst_type    : in std_logic_vector (2 downto 0);
+    e_state      : in std_logic_vector (3 downto 0);
+    inst_ad      : in std_logic_vector (7 downto 0);
+    inst_as      : in std_logic_vector (7 downto 0);
+    inst_jmp     : in std_logic_vector (7 downto 0);
+    inst_so      : in std_logic_vector (7 downto 0);
+    inst_alu     : in std_logic_vector (11 downto 0);
+    dbg_mem_dout : in std_logic_vector (15 downto 0);
+    inst_dest    : in std_logic_vector (15 downto 0);
+    inst_dext    : in std_logic_vector (15 downto 0);
+    inst_sext    : in std_logic_vector (15 downto 0);
+    inst_src     : in std_logic_vector (15 downto 0);
+    mdb_in       : in std_logic_vector (15 downto 0);
+    pc           : in std_logic_vector (15 downto 0);
+    pc_nxt       : in std_logic_vector (15 downto 0));
 end EXECUTION;
 
 architecture EXECUTION_ARQ of EXECUTION is
 
   --0.INTERNAL WIRES/REGISTERS/PARAMETERS DECLARATION
-  signal alu_stat    : std_ulogic_vector (3 downto 0);
-  signal alu_stat_wr : std_ulogic_vector (3 downto 0);
-  signal status      : std_ulogic_vector (3 downto 0);
-  signal alu_out     : std_ulogic_vector (15 downto 0);
-  signal alu_out_add : std_ulogic_vector (15 downto 0);
-  signal op_dst      : std_ulogic_vector (15 downto 0);
-  signal op_src      : std_ulogic_vector (15 downto 0);
-  signal reg_dest    : std_ulogic_vector (15 downto 0);
-  signal reg_src     : std_ulogic_vector (15 downto 0);
-  signal mdb_in_bw   : std_ulogic_vector (15 downto 0);
-  signal mdb_in_val  : std_ulogic_vector (15 downto 0);
+  signal alu_stat    : std_logic_vector (3 downto 0);
+  signal alu_stat_wr : std_logic_vector (3 downto 0);
+  signal status      : std_logic_vector (3 downto 0);
+  signal alu_out     : std_logic_vector (15 downto 0);
+  signal alu_out_add : std_logic_vector (15 downto 0);
+  signal op_dst      : std_logic_vector (15 downto 0);
+  signal op_src      : std_logic_vector (15 downto 0);
+  signal reg_dest    : std_logic_vector (15 downto 0);
+  signal reg_src     : std_logic_vector (15 downto 0);
+  signal mdb_in_bw   : std_logic_vector (15 downto 0);
+  signal mdb_in_val  : std_logic_vector (15 downto 0);
 
   --1.REGISTER FILE
-  signal reg_dest_wr : std_ulogic;
-  signal reg_sp_wr   : std_ulogic;
-  signal reg_sr_wr   : std_ulogic;
-  signal reg_sr_clr  : std_ulogic;
-  signal reg_pc_call : std_ulogic;
-  signal reg_incr    : std_ulogic;
+  signal reg_dest_wr : std_logic;
+  signal reg_sp_wr   : std_logic;
+  signal reg_sr_wr   : std_logic;
+  signal reg_sr_clr  : std_logic;
+  signal reg_pc_call : std_logic;
+  signal reg_incr    : std_logic;
 
   --2.SOURCE OPERAND MUXING
-  signal src_reg_src_sel    : std_ulogic;
-  signal src_reg_dest_sel   : std_ulogic;
-  signal src_mdb_in_val_sel : std_ulogic;
-  signal src_inst_dext_sel  : std_ulogic;
-  signal src_inst_sext_sel  : std_ulogic;
+  signal src_reg_src_sel    : std_logic;
+  signal src_reg_dest_sel   : std_logic;
+  signal src_mdb_in_val_sel : std_logic;
+  signal src_inst_dext_sel  : std_logic;
+  signal src_inst_sext_sel  : std_logic;
 
   --3.DESTINATION OPERAND MUXING
-  signal dst_inst_sext_sel : std_ulogic;
-  signal dst_mdb_in_bw_sel : std_ulogic;
-  signal dst_fffe_sel      : std_ulogic;
-  signal dst_reg_dest_sel  : std_ulogic;
+  signal dst_inst_sext_sel : std_logic;
+  signal dst_mdb_in_bw_sel : std_logic;
+  signal dst_fffe_sel      : std_logic;
+  signal dst_reg_dest_sel  : std_logic;
 
   --4.ALU
-  signal exec_cycle : std_ulogic;
+  signal exec_cycle : std_logic;
 
   --5.MEMORY INTERFACE
   --Detect memory read/write access
-  signal mb_rd_det : std_ulogic;
-  signal mb_wr_det : std_ulogic;
-  signal mb_wr_msk : std_ulogic_vector (1 downto 0);
+  signal mb_rd_det : std_logic;
+  signal mb_wr_det : std_logic;
+  signal mb_wr_msk : std_logic_vector (1 downto 0);
 
   --Memory data bus output
-  signal mdb_out_nxt_en   : std_ulogic;
-  signal mclk_mdb_out_nxt : std_ulogic;
-  signal mdb_out_nxt      : std_ulogic_vector (15 downto 0);
+  signal mdb_out_nxt_en   : std_logic;
+  signal mclk_mdb_out_nxt : std_logic;
+  signal mdb_out_nxt      : std_logic_vector (15 downto 0);
 
   --Format memory data bus input depending on BW
-  signal mab_lsb : std_ulogic;
+  signal mab_lsb : std_logic;
 
   --Memory data bus input buffer (buffer after a source read)
-  signal mdb_in_buf_en    : std_ulogic;
-  signal mdb_in_buf_valid : std_ulogic;
-  signal mclk_mdb_in_buf  : std_ulogic;
-  signal mdb_in_buf       : std_ulogic_vector (15 downto 0);
+  signal mdb_in_buf_en    : std_logic;
+  signal mdb_in_buf_valid : std_logic;
+  signal mclk_mdb_in_buf  : std_logic;
+  signal mdb_in_buf       : std_logic_vector (15 downto 0);
 
 begin
   C1_REGISTER_FILE : block

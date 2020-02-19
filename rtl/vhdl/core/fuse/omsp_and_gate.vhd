@@ -44,9 +44,9 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity omsp_and_gate is
   port (
-    y : out std_ulogic;
-    a : in  std_ulogic;
-    b : in  std_ulogic);
+    y : out std_logic;
+    a : in  std_logic;
+    b : in  std_logic);
 end omsp_and_gate;
 
 architecture omsp_and_gate_ARQ of omsp_and_gate is

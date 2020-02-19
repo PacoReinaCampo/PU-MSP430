@@ -46,105 +46,105 @@ use WORK.MSP430_PACK .all;
 
 entity omsp_register_file is
   port (
-    r0  : out std_ulogic_vector (15 downto 0);
-    r1  : out std_ulogic_vector (15 downto 0);
-    r2  : out std_ulogic_vector (15 downto 0);
-    r3  : out std_ulogic_vector (15 downto 0);
-    r4  : out std_ulogic_vector (15 downto 0);
-    r5  : out std_ulogic_vector (15 downto 0);
-    r6  : out std_ulogic_vector (15 downto 0);
-    r7  : out std_ulogic_vector (15 downto 0);
-    r8  : out std_ulogic_vector (15 downto 0);
-    r9  : out std_ulogic_vector (15 downto 0);
-    r10 : out std_ulogic_vector (15 downto 0);
-    r11 : out std_ulogic_vector (15 downto 0);
-    r12 : out std_ulogic_vector (15 downto 0);
-    r13 : out std_ulogic_vector (15 downto 0);
-    r14 : out std_ulogic_vector (15 downto 0);
-    r15 : out std_ulogic_vector (15 downto 0);
+    r0  : out std_logic_vector (15 downto 0);
+    r1  : out std_logic_vector (15 downto 0);
+    r2  : out std_logic_vector (15 downto 0);
+    r3  : out std_logic_vector (15 downto 0);
+    r4  : out std_logic_vector (15 downto 0);
+    r5  : out std_logic_vector (15 downto 0);
+    r6  : out std_logic_vector (15 downto 0);
+    r7  : out std_logic_vector (15 downto 0);
+    r8  : out std_logic_vector (15 downto 0);
+    r9  : out std_logic_vector (15 downto 0);
+    r10 : out std_logic_vector (15 downto 0);
+    r11 : out std_logic_vector (15 downto 0);
+    r12 : out std_logic_vector (15 downto 0);
+    r13 : out std_logic_vector (15 downto 0);
+    r14 : out std_logic_vector (15 downto 0);
+    r15 : out std_logic_vector (15 downto 0);
 
-    cpuoff   : out std_ulogic;
-    gie      : out std_ulogic;
-    oscoff   : out std_ulogic;
-    pc_sw_wr : out std_ulogic;
-    scg0     : out std_ulogic;
-    scg1     : out std_ulogic;
-    status   : out std_ulogic_vector (3 downto 0);
-    pc_sw    : out std_ulogic_vector (15 downto 0);
-    reg_dest : out std_ulogic_vector (15 downto 0);
-    reg_src  : out std_ulogic_vector (15 downto 0);
+    cpuoff   : out std_logic;
+    gie      : out std_logic;
+    oscoff   : out std_logic;
+    pc_sw_wr : out std_logic;
+    scg0     : out std_logic;
+    scg1     : out std_logic;
+    status   : out std_logic_vector (3 downto 0);
+    pc_sw    : out std_logic_vector (15 downto 0);
+    reg_dest : out std_logic_vector (15 downto 0);
+    reg_src  : out std_logic_vector (15 downto 0);
 
-    inst_bw      : in std_ulogic;
-    mclk         : in std_ulogic;
-    puc_rst      : in std_ulogic;
-    reg_dest_wr  : in std_ulogic;
-    reg_pc_call  : in std_ulogic;
-    reg_sp_wr    : in std_ulogic;
-    reg_sr_wr    : in std_ulogic;
-    reg_sr_clr   : in std_ulogic;
-    reg_incr     : in std_ulogic;
-    scan_enable  : in std_ulogic;
-    alu_stat     : in std_ulogic_vector (3 downto 0);
-    alu_stat_wr  : in std_ulogic_vector (3 downto 0);
-    inst_dest    : in std_ulogic_vector (15 downto 0);
-    inst_src     : in std_ulogic_vector (15 downto 0);
-    pc           : in std_ulogic_vector (15 downto 0);
-    reg_dest_val : in std_ulogic_vector (15 downto 0);
-    reg_sp_val   : in std_ulogic_vector (15 downto 0));
+    inst_bw      : in std_logic;
+    mclk         : in std_logic;
+    puc_rst      : in std_logic;
+    reg_dest_wr  : in std_logic;
+    reg_pc_call  : in std_logic;
+    reg_sp_wr    : in std_logic;
+    reg_sr_wr    : in std_logic;
+    reg_sr_clr   : in std_logic;
+    reg_incr     : in std_logic;
+    scan_enable  : in std_logic;
+    alu_stat     : in std_logic_vector (3 downto 0);
+    alu_stat_wr  : in std_logic_vector (3 downto 0);
+    inst_dest    : in std_logic_vector (15 downto 0);
+    inst_src     : in std_logic_vector (15 downto 0);
+    pc           : in std_logic_vector (15 downto 0);
+    reg_dest_val : in std_logic_vector (15 downto 0);
+    reg_sp_val   : in std_logic_vector (15 downto 0));
 end omsp_register_file;
 
 architecture omsp_register_file_ARQ of omsp_register_file is
 
   --SIGNAL INOUT
-  signal reg_src_omsp : std_ulogic_vector (15 downto 0);
+  signal reg_src_omsp : std_logic_vector (15 downto 0);
 
   --1.REGISTER FILE
   --1.1.AUTOINCREMENT UNIT
-  signal inst_src_in     : std_ulogic_vector (15 downto 0);
-  signal incr_op         : std_ulogic_vector (15 downto 0);
-  signal reg_incr_val    : std_ulogic_vector (15 downto 0);
-  signal reg_dest_val_in : std_ulogic_vector (15 downto 0);
+  signal inst_src_in     : std_logic_vector (15 downto 0);
+  signal incr_op         : std_logic_vector (15 downto 0);
+  signal reg_incr_val    : std_logic_vector (15 downto 0);
+  signal reg_dest_val_in : std_logic_vector (15 downto 0);
 
   --1.2.SPECIAL REGISTERS (R1/R2/R3)
   --R0: Program counter
   signal re : M_03_15;
 
   --R1: Stack pointer
-  signal mclk_r1 : std_ulogic;
-  signal r1_en   : std_ulogic;
-  signal r1_inc  : std_ulogic;
-  signal r1_wr   : std_ulogic;
+  signal mclk_r1 : std_logic;
+  signal r1_en   : std_logic;
+  signal r1_inc  : std_logic;
+  signal r1_wr   : std_logic;
 
   --R2: Status register
-  signal mclk_r2     : std_ulogic;
-  signal r2_c        : std_ulogic;
-  signal r2_en       : std_ulogic;
-  signal r2_n        : std_ulogic;
-  signal r2_v        : std_ulogic;
-  signal r2_wr       : std_ulogic;
-  signal r2_z        : std_ulogic;
-  signal r2_nxt      : std_ulogic_vector (7 downto 3);
-  signal cpuoff_mask : std_ulogic_vector (15 downto 0);
-  signal oscoff_mask : std_ulogic_vector (15 downto 0);
-  signal r2_mask     : std_ulogic_vector (15 downto 0);
+  signal mclk_r2     : std_logic;
+  signal r2_c        : std_logic;
+  signal r2_en       : std_logic;
+  signal r2_n        : std_logic;
+  signal r2_v        : std_logic;
+  signal r2_wr       : std_logic;
+  signal r2_z        : std_logic;
+  signal r2_nxt      : std_logic_vector (7 downto 3);
+  signal cpuoff_mask : std_logic_vector (15 downto 0);
+  signal oscoff_mask : std_logic_vector (15 downto 0);
+  signal r2_mask     : std_logic_vector (15 downto 0);
   signal scg_mask    : M_01_15;
 
   --R3: Constant generator
-  signal mclk_r3 : std_ulogic;
-  signal r3_en   : std_ulogic;
-  signal r3_wr   : std_ulogic;
+  signal mclk_r3 : std_logic;
+  signal r3_en   : std_logic;
+  signal r3_wr   : std_logic;
 
   --1.3.GENERAL PURPOSE REGISTERS (R4...R15)
   signal rg      : M_15_15;
-  signal mclk_rg : std_ulogic_vector (15 downto 4);
-  signal rg_en   : std_ulogic_vector (15 downto 4);
-  signal rg_inc  : std_ulogic_vector (15 downto 4);
-  signal rg_wr   : std_ulogic_vector (15 downto 4);
+  signal mclk_rg : std_logic_vector (15 downto 4);
+  signal rg_en   : std_logic_vector (15 downto 4);
+  signal rg_inc  : std_logic_vector (15 downto 4);
+  signal rg_wr   : std_logic_vector (15 downto 4);
 
 begin
   --1.1.AUTOINCREMENT UNIT
   incr_op         <= X"0001"                            when (inst_bw and not inst_src_in(1)) = '1' else X"0002";
-  reg_incr_val    <= std_ulogic_vector(unsigned(reg_src_omsp) + unsigned(incr_op));
+  reg_incr_val    <= std_logic_vector(unsigned(reg_src_omsp) + unsigned(incr_op));
   reg_dest_val_in <= (X"00" & reg_dest_val(7 downto 0)) when inst_bw = '1'                          else reg_dest_val;
 
   --1.2.SPECIAL REGISTERS (R1/R2/R3)
@@ -335,39 +335,39 @@ begin
   end generate GPR;
 
   --1.4.READ MUX
-  reg_src_omsp <= (re(0) and (reg_src'range => inst_src_in(0))) or
-                  (re(1) and (reg_src'range  => inst_src_in(1))) or
-                  (re(2) and (reg_src'range  => inst_src_in(2))) or
-                  (re(3) and (reg_src'range  => inst_src_in(3))) or
-                  (rg(4) and (reg_src'range  => inst_src_in(4))) or
-                  (rg(5) and (reg_src'range  => inst_src_in(5))) or
-                  (rg(6) and (reg_src'range  => inst_src_in(6))) or
-                  (rg(7) and (reg_src'range  => inst_src_in(7))) or
-                  (rg(8) and (reg_src'range  => inst_src_in(8))) or
-                  (rg(9) and (reg_src'range  => inst_src_in(9))) or
-                  (rg(10) and (reg_src'range => inst_src_in(10))) or
-                  (rg(11) and (reg_src'range => inst_src_in(11))) or
-                  (rg(12) and (reg_src'range => inst_src_in(12))) or
-                  (rg(13) and (reg_src'range => inst_src_in(13))) or
-                  (rg(14) and (reg_src'range => inst_src_in(14))) or
-                  (rg(15) and (reg_src'range => inst_src_in(15)));
+  reg_src_omsp <= (re(0) and (0 to 15 => inst_src_in(0))) or
+                  (re(1) and (0 to 15  => inst_src_in(1))) or
+                  (re(2) and (0 to 15  => inst_src_in(2))) or
+                  (re(3) and (0 to 15  => inst_src_in(3))) or
+                  (rg(4) and (0 to 15  => inst_src_in(4))) or
+                  (rg(5) and (0 to 15  => inst_src_in(5))) or
+                  (rg(6) and (0 to 15  => inst_src_in(6))) or
+                  (rg(7) and (0 to 15  => inst_src_in(7))) or
+                  (rg(8) and (0 to 15  => inst_src_in(8))) or
+                  (rg(9) and (0 to 15  => inst_src_in(9))) or
+                  (rg(10) and (0 to 15 => inst_src_in(10))) or
+                  (rg(11) and (0 to 15 => inst_src_in(11))) or
+                  (rg(12) and (0 to 15 => inst_src_in(12))) or
+                  (rg(13) and (0 to 15 => inst_src_in(13))) or
+                  (rg(14) and (0 to 15 => inst_src_in(14))) or
+                  (rg(15) and (0 to 15 => inst_src_in(15)));
 
-  reg_dest <= (re(0) and (reg_dest'range => inst_dest(0))) or
-              (re(1) and (reg_dest'range  => inst_dest(1))) or
-              (re(2) and (reg_dest'range  => inst_dest(2))) or
-              (re(3) and (reg_dest'range  => inst_dest(3))) or
-              (rg(4) and (reg_dest'range  => inst_dest(4))) or
-              (rg(5) and (reg_dest'range  => inst_dest(5))) or
-              (rg(6) and (reg_dest'range  => inst_dest(6))) or
-              (rg(7) and (reg_dest'range  => inst_dest(7))) or
-              (rg(8) and (reg_dest'range  => inst_dest(8))) or
-              (rg(9) and (reg_dest'range  => inst_dest(9))) or
-              (rg(10) and (reg_dest'range => inst_dest(10))) or
-              (rg(11) and (reg_dest'range => inst_dest(11))) or
-              (rg(12) and (reg_dest'range => inst_dest(12))) or
-              (rg(13) and (reg_dest'range => inst_dest(13))) or
-              (rg(14) and (reg_dest'range => inst_dest(14))) or
-              (rg(15) and (reg_dest'range => inst_dest(15)));
+  reg_dest <= (re(0) and (0 to 15 => inst_dest(0))) or
+              (re(1) and (0 to 15  => inst_dest(1))) or
+              (re(2) and (0 to 15  => inst_dest(2))) or
+              (re(3) and (0 to 15  => inst_dest(3))) or
+              (rg(4) and (0 to 15  => inst_dest(4))) or
+              (rg(5) and (0 to 15  => inst_dest(5))) or
+              (rg(6) and (0 to 15  => inst_dest(6))) or
+              (rg(7) and (0 to 15  => inst_dest(7))) or
+              (rg(8) and (0 to 15  => inst_dest(8))) or
+              (rg(9) and (0 to 15  => inst_dest(9))) or
+              (rg(10) and (0 to 15 => inst_dest(10))) or
+              (rg(11) and (0 to 15 => inst_dest(11))) or
+              (rg(12) and (0 to 15 => inst_dest(12))) or
+              (rg(13) and (0 to 15 => inst_dest(13))) or
+              (rg(14) and (0 to 15 => inst_dest(14))) or
+              (rg(15) and (0 to 15 => inst_dest(15)));
 
   SIGNAL_INOUT : block
   begin

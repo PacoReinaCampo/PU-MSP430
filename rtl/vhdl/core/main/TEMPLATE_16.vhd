@@ -168,7 +168,7 @@ begin
       variable decode : M_ORDEN_P161_DEC_SZ_P161;
     begin
       for i in ORDEN_P16 - 1 downto 0 loop
-        decode(i) := CNTRL_D16(i) and (DEC_SZ_P16 - 1 downto 0 =>
+        decode(i) := CNTRL_D16(i) and (0 to DEC_SZ_P16 - 1 =>
                                        to_stdlogic(reg_addr_p16 = CNTRLB16(i)));
       end loop;
 
@@ -181,9 +181,9 @@ begin
     reg_read_p16 <= not or_reduce(per_we) and reg_sel_p16;
 
     --1.5.      Read/Write vectors
-    reg_wr_p <= reg_dec_p16 and (DEC_SZ_P16 - 1 downto 0 => reg_write_p);
+    reg_wr_p <= reg_dec_p16 and (0 to DEC_SZ_P16 - 1 => reg_write_p);
 
-    reg_rd_p16 <= reg_dec_p16 and (DEC_SZ_P16 - 1 downto 0 => reg_read_p16);
+    reg_rd_p16 <= reg_dec_p16 and (0 to DEC_SZ_P16 - 1 => reg_read_p16);
   end block REGISTER_DECODER;
 
   REGISTERS : block
@@ -207,7 +207,7 @@ begin
   DATA_OUTPUT_GENERATION : block
   begin
     data_output_mux : for i in ORDEN_P16 - 1 downto 0 generate
-      cntrl_rd16 (i) <= cntrl_p16(i) and (15 downto 0 => reg_rd_p16(CNTRLI16(i)));
+      cntrl_rd16 (i) <= cntrl_p16(i) and (0 to 15 => reg_rd_p16(CNTRLI16(i)));
     end generate data_output_mux;
 
     per_dout   <= matrixAP_or(cntrl_rd16);

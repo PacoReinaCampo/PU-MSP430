@@ -47,73 +47,73 @@ use WORK.MSP430_PACK .all;
 entity GPIO is
 
   port (
-    p1_dout : out std_ulogic_vector (7 downto 0);
-    p2_dout : out std_ulogic_vector (7 downto 0);
-    p3_dout : out std_ulogic_vector (7 downto 0);
-    p4_dout : out std_ulogic_vector (7 downto 0);
-    p5_dout : out std_ulogic_vector (7 downto 0);
-    p6_dout : out std_ulogic_vector (7 downto 0);
+    p1_dout : out std_logic_vector (7 downto 0);
+    p2_dout : out std_logic_vector (7 downto 0);
+    p3_dout : out std_logic_vector (7 downto 0);
+    p4_dout : out std_logic_vector (7 downto 0);
+    p5_dout : out std_logic_vector (7 downto 0);
+    p6_dout : out std_logic_vector (7 downto 0);
 
-    p1_dout_en : out std_ulogic_vector (7 downto 0);
-    p2_dout_en : out std_ulogic_vector (7 downto 0);
-    p3_dout_en : out std_ulogic_vector (7 downto 0);
-    p4_dout_en : out std_ulogic_vector (7 downto 0);
-    p5_dout_en : out std_ulogic_vector (7 downto 0);
-    p6_dout_en : out std_ulogic_vector (7 downto 0);
+    p1_dout_en : out std_logic_vector (7 downto 0);
+    p2_dout_en : out std_logic_vector (7 downto 0);
+    p3_dout_en : out std_logic_vector (7 downto 0);
+    p4_dout_en : out std_logic_vector (7 downto 0);
+    p5_dout_en : out std_logic_vector (7 downto 0);
+    p6_dout_en : out std_logic_vector (7 downto 0);
 
-    p1_sel : out std_ulogic_vector (7 downto 0);
-    p2_sel : out std_ulogic_vector (7 downto 0);
-    p3_sel : out std_ulogic_vector (7 downto 0);
-    p4_sel : out std_ulogic_vector (7 downto 0);
-    p5_sel : out std_ulogic_vector (7 downto 0);
-    p6_sel : out std_ulogic_vector (7 downto 0);
+    p1_sel : out std_logic_vector (7 downto 0);
+    p2_sel : out std_logic_vector (7 downto 0);
+    p3_sel : out std_logic_vector (7 downto 0);
+    p4_sel : out std_logic_vector (7 downto 0);
+    p5_sel : out std_logic_vector (7 downto 0);
+    p6_sel : out std_logic_vector (7 downto 0);
 
-    p1dir : out std_ulogic_vector (7 downto 0);
-    p1ifg : out std_ulogic_vector (7 downto 0);
+    p1dir : out std_logic_vector (7 downto 0);
+    p1ifg : out std_logic_vector (7 downto 0);
 
-    p1_din : in std_ulogic_vector (7 downto 0);
-    p2_din : in std_ulogic_vector (7 downto 0);
-    p3_din : in std_ulogic_vector (7 downto 0);
-    p4_din : in std_ulogic_vector (7 downto 0);
-    p5_din : in std_ulogic_vector (7 downto 0);
-    p6_din : in std_ulogic_vector (7 downto 0);
+    p1_din : in std_logic_vector (7 downto 0);
+    p2_din : in std_logic_vector (7 downto 0);
+    p3_din : in std_logic_vector (7 downto 0);
+    p4_din : in std_logic_vector (7 downto 0);
+    p5_din : in std_logic_vector (7 downto 0);
+    p6_din : in std_logic_vector (7 downto 0);
 
-    irq_port1 : out std_ulogic;
-    irq_port2 : out std_ulogic;
+    irq_port1 : out std_logic;
+    irq_port2 : out std_logic;
 
-    per_dout : out std_ulogic_vector (15 downto 0);
-    mclk     : in  std_ulogic;
-    per_en   : in  std_ulogic;
-    puc_rst  : in  std_ulogic;
-    per_we   : in  std_ulogic_vector (1 downto 0);
-    per_addr : in  std_ulogic_vector (13 downto 0);
-    per_din  : in  std_ulogic_vector (15 downto 0));
+    per_dout : out std_logic_vector (15 downto 0);
+    mclk     : in  std_logic;
+    per_en   : in  std_logic;
+    puc_rst  : in  std_logic;
+    per_we   : in  std_logic_vector (1 downto 0);
+    per_addr : in  std_logic_vector (13 downto 0);
+    per_din  : in  std_logic_vector (15 downto 0));
 end GPIO;
 
 architecture GPIO_ARQ of GPIO is
 
   --0.  PARAMETER DECLARATION
   --0.1.        Register base address (must be aligned to decoder bit width)
-  constant BASE_ADDR_G : std_ulogic_vector (14 downto 0) := (others => '0');
+  constant BASE_ADDR_G : std_logic_vector (14 downto 0) := (others => '0');
 
   --0.2.        Register addresses offset
   constant DEC_WD_G : integer := 6;
 
   --0.3.        Register one-hot decoder utilities
   constant DEC_SZ_G   : integer                                   := 2**DEC_WD_G;
-  constant BASE_REG_G : std_ulogic_vector (DEC_SZ_G - 1 downto 0) := std_ulogic_vector(to_unsigned(1, DEC_SZ_G));
+  constant BASE_REG_G : std_logic_vector (DEC_SZ_G - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_G));
 
   --0.7.        Masks
-  constant P_EN : std_ulogic_vector (DEC_WD_G - 1 downto 0) := "111111";
+  constant P_EN : std_logic_vector (DEC_WD_G - 1 downto 0) := "111111";
 
-  type M_DEC_WD_G5_7 is array (DEC_WD_G - 5 downto 0) of std_ulogic_vector (7 downto 0);
-  type M_DEC_WD_G5_15 is array (DEC_WD_G - 5 downto 0) of std_ulogic_vector (15 downto 0);
-  type M_DEC_WD_G5_DEC_WD_G1 is array (DEC_WD_G - 5 downto 0) of std_ulogic_vector (DEC_WD_G - 1 downto 0);
-  type M_DEC_WD_G5_DEC_SZ_G1 is array (DEC_WD_G - 5 downto 0) of std_ulogic_vector (DEC_SZ_G - 1 downto 0);
-  type M_DEC_WD_G1_7 is array (DEC_WD_G - 1 downto 0) of std_ulogic_vector (7 downto 0);
-  type M_DEC_WD_G1_15 is array (DEC_WD_G - 1 downto 0) of std_ulogic_vector (15 downto 0);
-  type M_DEC_WD_G1_DEC_WD_G1 is array (DEC_WD_G - 1 downto 0) of std_ulogic_vector (DEC_WD_G - 1 downto 0);
-  type M_DEC_WD_G1_DEC_SZ_G1 is array (DEC_WD_G - 1 downto 0) of std_ulogic_vector (DEC_SZ_G - 1 downto 0);
+  type M_DEC_WD_G5_7 is array (DEC_WD_G - 5 downto 0) of std_logic_vector (7 downto 0);
+  type M_DEC_WD_G5_15 is array (DEC_WD_G - 5 downto 0) of std_logic_vector (15 downto 0);
+  type M_DEC_WD_G5_DEC_WD_G1 is array (DEC_WD_G - 5 downto 0) of std_logic_vector (DEC_WD_G - 1 downto 0);
+  type M_DEC_WD_G5_DEC_SZ_G1 is array (DEC_WD_G - 5 downto 0) of std_logic_vector (DEC_SZ_G - 1 downto 0);
+  type M_DEC_WD_G1_7 is array (DEC_WD_G - 1 downto 0) of std_logic_vector (7 downto 0);
+  type M_DEC_WD_G1_15 is array (DEC_WD_G - 1 downto 0) of std_logic_vector (15 downto 0);
+  type M_DEC_WD_G1_DEC_WD_G1 is array (DEC_WD_G - 1 downto 0) of std_logic_vector (DEC_WD_G - 1 downto 0);
+  type M_DEC_WD_G1_DEC_SZ_G1 is array (DEC_WD_G - 1 downto 0) of std_logic_vector (DEC_SZ_G - 1 downto 0);
 
   constant P_IN   : M_DEC_WD_G1_DEC_WD_G1 := ("110100", "110000", "011100", "011000", "101000", "100000");
   constant P_OUT  : M_DEC_WD_G1_DEC_WD_G1 := ("110101", "110001", "011101", "011001", "101001", "100001");
@@ -133,61 +133,61 @@ architecture GPIO_ARQ of GPIO is
 
   --1.  REGISTER_DECODER
   --1.1.        Local register selection
-  signal reg_sel_g : std_ulogic;
+  signal reg_sel_g : std_logic;
 
   --1.2.        Register local address
-  signal reg_addr_g : std_ulogic_vector (DEC_WD_G - 1 downto 0);
+  signal reg_addr_g : std_logic_vector (DEC_WD_G - 1 downto 0);
 
   --1.3.        Register address decode
-  signal reg_dec_g : std_ulogic_vector (DEC_SZ_G - 1 downto 0);
+  signal reg_dec_g : std_logic_vector (DEC_SZ_G - 1 downto 0);
 
   --1.4.        Read/Write probes
-  signal reg_lo_write_g : std_ulogic;
-  signal reg_hi_write_g : std_ulogic;
-  signal reg_read_g     : std_ulogic;
+  signal reg_lo_write_g : std_logic;
+  signal reg_hi_write_g : std_logic;
+  signal reg_read_g     : std_logic;
 
   --1.5.        Read/Write vectors
-  signal reg_hi_wr_g : std_ulogic_vector (DEC_SZ_G - 1 downto 0);
-  signal reg_lo_wr_g : std_ulogic_vector (DEC_SZ_G - 1 downto 0);
-  signal reg_rd_g    : std_ulogic_vector (DEC_SZ_G - 1 downto 0);
+  signal reg_hi_wr_g : std_logic_vector (DEC_SZ_G - 1 downto 0);
+  signal reg_lo_wr_g : std_logic_vector (DEC_SZ_G - 1 downto 0);
+  signal reg_rd_g    : std_logic_vector (DEC_SZ_G - 1 downto 0);
 
   --2.  REGISTERS       
   --2.1.        PIN Register
   signal pin : M_DEC_WD_G1_7;
 
   --2.2.        POUT Register
-  signal pout_wr  : std_ulogic_vector (DEC_SZ_G - 1 downto 0);
+  signal pout_wr  : std_logic_vector (DEC_SZ_G - 1 downto 0);
   signal pout     : M_DEC_WD_G1_7;
   signal pout_nxt : M_DEC_WD_G1_7;
 
   --2.3.        PDIR Register
-  signal pdir_wr  : std_ulogic_vector (DEC_SZ_G - 1 downto 0);
+  signal pdir_wr  : std_logic_vector (DEC_SZ_G - 1 downto 0);
   signal pdir     : M_DEC_WD_G1_7;
   signal pdir_nxt : M_DEC_WD_G1_7;
 
   --2.4.        PIFG Register
-  signal pifg_wr  : std_ulogic_vector (DEC_SZ_G - 5 downto 0);
+  signal pifg_wr  : std_logic_vector (DEC_SZ_G - 5 downto 0);
   signal pifg     : M_DEC_WD_G5_7;
   signal pifg_nxt : M_DEC_WD_G5_7;
   signal pifg_set : M_DEC_WD_G5_7;
 
   --2.5.        PIES Register
-  signal pies_wr  : std_ulogic_vector (DEC_SZ_G - 5 downto 0);
+  signal pies_wr  : std_logic_vector (DEC_SZ_G - 5 downto 0);
   signal pies     : M_DEC_WD_G5_7;
   signal pies_nxt : M_DEC_WD_G5_7;
 
   --2.6.        PIE Register
-  signal pie_wr  : std_ulogic_vector (DEC_SZ_G - 5 downto 0);
+  signal pie_wr  : std_logic_vector (DEC_SZ_G - 5 downto 0);
   signal pie     : M_DEC_WD_G5_7;
   signal pie_nxt : M_DEC_WD_G5_7;
 
   --2.7.        PSEL Register
-  signal psel_wr  : std_ulogic_vector (DEC_SZ_G - 5 downto 0);
+  signal psel_wr  : std_logic_vector (DEC_SZ_G - 5 downto 0);
   signal psel     : M_DEC_WD_G1_7;
   signal psel_nxt : M_DEC_WD_G1_7;
 
   --3.  INTERRRUPT_GENERATION
-  signal irq_port : std_ulogic_vector (1 downto 0);
+  signal irq_port : std_logic_vector (1 downto 0);
 
   --3.1.        Delay input
   signal p_in_dly : M_DEC_WD_G5_7;
@@ -209,8 +209,8 @@ architecture GPIO_ARQ of GPIO is
   signal p_ies_rd : M_DEC_WD_G5_15;
   signal p_ie_rd  : M_DEC_WD_G5_15;
 
-  function matrixA5G_or (matrix : M_DEC_WD_G5_15) return std_ulogic_vector is
-    variable RESULT : std_ulogic_vector (15 downto 0) := (others => '0');
+  function matrixA5G_or (matrix : M_DEC_WD_G5_15) return std_logic_vector is
+    variable RESULT : std_logic_vector (15 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
       RESULT := RESULT or matrix(i);
@@ -218,8 +218,8 @@ architecture GPIO_ARQ of GPIO is
     return RESULT;
   end matrixA5G_or;
 
-  function matrixA1G_or (matrix : M_DEC_WD_G1_15) return std_ulogic_vector is
-    variable RESULT : std_ulogic_vector (15 downto 0) := (others => '0');
+  function matrixA1G_or (matrix : M_DEC_WD_G1_15) return std_logic_vector is
+    variable RESULT : std_logic_vector (15 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
       RESULT := RESULT or matrix(i);
@@ -227,8 +227,8 @@ architecture GPIO_ARQ of GPIO is
     return RESULT;
   end matrixA1G_or;
 
-  function matrixB5G_or (matrix : M_DEC_WD_G5_DEC_SZ_G1) return std_ulogic_vector is
-    variable RESULT : std_ulogic_vector (DEC_SZ_G - 1 downto 0) := (others => '0');
+  function matrixB5G_or (matrix : M_DEC_WD_G5_DEC_SZ_G1) return std_logic_vector is
+    variable RESULT : std_logic_vector (DEC_SZ_G - 1 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
       RESULT := RESULT or matrix(i);
@@ -236,8 +236,8 @@ architecture GPIO_ARQ of GPIO is
     return RESULT;
   end matrixB5G_or;
 
-  function matrixB1G_or (matrix : M_DEC_WD_G1_DEC_SZ_G1) return std_ulogic_vector is
-    variable RESULT : std_ulogic_vector (DEC_SZ_G - 1 downto 0) := (others => '0');
+  function matrixB1G_or (matrix : M_DEC_WD_G1_DEC_SZ_G1) return std_logic_vector is
+    variable RESULT : std_logic_vector (DEC_SZ_G - 1 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
       RESULT := RESULT or matrix(i);
@@ -276,32 +276,32 @@ begin
 
     begin
       for i in DEC_WD_G - 1 downto 0 loop
-        P_IN_D (i)   := std_ulogic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_IN (i))));
-        P_OUT_D (i)  := std_ulogic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_OUT (i))));
-        P_DIR_D (i)  := std_ulogic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_DIR (i))));
-        P_SELC_D (i) := std_ulogic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_SELC (i))));
+        P_IN_D (i)   := std_logic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_IN (i))));
+        P_OUT_D (i)  := std_logic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_OUT (i))));
+        P_DIR_D (i)  := std_logic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_DIR (i))));
+        P_SELC_D (i) := std_logic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_SELC (i))));
 
-        P_IN_DX (i) := (P_IN_D (i) and (DEC_SZ_G - 1 downto 0 =>
-                                        (to_stdlogic(reg_addr_g = std_ulogic_vector(unsigned(P_IN (i)) srl 1)) and P_EN(i))));
-        P_OUT_DX (i) := (P_OUT_D (i) and (DEC_SZ_G - 1 downto 0 =>
-                                          (to_stdlogic(reg_addr_g = std_ulogic_vector(unsigned(P_OUT (i)) srl 1)) and P_EN(i))));
-        P_DIR_DX (i) := (P_DIR_D (i) and (DEC_SZ_G - 1 downto 0 =>
-                                          (to_stdlogic(reg_addr_g = std_ulogic_vector(unsigned(P_DIR (i)) srl 1)) and P_EN(i))));
-        P_SELC_DX (i) := (P_SELC_D (i) and (DEC_SZ_G - 1 downto 0 =>
-                                            (to_stdlogic(reg_addr_g = std_ulogic_vector(unsigned(P_SELC (i)) srl 1)) and P_EN(i))));
+        P_IN_DX (i) := (P_IN_D (i) and (0 to DEC_SZ_G - 1 =>
+                                        (to_stdlogic(reg_addr_g = std_logic_vector(unsigned(P_IN (i)) srl 1)) and P_EN(i))));
+        P_OUT_DX (i) := (P_OUT_D (i) and (0 to DEC_SZ_G - 1 =>
+                                          (to_stdlogic(reg_addr_g = std_logic_vector(unsigned(P_OUT (i)) srl 1)) and P_EN(i))));
+        P_DIR_DX (i) := (P_DIR_D (i) and (0 to DEC_SZ_G - 1 =>
+                                          (to_stdlogic(reg_addr_g = std_logic_vector(unsigned(P_DIR (i)) srl 1)) and P_EN(i))));
+        P_SELC_DX (i) := (P_SELC_D (i) and (0 to DEC_SZ_G - 1 =>
+                                            (to_stdlogic(reg_addr_g = std_logic_vector(unsigned(P_SELC (i)) srl 1)) and P_EN(i))));
       end loop;
 
       for i in DEC_WD_G - 5 downto 0 loop
-        P_IFG_D (i) := std_ulogic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_IFG (i))));
-        P_IES_D (i) := std_ulogic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_IES (i))));
-        P_IE_D (i)  := std_ulogic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_IE (i))));
+        P_IFG_D (i) := std_logic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_IFG (i))));
+        P_IES_D (i) := std_logic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_IES (i))));
+        P_IE_D (i)  := std_logic_vector(unsigned(BASE_REG_G) sll to_integer(unsigned(P_IE (i))));
 
-        P_IFG_DX (i) := (P_IFG_D (i) and (DEC_SZ_G - 1 downto 0 =>
-                                          (to_stdlogic(reg_addr_g = std_ulogic_vector(unsigned(P_IFG (i)) srl 1)) and P_EN(i))));
-        P_IES_DX (i) := (P_IES_D (i) and (DEC_SZ_G - 1 downto 0 =>
-                                          (to_stdlogic(reg_addr_g = std_ulogic_vector(unsigned(P_IES (i)) srl 1)) and P_EN(i))));
-        P_IE_DX (i) := (P_IE_D (i) and (DEC_SZ_G - 1 downto 0 =>
-                                        (to_stdlogic(reg_addr_g = std_ulogic_vector(unsigned(P_IE (i)) srl 1)) and P_EN(i))));
+        P_IFG_DX (i) := (P_IFG_D (i) and (0 to DEC_SZ_G - 1 =>
+                                          (to_stdlogic(reg_addr_g = std_logic_vector(unsigned(P_IFG (i)) srl 1)) and P_EN(i))));
+        P_IES_DX (i) := (P_IES_D (i) and (0 to DEC_SZ_G - 1 =>
+                                          (to_stdlogic(reg_addr_g = std_logic_vector(unsigned(P_IES (i)) srl 1)) and P_EN(i))));
+        P_IE_DX (i) := (P_IE_D (i) and (0 to DEC_SZ_G - 1 =>
+                                        (to_stdlogic(reg_addr_g = std_logic_vector(unsigned(P_IE (i)) srl 1)) and P_EN(i))));
       end loop;
 
       reg_dec_g <= matrixB1G_or(P_IN_DX) or
@@ -320,9 +320,9 @@ begin
     reg_read_g     <= not or_reduce(per_we) and reg_sel_g;
 
     --1.5.      Read/Write vectors
-    reg_hi_wr_g <= reg_dec_g and (reg_dec_g'range => reg_hi_write_g);
-    reg_lo_wr_g <= reg_dec_g and (reg_dec_g'range => reg_lo_write_g);
-    reg_rd_g    <= reg_dec_g and (reg_dec_g'range => reg_read_g);
+    reg_hi_wr_g <= reg_dec_g and (0 to DEC_SZ_G - 1 => reg_hi_write_g);
+    reg_lo_wr_g <= reg_dec_g and (0 to DEC_SZ_G - 1 => reg_lo_write_g);
+    reg_rd_g    <= reg_dec_g and (0 to DEC_SZ_G - 1 => reg_read_g);
   end block REGISTER_DECODER;
 
   REGISTERS : block
@@ -352,7 +352,7 @@ begin
           pout(i) <= X"00";
         elsif (rising_edge(mclk)) then
           if (pout_wr(i) = '1') then
-            pout(i) <= pout_nxt(i) and (7 downto 0 => P_EN(i));
+            pout(i) <= pout_nxt(i) and (0 to 7 => P_EN(i));
           end if;
         end if;
       end process;
@@ -371,7 +371,7 @@ begin
           pdir(i) <= X"00";
         elsif (rising_edge(mclk)) then
           if (pdir_wr(i) = '1') then
-            pdir(i) <= pdir_nxt(i) and (7 downto 0 => P_EN(i));
+            pdir(i) <= pdir_nxt(i) and (0 to 7 => P_EN(i));
           end if;
         end if;
       end process;
@@ -390,7 +390,7 @@ begin
           psel(i) <= X"00";
         elsif (rising_edge(mclk)) then
           if (psel_wr(i) = '1') then
-            psel(i) <= psel_nxt(i) and (7 downto 0 => P_EN(i));
+            psel(i) <= psel_nxt(i) and (0 to 7 => P_EN(i));
           end if;
         end if;
       end process;
@@ -411,9 +411,9 @@ begin
           pifg(i) <= X"00";
         elsif (rising_edge(mclk)) then
           if (pifg_wr(i) = '1') then
-            pifg(i) <= (pifg_nxt(i) or pifg_set(i)) and (7 downto 0 => P_EN(i));
+            pifg(i) <= (pifg_nxt(i) or pifg_set(i)) and (0 to 7 => P_EN(i));
           else
-            pifg(i) <= (pifg(i) or pifg_set(i)) and (7 downto 0 => P_EN(i));
+            pifg(i) <= (pifg(i) or pifg_set(i)) and (0 to 7 => P_EN(i));
           end if;
         end if;
       end process;
@@ -430,7 +430,7 @@ begin
           pies(i) <= X"00";
         elsif (rising_edge(mclk)) then
           if (pies_wr(i) = '1') then
-            pies(i) <= pies_nxt(i) and (7 downto 0 => P_EN(i));
+            pies(i) <= pies_nxt(i) and (0 to 7 => P_EN(i));
           end if;
         end if;
       end process;
@@ -447,7 +447,7 @@ begin
           pie(i) <= X"00";
         elsif (rising_edge(mclk)) then
           if (pie_wr(i) = '1') then
-            pie(i) <= pie_nxt(i) and (7 downto 0 => P_EN(i));
+            pie(i) <= pie_nxt(i) and (0 to 7 => P_EN(i));
           end if;
         end if;
       end process;
@@ -463,7 +463,7 @@ begin
         if (puc_rst = '1') then
           p_in_dly(i) <= X"00";
         elsif (rising_edge(mclk)) then
-          p_in_dly(i) <= pin(i) and (7 downto 0 => P_EN(i));
+          p_in_dly(i) <= pin(i) and (0 to 7 => P_EN(i));
         end if;
       end process;
 
@@ -483,7 +483,7 @@ begin
           end if;
         end loop;
 
-        pifg_set(i) <= dout(i) and (7 downto 0 => P_EN(i));
+        pifg_set(i) <= dout(i) and (0 to 7 => P_EN(i));
       end process;
 
       --3.4.    Generate CPU interrupt
@@ -505,30 +505,30 @@ begin
   begin
     --4.1.      Data output mux
     data_output_mux_1 : for i in DEC_WD_G - 1 downto 0 generate
-      p_in_rd (i) <= std_ulogic_vector((X"00" & (unsigned(pin(i)) and
-                                                 (7 downto 0 => reg_rd_g(to_integer(unsigned(P_IN (i)))))))
-                                       sll to_integer((3 downto 0 => P_IN (i)(0)) and to_unsigned(8, 4)));
-      p_out_rd (i) <= std_ulogic_vector((X"00" & (unsigned(pout(i)) and
-                                                  (7 downto 0 => reg_rd_g(to_integer(unsigned(P_OUT (i)))))))
-                                        sll to_integer((3 downto 0 => P_OUT (i)(0)) and to_unsigned(8, 4)));
-      p_dir_rd (i) <= std_ulogic_vector((X"00" & (unsigned(pdir(i)) and
-                                                  (7 downto 0 => reg_rd_g(to_integer(unsigned(P_DIR (i)))))))
-                                        sll to_integer((3 downto 0 => P_DIR (i)(0)) and to_unsigned(8, 4)));
-      p_sel_rd (i) <= std_ulogic_vector((X"00" & (unsigned(psel(i)) and
-                                                  (7 downto 0 => reg_rd_g(to_integer(unsigned(P_SELC (i)))))))
-                                        sll to_integer((3 downto 0 => P_SELC (i)(0)) and to_unsigned(8, 4)));
+      p_in_rd (i) <= std_logic_vector((X"00" & (unsigned(pin(i)) and
+                                                 (0 to 7 => reg_rd_g(to_integer(unsigned(P_IN (i)))))))
+                                       sll to_integer((0 to 3 => P_IN (i)(0)) and to_unsigned(8, 4)));
+      p_out_rd (i) <= std_logic_vector((X"00" & (unsigned(pout(i)) and
+                                                  (0 to 7 => reg_rd_g(to_integer(unsigned(P_OUT (i)))))))
+                                        sll to_integer((0 to 3 => P_OUT (i)(0)) and to_unsigned(8, 4)));
+      p_dir_rd (i) <= std_logic_vector((X"00" & (unsigned(pdir(i)) and
+                                                  (0 to 7 => reg_rd_g(to_integer(unsigned(P_DIR (i)))))))
+                                        sll to_integer((0 to 3 => P_DIR (i)(0)) and to_unsigned(8, 4)));
+      p_sel_rd (i) <= std_logic_vector((X"00" & (unsigned(psel(i)) and
+                                                  (0 to 7 => reg_rd_g(to_integer(unsigned(P_SELC (i)))))))
+                                        sll to_integer((0 to 3 => P_SELC (i)(0)) and to_unsigned(8, 4)));
     end generate data_output_mux_1;
 
     data_output_mux_5 : for i in DEC_WD_G - 5 downto 0 generate
-      p_ifg_rd (i) <= std_ulogic_vector((X"00" & (unsigned(pifg(i)) and
-                                                  (7 downto 0 => reg_rd_g(to_integer(unsigned(P_IFG (i)))))))
-                                        sll to_integer((3 downto 0 => P_IFG (i)(0)) and to_unsigned(8, 4)));
-      p_ies_rd (i) <= std_ulogic_vector((X"00" & (unsigned(pies(i)) and
-                                                  (7 downto 0 => reg_rd_g(to_integer(unsigned(P_IES (i)))))))
-                                        sll to_integer((3 downto 0 => P_IES (i)(0)) and to_unsigned(8, 4)));
-      p_ie_rd (i) <= std_ulogic_vector((X"00" & (unsigned(pie(i)) and
-                                                 (7 downto 0 => reg_rd_g(to_integer(unsigned(P_IE (i)))))))
-                                       sll to_integer((3 downto 0 => P_IE (i)(0)) and to_unsigned(8, 4)));
+      p_ifg_rd (i) <= std_logic_vector((X"00" & (unsigned(pifg(i)) and
+                                                  (0 to 7 => reg_rd_g(to_integer(unsigned(P_IFG (i)))))))
+                                        sll to_integer((0 to 3 => P_IFG (i)(0)) and to_unsigned(8, 4)));
+      p_ies_rd (i) <= std_logic_vector((X"00" & (unsigned(pies(i)) and
+                                                  (0 to 7 => reg_rd_g(to_integer(unsigned(P_IES (i)))))))
+                                        sll to_integer((0 to 3 => P_IES (i)(0)) and to_unsigned(8, 4)));
+      p_ie_rd (i) <= std_logic_vector((X"00" & (unsigned(pie(i)) and
+                                                 (0 to 7 => reg_rd_g(to_integer(unsigned(P_IE (i)))))))
+                                       sll to_integer((0 to 3 => P_IE (i)(0)) and to_unsigned(8, 4)));
     end generate data_output_mux_5;
 
     per_dout <= matrixA1G_or(p_in_rd) or

@@ -46,144 +46,144 @@ use WORK.MSP430_PACK .all;
 
 entity T_WATCHDOG is
   port (
-    wdt_reset      : out std_ulogic;
-    wdt_wkup       : out std_ulogic;
-    wdtifg         : out std_ulogic;
-    wdtnmies       : out std_ulogic;
-    aclk           : in  std_ulogic;
-    aclk_en        : in  std_ulogic;
-    dbg_freeze     : in  std_ulogic;
-    por            : in  std_ulogic;
-    scan_enable    : in  std_ulogic;
-    scan_mode      : in  std_ulogic;
-    smclk          : in  std_ulogic;
-    smclk_en       : in  std_ulogic;
-    wdtie          : in  std_ulogic;
-    wdtifg_irq_clr : in  std_ulogic;
-    wdtifg_sw_clr  : in  std_ulogic;
-    wdtifg_sw_set  : in  std_ulogic;
+    wdt_reset      : out std_logic;
+    wdt_wkup       : out std_logic;
+    wdtifg         : out std_logic;
+    wdtnmies       : out std_logic;
+    aclk           : in  std_logic;
+    aclk_en        : in  std_logic;
+    dbg_freeze     : in  std_logic;
+    por            : in  std_logic;
+    scan_enable    : in  std_logic;
+    scan_mode      : in  std_logic;
+    smclk          : in  std_logic;
+    smclk_en       : in  std_logic;
+    wdtie          : in  std_logic;
+    wdtifg_irq_clr : in  std_logic;
+    wdtifg_sw_clr  : in  std_logic;
+    wdtifg_sw_set  : in  std_logic;
 
-    wdt_irq : out std_ulogic;
+    wdt_irq : out std_logic;
 
-    per_dout : out std_ulogic_vector (15 downto 0);
-    mclk     : in  std_ulogic;
-    per_en   : in  std_ulogic;
-    puc_rst  : in  std_ulogic;
-    per_we   : in  std_ulogic_vector (1 downto 0);
-    per_addr : in  std_ulogic_vector (13 downto 0);
-    per_din  : in  std_ulogic_vector (15 downto 0));
+    per_dout : out std_logic_vector (15 downto 0);
+    mclk     : in  std_logic;
+    per_en   : in  std_logic;
+    puc_rst  : in  std_logic;
+    per_we   : in  std_logic_vector (1 downto 0);
+    per_addr : in  std_logic_vector (13 downto 0);
+    per_din  : in  std_logic_vector (15 downto 0));
 end T_WATCHDOG;
 
 architecture T_WATCHDOG_ARQ of T_WATCHDOG is
 
   --SIGNAL INOUT
-  signal wdtifg_omsp : std_ulogic;
+  signal wdtifg_omsp : std_logic;
 
   --0.  PARAMETER DECLARATION
   --0.1.        Register base address (must be aligned to decoder bit width)
-  constant BASE_ADDR_W : std_ulogic_vector (14 downto 0) := "000000100100000";
+  constant BASE_ADDR_W : std_logic_vector (14 downto 0) := "000000100100000";
 
   --0.2.                Decoder bit width (defines how many bits are considered for address decoding)
   constant DEC_WD_W : integer := 2;
 
   --0.3.        Register addresses offset
-  constant WDTCTLB : std_ulogic_vector (DEC_WD_W - 1 downto 0) := (others => '0');
+  constant WDTCTLB : std_logic_vector (DEC_WD_W - 1 downto 0) := (others => '0');
   constant WDTCTLC : integer                                   := to_integer(unsigned(WDTCTLB));
 
   --0.4.        Register one-hot decoder utilities
   constant DEC_SZ_W   : integer                                   := 2**DEC_WD_W;
-  constant BASE_REG_W : std_ulogic_vector (DEC_SZ_W - 1 downto 0) := std_ulogic_vector(to_unsigned(1, DEC_SZ_W));
+  constant BASE_REG_W : std_logic_vector (DEC_SZ_W - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_W));
 
   --0.5.        Register one-hot decoder
-  constant WDTCTLC_D : std_ulogic_vector (DEC_SZ_W - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_W) sll WDTCTLC);
+  constant WDTCTLC_D : std_logic_vector (DEC_SZ_W - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_W) sll WDTCTLC);
 
   --1.  REGISTER DECODER
   --1.1.        Local register selection
-  signal reg_sel_w : std_ulogic;
+  signal reg_sel_w : std_logic;
 
   --1.2.        Register local address
-  signal reg_addr_w : std_ulogic_vector (DEC_WD_W - 1 downto 0);
+  signal reg_addr_w : std_logic_vector (DEC_WD_W - 1 downto 0);
 
   --1.3.        Register address decode
-  signal reg_dec_w : std_ulogic_vector (DEC_SZ_W - 1 downto 0);
+  signal reg_dec_w : std_logic_vector (DEC_SZ_W - 1 downto 0);
 
   --1.4.        Read/Write probes
-  signal reg_write_w : std_ulogic;
-  signal reg_read_w  : std_ulogic;
+  signal reg_write_w : std_logic;
+  signal reg_read_w  : std_logic;
 
   --1.5.        Read/Write vectors
-  signal reg_wr_w : std_ulogic_vector (DEC_SZ_W - 1 downto 0);
-  signal reg_rd_w : std_ulogic_vector (DEC_SZ_W - 1 downto 0);
+  signal reg_wr_w : std_logic_vector (DEC_SZ_W - 1 downto 0);
+  signal reg_rd_w : std_logic_vector (DEC_SZ_W - 1 downto 0);
 
   --2.  REGISTERS
   --2.1.        WDTCTLC Register
-  signal wdtctl_wr   : std_ulogic;
-  signal mclk_wdtctl : std_ulogic;
-  signal wdtpw_error : std_ulogic;
-  signal wdttmsel    : std_ulogic;
-  signal wdtctl      : std_ulogic_vector (7 downto 0);
+  signal wdtctl_wr   : std_logic;
+  signal mclk_wdtctl : std_logic;
+  signal wdtpw_error : std_logic;
+  signal wdttmsel    : std_logic;
+  signal wdtctl      : std_logic_vector (7 downto 0);
 
   --3.  DATA OUTPUT GENERATION
   --3.1.        Data output mux
 
   --4.  WATCHDOG TIMER (ASIC IMPLEMENTATION)    
   --4.1.        Watchdog clock source selection
-  signal wdt_clk : std_ulogic;
+  signal wdt_clk : std_logic;
 
   --4.2.        Reset synchronizer for the watchdog local clock domain
-  signal wdt_rst_noscan : std_ulogic;
-  signal wdt_rst        : std_ulogic;
+  signal wdt_rst_noscan : std_logic;
+  signal wdt_rst        : std_logic;
 
   --4.3.        Watchog counter clear (synchronization)
-  signal wdtcnt_clr_toggle   : std_ulogic;
-  signal wdtcnt_clr_detect   : std_ulogic;
-  signal wdtcnt_clr_sync     : std_ulogic;
-  signal wdtcnt_clr_sync_dly : std_ulogic;
-  signal wdtqn_edge          : std_ulogic;
-  signal wdtcnt_clr          : std_ulogic;
+  signal wdtcnt_clr_toggle   : std_logic;
+  signal wdtcnt_clr_detect   : std_logic;
+  signal wdtcnt_clr_sync     : std_logic;
+  signal wdtcnt_clr_sync_dly : std_logic;
+  signal wdtqn_edge          : std_logic;
+  signal wdtcnt_clr          : std_logic;
 
   --4.4.        Watchog counter increment (synchronization)
-  signal wdtctl_dbg : std_ulogic;
+  signal wdtctl_dbg : std_logic;
 
   --4.5.        Watchdog 16 bit counter
-  signal wdtcnt_en   : std_ulogic;
-  signal wdt_clk_cnt : std_ulogic;
-  signal wdtisx_s    : std_ulogic_vector (1 downto 0);
-  signal wdtisx_ss   : std_ulogic_vector (1 downto 0);
-  signal wdtcnt      : std_ulogic_vector (15 downto 0);
-  signal wdtcnt_nxt  : std_ulogic_vector (15 downto 0);
+  signal wdtcnt_en   : std_logic;
+  signal wdt_clk_cnt : std_logic;
+  signal wdtisx_s    : std_logic_vector (1 downto 0);
+  signal wdtisx_ss   : std_logic_vector (1 downto 0);
+  signal wdtcnt      : std_logic_vector (15 downto 0);
+  signal wdtcnt_nxt  : std_logic_vector (15 downto 0);
 
   --4.6.        Interval selection mux
   --4.7.        Watchdog event detection        
-  signal wdt_evt_toggle          : std_ulogic;
-  signal wdt_evt_toggle_sync     : std_ulogic;
-  signal wdt_evt_toggle_sync_dly : std_ulogic;
-  signal wdtifg_evt              : std_ulogic;
+  signal wdt_evt_toggle          : std_logic;
+  signal wdt_evt_toggle_sync     : std_logic;
+  signal wdt_evt_toggle_sync_dly : std_logic;
+  signal wdtifg_evt              : std_logic;
 
   --4.8.        Watchdog wakeup generation
-  signal wdtifg_clr_reg : std_ulogic;
-  signal wdtqn_edge_reg : std_ulogic;
-  signal wdt_wkup_pre   : std_ulogic;
-  signal wdt_wkup_en    : std_ulogic;
+  signal wdtifg_clr_reg : std_logic;
+  signal wdtqn_edge_reg : std_logic;
+  signal wdt_wkup_pre   : std_logic;
+  signal wdt_wkup_en    : std_logic;
 
   --4.9.        Watchdog interrupt flag
-  signal wdtifg_set : std_ulogic;
+  signal wdtifg_set : std_logic;
 
   --4.10.       Watchdog interrupt generation
   --4.11.       Watchdog reset generation
   --5.  WATCHDOG TIMER (FPGA IMPLEMENTATION)
   --5.1.        Watchdog clock source selection
-  signal clk_src_en : std_ulogic;
+  signal clk_src_en : std_logic;
 
   --5.2.        Watchdog 16 bit counter
-  signal wdtcnt_incr : std_ulogic;
+  signal wdtcnt_incr : std_logic;
 
   --5.3.        Interval selection mux
-  signal wdtqn : std_ulogic;
+  signal wdtqn : std_logic;
 
   --5.4.        Watchdog event detection
   --5.5.        Watchdog interrupt flag
-  signal wdtifg_clr : std_ulogic;
+  signal wdtifg_clr : std_logic;
 
   --5.6.        Watchdog interrupt generation   
   --5.7.        Watchdog reset generation
@@ -197,14 +197,14 @@ begin
     reg_addr_w <= (per_addr(DEC_WD_W - 2 downto 0) & '0');
 
     --1.3.      Register address decode
-    reg_dec_w   <= WDTCTLC_D and (reg_dec_w'range => to_stdlogic(reg_addr_w = WDTCTLB));
+    reg_dec_w   <= WDTCTLC_D and (0 to DEC_SZ_W - 1 => to_stdlogic(reg_addr_w = WDTCTLB));
     --1.4.      Read/Write probes       
     reg_write_w <= or_reduce(per_we) and reg_sel_w;
     reg_read_w  <= not or_reduce(per_we) and reg_sel_w;
 
     --1.5.      Read/Write vectors
-    reg_wr_w <= reg_dec_w and (reg_dec_w'range => reg_write_w);
-    reg_rd_w <= reg_dec_w and (reg_dec_w'range => reg_read_w);
+    reg_wr_w <= reg_dec_w and (0 to DEC_SZ_W - 1 => reg_write_w);
+    reg_rd_w <= reg_dec_w and (0 to DEC_SZ_W - 1 => reg_read_w);
   end block REGISTER_DECODER;
 
   REGISTERS : block
@@ -226,9 +226,9 @@ begin
     end generate clock_gating_1_off;
 
     process (mclk_wdtctl, puc_rst)
-      variable WDTNMIES_MASK : std_ulogic_vector (7 downto 0);
-      variable WDTSSEL_MASK  : std_ulogic_vector (7 downto 0);
-      variable WDTCTL_MASK   : std_ulogic_vector (7 downto 0);
+      variable WDTNMIES_MASK : std_logic_vector (7 downto 0);
+      variable WDTSSEL_MASK  : std_logic_vector (7 downto 0);
+      variable WDTCTL_MASK   : std_logic_vector (7 downto 0);
     begin
       if (NMI_EN = '1') then
         WDTNMIES_MASK := "01000000";
@@ -268,30 +268,30 @@ begin
   begin
     data_output_gen_00 : if (NMI_EN = '0' and WATCHDOG_MUX = '0') generate
       data_output_gen_a : if (WATCHDOG_NOMUX_ACLK = '0') generate
-        per_dout <= (X"69" & (wdtctl or "00000000")) and (per_dout'range => reg_rd_w(WDTCTLC));
+        per_dout <= (X"69" & (wdtctl or "00000000")) and (0 to 15 => reg_rd_w(WDTCTLC));
       end generate data_output_gen_a;
 
       data_output_gen_b : if (WATCHDOG_NOMUX_ACLK = '1') generate
-        per_dout <= (X"69" & (wdtctl or "00000100")) and (per_dout'range => reg_rd_w(WDTCTLC));
+        per_dout <= (X"69" & (wdtctl or "00000100")) and (0 to 15 => reg_rd_w(WDTCTLC));
       end generate data_output_gen_b;
     end generate data_output_gen_00;
 
     data_output_gen_01 : if (NMI_EN = '0' and WATCHDOG_MUX = '1') generate
-      per_dout <= (X"69" & (wdtctl or "00000000")) and (per_dout'range => reg_rd_w(WDTCTLC));
+      per_dout <= (X"69" & (wdtctl or "00000000")) and (0 to 15 => reg_rd_w(WDTCTLC));
     end generate data_output_gen_01;
 
     data_output_gen_10 : if (NMI_EN = '1' and WATCHDOG_MUX = '0') generate
       data_output_gen_a : if (WATCHDOG_NOMUX_ACLK = '0') generate
-        per_dout <= (X"69" & (wdtctl or "00100000")) and (per_dout'range => reg_rd_w(WDTCTLC));
+        per_dout <= (X"69" & (wdtctl or "00100000")) and (0 to 15 => reg_rd_w(WDTCTLC));
       end generate data_output_gen_a;
 
       data_output_gen_b : if (WATCHDOG_NOMUX_ACLK = '1') generate
-        per_dout <= (X"69" & (wdtctl or "00100100")) and (per_dout'range => reg_rd_w(WDTCTLC));
+        per_dout <= (X"69" & (wdtctl or "00100100")) and (0 to 15 => reg_rd_w(WDTCTLC));
       end generate data_output_gen_b;
     end generate data_output_gen_10;
 
     data_output_gen_11 : if (NMI_EN = '1' and WATCHDOG_MUX = '1') generate
-      per_dout <= (X"69" & (wdtctl or "00100000")) and (per_dout'range => reg_rd_w(WDTCTLC));
+      per_dout <= (X"69" & (wdtctl or "00100000")) and (0 to 15 => reg_rd_w(WDTCTLC));
     end generate data_output_gen_11;
   end block DATA_OUTPUT_GENERATION;
 
@@ -378,7 +378,7 @@ begin
       wdtctl_dbg <= not wdtctl(7) and not dbg_freeze;
 
       --4.5.    Watchdog 16 bit counter
-      wdtcnt_nxt <= std_ulogic_vector(unsigned(wdtcnt) + "0000000000000001");
+      wdtcnt_nxt <= std_logic_vector(unsigned(wdtcnt) + "0000000000000001");
 
       clock_gating_2_on : if (CLOCK_GATING = '1') generate
         wdtcnt_en <= wdtcnt_clr or wdtcnt_incr;
@@ -551,7 +551,7 @@ begin
       --5.2.    Watchdog 16 bit counter
       wdtcnt_clr  <= (wdtctl_wr and per_din(3)) or wdtifg_evt;
       wdtcnt_incr <= not wdtctl(7) and clk_src_en and not dbg_freeze;
-      wdtcnt_nxt  <= std_ulogic_vector(unsigned(wdtcnt) + "0000000000000001");
+      wdtcnt_nxt  <= std_logic_vector(unsigned(wdtcnt) + "0000000000000001");
 
       R_1c_2c : process (mclk, puc_rst)
       begin

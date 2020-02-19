@@ -46,22 +46,22 @@ use WORK.MSP430_PACK .all;
 
 entity omsp_dbg_uart is
   port (
-    dbg_rd       : out std_ulogic;
-    dbg_uart_txd : out std_ulogic;
-    dbg_wr       : out std_ulogic;
-    dbg_addr     : out std_ulogic_vector (5 downto 0);
-    dbg_din      : out std_ulogic_vector (15 downto 0);
+    dbg_rd       : out std_logic;
+    dbg_uart_txd : out std_logic;
+    dbg_wr       : out std_logic;
+    dbg_addr     : out std_logic_vector (5 downto 0);
+    dbg_din      : out std_logic_vector (15 downto 0);
 
-    dbg_clk       : in std_ulogic;
-    dbg_rd_rdy    : in std_ulogic;
-    dbg_rst       : in std_ulogic;
-    dbg_uart_rxd  : in std_ulogic;
-    mem_burst     : in std_ulogic;
-    mem_burst_end : in std_ulogic;
-    mem_burst_rd  : in std_ulogic;
-    mem_burst_wr  : in std_ulogic;
-    mem_bw        : in std_ulogic;
-    dbg_dout      : in std_ulogic_vector (15 downto 0));
+    dbg_clk       : in std_logic;
+    dbg_rd_rdy    : in std_logic;
+    dbg_rst       : in std_logic;
+    dbg_uart_rxd  : in std_logic;
+    mem_burst     : in std_logic;
+    mem_burst_end : in std_logic;
+    mem_burst_rd  : in std_logic;
+    mem_burst_wr  : in std_logic;
+    mem_bw        : in std_logic;
+    dbg_dout      : in std_logic_vector (15 downto 0));
 end omsp_dbg_uart;
 
 architecture omsp_dbg_uart_ARQ of omsp_dbg_uart is
@@ -69,81 +69,81 @@ architecture omsp_dbg_uart_ARQ of omsp_dbg_uart is
   --8.          UART_COMMUNICATION      
   --8.2.                UART STATE MACHINE      
   --8.2.2.      State machine definition
-  constant RX_SYNC  : std_ulogic_vector (2 downto 0) := "000";
-  constant RX_CMD   : std_ulogic_vector (2 downto 0) := "001";
-  constant RX_DATA1 : std_ulogic_vector (2 downto 0) := "010";
-  constant RX_DATA2 : std_ulogic_vector (2 downto 0) := "011";
-  constant TX_DATA1 : std_ulogic_vector (2 downto 0) := "100";
-  constant TX_DATA2 : std_ulogic_vector (2 downto 0) := "101";
+  constant RX_SYNC  : std_logic_vector (2 downto 0) := "000";
+  constant RX_CMD   : std_logic_vector (2 downto 0) := "001";
+  constant RX_DATA1 : std_logic_vector (2 downto 0) := "010";
+  constant RX_DATA2 : std_logic_vector (2 downto 0) := "011";
+  constant TX_DATA1 : std_logic_vector (2 downto 0) := "100";
+  constant TX_DATA2 : std_logic_vector (2 downto 0) := "101";
 
   --8.          UART_COMMUNICATION                                              
   --8.1.                UART RECEIVE LINE SYNCHRONIZTION & FILTERING
   --8.1.1.      Synchronize RXD input
-  signal uart_rxd         : std_ulogic;
-  signal uart_rxd_n       : std_ulogic;
-  signal not_dbg_uart_rxd : std_ulogic;
+  signal uart_rxd         : std_logic;
+  signal uart_rxd_n       : std_logic;
+  signal not_dbg_uart_rxd : std_logic;
 
   --8.1.2.      RXD input buffer
-  signal rxd_buf : std_ulogic_vector (1 downto 0);
+  signal rxd_buf : std_logic_vector (1 downto 0);
 
   --8.1.3.      Majority decision
-  signal rxd_maj     : std_ulogic;
-  signal rxd_maj_nxt : std_ulogic;
-  signal rxd_s       : std_ulogic;
-  signal rxd_fe      : std_ulogic;
-  signal rxd_re      : std_ulogic;
-  signal rxd_edge    : std_ulogic;
+  signal rxd_maj     : std_logic;
+  signal rxd_maj_nxt : std_logic;
+  signal rxd_s       : std_logic;
+  signal rxd_fe      : std_logic;
+  signal rxd_re      : std_logic;
+  signal rxd_edge    : std_logic;
 
   --8.2.                UART STATE MACHINE
   --8.2.1.      Receive state
-  signal sync_done      : std_ulogic;
-  signal xfer_done      : std_ulogic;
-  signal uart_state     : std_ulogic_vector (2 downto 0);
-  signal uart_state_nxt : std_ulogic_vector (2 downto 0);
-  signal xfer_buf       : std_ulogic_vector (19 downto 0);
-  signal xfer_buf_nxt   : std_ulogic_vector (19 downto 0);
+  signal sync_done      : std_logic;
+  signal xfer_done      : std_logic;
+  signal uart_state     : std_logic_vector (2 downto 0);
+  signal uart_state_nxt : std_logic_vector (2 downto 0);
+  signal xfer_buf       : std_logic_vector (19 downto 0);
+  signal xfer_buf_nxt   : std_logic_vector (19 downto 0);
 
   --8.2.2.      State machine definition
-  signal re_rx_cmd : std_ulogic_vector (2 downto 0);
+  signal re_rx_cmd : std_logic_vector (2 downto 0);
 
-  signal re_0_rx_cmd : std_ulogic_vector (2 downto 0);
-  signal re_0_tx_cmd : std_ulogic_vector (2 downto 0);
+  signal re_0_rx_cmd : std_logic_vector (2 downto 0);
+  signal re_0_tx_cmd : std_logic_vector (2 downto 0);
 
-  signal re_1_rx_cmd : std_ulogic_vector (2 downto 0);
-  signal re_1_tx_cmd : std_ulogic_vector (2 downto 0);
+  signal re_1_rx_cmd : std_logic_vector (2 downto 0);
+  signal re_1_tx_cmd : std_logic_vector (2 downto 0);
 
-  signal re_rx_data2 : std_ulogic_vector (2 downto 0);
-  signal re_tx_data2 : std_ulogic_vector (2 downto 0);
+  signal re_rx_data2 : std_logic_vector (2 downto 0);
+  signal re_tx_data2 : std_logic_vector (2 downto 0);
 
-  signal re_0_rx_data2 : std_ulogic_vector (2 downto 0);
-  signal re_0_tx_data2 : std_ulogic_vector (2 downto 0);
+  signal re_0_rx_data2 : std_logic_vector (2 downto 0);
+  signal re_0_tx_data2 : std_logic_vector (2 downto 0);
 
   --8.2.3.      State transition
   --8.2.4.      State machine
   --8.2.5.      Utility signals
-  signal cmd_valid : std_ulogic;
-  signal rx_active : std_ulogic;
-  signal tx_active : std_ulogic;
+  signal cmd_valid : std_logic;
+  signal rx_active : std_logic;
+  signal tx_active : std_logic;
 
   --8.3.                UART SYNCHRONIZATION
-  signal sync_busy   : std_ulogic;
-  signal sync_cnt    : std_ulogic_vector (DBG_UART_XFER_CNT_W+2 downto 0);
-  signal bit_cnt_max : std_ulogic_vector (DBG_UART_XFER_CNT_W-1 downto 0);
+  signal sync_busy   : std_logic;
+  signal sync_cnt    : std_logic_vector (DBG_UART_XFER_CNT_W+2 downto 0);
+  signal bit_cnt_max : std_logic_vector (DBG_UART_XFER_CNT_W-1 downto 0);
 
   --8.4.                UART RECEIVE / TRANSMIT
   --8.4.1.      Transfer counter
-  signal txd_start    : std_ulogic;
-  signal rxd_start    : std_ulogic;
-  signal xfer_bit_inc : std_ulogic;
+  signal txd_start    : std_logic;
+  signal rxd_start    : std_logic;
+  signal xfer_bit_inc : std_logic;
 
-  signal xfer_bit : std_ulogic_vector (3 downto 0);
-  signal xfer_cnt : std_ulogic_vector (DBG_UART_XFER_CNT_W-1 downto 0);
+  signal xfer_bit : std_logic_vector (3 downto 0);
+  signal xfer_cnt : std_logic_vector (DBG_UART_XFER_CNT_W-1 downto 0);
 
   --8.4.2.      Receive/Transmit buffer
   --8.4.3.      Generate TXD output
   --8.5.                INTERFACE TO DEBUG REGISTERS
-  signal dbg_bw     : std_ulogic;
-  signal dbg_din_bw : std_ulogic;
+  signal dbg_bw     : std_logic;
+  signal dbg_din_bw : std_logic;
 
 begin
   P8_UART_COMMUNICATION : block
@@ -278,7 +278,7 @@ begin
           sync_cnt <= (DBG_UART_XFER_CNT_W + 2 downto 3 => '1', 2 downto 0 => '0');
         elsif (rising_edge(dbg_clk)) then
           if ((sync_busy or (not sync_busy and sync_cnt(2))) = '1') then
-            sync_cnt <= std_ulogic_vector(unsigned(sync_cnt) + (DBG_UART_XFER_CNT_W + 2 downto 1 => '0', 0 => '1'));
+            sync_cnt <= std_logic_vector(unsigned(sync_cnt) + to_unsigned(1, DBG_UART_XFER_CNT_W+3));
           end if;
         end if;
       end process R_1c;
@@ -294,7 +294,7 @@ begin
     --8.4.1.    Transfer counter
     txd_start    <= dbg_rd_rdy or (xfer_done and to_stdlogic(uart_state = TX_DATA1));
     rxd_start    <= to_stdlogic(xfer_bit = X"0") and rxd_fe and to_stdlogic(uart_state /= RX_SYNC);
-    xfer_bit_inc <= to_stdlogic(xfer_bit /= X"0") and to_stdlogic(xfer_cnt = (xfer_cnt'range => '0'));
+    xfer_bit_inc <= to_stdlogic(xfer_bit /= X"0") and to_stdlogic(xfer_cnt = (0 to DBG_UART_XFER_CNT_W - 1 => '0'));
     xfer_done    <= to_stdlogic(xfer_bit = "1010") when rx_active = '1' else to_stdlogic(xfer_bit = "1011");
 
     R1_1c_2c_3c : process (dbg_clk, dbg_rst)
@@ -307,7 +307,7 @@ begin
         elsif (xfer_done = '1') then
           xfer_bit <= "0000";
         elsif (xfer_bit_inc = '1') then
-          xfer_bit <= std_ulogic_vector(unsigned(xfer_bit) + "0001");
+          xfer_bit <= std_logic_vector(unsigned(xfer_bit) + "0001");
         end if;
       end if;
     end process R1_1c_2c_3c;
@@ -322,7 +322,7 @@ begin
         elsif ((txd_start or xfer_bit_inc) = '1') then
           xfer_cnt <= bit_cnt_max;
         elsif (or_reduce(xfer_cnt) = '1') then
-          xfer_cnt <= std_ulogic_vector(unsigned(xfer_cnt) + (DBG_UART_XFER_CNT_W - 1 downto 0 => '1'));
+          xfer_cnt <= std_logic_vector(unsigned(xfer_cnt) + (0 to DBG_UART_XFER_CNT_W - 1 => '1'));
         end if;
       end if;
     end process R2_1c_2c_3c;

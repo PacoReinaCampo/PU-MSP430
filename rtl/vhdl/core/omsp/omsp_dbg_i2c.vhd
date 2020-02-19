@@ -46,25 +46,25 @@ use WORK.MSP430_PACK .all;
 
 entity omsp_dbg_i2c is
   port (
-    dbg_i2c_sda_out : out std_ulogic;
-    dbg_rd          : out std_ulogic;
-    dbg_wr          : out std_ulogic;
-    dbg_addr        : out std_ulogic_vector (5 downto 0);
-    dbg_din         : out std_ulogic_vector (15 downto 0);
+    dbg_i2c_sda_out : out std_logic;
+    dbg_rd          : out std_logic;
+    dbg_wr          : out std_logic;
+    dbg_addr        : out std_logic_vector (5 downto 0);
+    dbg_din         : out std_logic_vector (15 downto 0);
 
-    dbg_clk           : in std_ulogic;
-    dbg_i2c_scl       : in std_ulogic;
-    dbg_i2c_sda_in    : in std_ulogic;
-    dbg_rd_rdy        : in std_ulogic;
-    dbg_rst           : in std_ulogic;
-    mem_burst         : in std_ulogic;
-    mem_burst_end     : in std_ulogic;
-    mem_burst_rd      : in std_ulogic;
-    mem_burst_wr      : in std_ulogic;
-    mem_bw            : in std_ulogic;
-    dbg_i2c_addr      : in std_ulogic_vector (6 downto 0);
-    dbg_i2c_broadcast : in std_ulogic_vector (6 downto 0);
-    dbg_dout          : in std_ulogic_vector (15 downto 0));
+    dbg_clk           : in std_logic;
+    dbg_i2c_scl       : in std_logic;
+    dbg_i2c_sda_in    : in std_logic;
+    dbg_rd_rdy        : in std_logic;
+    dbg_rst           : in std_logic;
+    mem_burst         : in std_logic;
+    mem_burst_end     : in std_logic;
+    mem_burst_rd      : in std_logic;
+    mem_burst_wr      : in std_logic;
+    mem_bw            : in std_logic;
+    dbg_i2c_addr      : in std_logic_vector (6 downto 0);
+    dbg_i2c_broadcast : in std_logic_vector (6 downto 0);
+    dbg_dout          : in std_logic_vector (15 downto 0));
 end omsp_dbg_i2c;
 
 architecture omsp_dbg_i2c_ARQ of omsp_dbg_i2c is
@@ -72,135 +72,135 @@ architecture omsp_dbg_i2c_ARQ of omsp_dbg_i2c is
   --9.          I2C_COMMUNICATION       
   --9.3.                I2C STATE MACHINE       
   --9.3.3.      State machine definition
-  constant RX_ADDR     : std_ulogic_vector (2 downto 0) := "000";
-  constant RX_ADDR_ACK : std_ulogic_vector (2 downto 0) := "001";
-  constant RX_DATA     : std_ulogic_vector (2 downto 0) := "010";
-  constant RX_DATA_ACK : std_ulogic_vector (2 downto 0) := "011";
-  constant TX_DATA     : std_ulogic_vector (2 downto 0) := "100";
-  constant TX_DATA_ACK : std_ulogic_vector (2 downto 0) := "101";
+  constant RX_ADDR     : std_logic_vector (2 downto 0) := "000";
+  constant RX_ADDR_ACK : std_logic_vector (2 downto 0) := "001";
+  constant RX_DATA     : std_logic_vector (2 downto 0) := "010";
+  constant RX_DATA_ACK : std_logic_vector (2 downto 0) := "011";
+  constant TX_DATA     : std_logic_vector (2 downto 0) := "100";
+  constant TX_DATA_ACK : std_logic_vector (2 downto 0) := "101";
   --9.4.                I2C SHIFT REGISTER (FOR RECEIVING & TRANSMITING)
   --9.6.3.      State machine definition
-  constant RX_CMD      : std_ulogic_vector (2 downto 0) := "000";
-  constant RX_BYTE_LO  : std_ulogic_vector (2 downto 0) := "001";
-  constant RX_BYTE_HI  : std_ulogic_vector (2 downto 0) := "010";
-  constant TX_BYTE_LO  : std_ulogic_vector (2 downto 0) := "011";
-  constant TX_BYTE_HI  : std_ulogic_vector (2 downto 0) := "100";
+  constant RX_CMD      : std_logic_vector (2 downto 0) := "000";
+  constant RX_BYTE_LO  : std_logic_vector (2 downto 0) := "001";
+  constant RX_BYTE_HI  : std_logic_vector (2 downto 0) := "010";
+  constant TX_BYTE_LO  : std_logic_vector (2 downto 0) := "011";
+  constant TX_BYTE_HI  : std_logic_vector (2 downto 0) := "100";
 
   --9.7.                REGISTER READ/WRITE ACCESS
-  constant MEM_DATA : std_ulogic_vector (5 downto 0) := "000110";
+  constant MEM_DATA : std_logic_vector (5 downto 0) := "000110";
 
   --9.          I2C_COMMUNICATION
   --9.1.                I2C RECEIVE LINE SYNCHRONIZTION & FILTERING
   --9.1.1.      Synchronize SCL/SDA inputs
-  signal scl_sync_n         : std_ulogic;
-  signal scl_sync           : std_ulogic;
-  signal sda_in_sync_n      : std_ulogic;
-  signal sda_in_sync        : std_ulogic;
-  signal not_dbg_i2c_scl    : std_ulogic;
-  signal not_dbg_i2c_sda_in : std_ulogic;
+  signal scl_sync_n         : std_logic;
+  signal scl_sync           : std_logic;
+  signal sda_in_sync_n      : std_logic;
+  signal sda_in_sync        : std_logic;
+  signal not_dbg_i2c_scl    : std_logic;
+  signal not_dbg_i2c_sda_in : std_logic;
 
   --9.1.2.      SCL/SDA input buffers
-  signal scl_buf    : std_ulogic_vector (1 downto 0);
-  signal sda_in_buf : std_ulogic_vector (1 downto 0);
+  signal scl_buf    : std_logic_vector (1 downto 0);
+  signal sda_in_buf : std_logic_vector (1 downto 0);
 
   --9.1.3.      SCL/SDA Majority decision
-  signal scl    : std_ulogic;
-  signal sda_in : std_ulogic;
+  signal scl    : std_logic;
+  signal sda_in : std_logic;
 
   --9.1.4.      SCL/SDA Edge detection
-  signal sda_in_dly : std_ulogic;
-  signal sda_in_fe  : std_ulogic;
-  signal sda_in_re  : std_ulogic;
-  signal scl_dly    : std_ulogic;
-  signal scl_fe     : std_ulogic;
-  signal scl_re     : std_ulogic;
-  signal scl_sample : std_ulogic;
-  signal scl_re_dly : std_ulogic_vector (1 downto 0);
+  signal sda_in_dly : std_logic;
+  signal sda_in_fe  : std_logic;
+  signal sda_in_re  : std_logic;
+  signal scl_dly    : std_logic;
+  signal scl_fe     : std_logic;
+  signal scl_re     : std_logic;
+  signal scl_sample : std_logic;
+  signal scl_re_dly : std_logic_vector (1 downto 0);
 
   --9.2.                I2C START & STOP CONDITION DETECTION
   --9.2.1.      Start condition
-  signal start_detect : std_ulogic;
+  signal start_detect : std_logic;
 
   --9.2.2.      Stop condition
-  signal stop_detect : std_ulogic;
+  signal stop_detect : std_logic;
 
   --9.2.3.      I2C Slave Active
-  signal i2c_addr_not_valid : std_ulogic;
-  signal i2c_active_seq     : std_ulogic;
-  signal i2c_active         : std_ulogic;
-  signal i2c_init           : std_ulogic;
+  signal i2c_addr_not_valid : std_logic;
+  signal i2c_active_seq     : std_logic;
+  signal i2c_active         : std_logic;
+  signal i2c_init           : std_logic;
 
   --9.3.                I2C STATE MACHINE
-  signal re_rx_addr     : std_ulogic_vector (2 downto 0);
-  signal re_rx_addr_ack : std_ulogic_vector (2 downto 0);
-  signal re_rx_data     : std_ulogic_vector (2 downto 0);
-  signal re_rx_data_ack : std_ulogic_vector (2 downto 0);
-  signal re_tx_data     : std_ulogic_vector (2 downto 0);
-  signal re_tx_data_ack : std_ulogic_vector (2 downto 0);
+  signal re_rx_addr     : std_logic_vector (2 downto 0);
+  signal re_rx_addr_ack : std_logic_vector (2 downto 0);
+  signal re_rx_data     : std_logic_vector (2 downto 0);
+  signal re_rx_data_ack : std_logic_vector (2 downto 0);
+  signal re_tx_data     : std_logic_vector (2 downto 0);
+  signal re_tx_data_ack : std_logic_vector (2 downto 0);
 
   --9.3.1.      State register/wires
-  signal i2c_state     : std_ulogic_vector (2 downto 0);
-  signal i2c_state_nxt : std_ulogic_vector (2 downto 0);
+  signal i2c_state     : std_logic_vector (2 downto 0);
+  signal i2c_state_nxt : std_logic_vector (2 downto 0);
 
   --9.3.2.      Utility signals
-  signal shift_rx_done : std_ulogic;
-  signal shift_tx_done : std_ulogic;
-  signal shift_buf     : std_ulogic_vector (8 downto 0);
+  signal shift_rx_done : std_logic;
+  signal shift_tx_done : std_logic;
+  signal shift_buf     : std_logic_vector (8 downto 0);
 
   --9.3.3.      State machine definition        
   --9.3.4.      State transition
   --9.3.5.      State machine
   --9.4.                I2C SHIFT REGISTER (FOR RECEIVING & TRANSMITING)
-  signal shift_rx_en       : std_ulogic;
-  signal shift_tx_en       : std_ulogic;
-  signal shift_tx_en_pre   : std_ulogic;
-  signal shift_buf_rx_init : std_ulogic;
-  signal shift_buf_rx_en   : std_ulogic;
-  signal shift_buf_tx_en   : std_ulogic;
-  signal shift_buf_tx_init : std_ulogic;
-  signal shift_tx_val      : std_ulogic_vector (7 downto 0);
-  signal shift_buf_nxt     : std_ulogic_vector (8 downto 0);
+  signal shift_rx_en       : std_logic;
+  signal shift_tx_en       : std_logic;
+  signal shift_tx_en_pre   : std_logic;
+  signal shift_buf_rx_init : std_logic;
+  signal shift_buf_rx_en   : std_logic;
+  signal shift_buf_tx_en   : std_logic;
+  signal shift_buf_tx_init : std_logic;
+  signal shift_tx_val      : std_logic_vector (7 downto 0);
+  signal shift_buf_nxt     : std_logic_vector (8 downto 0);
 
   --9.4.1.      Detect when the received I2C device address is not valid
   --9.4.2.      Utility signals
-  signal shift_rx_data_done : std_ulogic;
-  signal shift_tx_data_done : std_ulogic;
+  signal shift_rx_data_done : std_logic;
+  signal shift_tx_data_done : std_logic;
 
   --9.5.                I2C TRANSMIT BUFFER
   --9.6.                DEBUG INTERFACE STATE MACHINE
-  signal re_rx_cmd     : std_ulogic_vector (2 downto 0);
-  signal re_rx_byte_lo : std_ulogic_vector (2 downto 0);
-  signal re_rx_byte_hi : std_ulogic_vector (2 downto 0);
-  signal re_tx_byte_lo : std_ulogic_vector (2 downto 0);
-  signal re_tx_byte_hi : std_ulogic_vector (2 downto 0);
-  signal re_0_rx_cmd   : std_ulogic_vector (2 downto 0);
+  signal re_rx_cmd     : std_logic_vector (2 downto 0);
+  signal re_rx_byte_lo : std_logic_vector (2 downto 0);
+  signal re_rx_byte_hi : std_logic_vector (2 downto 0);
+  signal re_tx_byte_lo : std_logic_vector (2 downto 0);
+  signal re_tx_byte_hi : std_logic_vector (2 downto 0);
+  signal re_0_rx_cmd   : std_logic_vector (2 downto 0);
 
   --9.6.1.      State register/wires
-  signal dbg_state     : std_ulogic_vector (2 downto 0);
-  signal dbg_state_nxt : std_ulogic_vector (2 downto 0);
+  signal dbg_state     : std_logic_vector (2 downto 0);
+  signal dbg_state_nxt : std_logic_vector (2 downto 0);
 
   --9.6.2.      Utility signals
-  signal dbg_bw : std_ulogic;
+  signal dbg_bw : std_logic;
 
   --9.6.3.      State machine definition
   --9.6.4.      State transition
   --9.6.5.      State machine
   --9.6.6.      Utility signals
-  signal cmd_valid   : std_ulogic;
-  signal rx_lo_valid : std_ulogic;
-  signal rx_hi_valid : std_ulogic;
+  signal cmd_valid   : std_logic;
+  signal rx_lo_valid : std_logic;
+  signal rx_hi_valid : std_logic;
 
   --9.7.                REGISTER READ/WRITE ACCESS      
   --9.7.1.      Debug register address & bit width      
   --9.7.2.      Debug register data input
-  signal dbg_din_lo : std_ulogic_vector (7 downto 0);
-  signal dbg_din_hi : std_ulogic_vector (7 downto 0);
+  signal dbg_din_lo : std_logic_vector (7 downto 0);
+  signal dbg_din_hi : std_logic_vector (7 downto 0);
 
   --9.7.3.      Debug register data write command       
-  signal data_write_command : std_ulogic;
+  signal data_write_command : std_logic;
 
   --9.7.4.      Debug register data read command
-  signal data_read_command : std_ulogic;
+  signal data_read_command : std_logic;
 
   --9.7.5.      Debug register data read value
 

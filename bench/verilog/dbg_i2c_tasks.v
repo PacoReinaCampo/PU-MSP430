@@ -352,3 +352,4 @@ always @(posedge mclk or posedge dbg_rst)
 assign dbg_sda_master_out = dbg_sda_master_out_sel ? dbg_sda_master_out_dly : dbg_sda_master_out_pre;
 
 assign dbg_scl_master     = dbg_scl_master_sel     ? dbg_scl_master_dly     : dbg_scl_master_pre;
+

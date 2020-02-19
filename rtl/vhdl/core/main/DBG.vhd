@@ -46,67 +46,67 @@ use WORK.MSP430_PACK .all;
 
 entity DBG is
   port (
-    dbg_cpu_reset   : out std_ulogic;
-    dbg_freeze      : out std_ulogic;
-    dbg_halt_cmd    : out std_ulogic;
-    dbg_i2c_sda_out : out std_ulogic;
-    dbg_mem_en      : out std_ulogic;
-    dbg_reg_wr      : out std_ulogic;
-    dbg_uart_txd    : out std_ulogic;
-    dbg_mem_wr      : out std_ulogic_vector (1 downto 0);
-    dbg_mem_addr    : out std_ulogic_vector (15 downto 0);
-    dbg_mem_dout    : out std_ulogic_vector (15 downto 0);
+    dbg_cpu_reset   : out std_logic;
+    dbg_freeze      : out std_logic;
+    dbg_halt_cmd    : out std_logic;
+    dbg_i2c_sda_out : out std_logic;
+    dbg_mem_en      : out std_logic;
+    dbg_reg_wr      : out std_logic;
+    dbg_uart_txd    : out std_logic;
+    dbg_mem_wr      : out std_logic_vector (1 downto 0);
+    dbg_mem_addr    : out std_logic_vector (15 downto 0);
+    dbg_mem_dout    : out std_logic_vector (15 downto 0);
 
-    cpu_en_s          : in std_ulogic;
-    dbg_clk           : in std_ulogic;
-    dbg_en_s          : in std_ulogic;
-    dbg_halt_st       : in std_ulogic;
-    dbg_i2c_scl       : in std_ulogic;
-    dbg_i2c_sda_in    : in std_ulogic;
-    dbg_rst           : in std_ulogic;
-    dbg_uart_rxd      : in std_ulogic;
-    decode_noirq      : in std_ulogic;
-    eu_mb_en          : in std_ulogic;
-    puc_pnd_set       : in std_ulogic;
-    eu_mb_wr          : in std_ulogic_vector (1 downto 0);
-    dbg_i2c_addr      : in std_ulogic_vector (6 downto 0);
-    dbg_i2c_broadcast : in std_ulogic_vector (6 downto 0);
-    cpu_nr_inst       : in std_ulogic_vector (7 downto 0);
-    cpu_nr_total      : in std_ulogic_vector (7 downto 0);
-    dbg_mem_din       : in std_ulogic_vector (15 downto 0);
-    dbg_reg_din       : in std_ulogic_vector (15 downto 0);
-    eu_mab            : in std_ulogic_vector (15 downto 0);
-    fe_mdb_in         : in std_ulogic_vector (15 downto 0);
-    pc                : in std_ulogic_vector (15 downto 0);
-    cpu_id            : in std_ulogic_vector (31 downto 0));
+    cpu_en_s          : in std_logic;
+    dbg_clk           : in std_logic;
+    dbg_en_s          : in std_logic;
+    dbg_halt_st       : in std_logic;
+    dbg_i2c_scl       : in std_logic;
+    dbg_i2c_sda_in    : in std_logic;
+    dbg_rst           : in std_logic;
+    dbg_uart_rxd      : in std_logic;
+    decode_noirq      : in std_logic;
+    eu_mb_en          : in std_logic;
+    puc_pnd_set       : in std_logic;
+    eu_mb_wr          : in std_logic_vector (1 downto 0);
+    dbg_i2c_addr      : in std_logic_vector (6 downto 0);
+    dbg_i2c_broadcast : in std_logic_vector (6 downto 0);
+    cpu_nr_inst       : in std_logic_vector (7 downto 0);
+    cpu_nr_total      : in std_logic_vector (7 downto 0);
+    dbg_mem_din       : in std_logic_vector (15 downto 0);
+    dbg_reg_din       : in std_logic_vector (15 downto 0);
+    eu_mab            : in std_logic_vector (15 downto 0);
+    fe_mdb_in         : in std_logic_vector (15 downto 0);
+    pc                : in std_logic_vector (15 downto 0);
+    cpu_id            : in std_logic_vector (31 downto 0));
 end DBG;
 
 architecture DBG_ARQ of DBG is
 
-  type M_TOTAL_BP1_3 is array (TOTAL_BP - 1 downto 0) of std_ulogic_vector (3 downto 0);
-  type M_TOTAL_BP1_15 is array (TOTAL_BP - 1 downto 0) of std_ulogic_vector (15 downto 0);
+  type M_TOTAL_BP1_3 is array (TOTAL_BP - 1 downto 0) of std_logic_vector (3 downto 0);
+  type M_TOTAL_BP1_15 is array (TOTAL_BP - 1 downto 0) of std_logic_vector (15 downto 0);
   type M_TOTAL_BP1_I is array (TOTAL_BP - 1 downto 0) of natural;
 
   --SIGNAL INOUT
-  signal dbg_mem_en_omsp : std_ulogic;
-  signal dbg_reg_wr_omsp : std_ulogic;
-  signal dbg_mem_wr_omsp : std_ulogic_vector (1 downto 0);
+  signal dbg_mem_en_omsp : std_logic;
+  signal dbg_reg_wr_omsp : std_logic;
+  signal dbg_mem_wr_omsp : std_logic_vector (1 downto 0);
 
   --0.          PARAMETER_DECLARATION
   --0.1.                Diverse wires and registers
-  signal dbg_wr         : std_ulogic;
-  signal mem_burst      : std_ulogic;
-  signal dbg_reg_rd     : std_ulogic;
-  signal dbg_mem_rd_dly : std_ulogic;
-  signal dbg_swbrk      : std_ulogic;
-  signal dbg_rd         : std_ulogic;
-  signal dbg_rd_rdy     : std_ulogic;
-  signal mem_burst_rd   : std_ulogic;
-  signal mem_burst_wr   : std_ulogic;
-  signal dbg_addr       : std_ulogic_vector (5 downto 0);
-  signal dbg_din        : std_ulogic_vector (15 downto 0);
-  signal brk_halt       : std_ulogic_vector (TOTAL_BP - 1 downto 0);
-  signal brk_pnd        : std_ulogic_vector (TOTAL_BP - 1 downto 0);
+  signal dbg_wr         : std_logic;
+  signal mem_burst      : std_logic;
+  signal dbg_reg_rd     : std_logic;
+  signal dbg_mem_rd_dly : std_logic;
+  signal dbg_swbrk      : std_logic;
+  signal dbg_rd         : std_logic;
+  signal dbg_rd_rdy     : std_logic;
+  signal mem_burst_rd   : std_logic;
+  signal mem_burst_wr   : std_logic;
+  signal dbg_addr       : std_logic_vector (5 downto 0);
+  signal dbg_din        : std_logic_vector (15 downto 0);
+  signal brk_halt       : std_logic_vector (TOTAL_BP - 1 downto 0);
+  signal brk_pnd        : std_logic_vector (TOTAL_BP - 1 downto 0);
   signal brk_dout       : M_TOTAL_BP1_15;
 
   --0.2.                Number of registers
@@ -144,36 +144,36 @@ architecture DBG_ARQ of DBG is
 
   constant CPU_NR : integer := 24;
 
-  constant CPU_ID_LOB : std_ulogic_vector (5 downto 0) := "000000";
-  constant CPU_ID_HIB : std_ulogic_vector (5 downto 0) := "000001";
-  constant CPU_CTLB   : std_ulogic_vector (5 downto 0) := "000010";
-  constant CPU_STATB  : std_ulogic_vector (5 downto 0) := "000011";
-  constant MEM_CTLB   : std_ulogic_vector (5 downto 0) := "000100";
-  constant MEM_ADDRB  : std_ulogic_vector (5 downto 0) := "000101";
-  constant MEM_DATAB  : std_ulogic_vector (5 downto 0) := "000110";
-  constant MEM_CNTB   : std_ulogic_vector (5 downto 0) := "000111";
+  constant CPU_ID_LOB : std_logic_vector (5 downto 0) := "000000";
+  constant CPU_ID_HIB : std_logic_vector (5 downto 0) := "000001";
+  constant CPU_CTLB   : std_logic_vector (5 downto 0) := "000010";
+  constant CPU_STATB  : std_logic_vector (5 downto 0) := "000011";
+  constant MEM_CTLB   : std_logic_vector (5 downto 0) := "000100";
+  constant MEM_ADDRB  : std_logic_vector (5 downto 0) := "000101";
+  constant MEM_DATAB  : std_logic_vector (5 downto 0) := "000110";
+  constant MEM_CNTB   : std_logic_vector (5 downto 0) := "000111";
 
-  constant BRK0_CTLB   : std_ulogic_vector (5 downto 0) := "001000";
-  constant BRK0_STATB  : std_ulogic_vector (5 downto 0) := "001001";
-  constant BRK0_ADDR0B : std_ulogic_vector (5 downto 0) := "001010";
-  constant BRK0_ADDR1B : std_ulogic_vector (5 downto 0) := "001011";
+  constant BRK0_CTLB   : std_logic_vector (5 downto 0) := "001000";
+  constant BRK0_STATB  : std_logic_vector (5 downto 0) := "001001";
+  constant BRK0_ADDR0B : std_logic_vector (5 downto 0) := "001010";
+  constant BRK0_ADDR1B : std_logic_vector (5 downto 0) := "001011";
 
-  constant BRK1_CTLB   : std_ulogic_vector (5 downto 0) := "001100";
-  constant BRK1_STATB  : std_ulogic_vector (5 downto 0) := "001101";
-  constant BRK1_ADDR0B : std_ulogic_vector (5 downto 0) := "001110";
-  constant BRK1_ADDR1B : std_ulogic_vector (5 downto 0) := "001111";
+  constant BRK1_CTLB   : std_logic_vector (5 downto 0) := "001100";
+  constant BRK1_STATB  : std_logic_vector (5 downto 0) := "001101";
+  constant BRK1_ADDR0B : std_logic_vector (5 downto 0) := "001110";
+  constant BRK1_ADDR1B : std_logic_vector (5 downto 0) := "001111";
 
-  constant BRK2_CTLB   : std_ulogic_vector (5 downto 0) := "010000";
-  constant BRK2_STATB  : std_ulogic_vector (5 downto 0) := "010001";
-  constant BRK2_ADDR0B : std_ulogic_vector (5 downto 0) := "010010";
-  constant BRK2_ADDR1B : std_ulogic_vector (5 downto 0) := "010011";
+  constant BRK2_CTLB   : std_logic_vector (5 downto 0) := "010000";
+  constant BRK2_STATB  : std_logic_vector (5 downto 0) := "010001";
+  constant BRK2_ADDR0B : std_logic_vector (5 downto 0) := "010010";
+  constant BRK2_ADDR1B : std_logic_vector (5 downto 0) := "010011";
 
-  constant BRK3_CTLB   : std_ulogic_vector (5 downto 0) := "010100";
-  constant BRK3_STATB  : std_ulogic_vector (5 downto 0) := "010101";
-  constant BRK3_ADDR0B : std_ulogic_vector (5 downto 0) := "010110";
-  constant BRK3_ADDR1B : std_ulogic_vector (5 downto 0) := "010111";
+  constant BRK3_CTLB   : std_logic_vector (5 downto 0) := "010100";
+  constant BRK3_STATB  : std_logic_vector (5 downto 0) := "010101";
+  constant BRK3_ADDR0B : std_logic_vector (5 downto 0) := "010110";
+  constant BRK3_ADDR1B : std_logic_vector (5 downto 0) := "010111";
 
-  constant CPU_NRB : std_ulogic_vector (5 downto 0) := "011000";
+  constant CPU_NRB : std_logic_vector (5 downto 0) := "011000";
 
   constant BRK_CTL : M_TOTAL_BP1_I := (BRK3_CTL,
                                        BRK2_CTL,
@@ -196,98 +196,98 @@ architecture DBG_ARQ of DBG is
                                          BRK0_ADDR1);
 
   --0.4.                Register one-hot decoder
-  constant BASE_D : std_ulogic_vector (NR_REG - 1 downto 0) := (0 => '1', others => '0');
+  constant BASE_D : std_logic_vector (NR_REG - 1 downto 0) := (0 => '1', others => '0');
 
-  constant CPU_ID_LO_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) srl CPU_ID_LO);
-  constant CPU_ID_HI_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll CPU_ID_HI);
-  constant CPU_CTL_D   : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll CPU_CTL);
-  constant CPU_STAT_D  : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll CPU_STAT);
-  constant MEM_CTL_D   : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll MEM_CTL);
-  constant MEM_ADDR_D  : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll MEM_ADDR);
-  constant MEM_DATA_D  : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll MEM_DATA);
-  constant MEM_CNT_D   : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll MEM_CNT);
+  constant CPU_ID_LO_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) srl CPU_ID_LO);
+  constant CPU_ID_HI_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll CPU_ID_HI);
+  constant CPU_CTL_D   : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll CPU_CTL);
+  constant CPU_STAT_D  : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll CPU_STAT);
+  constant MEM_CTL_D   : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll MEM_CTL);
+  constant MEM_ADDR_D  : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll MEM_ADDR);
+  constant MEM_DATA_D  : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll MEM_DATA);
+  constant MEM_CNT_D   : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll MEM_CNT);
 
-  constant BRK0_CTL_D   : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK0_CTL);
-  constant BRK0_STAT_D  : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK0_STAT);
-  constant BRK0_ADDR0_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK0_ADDR0);
-  constant BRK0_ADDR1_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK0_ADDR1);
+  constant BRK0_CTL_D   : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK0_CTL);
+  constant BRK0_STAT_D  : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK0_STAT);
+  constant BRK0_ADDR0_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK0_ADDR0);
+  constant BRK0_ADDR1_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK0_ADDR1);
 
-  constant BRK1_CTL_D   : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK1_CTL);
-  constant BRK1_STAT_D  : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK1_STAT);
-  constant BRK1_ADDR0_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK1_ADDR0);
-  constant BRK1_ADDR1_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK1_ADDR1);
+  constant BRK1_CTL_D   : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK1_CTL);
+  constant BRK1_STAT_D  : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK1_STAT);
+  constant BRK1_ADDR0_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK1_ADDR0);
+  constant BRK1_ADDR1_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK1_ADDR1);
 
-  constant BRK2_CTL_D   : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK2_CTL);
-  constant BRK2_STAT_D  : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK2_STAT);
-  constant BRK2_ADDR0_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK2_ADDR0);
-  constant BRK2_ADDR1_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK2_ADDR1);
+  constant BRK2_CTL_D   : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK2_CTL);
+  constant BRK2_STAT_D  : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK2_STAT);
+  constant BRK2_ADDR0_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK2_ADDR0);
+  constant BRK2_ADDR1_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK2_ADDR1);
 
-  constant BRK3_CTL_D   : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK3_CTL);
-  constant BRK3_STAT_D  : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK3_STAT);
-  constant BRK3_ADDR0_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK3_ADDR0);
-  constant BRK3_ADDR1_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll BRK3_ADDR1);
+  constant BRK3_CTL_D   : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK3_CTL);
+  constant BRK3_STAT_D  : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK3_STAT);
+  constant BRK3_ADDR0_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK3_ADDR0);
+  constant BRK3_ADDR1_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll BRK3_ADDR1);
 
-  constant CPU_NR_D : std_ulogic_vector (NR_REG - 1 downto 0) := std_ulogic_vector(unsigned(BASE_D) sll CPU_NR);
+  constant CPU_NR_D : std_logic_vector (NR_REG - 1 downto 0) := std_logic_vector(unsigned(BASE_D) sll CPU_NR);
 
   --1.          REGISTER_DECODER
   --1.1.                Select Data register during a burst
-  signal dbg_addr_in : std_ulogic_vector (5 downto 0);
+  signal dbg_addr_in : std_logic_vector (5 downto 0);
 
   --1.2.                Register address decode
-  signal reg_dec : std_ulogic_vector (NR_REG - 1 downto 0);
+  signal reg_dec : std_logic_vector (NR_REG - 1 downto 0);
 
   --1.3.                Read/Write probes
-  signal reg_write : std_ulogic;
-  signal reg_read  : std_ulogic;
+  signal reg_write : std_logic;
+  signal reg_read  : std_logic;
 
   --1.4.                Read/Write vectors
-  signal reg_wr : std_ulogic_vector (NR_REG - 1 downto 0);
-  signal reg_rd : std_ulogic_vector (NR_REG - 1 downto 0);
+  signal reg_wr : std_logic_vector (NR_REG - 1 downto 0);
+  signal reg_rd : std_logic_vector (NR_REG - 1 downto 0);
 
   --2.          REGISTER_CORE_INTERFACE
   --2.1.                CPU_NR Register
-  signal cpu_nr_s : std_ulogic_vector (15 downto 0);
+  signal cpu_nr_s : std_logic_vector (15 downto 0);
 
   --2.2.                CPU_CTL Register
-  signal cpu_ctl_wr   : std_ulogic;
-  signal halt_cpu     : std_ulogic;
-  signal run_cpu      : std_ulogic;
-  signal istep_s      : std_ulogic;
-  signal cpu_ctl_s    : std_ulogic_vector (6 downto 3);
-  signal cpu_ctl_full : std_ulogic_vector (7 downto 0);
+  signal cpu_ctl_wr   : std_logic;
+  signal halt_cpu     : std_logic;
+  signal run_cpu      : std_logic;
+  signal istep_s      : std_logic;
+  signal cpu_ctl_s    : std_logic_vector (6 downto 3);
+  signal cpu_ctl_full : std_logic_vector (7 downto 0);
 
   --2.3.                CPU_STAT Register
-  signal cpu_stat_wr   : std_ulogic;
-  signal cpu_stat_s    : std_ulogic_vector (3 downto 2);
-  signal cpu_stat_set  : std_ulogic_vector (3 downto 2);
-  signal cpu_stat_clr  : std_ulogic_vector (3 downto 2);
-  signal cpu_stat_full : std_ulogic_vector (7 downto 0);
+  signal cpu_stat_wr   : std_logic;
+  signal cpu_stat_s    : std_logic_vector (3 downto 2);
+  signal cpu_stat_set  : std_logic_vector (3 downto 2);
+  signal cpu_stat_clr  : std_logic_vector (3 downto 2);
+  signal cpu_stat_full : std_logic_vector (7 downto 0);
 
   --3.          REGISTER_MEMORY_INTERFACE
   --3.1.                MEM_CTL Register
-  signal mem_ctl_wr   : std_ulogic;
-  signal mem_bw       : std_ulogic;
-  signal mem_start    : std_ulogic;
-  signal mem_ctl_s    : std_ulogic_vector (3 downto 1);
-  signal mem_ctl_full : std_ulogic_vector (7 downto 0);
+  signal mem_ctl_wr   : std_logic;
+  signal mem_bw       : std_logic;
+  signal mem_start    : std_logic;
+  signal mem_ctl_s    : std_logic_vector (3 downto 1);
+  signal mem_ctl_full : std_logic_vector (7 downto 0);
 
   --3.2.                MEM_DATA Register
-  signal mem_access     : std_ulogic;
-  signal mem_data_wr    : std_ulogic;
-  signal mem_data_s     : std_ulogic_vector (15 downto 0);
-  signal mem_addr_s     : std_ulogic_vector (15 downto 0);
-  signal dbg_mem_din_bw : std_ulogic_vector (15 downto 0);
+  signal mem_access     : std_logic;
+  signal mem_data_wr    : std_logic;
+  signal mem_data_s     : std_logic_vector (15 downto 0);
+  signal mem_addr_s     : std_logic_vector (15 downto 0);
+  signal dbg_mem_din_bw : std_logic_vector (15 downto 0);
 
   --3.3.                MEM_ADDR Register
-  signal mem_addr_wr  : std_ulogic;
-  signal dbg_mem_acc  : std_ulogic;
-  signal dbg_reg_acc  : std_ulogic;
-  signal mem_cnt_s    : std_ulogic_vector (15 downto 0);
-  signal mem_addr_inc : std_ulogic_vector (15 downto 0);
+  signal mem_addr_wr  : std_logic;
+  signal dbg_mem_acc  : std_logic;
+  signal dbg_reg_acc  : std_logic;
+  signal mem_cnt_s    : std_logic_vector (15 downto 0);
+  signal mem_addr_inc : std_logic_vector (15 downto 0);
 
   --3.4.                MEM_CNT Register
-  signal mem_cnt_wr  : std_ulogic;
-  signal mem_cnt_dec : std_ulogic_vector (15 downto 0);
+  signal mem_cnt_wr  : std_logic;
+  signal mem_cnt_dec : std_logic_vector (15 downto 0);
 
   --4.          BREAKPOINTS_/_WATCHPOINTS
   --4.1.                Hardware Breakpoint/Watchpoint Register write/read select
@@ -295,75 +295,75 @@ architecture DBG_ARQ of DBG is
   signal brk_reg_wr : M_TOTAL_BP1_3;
 
   --5.          DATA_OUTPUT_GENERATION
-  signal cpu_id_lo_rd : std_ulogic_vector (15 downto 0);
-  signal cpu_id_hi_rd : std_ulogic_vector (15 downto 0);
-  signal cpu_ctl_rd   : std_ulogic_vector (15 downto 0);
-  signal cpu_stat_rd  : std_ulogic_vector (15 downto 0);
-  signal mem_ctl_rd   : std_ulogic_vector (15 downto 0);
-  signal mem_data_rd  : std_ulogic_vector (15 downto 0);
-  signal mem_addr_rd  : std_ulogic_vector (15 downto 0);
-  signal mem_cnt_rd   : std_ulogic_vector (15 downto 0);
-  signal cpu_nr_rd    : std_ulogic_vector (15 downto 0);
-  signal dbg_dout     : std_ulogic_vector (15 downto 0);
+  signal cpu_id_lo_rd : std_logic_vector (15 downto 0);
+  signal cpu_id_hi_rd : std_logic_vector (15 downto 0);
+  signal cpu_ctl_rd   : std_logic_vector (15 downto 0);
+  signal cpu_stat_rd  : std_logic_vector (15 downto 0);
+  signal mem_ctl_rd   : std_logic_vector (15 downto 0);
+  signal mem_data_rd  : std_logic_vector (15 downto 0);
+  signal mem_addr_rd  : std_logic_vector (15 downto 0);
+  signal mem_cnt_rd   : std_logic_vector (15 downto 0);
+  signal cpu_nr_rd    : std_logic_vector (15 downto 0);
+  signal dbg_dout     : std_logic_vector (15 downto 0);
 
-  signal cpu_id_lo_s : std_ulogic_vector (15 downto 0);
-  signal cpu_id_hi_s : std_ulogic_vector (15 downto 0);
+  signal cpu_id_lo_s : std_logic_vector (15 downto 0);
+  signal cpu_id_hi_s : std_logic_vector (15 downto 0);
 
   --5.1.                Tell UART/I2C interface that the data is ready to be read
 
   --6.          CPU_CONTROL
   --6.1.                Reset CPU       
   --6.2.                Beak after reset
-  signal halt_rst : std_ulogic;
+  signal halt_rst : std_logic;
 
   --6.3.                Freeze peripherals      
   --6.4.                Software break
-  signal inc_step : std_ulogic_vector (1 downto 0);
+  signal inc_step : std_logic_vector (1 downto 0);
 
   --6.5.                Single step
   --6.6.                Run / Halt
-  signal halt_flag     : std_ulogic;
-  signal mem_halt_cpu  : std_ulogic;
-  signal mem_run_cpu   : std_ulogic;
-  signal halt_flag_clr : std_ulogic;
-  signal halt_flag_set : std_ulogic;
+  signal halt_flag     : std_logic;
+  signal mem_halt_cpu  : std_logic;
+  signal mem_run_cpu   : std_logic;
+  signal halt_flag_clr : std_logic;
+  signal halt_flag_set : std_logic;
 
   --7.          MEMORY_CONTROL
   --7.1.                Control Memory bursts
-  signal mem_burst_start : std_ulogic;
-  signal mem_burst_end   : std_ulogic;
+  signal mem_burst_start : std_logic;
+  signal mem_burst_end   : std_logic;
 
   --7.1.1.      Detect when burst is on going 
   --7.1.2.      Control signals for UART/I2C interface 
   --7.1.3.      Trigger CPU Register or memory access during a burst
-  signal mem_startb    : std_ulogic;
-  signal mem_seq_start : std_ulogic;
+  signal mem_startb    : std_logic;
+  signal mem_seq_start : std_logic;
 
   --7.1.4.      Combine single and burst memory start of sequence 
   --7.2.                Memory access state machine
-  signal mem_state     : std_ulogic_vector (1 downto 0);
-  signal mem_state_nxt : std_ulogic_vector (1 downto 0);
+  signal mem_state     : std_logic_vector (1 downto 0);
+  signal mem_state_nxt : std_logic_vector (1 downto 0);
 
   --7.2.1.      State machine definition
-  signal re_m_idle    : std_ulogic_vector (1 downto 0);
-  signal re_m_set_brk : std_ulogic_vector (1 downto 0);
+  signal re_m_idle    : std_logic_vector (1 downto 0);
+  signal re_m_set_brk : std_logic_vector (1 downto 0);
 
-  constant M_IDLE       : std_ulogic_vector (1 downto 0) := "00";
-  constant M_SET_BRK    : std_ulogic_vector (1 downto 0) := "01";
-  constant M_ACCESS_BRK : std_ulogic_vector (1 downto 0) := "10";
-  constant M_ACCESS     : std_ulogic_vector (1 downto 0) := "11";
+  constant M_IDLE       : std_logic_vector (1 downto 0) := "00";
+  constant M_SET_BRK    : std_logic_vector (1 downto 0) := "01";
+  constant M_ACCESS_BRK : std_logic_vector (1 downto 0) := "10";
+  constant M_ACCESS     : std_logic_vector (1 downto 0) := "11";
 
   --7.2.2.      State transition 
   --7.2.3.      State machine 
   --7.2.4.      Utility signals 
   --7.3.                Interface to CPU Registers and Memory bacbkone
-  signal dbg_mem_rd       : std_ulogic;
-  signal dbg_mem_wr_msk_s : std_ulogic_vector (1 downto 0);
+  signal dbg_mem_rd       : std_logic;
+  signal dbg_mem_wr_msk_s : std_logic_vector (1 downto 0);
 
   --7.3.1.      It takes one additional cycle to read from Memory as from registers
 
-  function matrix_or (matrix : M_TOTAL_BP1_15) return std_ulogic_vector is
-    variable RESULT : std_ulogic_vector (15 downto 0) := (others => '0');
+  function matrix_or (matrix : M_TOTAL_BP1_15) return std_logic_vector is
+    variable RESULT : std_logic_vector (15 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
       RESULT := RESULT or matrix(i);
@@ -375,7 +375,7 @@ begin
   P1_REGISTER_DECODER : block
   begin
     --1.1.              Select Data register during a burst
-    dbg_addr_in <= std_ulogic_vector(to_unsigned(MEM_DATA, 6)) when mem_burst = '1' else dbg_addr;
+    dbg_addr_in <= std_logic_vector(to_unsigned(MEM_DATA, 6)) when mem_burst = '1' else dbg_addr;
 
     --1.2.              Register address decode
     address_decode_01 : if (TOTAL_BP = 1) generate
@@ -510,8 +510,8 @@ begin
     reg_read  <= '1';
 
     --1.4.              Read/Write vectors
-    reg_wr <= reg_dec and (reg_dec'range => reg_write);
-    reg_rd <= reg_dec and (reg_dec'range => reg_read);
+    reg_wr <= reg_dec and (0 to NR_REG - 1 => reg_write);
+    reg_rd <= reg_dec and (0 to NR_REG - 1 => reg_read);
   end block P1_REGISTER_DECODER;
 
   P2_REGISTER_CORE_INTERFACE : block
@@ -526,9 +526,9 @@ begin
     begin
       if (dbg_rst = '1') then
         if (DBG_RST_BRK_EN = '1') then
-          cpu_ctl_s <= std_ulogic_vector(to_unsigned(6, 4));
+          cpu_ctl_s <= std_logic_vector(to_unsigned(6, 4));
         elsif (DBG_RST_BRK_EN = '0') then
-          cpu_ctl_s <= std_ulogic_vector(to_unsigned(2, 4));
+          cpu_ctl_s <= std_logic_vector(to_unsigned(2, 4));
         end if;
       elsif (rising_edge(dbg_clk)) then
         if (cpu_ctl_wr = '1') then
@@ -631,7 +631,7 @@ begin
         if (mem_addr_wr = '1') then
           mem_addr_s <= dbg_din;
         else
-          mem_addr_s <= std_ulogic_vector(unsigned(mem_addr_s) + unsigned(mem_addr_inc));
+          mem_addr_s <= std_logic_vector(unsigned(mem_addr_s) + unsigned(mem_addr_inc));
         end if;
       end if;
     end process R1_1c_2;
@@ -650,7 +650,7 @@ begin
         if (mem_cnt_wr = '1') then
           mem_cnt_s <= dbg_din;
         else
-          mem_cnt_s <= std_ulogic_vector(unsigned(mem_cnt_s) + unsigned(mem_cnt_dec));
+          mem_cnt_s <= std_logic_vector(unsigned(mem_cnt_s) + unsigned(mem_cnt_dec));
         end if;
       end if;
     end process R2_1c_2;
@@ -705,15 +705,15 @@ begin
     cpu_id_lo_s <= cpu_id(15 downto 0);
     cpu_id_hi_s <= cpu_id(31 downto 16);
 
-    cpu_id_lo_rd <= cpu_id_lo_s and (15 downto 0             => reg_rd(CPU_ID_LO));
-    cpu_id_hi_rd <= cpu_id_hi_s and (15 downto 0             => reg_rd(CPU_ID_HI));
-    cpu_ctl_rd   <= (X"00" & cpu_ctl_full) and (15 downto 0  => reg_rd(CPU_CTL));
-    cpu_stat_rd  <= (X"00" & cpu_stat_full) and (15 downto 0 => reg_rd(CPU_STAT));
-    mem_ctl_rd   <= (X"00" & mem_ctl_full) and (15 downto 0  => reg_rd(MEM_CTL));
-    mem_data_rd  <= mem_data_s and (15 downto 0              => reg_rd(MEM_DATA));
-    mem_addr_rd  <= mem_addr_s and (15 downto 0              => reg_rd(MEM_ADDR));
-    mem_cnt_rd   <= mem_cnt_s and (15 downto 0               => reg_rd(MEM_CNT));
-    cpu_nr_rd    <= cpu_nr_s and (15 downto 0                => reg_rd(CPU_NR));
+    cpu_id_lo_rd <= cpu_id_lo_s and (0 to 15             => reg_rd(CPU_ID_LO));
+    cpu_id_hi_rd <= cpu_id_hi_s and (0 to 15             => reg_rd(CPU_ID_HI));
+    cpu_ctl_rd   <= (X"00" & cpu_ctl_full) and (0 to 15  => reg_rd(CPU_CTL));
+    cpu_stat_rd  <= (X"00" & cpu_stat_full) and (0 to 15 => reg_rd(CPU_STAT));
+    mem_ctl_rd   <= (X"00" & mem_ctl_full) and (0 to 15  => reg_rd(MEM_CTL));
+    mem_data_rd  <= mem_data_s and (0 to 15              => reg_rd(MEM_DATA));
+    mem_addr_rd  <= mem_addr_s and (0 to 15              => reg_rd(MEM_ADDR));
+    mem_cnt_rd   <= mem_cnt_s and (0 to 15               => reg_rd(MEM_CNT));
+    cpu_nr_rd    <= cpu_nr_s and (0 to 15                => reg_rd(CPU_NR));
 
     dbg_dout <= cpu_id_lo_rd or
                 cpu_id_hi_rd or
@@ -874,7 +874,7 @@ begin
     dbg_mem_wr_msk_s <= "11"
                         when mem_bw = '0'        else "10"
                         when mem_addr_s(0) = '1' else "01";
-    dbg_mem_wr_omsp <= (1 downto 0 => (dbg_mem_en_omsp and mem_ctl_s(1))) and dbg_mem_wr_msk_s;
+    dbg_mem_wr_omsp <= (0 to 1 => (dbg_mem_en_omsp and mem_ctl_s(1))) and dbg_mem_wr_msk_s;
 
     --7.3.1.    It takes one additional cycle to read from Memory as from registers
     R2_1_e : process (dbg_clk, dbg_rst)

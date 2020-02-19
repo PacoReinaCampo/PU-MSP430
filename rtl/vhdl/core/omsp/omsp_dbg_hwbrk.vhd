@@ -46,31 +46,31 @@ use WORK.MSP430_PACK .all;
 
 entity omsp_dbg_hwbrk is
   port (
-    brk_halt : out std_ulogic;
-    brk_pnd  : out std_ulogic;
-    brk_dout : out std_ulogic_vector (15 downto 0);
+    brk_halt : out std_logic;
+    brk_pnd  : out std_logic;
+    brk_dout : out std_logic_vector (15 downto 0);
 
-    dbg_clk      : in std_ulogic;
-    dbg_rst      : in std_ulogic;
-    decode_noirq : in std_ulogic;
-    eu_mb_en     : in std_ulogic;
-    eu_mb_wr     : in std_ulogic_vector (1 downto 0);
-    brk_reg_rd   : in std_ulogic_vector (3 downto 0);
-    brk_reg_wr   : in std_ulogic_vector (3 downto 0);
-    dbg_din      : in std_ulogic_vector (15 downto 0);
-    eu_mab       : in std_ulogic_vector (15 downto 0);
-    pc           : in std_ulogic_vector (15 downto 0));
+    dbg_clk      : in std_logic;
+    dbg_rst      : in std_logic;
+    decode_noirq : in std_logic;
+    eu_mb_en     : in std_logic;
+    eu_mb_wr     : in std_logic_vector (1 downto 0);
+    brk_reg_rd   : in std_logic_vector (3 downto 0);
+    brk_reg_wr   : in std_logic_vector (3 downto 0);
+    dbg_din      : in std_logic_vector (15 downto 0);
+    eu_mab       : in std_logic_vector (15 downto 0);
+    pc           : in std_logic_vector (15 downto 0));
 end omsp_dbg_hwbrk;
 
 architecture omsp_dbg_hwbrk_ARQ of omsp_dbg_hwbrk is
 
   --0. WIRE & PARAMETER DECLARATION
-  signal range_wr_set : std_ulogic;
-  signal range_rd_set : std_ulogic;
-  signal addr1_wr_set : std_ulogic;
-  signal addr1_rd_set : std_ulogic;
-  signal addr0_wr_set : std_ulogic;
-  signal addr0_rd_set : std_ulogic;
+  signal range_wr_set : std_logic;
+  signal range_rd_set : std_logic;
+  signal addr1_wr_set : std_logic;
+  signal addr1_rd_set : std_logic;
+  signal addr0_wr_set : std_logic;
+  signal addr0_rd_set : std_logic;
 
   constant BRK_CTLC   : integer := 0;
   constant BRK_STATC  : integer := 1;
@@ -79,49 +79,49 @@ architecture omsp_dbg_hwbrk_ARQ of omsp_dbg_hwbrk is
 
   --1.CONFIGURATION REGISTERS
   --BRK_CTL Register
-  signal brk_ctl_wr   : std_ulogic;
-  signal brk_ctl      : std_ulogic_vector (4 downto 0);
-  signal brk_ctl_full : std_ulogic_vector (7 downto 0);
+  signal brk_ctl_wr   : std_logic;
+  signal brk_ctl      : std_logic_vector (4 downto 0);
+  signal brk_ctl_full : std_logic_vector (7 downto 0);
 
   --BRK_STAT Register
-  signal brk_stat_wr   : std_ulogic;
-  signal brk_stat_set  : std_ulogic_vector (5 downto 0);
-  signal brk_stat      : std_ulogic_vector (5 downto 0);
-  signal brk_stat_clr  : std_ulogic_vector (5 downto 0);
-  signal brk_stat_full : std_ulogic_vector (7 downto 0);
+  signal brk_stat_wr   : std_logic;
+  signal brk_stat_set  : std_logic_vector (5 downto 0);
+  signal brk_stat      : std_logic_vector (5 downto 0);
+  signal brk_stat_clr  : std_logic_vector (5 downto 0);
+  signal brk_stat_full : std_logic_vector (7 downto 0);
 
   --BRK_ADDR0 Register
-  signal brk_addr_wr : std_ulogic_vector (1 downto 0);
+  signal brk_addr_wr : std_logic_vector (1 downto 0);
   signal brk_addr    : M_01_15;
 
   --2.DATA OUTPUT GENERATION
-  signal brk_ctl_rd   : std_ulogic_vector (15 downto 0);
-  signal brk_stat_rd  : std_ulogic_vector (15 downto 0);
-  signal brk_addr0_rd : std_ulogic_vector (15 downto 0);
-  signal brk_addr1_rd : std_ulogic_vector (15 downto 0);
+  signal brk_ctl_rd   : std_logic_vector (15 downto 0);
+  signal brk_stat_rd  : std_logic_vector (15 downto 0);
+  signal brk_addr0_rd : std_logic_vector (15 downto 0);
+  signal brk_addr1_rd : std_logic_vector (15 downto 0);
 
   --3.BREAKPOINT / WATCHPOINT GENERATION
   --Comparators
-  signal equ_d_addr0 : std_ulogic;
-  signal equ_d_addr1 : std_ulogic;
-  signal equ_d_range : std_ulogic;
+  signal equ_d_addr0 : std_logic;
+  signal equ_d_addr1 : std_logic;
+  signal equ_d_range : std_logic;
 
-  signal equ_i_addr0 : std_ulogic;
-  signal equ_i_addr1 : std_ulogic;
-  signal equ_i_range : std_ulogic;
+  signal equ_i_addr0 : std_logic;
+  signal equ_i_addr1 : std_logic;
+  signal equ_i_range : std_logic;
 
   --Detect accesses
-  signal i_addr0_rd : std_ulogic;
-  signal i_addr1_rd : std_ulogic;
-  signal i_range_rd : std_ulogic;
+  signal i_addr0_rd : std_logic;
+  signal i_addr1_rd : std_logic;
+  signal i_range_rd : std_logic;
 
-  signal d_addr0_wr : std_ulogic;
-  signal d_addr1_wr : std_ulogic;
-  signal d_range_wr : std_ulogic;
+  signal d_addr0_wr : std_logic;
+  signal d_addr1_wr : std_logic;
+  signal d_range_wr : std_logic;
 
-  signal d_addr0_rd : std_ulogic;
-  signal d_addr1_rd : std_ulogic;
-  signal d_range_rd : std_ulogic;
+  signal d_addr0_rd : std_logic;
+  signal d_addr1_rd : std_logic;
+  signal d_range_rd : std_logic;
 
 begin
   CONFIGURATION_REGISTERS : block
@@ -195,10 +195,10 @@ begin
 
   DATA_OUTPUT_GENERATION : block
   begin
-    brk_ctl_rd   <= ("00000000" & brk_ctl_full) and (15 downto 0  => brk_reg_rd(BRK_CTLC));
-    brk_stat_rd  <= ("00000000" & brk_stat_full) and (15 downto 0 => brk_reg_rd(BRK_STATC));
-    brk_addr0_rd <= brk_addr(0) and (15 downto 0                  => brk_reg_rd(BRK_ADDR0C));
-    brk_addr1_rd <= brk_addr(1) and (15 downto 0                  => brk_reg_rd(BRK_ADDR1C));
+    brk_ctl_rd   <= ("00000000" & brk_ctl_full)  and (0 to 15 => brk_reg_rd(BRK_CTLC));
+    brk_stat_rd  <= ("00000000" & brk_stat_full) and (0 to 15 => brk_reg_rd(BRK_STATC));
+    brk_addr0_rd <= brk_addr(0)                  and (0 to 15 => brk_reg_rd(BRK_ADDR0C));
+    brk_addr1_rd <= brk_addr(1)                  and (0 to 15 => brk_reg_rd(BRK_ADDR1C));
     brk_dout     <= brk_ctl_rd or brk_stat_rd or brk_addr0_rd or brk_addr1_rd;
   end block DATA_OUTPUT_GENERATION;
 

@@ -46,49 +46,49 @@ use WORK.MSP430_PACK .all;
 
 entity omsp_state_machine is
   port (
-    dbg_halt_st  : out std_ulogic;
-    decode_noirq : out std_ulogic;
-    fetch        : out std_ulogic;
-    decode       : out std_ulogic;
-    cpu_halt_cmd : out std_ulogic;
-    i_state      : out std_ulogic_vector (2 downto 0);
-    i_state_nxt  : out std_ulogic_vector (2 downto 0);
+    dbg_halt_st  : out std_logic;
+    decode_noirq : out std_logic;
+    fetch        : out std_logic;
+    decode       : out std_logic;
+    cpu_halt_cmd : out std_logic;
+    i_state      : out std_logic_vector (2 downto 0);
+    i_state_nxt  : out std_logic_vector (2 downto 0);
 
-    exec_done    : in std_ulogic;
-    cpu_en_s     : in std_ulogic;
-    cpuoff       : in std_ulogic;
-    irq_detect   : in std_ulogic;
-    dbg_halt_cmd : in std_ulogic;
-    mclk         : in std_ulogic;
-    pc_sw_wr     : in std_ulogic;
-    puc_rst      : in std_ulogic;
-    inst_sz      : in std_ulogic_vector (1 downto 0);
-    inst_sz_nxt  : in std_ulogic_vector (1 downto 0);
-    e_state      : in std_ulogic_vector (3 downto 0);
-    e_state_nxt  : in std_ulogic_vector (3 downto 0));
+    exec_done    : in std_logic;
+    cpu_en_s     : in std_logic;
+    cpuoff       : in std_logic;
+    irq_detect   : in std_logic;
+    dbg_halt_cmd : in std_logic;
+    mclk         : in std_logic;
+    pc_sw_wr     : in std_logic;
+    puc_rst      : in std_logic;
+    inst_sz      : in std_logic_vector (1 downto 0);
+    inst_sz_nxt  : in std_logic_vector (1 downto 0);
+    e_state      : in std_logic_vector (3 downto 0);
+    e_state_nxt  : in std_logic_vector (3 downto 0));
 end omsp_state_machine;
 
 architecture CONTROL_B1_ARQ of omsp_state_machine is
 
   --SIGNAL INOUT
-  signal dbg_halt_st_omsp  : std_ulogic;
-  signal decode_noirq_omsp : std_ulogic;
-  signal decode_omsp       : std_ulogic;
-  signal exec_done_omsp    : std_ulogic;
-  signal irq_detect_omsp   : std_ulogic;
-  signal i_state_omsp      : std_ulogic_vector (2 downto 0);
-  signal e_state_omsp      : std_ulogic_vector (3 downto 0);
+  signal dbg_halt_st_omsp  : std_logic;
+  signal decode_noirq_omsp : std_logic;
+  signal decode_omsp       : std_logic;
+  signal exec_done_omsp    : std_logic;
+  signal irq_detect_omsp   : std_logic;
+  signal i_state_omsp      : std_logic_vector (2 downto 0);
+  signal e_state_omsp      : std_logic_vector (3 downto 0);
 
   --1.FRONTEND STATE MACHINE
   --The wire "conv" is used as state bits to calculate the next response
-  signal i_state_nxt_omsp : std_ulogic_vector (2 downto 0);
+  signal i_state_nxt_omsp : std_logic_vector (2 downto 0);
 
   --CPU on/off through the debug interface or cpu_en port
-  signal cpu_halt_cmd_omsp : std_ulogic;
+  signal cpu_halt_cmd_omsp : std_logic;
 
-  signal re_i_idle : std_ulogic_vector (2 downto 0);
-  signal re_i_dec  : std_ulogic_vector (2 downto 0);
-  signal re_i_ext1 : std_ulogic_vector (2 downto 0);
+  signal re_i_idle : std_logic_vector (2 downto 0);
+  signal re_i_dec  : std_logic_vector (2 downto 0);
+  signal re_i_ext1 : std_logic_vector (2 downto 0);
 
 begin
   C1_FRONTEND_STATE_MACHINE : block
