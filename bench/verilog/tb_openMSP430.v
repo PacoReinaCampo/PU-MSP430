@@ -31,10 +31,7 @@
 //              - Olivier Girard,    olgirard@gmail.com
 //
 //----------------------------------------------------------------------------
-// $Rev: 192 $
-// $LastChangedBy: olivier.girard $
-// $LastChangedDate: 2013-12-17 21:15:28 +0100 (Tue, 17 Dec 2013) $
-//----------------------------------------------------------------------------
+
 `include "timescale.v"
 `ifdef OMSP_NO_INCLUDE
 `else

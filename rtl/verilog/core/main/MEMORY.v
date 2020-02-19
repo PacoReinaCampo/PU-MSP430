@@ -36,10 +36,7 @@
 //              - Olivier Girard,    olgirard@gmail.com
 //
 //----------------------------------------------------------------------------
-// $Rev: 151 $
-// $LastChangedBy: olivier.girard $
-// $LastChangedDate: 2012-07-23 00:24:11 +0200 (Mon, 23 Jul 2012) $
-//----------------------------------------------------------------------------
+
 `ifdef OMSP_NO_INCLUDE
 `else
 `include "openMSP430_defines.v"
