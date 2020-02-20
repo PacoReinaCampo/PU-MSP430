@@ -46,276 +46,254 @@ use WORK.MSP430_PACK .all;
 
 entity FRONTEND is
   port (
-    dbg_halt_st  : out std_ulogic;
-    decode_noirq : out std_ulogic;
-    exec_done    : out std_ulogic;
-    inst_bw      : out std_ulogic;
-    inst_irq_rst : out std_ulogic;
-    inst_mov     : out std_ulogic;
-    mb_en        : out std_ulogic;
-    mclk_enable  : out std_ulogic;
-    mclk_wkup    : out std_ulogic;
-    nmi_acc      : out std_ulogic;
-    inst_type    : out std_ulogic_vector (2 downto 0);
-    e_state      : out std_ulogic_vector (3 downto 0);
-    inst_ad      : out std_ulogic_vector (7 downto 0);
-    inst_as      : out std_ulogic_vector (7 downto 0);
-    inst_jmp     : out std_ulogic_vector (7 downto 0);
-    inst_so      : out std_ulogic_vector (7 downto 0);
-    inst_alu     : out std_ulogic_vector (11 downto 0);
-    inst_dest    : out std_ulogic_vector (15 downto 0);
-    inst_dext    : out std_ulogic_vector (15 downto 0);
-    inst_sext    : out std_ulogic_vector (15 downto 0);
-    inst_src     : out std_ulogic_vector (15 downto 0);
-    mab          : out std_ulogic_vector (15 downto 0);
-    pc           : out std_ulogic_vector (15 downto 0);
-    pc_nxt       : out std_ulogic_vector (15 downto 0);
-    irq_acc      : out std_ulogic_vector (IRQ_NR - 3 downto 0);
+    dbg_halt_st  : out std_logic;
+    decode_noirq : out std_logic;
+    exec_done    : out std_logic;
+    inst_bw      : out std_logic;
+    inst_irq_rst : out std_logic;
+    inst_mov     : out std_logic;
+    mb_en        : out std_logic;
+    mclk_enable  : out std_logic;
+    mclk_wkup    : out std_logic;
+    nmi_acc      : out std_logic;
+    inst_type    : out std_logic_vector (2 downto 0);
+    e_state      : out std_logic_vector (3 downto 0);
+    inst_ad      : out std_logic_vector (7 downto 0);
+    inst_as      : out std_logic_vector (7 downto 0);
+    inst_jmp     : out std_logic_vector (7 downto 0);
+    inst_so      : out std_logic_vector (7 downto 0);
+    inst_alu     : out std_logic_vector (11 downto 0);
+    inst_dest    : out std_logic_vector (15 downto 0);
+    inst_dext    : out std_logic_vector (15 downto 0);
+    inst_sext    : out std_logic_vector (15 downto 0);
+    inst_src     : out std_logic_vector (15 downto 0);
+    mab          : out std_logic_vector (15 downto 0);
+    pc           : out std_logic_vector (15 downto 0);
+    pc_nxt       : out std_logic_vector (15 downto 0);
+    irq_acc      : out std_logic_vector (IRQ_NR - 3 downto 0);
 
-    decode     : out std_ulogic;
-    irq_detect : out std_ulogic;
-    i_state    : out std_ulogic_vector (2 downto 0);
-    irq_num    : out std_ulogic_vector (5 downto 0);
-    ir         : out std_ulogic_vector (15 downto 0);
+    decode     : out std_logic;
+    irq_detect : out std_logic;
+    i_state    : out std_logic_vector (2 downto 0);
+    irq_num    : out std_logic_vector (5 downto 0);
+    ir         : out std_logic_vector (15 downto 0);
 
-    cpu_en_s     : in std_ulogic;
-    cpuoff       : in std_ulogic;
-    dbg_halt_cmd : in std_ulogic;
-    fe_pmem_wait : in std_ulogic;
-    gie          : in std_ulogic;
-    mclk         : in std_ulogic;
-    nmi_pnd      : in std_ulogic;
-    nmi_wkup     : in std_ulogic;
-    pc_sw_wr     : in std_ulogic;
-    puc_rst      : in std_ulogic;
-    scan_enable  : in std_ulogic;
-    wdt_irq      : in std_ulogic;
-    wdt_wkup     : in std_ulogic;
-    wkup         : in std_ulogic;
-    dbg_reg_sel  : in std_ulogic_vector (3 downto 0);
-    mdb_in       : in std_ulogic_vector (15 downto 0);
-    pc_sw        : in std_ulogic_vector (15 downto 0);
-    irq          : in std_ulogic_vector (IRQ_NR - 3 downto 0));
+    cpu_en_s     : in std_logic;
+    cpuoff       : in std_logic;
+    dbg_halt_cmd : in std_logic;
+    fe_pmem_wait : in std_logic;
+    gie          : in std_logic;
+    mclk         : in std_logic;
+    nmi_pnd      : in std_logic;
+    nmi_wkup     : in std_logic;
+    pc_sw_wr     : in std_logic;
+    puc_rst      : in std_logic;
+    scan_enable  : in std_logic;
+    wdt_irq      : in std_logic;
+    wdt_wkup     : in std_logic;
+    wkup         : in std_logic;
+    dbg_reg_sel  : in std_logic_vector (3 downto 0);
+    mdb_in       : in std_logic_vector (15 downto 0);
+    pc_sw        : in std_logic_vector (15 downto 0);
+    irq          : in std_logic_vector (IRQ_NR - 3 downto 0));
 end FRONTEND;
 
 architecture FRONTEND_ARQ of FRONTEND is
 
   --SIGNAL INOUT
-  signal dbg_halt_st_omsp  : std_ulogic;
-  signal decode_noirq_omsp : std_ulogic;
-  signal exec_done_omsp    : std_ulogic;
-  signal inst_irq_rst_omsp : std_ulogic;
-  signal inst_type_omsp    : std_ulogic_vector (2 downto 0);
-  signal e_state_omsp      : std_ulogic_vector (3 downto 0);
-  signal inst_ad_omsp      : std_ulogic_vector (7 downto 0);
-  signal inst_as_omsp      : std_ulogic_vector (7 downto 0);
-  signal inst_so_omsp      : std_ulogic_vector (7 downto 0);
-  signal pc_omsp           : std_ulogic_vector (15 downto 0);
-  signal pc_nxt_omsp       : std_ulogic_vector (15 downto 0);
+  signal dbg_halt_st_omsp  : std_logic;
+  signal decode_noirq_omsp : std_logic;
+  signal exec_done_omsp    : std_logic;
+  signal inst_irq_rst_omsp : std_logic;
+  signal inst_type_omsp    : std_logic_vector (2 downto 0);
+  signal e_state_omsp      : std_logic_vector (3 downto 0);
+  signal inst_ad_omsp      : std_logic_vector (7 downto 0);
+  signal inst_as_omsp      : std_logic_vector (7 downto 0);
+  signal inst_so_omsp      : std_logic_vector (7 downto 0);
+  signal pc_omsp           : std_logic_vector (15 downto 0);
+  signal pc_nxt_omsp       : std_logic_vector (15 downto 0);
 
-  signal irq_detect_omsp : std_ulogic;
-  signal i_state_omsp    : std_ulogic_vector (2 downto 0);
-  signal decode_omsp     : std_ulogic;
-  signal ir_omsp         : std_ulogic_vector (15 downto 0);
-  signal irq_num_omsp    : std_ulogic_vector (5 downto 0);
+  signal irq_detect_omsp : std_logic;
+  signal i_state_omsp    : std_logic_vector (2 downto 0);
+  signal decode_omsp     : std_logic;
+  signal ir_omsp         : std_logic_vector (15 downto 0);
+  signal irq_num_omsp    : std_logic_vector (5 downto 0);
 
   --1.FRONTEND STATE MACHINE
   --The wire "conv" is used as state bits to calculate the next response
-  signal is_const      : std_ulogic;
-  signal inst_sz       : std_ulogic_vector (1 downto 0);
-  signal inst_sz_nxt   : std_ulogic_vector (1 downto 0);
-  signal inst_sz_nxt_a : std_ulogic_vector (1 downto 0);
-  signal inst_sz_nxt_b : std_ulogic_vector (1 downto 0);
-  signal i_state_nxt   : std_ulogic_vector (2 downto 0);
-  signal inst_type_nxt : std_ulogic_vector (2 downto 0);
-  signal e_state_nxt   : std_ulogic_vector (3 downto 0);
-  signal sconst_nxt    : std_ulogic_vector (15 downto 0);
+  signal is_const      : std_logic;
+  signal inst_sz       : std_logic_vector (1 downto 0);
+  signal inst_sz_nxt   : std_logic_vector (1 downto 0);
+  signal inst_sz_nxt_a : std_logic_vector (1 downto 0);
+  signal inst_sz_nxt_b : std_logic_vector (1 downto 0);
+  signal i_state_nxt   : std_logic_vector (2 downto 0);
+  signal inst_type_nxt : std_logic_vector (2 downto 0);
+  signal e_state_nxt   : std_logic_vector (3 downto 0);
+  signal sconst_nxt    : std_logic_vector (15 downto 0);
 
   --CPU on/off through the debug interface or cpu_en port
-  signal cpu_halt_cmd : std_ulogic;
+  signal cpu_halt_cmd : std_logic;
 
-  signal re_i_idle : std_ulogic_vector (2 downto 0);
-  signal re_i_dec  : std_ulogic_vector (2 downto 0);
-  signal re_i_ext1 : std_ulogic_vector (2 downto 0);
+  signal re_i_idle : std_logic_vector (2 downto 0);
+  signal re_i_dec  : std_logic_vector (2 downto 0);
+  signal re_i_ext1 : std_logic_vector (2 downto 0);
 
   --Utility signals     
-  signal fetch : std_ulogic;
+  signal fetch : std_logic;
 
   --2.INTERRUPT HANDLING & SYSTEM WAKEUP
   --2.1.INTERRUPT HANDLING
   --Detect other interrupts
-  signal mclk_irq_num : std_ulogic;
+  signal mclk_irq_num : std_logic;
 
   --Combine all IRQs
-  signal irq_all : std_ulogic_vector (62 downto 0);
+  signal irq_all : std_logic_vector (62 downto 0);
 
   --Select highest priority IRQ
 
   --Generate selected IRQ vector address
-  signal irq_addr : std_ulogic_vector (15 downto 0);
+  signal irq_addr : std_logic_vector (15 downto 0);
 
   --Interrupt request accepted
-  signal irq_acc_all : std_ulogic_vector (63 downto 0);
+  signal irq_acc_all : std_logic_vector (63 downto 0);
 
   --2.2.SYSTEM WAKEUP
   --Wakeup condition from maskable interrupts
-  signal mirq_wkup : std_ulogic;
+  signal mirq_wkup : std_logic;
 
   --3.FETCH INSTRUCTION
   --3.1.PROGRAM COUNTER & MEMORY INTERFACE
   --Compute next PC value
-  signal mclk_pc : std_ulogic;
-  signal pc_en   : std_ulogic;
-  signal pc_incr : std_ulogic_vector (15 downto 0);
+  signal mclk_pc : std_logic;
+  signal pc_en   : std_logic;
+  signal pc_incr : std_logic_vector (15 downto 0);
 
   --Check if ROM has been busy in order to retry ROM access
-  signal pmem_busy : std_ulogic;
+  signal pmem_busy : std_logic;
 
   --3.2.INSTRUCTION REGISTER
   --Instruction register
 
   --Detect if source extension word is required
-  signal is_sext : std_ulogic;
+  signal is_sext : std_logic;
 
   --For the Symbolic addressing mode, add -2 to the extension word in order to make up for the PC address
-  signal ext_incr : std_ulogic_vector (15 downto 0);
-  signal ext_nxt  : std_ulogic_vector (15 downto 0);
+  signal ext_incr : std_logic_vector (15 downto 0);
+  signal ext_nxt  : std_logic_vector (15 downto 0);
 
   --Store source extension word
-  signal inst_sext_en   : std_ulogic;
-  signal mclk_inst_sext : std_ulogic;
+  signal inst_sext_en   : std_logic;
+  signal mclk_inst_sext : std_logic;
 
   --Source extension word is ready
-  signal inst_sext_rdy : std_ulogic;
+  signal inst_sext_rdy : std_logic;
 
   --Store destination extension word
-  signal inst_dext_en   : std_ulogic;
-  signal mclk_inst_dext : std_ulogic;
+  signal inst_dext_en   : std_logic;
+  signal mclk_inst_dext : std_logic;
 
   --Destination extension word is ready 
-  signal inst_dext_rdy : std_ulogic;
+  signal inst_dext_rdy : std_logic;
 
   --4.DECODE INSTRUCTIONS
-  signal mclk_decode : std_ulogic;
+  signal mclk_decode : std_logic;
 
   --4.2.OPCODE: SINGLE-OPERAND ARITHMETIC 
   --Instructions are encoded in a one hot fashion as following:
-  signal inst_so_nxt : std_ulogic_vector (7 downto 0);
+  signal inst_so_nxt : std_logic_vector (7 downto 0);
 
   --4.3.OPCODE: CONDITIONAL JUMP 
   --Instructions are encoded in a one hot fashion as following: 
-  signal inst_jmp_bin : std_ulogic_vector (2 downto 0);
+  signal inst_jmp_bin : std_logic_vector (2 downto 0);
 
   --4.4.OPCODE: TWO-OPERAND ARITHMETIC
   --Instructions are encoded in a one hot fashion as following:
-  signal inst_to_nxt  : std_ulogic_vector (11 downto 0);
-  signal inst_to_1hot : std_ulogic_vector (15 downto 0);
+  signal inst_to_nxt  : std_logic_vector (11 downto 0);
+  signal inst_to_1hot : std_logic_vector (15 downto 0);
 
   --4.5.SOURCE AND DESTINATION REGISTERS
   --Destination register
-  signal inst_dest_bin : std_ulogic_vector (3 downto 0);
+  signal inst_dest_bin : std_logic_vector (3 downto 0);
 
   --Source register
-  signal inst_src_bin : std_ulogic_vector (3 downto 0);
+  signal inst_src_bin : std_logic_vector (3 downto 0);
 
   --4.6.SOURCE ADDRESSING MODES
   --Source addressing modes are encoded in a one hot fashion as following:
-  signal src_reg     : std_ulogic_vector (3 downto 0);
-  signal inst_as_nxt : std_ulogic_vector (12 downto 0);
+  signal src_reg     : std_logic_vector (3 downto 0);
+  signal inst_as_nxt : std_logic_vector (12 downto 0);
 
   --4.7.DESTINATION ADDRESSING MODES
   --Source addressing modes are encoded in a one hot fashion as following:
-  signal dest_reg    : std_ulogic_vector (3 downto 0);
-  signal inst_ad_nxt : std_ulogic_vector (7 downto 0);
+  signal dest_reg    : std_logic_vector (3 downto 0);
+  signal inst_ad_nxt : std_logic_vector (7 downto 0);
 
   --5.EXECUTION-UNIT STATE MACHINE
-  signal re_e_src_ad : std_ulogic_vector (3 downto 0);
-  signal re_e_src_rd : std_ulogic_vector (3 downto 0);
-  signal re_e_dst_ad : std_ulogic_vector (3 downto 0);
-  signal re_e_exec   : std_ulogic_vector (3 downto 0);
-  signal re_e_dst_wr : std_ulogic_vector (3 downto 0);
+  signal re_e_src_ad : std_logic_vector (3 downto 0);
+  signal re_e_src_rd : std_logic_vector (3 downto 0);
+  signal re_e_dst_ad : std_logic_vector (3 downto 0);
+  signal re_e_exec   : std_logic_vector (3 downto 0);
+  signal re_e_dst_wr : std_logic_vector (3 downto 0);
 
   --State machine control signals
-  signal src_acalc_pre : std_ulogic;
-  signal src_rd_pre    : std_ulogic;
-  signal dst_acalc_pre : std_ulogic;
-  signal dst_acalc     : std_ulogic;
-  signal dst_rd_pre    : std_ulogic;
-  signal dst_rd        : std_ulogic;
-  signal inst_branch   : std_ulogic;
-  signal exec_jmp      : std_ulogic;
-  signal exec_dst_wr   : std_ulogic;
-  signal exec_src_wr   : std_ulogic;
-  signal exec_dext_rdy : std_ulogic;
+  signal src_acalc_pre : std_logic;
+  signal src_rd_pre    : std_logic;
+  signal dst_acalc_pre : std_logic;
+  signal dst_acalc     : std_logic;
+  signal dst_rd_pre    : std_logic;
+  signal dst_rd        : std_logic;
+  signal inst_branch   : std_logic;
+  signal exec_jmp      : std_logic;
+  signal exec_dst_wr   : std_logic;
+  signal exec_src_wr   : std_logic;
+  signal exec_dext_rdy : std_logic;
 
   --Execution first state
-  signal e_first_state : std_ulogic_vector (3 downto 0);
+  signal e_first_state : std_logic_vector (3 downto 0);
 
   --6.EXECUTION-UNIT STATE FRONTEND
   --6.1.ALU FRONTEND SIGNALS
-  signal alu_src_inv_s  : std_ulogic;
-  signal alu_inc_s      : std_ulogic;
-  signal alu_inc_c_s    : std_ulogic;
-  signal alu_add_s      : std_ulogic;
-  signal alu_and_s      : std_ulogic;
-  signal alu_or_s       : std_ulogic;
-  signal alu_xor_s      : std_ulogic;
-  signal alu_dadd_s     : std_ulogic;
-  signal alu_stat_7_s   : std_ulogic;
-  signal alu_stat_f_s   : std_ulogic;
-  signal alu_shift_s    : std_ulogic;
-  signal exec_no_wr_s   : std_ulogic;
-  signal inst_alu_nxt_s : std_ulogic_vector (11 downto 0);
+  signal alu_src_inv_s  : std_logic;
+  signal alu_inc_s      : std_logic;
+  signal alu_inc_c_s    : std_logic;
+  signal alu_add_s      : std_logic;
+  signal alu_and_s      : std_logic;
+  signal alu_or_s       : std_logic;
+  signal alu_xor_s      : std_logic;
+  signal alu_dadd_s     : std_logic;
+  signal alu_stat_7_s   : std_logic;
+  signal alu_stat_f_s   : std_logic;
+  signal alu_shift_s    : std_logic;
+  signal exec_no_wr_s   : std_logic;
+  signal inst_alu_nxt_s : std_logic_vector (11 downto 0);
 
-  function to_natural (entrada : unsigned) return natural is
-    constant ARG_LEFT : integer := entrada'length - 1;
-    alias XXARG       : unsigned (ARG_LEFT downto 0) is entrada;
-    variable XARG     : unsigned (ARG_LEFT downto 0);
-    variable RESULT   : natural := 0;
-    variable w        : integer := 1;
+  function one_hot64 (binary : std_logic_vector (5 downto 0)) return std_logic_vector is
+    variable v : std_logic_vector (63 downto 0) := (others => '0');
   begin
-    XARG := TO_01(XXARG);
-    if (XARG(XARG'left) = 'X') then
-      return 0;
-    end if;
-    for i in XARG'reverse_range loop
-      if (XARG(i) = '1') then
-        RESULT := RESULT + w;
-      end if;
-      if (i /= XARG'left) then
-        w := w + w;
-      end if;
-    end loop;
-    return RESULT;
-  end to_natural;
-
-  function one_hot64 (binary : std_ulogic_vector (5 downto 0)) return std_ulogic_vector is
-    variable v : std_ulogic_vector (63 downto 0) := (others => '0');
-  begin
-    v(to_natural(unsigned(binary))) := '1';
+    v(to_integer(unsigned(binary))) := '1';
     return v;
   end one_hot64;
 
-  function one_hot16 (binary : std_ulogic_vector (3 downto 0)) return std_ulogic_vector is
-    variable v : std_ulogic_vector (15 downto 0) := (others => '0');
+  function one_hot16 (binary : std_logic_vector (3 downto 0)) return std_logic_vector is
+    variable v : std_logic_vector (15 downto 0) := (others => '0');
   begin
-    v(to_natural(unsigned(binary))) := '1';
+    v(to_integer(unsigned(binary))) := '1';
     return v;
   end one_hot16;
 
-  function one_hot8 (binary : std_ulogic_vector (2 downto 0)) return std_ulogic_vector is
-    variable v : std_ulogic_vector (7 downto 0) := (others => '0');
+  function one_hot8 (binary : std_logic_vector (2 downto 0)) return std_logic_vector is
+    variable v : std_logic_vector (7 downto 0) := (others => '0');
   begin
-    v(to_natural(unsigned(binary))) := '1';
+    v(to_integer(unsigned(binary))) := '1';
     return v;
   end one_hot8;
 
-  function get_irq_num (irq_all : std_ulogic_vector (62 downto 0)) return std_ulogic_vector is
-    variable v : std_ulogic_vector (5 downto 0) := (others => '1');
+  function get_irq_num (irq_all : std_logic_vector (62 downto 0)) return std_logic_vector is
+    variable v : std_logic_vector (5 downto 0) := (others => '1');
   begin
     for i in 62 downto 0 loop
       if((v(0) and v(1) and v(2) and v(3) and v(4) and v(5) and irq_all(i)) = '1') then
-        v := std_ulogic_vector(to_unsigned(i, 6));
+        v := std_logic_vector(to_unsigned(i, 6));
       end if;
     end loop;
     return v;
@@ -392,7 +370,7 @@ begin
   begin
     --3.1.PROGRAM COUNTER & MEMORY INTERFACE
     --Compute next PC value
-    pc_incr     <= std_ulogic_vector(unsigned(pc_omsp) + ((1 to 14 => '0') & fetch & '0'));
+    pc_incr     <= std_logic_vector(unsigned(pc_omsp) + ((1 to 14 => '0') & fetch & '0'));
     pc_nxt_omsp <= pc_sw
                    when pc_sw_wr = '1'             else irq_addr
                    when i_state_omsp = I_IRQ_FETCH else mdb_in
@@ -450,7 +428,7 @@ begin
                 (i_state_omsp = I_EXT1 and inst_as_omsp(SYMB) = '0' and
                  i_state_nxt /= I_EXT2 and inst_ad_omsp(SYMB) = '1')
                 else X"0000";
-    ext_nxt <= std_ulogic_vector(unsigned(ir_omsp) + unsigned(ext_incr));
+    ext_nxt <= std_logic_vector(unsigned(ir_omsp) + unsigned(ext_incr));
 
     --Store source extension word 
     clock_gating_1_on : if (CLOCK_GATING = '1') generate
@@ -771,7 +749,7 @@ begin
     end process;
 
     --Extended instruction size
-    inst_sz_nxt   <= std_ulogic_vector(unsigned(inst_sz_nxt_a) + unsigned(inst_sz_nxt_b));
+    inst_sz_nxt   <= std_logic_vector(unsigned(inst_sz_nxt_a) + unsigned(inst_sz_nxt_b));
     inst_sz_nxt_a <= '0' & (inst_as_nxt(IDX) or inst_as_nxt(SYMB) or inst_as_nxt(ABSC) or inst_as_nxt(IMM));
     inst_sz_nxt_b <= ('0' & ((inst_ad_nxt(IDX) or inst_ad_nxt(SYMB) or inst_ad_nxt(ABSC)) and not inst_type_nxt(INST_SOC)));
 

@@ -66,7 +66,7 @@ entity omsp_interrupt is
     irq          : in std_logic_vector (IRQ_NR - 3 downto 0));
 end omsp_interrupt;
 
-architecture CONTROL_B2_ARQ of omsp_interrupt is
+architecture FRONTEND_B2_ARQ of omsp_interrupt is
 
   --SIGNAL INOUT
   signal inst_irq_rst_omsp : std_logic;
@@ -213,4 +213,4 @@ begin
   begin
     inst_irq_rst <= inst_irq_rst_omsp;
   end block SIGNAL_INOUT;
-end CONTROL_B2_ARQ;
+end FRONTEND_B2_ARQ;

@@ -68,7 +68,7 @@ entity omsp_state_machine is
     e_state_nxt  : in std_logic_vector (3 downto 0));
 end omsp_state_machine;
 
-architecture CONTROL_B1_ARQ of omsp_state_machine is
+architecture FRONTEND_B1_ARQ of omsp_state_machine is
 
   --SIGNAL INOUT
   signal dbg_halt_st_omsp  : std_logic;
@@ -165,4 +165,4 @@ begin
     irq_detect_omsp <= irq_detect;
     e_state_omsp    <= e_state;
   end block SIGNAL_INOUT;
-end CONTROL_B1_ARQ;
+end FRONTEND_B1_ARQ;

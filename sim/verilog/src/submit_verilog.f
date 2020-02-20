@@ -55,17 +55,9 @@
 //=============================================================================
 
 +incdir+../../../rtl/verilog/
-../../../rtl/verilog/core/main/BCM.v
-../../../rtl/verilog/core/main/DBG.v
-../../../rtl/verilog/core/main/EXECUTION.v
 ../../../rtl/verilog/core/main/FRONTEND.v
-../../../rtl/verilog/core/main/GPIO.v
-../../../rtl/verilog/core/main/MEMORY.v
-../../../rtl/verilog/core/main/MULTIPLIER.v
 ../../../rtl/verilog/core/main/SFR.v
 ../../../rtl/verilog/core/main/T_A.v
 ../../../rtl/verilog/core/main/T_WATCHDOG.v
-../../../rtl/verilog/core/main/TEMPLATE_08.v
-../../../rtl/verilog/core/main/TEMPLATE_16.v
-../../../rtl/verilog/core/main/UART.v
+
 ../../../rtl/verilog/core/MSP430_CORE.v

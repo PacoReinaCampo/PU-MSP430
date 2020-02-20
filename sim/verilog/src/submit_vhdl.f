@@ -60,3 +60,13 @@
 ../../../rtl/vhdl/core/omsp/omsp_interrupt.vhd
 ../../../rtl/vhdl/core/omsp/omsp_register_file.vhd
 ../../../rtl/vhdl/core/omsp/omsp_state_machine.vhd
+
+../../../rtl/vhdl/core/main/BCM.vhd
+../../../rtl/vhdl/core/main/DBG.vhd
+../../../rtl/vhdl/core/main/EXECUTION.vhd
+../../../rtl/vhdl/core/main/GPIO.vhd
+../../../rtl/vhdl/core/main/MEMORY.vhd
+../../../rtl/vhdl/core/main/MULTIPLIER.vhd
+../../../rtl/vhdl/core/main/TEMPLATE_08.vhd
+../../../rtl/vhdl/core/main/TEMPLATE_16.vhd
+../../../rtl/vhdl/core/main/UART.vhd
