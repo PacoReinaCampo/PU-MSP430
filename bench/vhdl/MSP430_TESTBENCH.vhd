@@ -52,70 +52,70 @@ architecture RTL of MSP430_TESTBENCH is
     port (
       --CORE O
       --CPU registers
-      omsp0_r0  : out std_ulogic_vector (15 downto 0);
-      omsp0_r1  : out std_ulogic_vector (15 downto 0);
-      omsp0_r2  : out std_ulogic_vector (15 downto 0);
-      omsp0_r3  : out std_ulogic_vector (15 downto 0);
-      omsp0_r4  : out std_ulogic_vector (15 downto 0);
-      omsp0_r5  : out std_ulogic_vector (15 downto 0);
-      omsp0_r6  : out std_ulogic_vector (15 downto 0);
-      omsp0_r7  : out std_ulogic_vector (15 downto 0);
-      omsp0_r8  : out std_ulogic_vector (15 downto 0);
-      omsp0_r9  : out std_ulogic_vector (15 downto 0);
-      omsp0_r10 : out std_ulogic_vector (15 downto 0);
-      omsp0_r11 : out std_ulogic_vector (15 downto 0);
-      omsp0_r12 : out std_ulogic_vector (15 downto 0);
-      omsp0_r13 : out std_ulogic_vector (15 downto 0);
-      omsp0_r14 : out std_ulogic_vector (15 downto 0);
-      omsp0_r15 : out std_ulogic_vector (15 downto 0);
+      omsp0_r0  : out std_logic_vector (15 downto 0);
+      omsp0_r1  : out std_logic_vector (15 downto 0);
+      omsp0_r2  : out std_logic_vector (15 downto 0);
+      omsp0_r3  : out std_logic_vector (15 downto 0);
+      omsp0_r4  : out std_logic_vector (15 downto 0);
+      omsp0_r5  : out std_logic_vector (15 downto 0);
+      omsp0_r6  : out std_logic_vector (15 downto 0);
+      omsp0_r7  : out std_logic_vector (15 downto 0);
+      omsp0_r8  : out std_logic_vector (15 downto 0);
+      omsp0_r9  : out std_logic_vector (15 downto 0);
+      omsp0_r10 : out std_logic_vector (15 downto 0);
+      omsp0_r11 : out std_logic_vector (15 downto 0);
+      omsp0_r12 : out std_logic_vector (15 downto 0);
+      omsp0_r13 : out std_logic_vector (15 downto 0);
+      omsp0_r14 : out std_logic_vector (15 downto 0);
+      omsp0_r15 : out std_logic_vector (15 downto 0);
 
       --Debug interface
-      omsp0_dbg_en  : out std_ulogic;
-      omsp0_dbg_clk : out std_ulogic;
-      omsp0_dbg_rst : out std_ulogic;
+      omsp0_dbg_en  : out std_logic;
+      omsp0_dbg_clk : out std_logic;
+      omsp0_dbg_rst : out std_logic;
 
       --Interrupt detection
-      omsp0_irq_detect : out std_ulogic;
-      omsp0_nmi_pnd    : out std_ulogic;
+      omsp0_irq_detect : out std_logic;
+      omsp0_nmi_pnd    : out std_logic;
 
-      omsp0_i_state : out std_ulogic_vector (2 downto 0);
-      omsp0_e_state : out std_ulogic_vector (3 downto 0);
-      omsp0_decode  : out std_ulogic;
-      omsp0_ir      : out std_ulogic_vector (15 downto 0);
-      omsp0_irq_num : out std_ulogic_vector (5 downto 0);
-      omsp0_pc      : out std_ulogic_vector (15 downto 0);
+      omsp0_i_state : out std_logic_vector (2 downto 0);
+      omsp0_e_state : out std_logic_vector (3 downto 0);
+      omsp0_decode  : out std_logic;
+      omsp0_ir      : out std_logic_vector (15 downto 0);
+      omsp0_irq_num : out std_logic_vector (5 downto 0);
+      omsp0_pc      : out std_logic_vector (15 downto 0);
 
       --CPU internals
-      omsp0_mclk    : out std_ulogic;
-      omsp0_puc_rst : out std_ulogic;
+      omsp0_mclk    : out std_logic;
+      omsp0_puc_rst : out std_logic;
 
-      dco_clk : out std_ulogic;
+      dco_clk : out std_logic;
 
       --User Reset Push Button
-      USER_RESET : in std_ulogic;
+      USER_RESET : in std_logic;
 
       --Triple-Output PLL Clock Chip
-      USER_CLOCK : in std_ulogic;
+      USER_CLOCK : in std_logic;
 
       --User DIP Switch x4
-      GPIO_DIP1 : in std_ulogic;
-      GPIO_DIP2 : in std_ulogic;
-      GPIO_DIP3 : in std_ulogic;
-      GPIO_DIP4 : in std_ulogic;
+      GPIO_DIP1 : in std_logic;
+      GPIO_DIP2 : in std_logic;
+      GPIO_DIP3 : in std_logic;
+      GPIO_DIP4 : in std_logic;
 
       --User LEDs                 
-      GPIO_LED1 : out std_ulogic;
-      GPIO_LED2 : out std_ulogic;
-      GPIO_LED3 : out std_ulogic;
-      GPIO_LED4 : out std_ulogic;
+      GPIO_LED1 : out std_logic;
+      GPIO_LED2 : out std_logic;
+      GPIO_LED3 : out std_logic;
+      GPIO_LED4 : out std_logic;
 
       --Silicon Labs CP2102 USB-to-UART Bridge Chip
-      USB_RS232_RXD : in  std_ulogic;
-      USB_RS232_TXD : out std_ulogic;
+      USB_RS232_RXD : in  std_logic;
+      USB_RS232_TXD : out std_logic;
 
       --Peripheral Modules (PMODs) and GPIO
-      PMOD1_P3 : inout std_ulogic;
-      PMOD1_P4 : in    std_ulogic);
+      PMOD1_P3 : inout std_logic;
+      PMOD1_P4 : in    std_logic);
   end component;
 
   --////////////////////////////////////////////////////////////////
@@ -125,70 +125,70 @@ architecture RTL of MSP430_TESTBENCH is
 
   --CORE O
   --CPU registers
-  signal omsp0_r0  : std_ulogic_vector (15 downto 0);
-  signal omsp0_r1  : std_ulogic_vector (15 downto 0);
-  signal omsp0_r2  : std_ulogic_vector (15 downto 0);
-  signal omsp0_r3  : std_ulogic_vector (15 downto 0);
-  signal omsp0_r4  : std_ulogic_vector (15 downto 0);
-  signal omsp0_r5  : std_ulogic_vector (15 downto 0);
-  signal omsp0_r6  : std_ulogic_vector (15 downto 0);
-  signal omsp0_r7  : std_ulogic_vector (15 downto 0);
-  signal omsp0_r8  : std_ulogic_vector (15 downto 0);
-  signal omsp0_r9  : std_ulogic_vector (15 downto 0);
-  signal omsp0_r10 : std_ulogic_vector (15 downto 0);
-  signal omsp0_r11 : std_ulogic_vector (15 downto 0);
-  signal omsp0_r12 : std_ulogic_vector (15 downto 0);
-  signal omsp0_r13 : std_ulogic_vector (15 downto 0);
-  signal omsp0_r14 : std_ulogic_vector (15 downto 0);
-  signal omsp0_r15 : std_ulogic_vector (15 downto 0);
+  signal omsp0_r0  : std_logic_vector (15 downto 0);
+  signal omsp0_r1  : std_logic_vector (15 downto 0);
+  signal omsp0_r2  : std_logic_vector (15 downto 0);
+  signal omsp0_r3  : std_logic_vector (15 downto 0);
+  signal omsp0_r4  : std_logic_vector (15 downto 0);
+  signal omsp0_r5  : std_logic_vector (15 downto 0);
+  signal omsp0_r6  : std_logic_vector (15 downto 0);
+  signal omsp0_r7  : std_logic_vector (15 downto 0);
+  signal omsp0_r8  : std_logic_vector (15 downto 0);
+  signal omsp0_r9  : std_logic_vector (15 downto 0);
+  signal omsp0_r10 : std_logic_vector (15 downto 0);
+  signal omsp0_r11 : std_logic_vector (15 downto 0);
+  signal omsp0_r12 : std_logic_vector (15 downto 0);
+  signal omsp0_r13 : std_logic_vector (15 downto 0);
+  signal omsp0_r14 : std_logic_vector (15 downto 0);
+  signal omsp0_r15 : std_logic_vector (15 downto 0);
 
   --Debug interface
-  signal omsp0_dbg_en  : std_ulogic;
-  signal omsp0_dbg_clk : std_ulogic;
-  signal omsp0_dbg_rst : std_ulogic;
+  signal omsp0_dbg_en  : std_logic;
+  signal omsp0_dbg_clk : std_logic;
+  signal omsp0_dbg_rst : std_logic;
 
   --Interrupt detection
-  signal omsp0_irq_detect : std_ulogic;
-  signal omsp0_nmi_pnd    : std_ulogic;
+  signal omsp0_irq_detect : std_logic;
+  signal omsp0_nmi_pnd    : std_logic;
 
-  signal omsp0_i_state : std_ulogic_vector (2 downto 0);
-  signal omsp0_e_state : std_ulogic_vector (3 downto 0);
-  signal omsp0_decode  : std_ulogic;
-  signal omsp0_ir      : std_ulogic_vector (15 downto 0);
-  signal omsp0_irq_num : std_ulogic_vector (5 downto 0);
-  signal omsp0_pc      : std_ulogic_vector (15 downto 0);
+  signal omsp0_i_state : std_logic_vector (2 downto 0);
+  signal omsp0_e_state : std_logic_vector (3 downto 0);
+  signal omsp0_decode  : std_logic;
+  signal omsp0_ir      : std_logic_vector (15 downto 0);
+  signal omsp0_irq_num : std_logic_vector (5 downto 0);
+  signal omsp0_pc      : std_logic_vector (15 downto 0);
 
   --CPU internals
-  signal omsp0_mclk    : std_ulogic;
-  signal omsp0_puc_rst : std_ulogic;
+  signal omsp0_mclk    : std_logic;
+  signal omsp0_puc_rst : std_logic;
 
-  signal dco_clk : std_ulogic;
+  signal dco_clk : std_logic;
 
   --User Reset Push Button
-  signal USER_RESET : std_ulogic;
+  signal USER_RESET : std_logic;
 
   --Triple-Output PLL Clock Chip
-  signal USER_CLOCK : std_ulogic;
+  signal USER_CLOCK : std_logic;
 
   --User DIP Switch x4
-  signal GPIO_DIP1 : std_ulogic;
-  signal GPIO_DIP2 : std_ulogic;
-  signal GPIO_DIP3 : std_ulogic;
-  signal GPIO_DIP4 : std_ulogic;
+  signal GPIO_DIP1 : std_logic;
+  signal GPIO_DIP2 : std_logic;
+  signal GPIO_DIP3 : std_logic;
+  signal GPIO_DIP4 : std_logic;
 
   --User LEDs
-  signal GPIO_LED1 : std_ulogic;
-  signal GPIO_LED2 : std_ulogic;
-  signal GPIO_LED3 : std_ulogic;
-  signal GPIO_LED4 : std_ulogic;
+  signal GPIO_LED1 : std_logic;
+  signal GPIO_LED2 : std_logic;
+  signal GPIO_LED3 : std_logic;
+  signal GPIO_LED4 : std_logic;
 
   --Silicon Labs CP2102 USB-to-UART Bridge Chip
-  signal USB_RS232_RXD : std_ulogic;
-  signal USB_RS232_TXD : std_ulogic;
+  signal USB_RS232_RXD : std_logic;
+  signal USB_RS232_TXD : std_logic;
 
   --Peripheral Modules (PMODs) and GPIO
-  signal PMOD1_P3 : std_ulogic;
-  signal PMOD1_P4 : std_ulogic;
+  signal PMOD1_P3 : std_logic;
+  signal PMOD1_P4 : std_logic;
 
 begin
   --////////////////////////////////////////////////////////////////

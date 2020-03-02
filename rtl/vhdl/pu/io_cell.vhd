@@ -44,10 +44,10 @@ use IEEE.STD_LOGIC_1164.all;
 
 entity io_cell is
   port (
-    pad         : inout std_ulogic;
-    data_in     : out   std_ulogic;
-    data_out    : in    std_ulogic;
-    data_out_en : in    std_ulogic);
+    pad         : inout std_logic;
+    data_in     : out   std_logic;
+    data_out    : in    std_logic;
+    data_out_en : in    std_logic);
 end io_cell;
 
 architecture io_cell_ARQ of io_cell is

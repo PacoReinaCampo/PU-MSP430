@@ -46,12 +46,12 @@ use WORK.MSP430_PACK .all;
 
 entity INSTRUCTION_MEMORY_SHARED_SINGLEPORT is
   port (
-    clka  : in  std_ulogic;
-    ena   : in  std_ulogic;
-    wea   : in  std_ulogic_vector(1 downto 0);
-    addra : in  std_ulogic_vector(PMEM_MSB downto 0);
-    dina  : in  std_ulogic_vector(15 downto 0);
-    douta : out std_ulogic_vector(15 downto 0));
+    clka  : in  std_logic;
+    ena   : in  std_logic;
+    wea   : in  std_logic_vector(1 downto 0);
+    addra : in  std_logic_vector(PMEM_MSB downto 0);
+    dina  : in  std_logic_vector(15 downto 0);
+    douta : out std_logic_vector(15 downto 0));
 end INSTRUCTION_MEMORY_SHARED_SINGLEPORT;
 
 architecture INSTRUCTION_MEMORY_SHARED_SINGLEPORT_ARQ of INSTRUCTION_MEMORY_SHARED_SINGLEPORT is
@@ -59,7 +59,7 @@ architecture INSTRUCTION_MEMORY_SHARED_SINGLEPORT_ARQ of INSTRUCTION_MEMORY_SHAR
   --
   -- Types
   --
-  type type_mem_array is array (2**PMEM_MSB-1 downto 0) of std_ulogic_vector(15 downto 0);  --memory array
+  type type_mem_array is array (2**PMEM_MSB-1 downto 0) of std_logic_vector(15 downto 0);  --memory array
 
   --////////////////////////////////////////////////////////////////
   --

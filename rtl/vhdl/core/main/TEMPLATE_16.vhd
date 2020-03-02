@@ -46,16 +46,16 @@ use WORK.MSP430_PACK .all;
 
 entity TEMPLATE_16 is
   port (
-    per_dout   : out std_ulogic_vector (15 downto 0);
-    cntrl2_16b : out std_ulogic_vector (15 downto 0);
-    cntrl4_16b : out std_ulogic_vector (15 downto 0);
+    per_dout   : out std_logic_vector (15 downto 0);
+    cntrl2_16b : out std_logic_vector (15 downto 0);
+    cntrl4_16b : out std_logic_vector (15 downto 0);
 
-    mclk     : in std_ulogic;
-    per_en   : in std_ulogic;
-    puc_rst  : in std_ulogic;
-    per_we   : in std_ulogic_vector (1 downto 0);
-    per_addr : in std_ulogic_vector (13 downto 0);
-    per_din  : in std_ulogic_vector (15 downto 0));
+    mclk     : in std_logic;
+    per_en   : in std_logic;
+    puc_rst  : in std_logic;
+    per_we   : in std_logic_vector (1 downto 0);
+    per_addr : in std_logic_vector (13 downto 0);
+    per_din  : in std_logic_vector (15 downto 0));
 end TEMPLATE_16;
 
 architecture TEMPLATE_16_ARQ of TEMPLATE_16 is
@@ -64,31 +64,31 @@ architecture TEMPLATE_16_ARQ of TEMPLATE_16 is
 
   --0.  PARAMETER_DECLARATION
   --0.1.        Register base address (must be aligned to decoder bit width)
-  constant BASE_ADDR_P16 : std_ulogic_vector (14 downto 0) := "000000110010000";
+  constant BASE_ADDR_P16 : std_logic_vector (14 downto 0) := "000000110010000";
 
   --0.2.        Decoder bit width (defines how many bits are considered for address decoding)
   constant DEC_WD_P16 : integer := 3;
 
   --0.3.        Register addresses offset
-  constant CNTRL1B16 : std_ulogic_vector (DEC_WD_P16 - 1 downto 0) := std_ulogic_vector(to_unsigned(0, DEC_WD_P16));
-  constant CNTRL2B16 : std_ulogic_vector (DEC_WD_P16 - 1 downto 0) := std_ulogic_vector(to_unsigned(2, DEC_WD_P16));
-  constant CNTRL3B16 : std_ulogic_vector (DEC_WD_P16 - 1 downto 0) := std_ulogic_vector(to_unsigned(4, DEC_WD_P16));
-  constant CNTRL4B16 : std_ulogic_vector (DEC_WD_P16 - 1 downto 0) := std_ulogic_vector(to_unsigned(6, DEC_WD_P16));
+  constant CNTRL1B16 : std_logic_vector (DEC_WD_P16 - 1 downto 0) := std_logic_vector(to_unsigned(0, DEC_WD_P16));
+  constant CNTRL2B16 : std_logic_vector (DEC_WD_P16 - 1 downto 0) := std_logic_vector(to_unsigned(2, DEC_WD_P16));
+  constant CNTRL3B16 : std_logic_vector (DEC_WD_P16 - 1 downto 0) := std_logic_vector(to_unsigned(4, DEC_WD_P16));
+  constant CNTRL4B16 : std_logic_vector (DEC_WD_P16 - 1 downto 0) := std_logic_vector(to_unsigned(6, DEC_WD_P16));
 
   --0.4.        Register one-hot decoder utilities
   constant DEC_SZ_P16   : integer                                     := 2**DEC_WD_P16;
-  constant BASE_REG_P16 : std_ulogic_vector (DEC_SZ_P16 - 1 downto 0) := std_ulogic_vector(to_unsigned(1, DEC_SZ_P16));
+  constant BASE_REG_P16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_P16));
 
   --0.5.        Register one-hot decoder
-  constant CNTRL1_D16 : std_ulogic_vector (DEC_SZ_P16 - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_P16) sll to_integer(unsigned(CNTRL1B16)));
-  constant CNTRL2_D16 : std_ulogic_vector (DEC_SZ_P16 - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_P16) sll to_integer(unsigned(CNTRL2B16)));
-  constant CNTRL3_D16 : std_ulogic_vector (DEC_SZ_P16 - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_P16) sll to_integer(unsigned(CNTRL3B16)));
-  constant CNTRL4_D16 : std_ulogic_vector (DEC_SZ_P16 - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_P16) sll to_integer(unsigned(CNTRL4B16)));
+  constant CNTRL1_D16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_P16) sll to_integer(unsigned(CNTRL1B16)));
+  constant CNTRL2_D16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_P16) sll to_integer(unsigned(CNTRL2B16)));
+  constant CNTRL3_D16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_P16) sll to_integer(unsigned(CNTRL3B16)));
+  constant CNTRL4_D16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_P16) sll to_integer(unsigned(CNTRL4B16)));
 
 
-  type M_ORDEN_P161_15 is array (ORDEN_P16 - 1 downto 0) of std_ulogic_vector (15 downto 0);
-  type M_ORDEN_P161_DEC_SZ_P161 is array (ORDEN_P16 - 1 downto 0) of std_ulogic_vector (DEC_SZ_P16 - 1 downto 0);
-  type M_ORDEN_P161_DEC_WD_P161 is array (ORDEN_P16 - 1 downto 0) of std_ulogic_vector (DEC_WD_P16 - 1 downto 0);
+  type M_ORDEN_P161_15 is array (ORDEN_P16 - 1 downto 0) of std_logic_vector (15 downto 0);
+  type M_ORDEN_P161_DEC_SZ_P161 is array (ORDEN_P16 - 1 downto 0) of std_logic_vector (DEC_SZ_P16 - 1 downto 0);
+  type M_ORDEN_P161_DEC_WD_P161 is array (ORDEN_P16 - 1 downto 0) of std_logic_vector (DEC_WD_P16 - 1 downto 0);
   type M_ORDEN_P161_I is array (ORDEN_P16 - 1 downto 0) of integer;
 
   constant CNTRLB16 : M_ORDEN_P161_DEC_WD_P161 := (CNTRL4B16,
@@ -108,26 +108,26 @@ architecture TEMPLATE_16_ARQ of TEMPLATE_16 is
 
   --1.  REGISTER_DECODER
   --1.1.        Local register selection
-  signal reg_sel_p16 : std_ulogic;
+  signal reg_sel_p16 : std_logic;
 
   --1.2.        Register local address
-  signal reg_addr_p16 : std_ulogic_vector (DEC_WD_P16 - 1 downto 0);
+  signal reg_addr_p16 : std_logic_vector (DEC_WD_P16 - 1 downto 0);
 
   --1.3.        Register address decode
-  signal reg_dec_p16 : std_ulogic_vector (DEC_SZ_P16 - 1 downto 0);
+  signal reg_dec_p16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0);
 
   --1.4.        Read/Write probes
-  signal reg_write_p : std_ulogic;
+  signal reg_write_p : std_logic;
 
-  signal reg_read_p16 : std_ulogic;
+  signal reg_read_p16 : std_logic;
 
   --1.5.        Read/Write vectors
-  signal reg_wr_p : std_ulogic_vector (DEC_SZ_P16 - 1 downto 0);
+  signal reg_wr_p : std_logic_vector (DEC_SZ_P16 - 1 downto 0);
 
-  signal reg_rd_p16 : std_ulogic_vector (DEC_SZ_P16 - 1 downto 0);
+  signal reg_rd_p16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0);
 
   --2.  REGISTERS       
-  signal cntrl_wr_p16 : std_ulogic_vector (ORDEN_P16 - 1 downto 0);
+  signal cntrl_wr_p16 : std_logic_vector (ORDEN_P16 - 1 downto 0);
 
   signal cntrl_p16 : M_ORDEN_P161_15;
 
@@ -135,8 +135,8 @@ architecture TEMPLATE_16_ARQ of TEMPLATE_16 is
   --4.1.        Data output mux
   signal cntrl_rd16 : M_ORDEN_P161_15;
 
-  function matrixAP_or (matrix : M_ORDEN_P161_15) return std_ulogic_vector is
-    variable RESULT : std_ulogic_vector (15 downto 0) := (others => '0');
+  function matrixAP_or (matrix : M_ORDEN_P161_15) return std_logic_vector is
+    variable RESULT : std_logic_vector (15 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
       RESULT := RESULT or matrix(i);
@@ -144,8 +144,8 @@ architecture TEMPLATE_16_ARQ of TEMPLATE_16 is
     return RESULT;
   end matrixAP_or;
 
-  function matrixBP_or (matrix : M_ORDEN_P161_DEC_SZ_P161) return std_ulogic_vector is
-    variable RESULT : std_ulogic_vector (DEC_SZ_P16 - 1 downto 0) := (others => '0');
+  function matrixBP_or (matrix : M_ORDEN_P161_DEC_SZ_P161) return std_logic_vector is
+    variable RESULT : std_logic_vector (DEC_SZ_P16 - 1 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
       RESULT := RESULT or matrix(i);

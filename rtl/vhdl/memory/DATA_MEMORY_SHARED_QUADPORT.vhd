@@ -46,56 +46,56 @@ use WORK.MSP430_PACK .all;
 
 entity DATA_MEMORY_SHARED_QUADPORT is
   port (
-    douta : out std_ulogic_vector (15 downto 0);
-    doutb : out std_ulogic_vector (15 downto 0);
-    doutx : out std_ulogic_vector (15 downto 0);
-    douty : out std_ulogic_vector (15 downto 0);
+    douta : out std_logic_vector (15 downto 0);
+    doutb : out std_logic_vector (15 downto 0);
+    doutx : out std_logic_vector (15 downto 0);
+    douty : out std_logic_vector (15 downto 0);
 
-    addra : in std_ulogic_vector (DMEM_MSB downto 0);
-    ena   : in std_ulogic;
-    clka  : in std_ulogic;
-    dina  : in std_ulogic_vector (15 downto 0);
-    wea   : in std_ulogic_vector (1 downto 0);
-    addrb : in std_ulogic_vector (DMEM_MSB downto 0);
-    enb   : in std_ulogic;
-    clkb  : in std_ulogic;
-    dinb  : in std_ulogic_vector (15 downto 0);
-    web   : in std_ulogic_vector (1 downto 0);
-    addrx : in std_ulogic_vector (DMEM_MSB downto 0);
-    enx   : in std_ulogic;
-    clkx  : in std_ulogic;
-    dinx  : in std_ulogic_vector (15 downto 0);
-    wex   : in std_ulogic_vector (1 downto 0);
-    addry : in std_ulogic_vector (DMEM_MSB downto 0);
-    eny   : in std_ulogic;
-    clky  : in std_ulogic;
-    diny  : in std_ulogic_vector (15 downto 0);
-    wey   : in std_ulogic_vector (1 downto 0));
+    addra : in std_logic_vector (DMEM_MSB downto 0);
+    ena   : in std_logic;
+    clka  : in std_logic;
+    dina  : in std_logic_vector (15 downto 0);
+    wea   : in std_logic_vector (1 downto 0);
+    addrb : in std_logic_vector (DMEM_MSB downto 0);
+    enb   : in std_logic;
+    clkb  : in std_logic;
+    dinb  : in std_logic_vector (15 downto 0);
+    web   : in std_logic_vector (1 downto 0);
+    addrx : in std_logic_vector (DMEM_MSB downto 0);
+    enx   : in std_logic;
+    clkx  : in std_logic;
+    dinx  : in std_logic_vector (15 downto 0);
+    wex   : in std_logic_vector (1 downto 0);
+    addry : in std_logic_vector (DMEM_MSB downto 0);
+    eny   : in std_logic;
+    clky  : in std_logic;
+    diny  : in std_logic_vector (15 downto 0);
+    wey   : in std_logic_vector (1 downto 0));
 end DATA_MEMORY_SHARED_QUADPORT;
 
 architecture DATA_MEMORY_SHARED_QUADPORT_ARQ of DATA_MEMORY_SHARED_QUADPORT is
 
   constant nd : integer := 4;
 
-  type M_ND1_15 is array (nd - 1 downto 0) of std_ulogic_vector (15 downto 0);
-  type M_ND1_DMEM_MSB1 is array (nd - 1 downto 0) of std_ulogic_vector (DMEM_MSB downto 0);
-  type M_ND1_1 is array (nd - 1 downto 0) of std_ulogic_vector (1 downto 0);
+  type M_ND1_15 is array (nd - 1 downto 0) of std_logic_vector (15 downto 0);
+  type M_ND1_DMEM_MSB1 is array (nd - 1 downto 0) of std_logic_vector (DMEM_MSB downto 0);
+  type M_ND1_1 is array (nd - 1 downto 0) of std_logic_vector (1 downto 0);
 
   signal dout   : M_ND1_15;
   signal addr   : M_ND1_DMEM_MSB1;
-  signal not_en : std_ulogic_vector (nd - 1 downto 0);
-  signal clk    : std_ulogic_vector (nd - 1 downto 0);
+  signal not_en : std_logic_vector (nd - 1 downto 0);
+  signal clk    : std_logic_vector (nd - 1 downto 0);
   signal din    : M_ND1_15;
   signal not_we : M_ND1_1;
 
   component DATA_MEMORY_SHARED_SINGLEPORT
     port (
-      clka  : in  std_ulogic;
-      ena   : in  std_ulogic;
-      wea   : in  std_ulogic_vector (1 downto 0);
-      addra : in  std_ulogic_vector (DMEM_MSB downto 0);
-      dina  : in  std_ulogic_vector (15 downto 0);
-      douta : out std_ulogic_vector (15 downto 0));
+      clka  : in  std_logic;
+      ena   : in  std_logic;
+      wea   : in  std_logic_vector (1 downto 0);
+      addra : in  std_logic_vector (DMEM_MSB downto 0);
+      dina  : in  std_logic_vector (15 downto 0);
+      douta : out std_logic_vector (15 downto 0));
   end component DATA_MEMORY_SHARED_SINGLEPORT;
 
 begin

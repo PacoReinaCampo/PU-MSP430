@@ -46,39 +46,39 @@ use WORK.MSP430_PACK .all;
 
 entity SFR is
   port (
-    nmi_pnd       : out std_ulogic;
-    nmi_wkup      : out std_ulogic;
-    wdtie         : out std_ulogic;
-    wdtifg_sw_clr : out std_ulogic;
-    wdtifg_sw_set : out std_ulogic;
-    cpu_id        : out std_ulogic_vector (31 downto 0);
-    nmi           : in  std_ulogic;
-    nmi_acc       : in  std_ulogic;
-    scan_mode     : in  std_ulogic;
-    wdtifg        : in  std_ulogic;
-    wdtnmies      : in  std_ulogic;
-    cpu_nr_inst   : in  std_ulogic_vector (7 downto 0);
-    cpu_nr_total  : in  std_ulogic_vector (7 downto 0);
+    nmi_pnd       : out std_logic;
+    nmi_wkup      : out std_logic;
+    wdtie         : out std_logic;
+    wdtifg_sw_clr : out std_logic;
+    wdtifg_sw_set : out std_logic;
+    cpu_id        : out std_logic_vector (31 downto 0);
+    nmi           : in  std_logic;
+    nmi_acc       : in  std_logic;
+    scan_mode     : in  std_logic;
+    wdtifg        : in  std_logic;
+    wdtnmies      : in  std_logic;
+    cpu_nr_inst   : in  std_logic_vector (7 downto 0);
+    cpu_nr_total  : in  std_logic_vector (7 downto 0);
 
-    per_dout : out std_ulogic_vector (15 downto 0);
-    mclk     : in  std_ulogic;
-    per_en   : in  std_ulogic;
-    puc_rst  : in  std_ulogic;
-    per_we   : in  std_ulogic_vector (1 downto 0);
-    per_addr : in  std_ulogic_vector (13 downto 0);
-    per_din  : in  std_ulogic_vector (15 downto 0));
+    per_dout : out std_logic_vector (15 downto 0);
+    mclk     : in  std_logic;
+    per_en   : in  std_logic;
+    puc_rst  : in  std_logic;
+    per_we   : in  std_logic_vector (1 downto 0);
+    per_addr : in  std_logic_vector (13 downto 0);
+    per_din  : in  std_logic_vector (15 downto 0));
 end SFR;
 
 architecture SFR_ARQ of SFR is
 
   --SIGNAL INOUT
-  signal wdtie_omsp : std_ulogic;
-  signal cpu_id_hi  : std_ulogic_vector (15 downto 0);
-  signal cpu_id_lo  : std_ulogic_vector (15 downto 0);
+  signal wdtie_omsp : std_logic;
+  signal cpu_id_hi  : std_logic_vector (15 downto 0);
+  signal cpu_id_lo  : std_logic_vector (15 downto 0);
 
   --0.  PARAMETER_DECLARATION
   --0.1.        Register base address (must be aligned to decoder bit width)
-  constant BASE_ADDR_S : std_ulogic_vector (14 downto 0) := (others => '0');
+  constant BASE_ADDR_S : std_logic_vector (14 downto 0) := (others => '0');
 
   --0.2.                Decoder bit width (defines how many bits are considered for address decoding)
   constant DEC_WD_S : integer := 4;
@@ -90,89 +90,89 @@ architecture SFR_ARQ of SFR is
   constant CPU_ID_HIC : integer := 6;
   constant CPU_NRC    : integer := 8;
 
-  constant IE1B       : std_ulogic_vector (DEC_WD_S - 1 downto 0) := std_ulogic_vector(to_unsigned(IE1C, DEC_WD_S));
-  constant IFG1B      : std_ulogic_vector (DEC_WD_S - 1 downto 0) := std_ulogic_vector(to_unsigned(IFG1C, DEC_WD_S));
-  constant CPU_ID_LOB : std_ulogic_vector (DEC_WD_S - 1 downto 0) := std_ulogic_vector(to_unsigned(CPU_ID_LOC, DEC_WD_S));
-  constant CPU_ID_HIB : std_ulogic_vector (DEC_WD_S - 1 downto 0) := std_ulogic_vector(to_unsigned(CPU_ID_HIC, DEC_WD_S));
-  constant CPU_NRB    : std_ulogic_vector (DEC_WD_S - 1 downto 0) := std_ulogic_vector(to_unsigned(CPU_NRC, DEC_WD_S));
+  constant IE1B       : std_logic_vector (DEC_WD_S - 1 downto 0) := std_logic_vector(to_unsigned(IE1C, DEC_WD_S));
+  constant IFG1B      : std_logic_vector (DEC_WD_S - 1 downto 0) := std_logic_vector(to_unsigned(IFG1C, DEC_WD_S));
+  constant CPU_ID_LOB : std_logic_vector (DEC_WD_S - 1 downto 0) := std_logic_vector(to_unsigned(CPU_ID_LOC, DEC_WD_S));
+  constant CPU_ID_HIB : std_logic_vector (DEC_WD_S - 1 downto 0) := std_logic_vector(to_unsigned(CPU_ID_HIC, DEC_WD_S));
+  constant CPU_NRB    : std_logic_vector (DEC_WD_S - 1 downto 0) := std_logic_vector(to_unsigned(CPU_NRC, DEC_WD_S));
 
   --0.4.        Register one-hot decoder utilities
   constant DEC_SZ_S   : integer                                   := 2**DEC_WD_S;
-  constant BASE_REG_S : std_ulogic_vector (DEC_SZ_S - 1 downto 0) := std_ulogic_vector(to_unsigned(1, DEC_SZ_S));
+  constant BASE_REG_S : std_logic_vector (DEC_SZ_S - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_S));
 
   --0.5.        Register one-hot decoder
-  constant IE1_D       : std_ulogic_vector (DEC_SZ_S - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_S) sll IE1C);
-  constant IFG1_D      : std_ulogic_vector (DEC_SZ_S - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_S) sll IFG1C);
-  constant CPU_ID_LO_D : std_ulogic_vector (DEC_SZ_S - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_S) sll CPU_ID_LOC);
-  constant CPU_ID_HI_D : std_ulogic_vector (DEC_SZ_S - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_S) sll CPU_ID_HIC);
-  constant CPU_NRC_D   : std_ulogic_vector (DEC_SZ_S - 1 downto 0) := std_ulogic_vector(unsigned(BASE_REG_S) sll CPU_NRC);
+  constant IE1_D       : std_logic_vector (DEC_SZ_S - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_S) sll IE1C);
+  constant IFG1_D      : std_logic_vector (DEC_SZ_S - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_S) sll IFG1C);
+  constant CPU_ID_LO_D : std_logic_vector (DEC_SZ_S - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_S) sll CPU_ID_LOC);
+  constant CPU_ID_HI_D : std_logic_vector (DEC_SZ_S - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_S) sll CPU_ID_HIC);
+  constant CPU_NRC_D   : std_logic_vector (DEC_SZ_S - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_S) sll CPU_NRC);
 
   --1.  REGISTER_DECODER
   --1.1.        Local register selection
-  signal reg_sel_s : std_ulogic;
+  signal reg_sel_s : std_logic;
 
   --1.2.        Register local address
-  signal reg_addr_s : std_ulogic_vector (DEC_WD_S - 1 downto 0);
+  signal reg_addr_s : std_logic_vector (DEC_WD_S - 1 downto 0);
 
   --1.3.        Register address decode
-  signal reg_dec_s : std_ulogic_vector (DEC_SZ_S - 1 downto 0);
+  signal reg_dec_s : std_logic_vector (DEC_SZ_S - 1 downto 0);
 
   --1.4.        Read/Write probes
-  signal reg_lo_write_s : std_ulogic;
-  signal reg_hi_write_s : std_ulogic;
-  signal reg_read_s     : std_ulogic;
+  signal reg_lo_write_s : std_logic;
+  signal reg_hi_write_s : std_logic;
+  signal reg_read_s     : std_logic;
 
   --1.5.        Read/Write vectors
-  signal reg_hi_wr_s : std_ulogic_vector (DEC_SZ_S - 1 downto 0);
-  signal reg_lo_wr_s : std_ulogic_vector (DEC_SZ_S - 1 downto 0);
-  signal reg_rd_s    : std_ulogic_vector (DEC_SZ_S - 1 downto 0);
+  signal reg_hi_wr_s : std_logic_vector (DEC_SZ_S - 1 downto 0);
+  signal reg_lo_wr_s : std_logic_vector (DEC_SZ_S - 1 downto 0);
+  signal reg_rd_s    : std_logic_vector (DEC_SZ_S - 1 downto 0);
 
   --2.  REGISTERS
   --2.1.        IE1 Register
-  signal ie1_wr  : std_ulogic;
-  signal nmie    : std_ulogic;
-  signal ie1     : std_ulogic_vector (7 downto 0);
-  signal ie1_nxt : std_ulogic_vector (7 downto 0);
+  signal ie1_wr  : std_logic;
+  signal nmie    : std_logic;
+  signal ie1     : std_logic_vector (7 downto 0);
+  signal ie1_nxt : std_logic_vector (7 downto 0);
 
   --2.2.        IFG1 Register
-  signal ifg1_wr  : std_ulogic;
-  signal nmiifg   : std_ulogic;
-  signal nmi_edge : std_ulogic;
+  signal ifg1_wr  : std_logic;
+  signal nmiifg   : std_logic;
+  signal nmi_edge : std_logic;
 
-  signal ifg1     : std_ulogic_vector (7 downto 0);
-  signal ifg1_nxt : std_ulogic_vector (7 downto 0);
+  signal ifg1     : std_logic_vector (7 downto 0);
+  signal ifg1_nxt : std_logic_vector (7 downto 0);
 
   --2.3.        CPU_ID Register (READ ONLY)
-  signal cpu_asic       : std_ulogic;
-  signal mpy_info       : std_ulogic;
-  signal cpu_version_s  : std_ulogic_vector (2 downto 0);
-  signal user_version_s : std_ulogic_vector (4 downto 0);
-  signal pmem_size_s    : std_ulogic_vector (5 downto 0);
-  signal per_space      : std_ulogic_vector (6 downto 0);
-  signal dmem_size_s    : std_ulogic_vector (8 downto 0);
+  signal cpu_asic       : std_logic;
+  signal mpy_info       : std_logic;
+  signal cpu_version_s  : std_logic_vector (2 downto 0);
+  signal user_version_s : std_logic_vector (4 downto 0);
+  signal pmem_size_s    : std_logic_vector (5 downto 0);
+  signal per_space      : std_logic_vector (6 downto 0);
+  signal dmem_size_s    : std_logic_vector (8 downto 0);
 
   --2.4.        CPU_NRC Register (READ ONLY)
-  signal cpu_nr_s : std_ulogic_vector (15 downto 0);
+  signal cpu_nr_s : std_logic_vector (15 downto 0);
 
   --3.  DATA_OUTPUT_GENERATION
   --3.1.        Data output mux
-  signal ie1_rd         : std_ulogic_vector (15 downto 0);
-  signal ifg1_rd        : std_ulogic_vector (15 downto 0);
-  signal cpu_id_lo_rd_s : std_ulogic_vector (15 downto 0);
-  signal cpu_id_hi_rd_s : std_ulogic_vector (15 downto 0);
-  signal cpu_nr_rd_s    : std_ulogic_vector (15 downto 0);
+  signal ie1_rd         : std_logic_vector (15 downto 0);
+  signal ifg1_rd        : std_logic_vector (15 downto 0);
+  signal cpu_id_lo_rd_s : std_logic_vector (15 downto 0);
+  signal cpu_id_hi_rd_s : std_logic_vector (15 downto 0);
+  signal cpu_nr_rd_s    : std_logic_vector (15 downto 0);
 
   --4.  NMI_GENERATION
   --4.1.        Edge selection
-  signal nmi_pol : std_ulogic;
+  signal nmi_pol : std_logic;
 
   --4.2.        Pulse capture and synchronization
-  signal nmi_capture_rst : std_ulogic;
-  signal nmi_capture     : std_ulogic;
-  signal nmi_s           : std_ulogic;
+  signal nmi_capture_rst : std_logic;
+  signal nmi_capture     : std_logic;
+  signal nmi_s           : std_logic;
 
   --4.3.        NMI Pending flag
-  signal nmi_dly : std_ulogic;
+  signal nmi_dly : std_logic;
 
 begin
   REGISTER_DECODER : block
@@ -185,15 +185,15 @@ begin
 
     --1.3.      Register address decode
     reg_dec_s <= (IE1_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
-                                                            std_ulogic_vector(unsigned(IE1B) srl 1)))) or
+                                                            std_logic_vector(unsigned(IE1B) srl 1)))) or
                  (IFG1_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
-                                                             std_ulogic_vector(unsigned(IFG1B) srl 1)))) or
+                                                             std_logic_vector(unsigned(IFG1B) srl 1)))) or
                  (CPU_ID_LO_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
-                                                                  std_ulogic_vector(unsigned(CPU_ID_LOB) srl 1)))) or
+                                                                  std_logic_vector(unsigned(CPU_ID_LOB) srl 1)))) or
                  (CPU_ID_HI_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
-                                                                  std_ulogic_vector(unsigned(CPU_ID_HIB) srl 1)))) or
+                                                                  std_logic_vector(unsigned(CPU_ID_HIB) srl 1)))) or
                  (CPU_NRC_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
-                                                                std_ulogic_vector(unsigned(CPU_NRB) srl 1))));
+                                                                std_logic_vector(unsigned(CPU_NRB) srl 1))));
 
     --1.4.      Read/Write probes
     reg_lo_write_s <= per_we(0) and reg_sel_s;
@@ -298,7 +298,7 @@ begin
     end generate asic_off;
 
     user_version_s <= USER_VERSION;
-    per_space      <= std_ulogic_vector(to_unsigned(PER_SIZE/512, 7));
+    per_space      <= std_logic_vector(to_unsigned(PER_SIZE/512, 7));
 
     multiplier_on : if (MULTIPLYING = '1') generate
       mpy_info <= '1';
@@ -308,8 +308,8 @@ begin
       mpy_info <= '0';
     end generate multiplier_off;
 
-    dmem_size_s <= std_ulogic_vector(to_unsigned(DMEM_SIZE/128, 9));
-    pmem_size_s <= std_ulogic_vector(to_unsigned(PMEM_SIZE/1024, 6));
+    dmem_size_s <= std_logic_vector(to_unsigned(DMEM_SIZE/128, 9));
+    pmem_size_s <= std_logic_vector(to_unsigned(PMEM_SIZE/1024, 6));
     cpu_id_hi   <= pmem_size_s & dmem_size_s & mpy_info;
     cpu_id_lo   <= per_space & user_version_s & cpu_asic & cpu_version_s;
     cpu_id      <= cpu_id_hi & cpu_id_lo;
@@ -321,9 +321,9 @@ begin
   DATA_OUTPUT_GENERATION : block
   begin
     --3.1.      Data output mux
-    ie1_rd <= std_ulogic_vector((X"00" & (unsigned(ie1) and (0 to 7 => reg_rd_s(IE1C))))
+    ie1_rd <= std_logic_vector((X"00" & (unsigned(ie1) and (0 to 7 => reg_rd_s(IE1C))))
                                 sll to_integer((0 to 3              => IE1B(0)) and to_unsigned(8, 4)));
-    ifg1_rd <= std_ulogic_vector((X"00" & (unsigned(ifg1) and (0 to 7 => reg_rd_s(IFG1C))))
+    ifg1_rd <= std_logic_vector((X"00" & (unsigned(ifg1) and (0 to 7 => reg_rd_s(IFG1C))))
                                  sll to_integer((0 to 3               => IFG1B(0)) and to_unsigned(8, 4)));
     cpu_id_lo_rd_s <= cpu_id_lo and (0 to 15 => reg_rd_s(CPU_ID_LOC));
     cpu_id_hi_rd_s <= cpu_id_hi and (0 to 15 => reg_rd_s(CPU_ID_HIC));

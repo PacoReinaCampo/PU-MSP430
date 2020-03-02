@@ -46,12 +46,12 @@ use WORK.MSP430_PACK .all;
 
 entity DATA_MEMORY_DISTRIBUTED_SINGLEPORT is
   port (
-    clka  : in  std_ulogic;
-    ena   : in  std_ulogic;
-    wea   : in  std_ulogic_vector(1 downto 0);
-    addra : in  std_ulogic_vector(DMEM_MSB - 1 downto 0);
-    dina  : in  std_ulogic_vector(15 downto 0);
-    douta : out std_ulogic_vector(15 downto 0));
+    clka  : in  std_logic;
+    ena   : in  std_logic;
+    wea   : in  std_logic_vector(1 downto 0);
+    addra : in  std_logic_vector(DMEM_MSB - 1 downto 0);
+    dina  : in  std_logic_vector(15 downto 0);
+    douta : out std_logic_vector(15 downto 0));
 end DATA_MEMORY_DISTRIBUTED_SINGLEPORT;
 
 architecture DATA_MEMORY_DISTRIBUTED_SINGLEPORT_ARQ of DATA_MEMORY_DISTRIBUTED_SINGLEPORT is
@@ -59,7 +59,7 @@ architecture DATA_MEMORY_DISTRIBUTED_SINGLEPORT_ARQ of DATA_MEMORY_DISTRIBUTED_S
   --
   -- Types
   --
-  type type_mem_array is array (2**DMEM_MSB-1 downto 0) of std_ulogic_vector(15 downto 0);  --memory array
+  type type_mem_array is array (2**DMEM_MSB-1 downto 0) of std_logic_vector(15 downto 0);  --memory array
 
   --////////////////////////////////////////////////////////////////
   --

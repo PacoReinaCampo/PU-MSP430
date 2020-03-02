@@ -47,291 +47,291 @@ use WORK.MSP430_PACK .all;
 entity MSP430_PU is
   port (
     --CPU registers     
-    r0  : out std_ulogic_vector (15 downto 0);
-    r1  : out std_ulogic_vector (15 downto 0);
-    r2  : out std_ulogic_vector (15 downto 0);
-    r3  : out std_ulogic_vector (15 downto 0);
-    r4  : out std_ulogic_vector (15 downto 0);
-    r5  : out std_ulogic_vector (15 downto 0);
-    r6  : out std_ulogic_vector (15 downto 0);
-    r7  : out std_ulogic_vector (15 downto 0);
-    r8  : out std_ulogic_vector (15 downto 0);
-    r9  : out std_ulogic_vector (15 downto 0);
-    r10 : out std_ulogic_vector (15 downto 0);
-    r11 : out std_ulogic_vector (15 downto 0);
-    r12 : out std_ulogic_vector (15 downto 0);
-    r13 : out std_ulogic_vector (15 downto 0);
-    r14 : out std_ulogic_vector (15 downto 0);
-    r15 : out std_ulogic_vector (15 downto 0);
+    r0  : out std_logic_vector (15 downto 0);
+    r1  : out std_logic_vector (15 downto 0);
+    r2  : out std_logic_vector (15 downto 0);
+    r3  : out std_logic_vector (15 downto 0);
+    r4  : out std_logic_vector (15 downto 0);
+    r5  : out std_logic_vector (15 downto 0);
+    r6  : out std_logic_vector (15 downto 0);
+    r7  : out std_logic_vector (15 downto 0);
+    r8  : out std_logic_vector (15 downto 0);
+    r9  : out std_logic_vector (15 downto 0);
+    r10 : out std_logic_vector (15 downto 0);
+    r11 : out std_logic_vector (15 downto 0);
+    r12 : out std_logic_vector (15 downto 0);
+    r13 : out std_logic_vector (15 downto 0);
+    r14 : out std_logic_vector (15 downto 0);
+    r15 : out std_logic_vector (15 downto 0);
 
     --Debug interface
-    dbg_en  : out std_ulogic;
-    dbg_clk : out std_ulogic;
-    dbg_rst : out std_ulogic;
+    dbg_en  : out std_logic;
+    dbg_clk : out std_logic;
+    dbg_rst : out std_logic;
 
     --Interrupt detection
-    irq_detect : out std_ulogic;
-    nmi_pnd    : out std_ulogic;
+    irq_detect : out std_logic;
+    nmi_pnd    : out std_logic;
 
-    i_state : out std_ulogic_vector (2 downto 0);
-    e_state : out std_ulogic_vector (3 downto 0);
-    decode  : out std_ulogic;
-    ir      : out std_ulogic_vector (15 downto 0);
-    irq_num : out std_ulogic_vector (5 downto 0);
-    pc      : out std_ulogic_vector (15 downto 0);
+    i_state : out std_logic_vector (2 downto 0);
+    e_state : out std_logic_vector (3 downto 0);
+    decode  : out std_logic;
+    ir      : out std_logic_vector (15 downto 0);
+    irq_num : out std_logic_vector (5 downto 0);
+    pc      : out std_logic_vector (15 downto 0);
 
     --CPU internals
-    mclk    : out std_ulogic;
-    puc_rst : out std_ulogic;
+    mclk    : out std_logic;
+    puc_rst : out std_logic;
 
     --Clock & Reset
-    dco_clk : in std_ulogic;
-    reset_n : in std_ulogic;
+    dco_clk : in std_logic;
+    reset_n : in std_logic;
 
     --Serial Debug Interface (I2C)
-    dbg_i2c_addr      : in  std_ulogic_vector (6 downto 0);
-    dbg_i2c_broadcast : in  std_ulogic_vector (6 downto 0);
-    dbg_i2c_scl       : in  std_ulogic;
-    dbg_i2c_sda_in    : in  std_ulogic;
-    dbg_i2c_sda_out   : out std_ulogic;
+    dbg_i2c_addr      : in  std_logic_vector (6 downto 0);
+    dbg_i2c_broadcast : in  std_logic_vector (6 downto 0);
+    dbg_i2c_scl       : in  std_logic;
+    dbg_i2c_sda_in    : in  std_logic;
+    dbg_i2c_sda_out   : out std_logic;
 
     --Data Memory
-    dmem_dout : in  std_ulogic_vector (15 downto 0);
-    dmem_addr : out std_ulogic_vector (DMEM_MSB downto 0);
-    dmem_cen  : out std_ulogic;
-    dmem_din  : out std_ulogic_vector (15 downto 0);
-    dmem_wen  : out std_ulogic_vector (1 downto 0);
+    dmem_dout : in  std_logic_vector (15 downto 0);
+    dmem_addr : out std_logic_vector (DMEM_MSB downto 0);
+    dmem_cen  : out std_logic;
+    dmem_din  : out std_logic_vector (15 downto 0);
+    dmem_wen  : out std_logic_vector (1 downto 0);
 
     --Instruction Memory
-    pmem_dout : in  std_ulogic_vector (15 downto 0);
-    pmem_addr : out std_ulogic_vector (PMEM_MSB downto 0);
-    pmem_cen  : out std_ulogic;
-    pmem_din  : out std_ulogic_vector (15 downto 0);
-    pmem_wen  : out std_ulogic_vector (1 downto 0);
+    pmem_dout : in  std_logic_vector (15 downto 0);
+    pmem_addr : out std_logic_vector (PMEM_MSB downto 0);
+    pmem_cen  : out std_logic;
+    pmem_din  : out std_logic_vector (15 downto 0);
+    pmem_wen  : out std_logic_vector (1 downto 0);
 
     --UART
-    uart_rxd : in  std_ulogic;
-    uart_txd : out std_ulogic;
+    uart_rxd : in  std_logic;
+    uart_txd : out std_logic;
 
     --GPIO
-    gpio_in  : in  std_ulogic_vector (3 downto 0);
-    gpio_out : out std_ulogic_vector (1 downto 0));
+    gpio_in  : in  std_logic_vector (3 downto 0);
+    gpio_out : out std_logic_vector (1 downto 0));
 end MSP430_PU;
 
 architecture MSP430_PU_ARQ of MSP430_PU is
 
   --Clock & Reset
-  signal mclk_omsp    : std_ulogic;
-  signal aclk_en      : std_ulogic;
-  signal smclk_en     : std_ulogic;
-  signal puc_rst_omsp : std_ulogic;
+  signal mclk_omsp    : std_logic;
+  signal aclk_en      : std_logic;
+  signal smclk_en     : std_logic;
+  signal puc_rst_omsp : std_logic;
 
   --Debug interface
-  signal dbg_en_omsp : std_ulogic;
-  signal dbg_freeze  : std_ulogic;
+  signal dbg_en_omsp : std_logic;
+  signal dbg_freeze  : std_logic;
 
   --Data memory
-  signal dmem_addr_omsp : std_ulogic_vector (DMEM_MSB downto 0);
-  signal dmem_cen_omsp  : std_ulogic;
-  signal dmem_din_omsp  : std_ulogic_vector (15 downto 0);
-  signal dmem_wen_omsp  : std_ulogic_vector (1 downto 0);
+  signal dmem_addr_omsp : std_logic_vector (DMEM_MSB downto 0);
+  signal dmem_cen_omsp  : std_logic;
+  signal dmem_din_omsp  : std_logic_vector (15 downto 0);
+  signal dmem_wen_omsp  : std_logic_vector (1 downto 0);
 
   --Program memory
-  signal pmem_addr_omsp : std_ulogic_vector (PMEM_MSB downto 0);
-  signal pmem_cen_omsp  : std_ulogic;
-  signal pmem_din_omsp  : std_ulogic_vector (15 downto 0);
-  signal pmem_wen_omsp  : std_ulogic_vector (1 downto 0);
+  signal pmem_addr_omsp : std_logic_vector (PMEM_MSB downto 0);
+  signal pmem_cen_omsp  : std_logic;
+  signal pmem_din_omsp  : std_logic_vector (15 downto 0);
+  signal pmem_wen_omsp  : std_logic_vector (1 downto 0);
 
   --Peripheral bus
-  signal per_addr : std_ulogic_vector (13 downto 0);
-  signal per_din  : std_ulogic_vector (15 downto 0);
-  signal per_we   : std_ulogic_vector (1 downto 0);
-  signal per_en   : std_ulogic;
-  signal per_dout : std_ulogic_vector (15 downto 0);
+  signal per_addr : std_logic_vector (13 downto 0);
+  signal per_din  : std_logic_vector (15 downto 0);
+  signal per_we   : std_logic_vector (1 downto 0);
+  signal per_en   : std_logic;
+  signal per_dout : std_logic_vector (15 downto 0);
 
   --Interrupts
-  signal irq_acc : std_ulogic_vector (13 downto 0);
-  signal irq_bus : std_ulogic_vector (13 downto 0);
-  signal nmi     : std_ulogic;
+  signal irq_acc : std_logic_vector (13 downto 0);
+  signal irq_bus : std_logic_vector (13 downto 0);
+  signal nmi     : std_logic;
 
   --GPIO
-  signal irq_port1     : std_ulogic;
-  signal irq_port2     : std_ulogic;
-  signal p1_din        : std_ulogic_vector (7 downto 0);
-  signal p1_dout       : std_ulogic_vector (7 downto 0);
-  signal p1_dout_en    : std_ulogic_vector (7 downto 0);
-  signal p1_sel        : std_ulogic_vector (7 downto 0);
-  signal p2_din        : std_ulogic_vector (7 downto 0);
-  signal p2_dout       : std_ulogic_vector (7 downto 0);
-  signal p2_dout_en    : std_ulogic_vector (7 downto 0);
-  signal p2_sel        : std_ulogic_vector (7 downto 0);
-  signal per_dout_gpio : std_ulogic_vector (15 downto 0);
+  signal irq_port1     : std_logic;
+  signal irq_port2     : std_logic;
+  signal p1_din        : std_logic_vector (7 downto 0);
+  signal p1_dout       : std_logic_vector (7 downto 0);
+  signal p1_dout_en    : std_logic_vector (7 downto 0);
+  signal p1_sel        : std_logic_vector (7 downto 0);
+  signal p2_din        : std_logic_vector (7 downto 0);
+  signal p2_dout       : std_logic_vector (7 downto 0);
+  signal p2_dout_en    : std_logic_vector (7 downto 0);
+  signal p2_sel        : std_logic_vector (7 downto 0);
+  signal per_dout_gpio : std_logic_vector (15 downto 0);
 
   --Hardware UART
-  signal irq_uart_rx   : std_ulogic;
-  signal irq_uart_tx   : std_ulogic;
-  signal per_dout_uart : std_ulogic_vector (15 downto 0);
+  signal irq_uart_rx   : std_logic;
+  signal irq_uart_tx   : std_logic;
+  signal per_dout_uart : std_logic_vector (15 downto 0);
 
   component MSP430_CORE
     port (
       --FRONTEND - SCAN
-      scan_enable : in std_ulogic;
-      scan_mode   : in std_ulogic;
+      scan_enable : in std_logic;
+      scan_mode   : in std_logic;
 
       --FRONTEND - INTERRUPTION
-      irq_acc : out std_ulogic_vector (IRQ_NR - 3 downto 0);
-      nmi     : in  std_ulogic;
-      irq     : in  std_ulogic_vector (IRQ_NR - 3 downto 0);
+      irq_acc : out std_logic_vector (IRQ_NR - 3 downto 0);
+      nmi     : in  std_logic;
+      irq     : in  std_logic_vector (IRQ_NR - 3 downto 0);
 
       --FRONTEND - RESET
-      puc_rst : out std_ulogic;
-      reset_n : in  std_ulogic;
+      puc_rst : out std_logic;
+      reset_n : in  std_logic;
 
       --DATA MEMORY
-      dmem_cen  : out std_ulogic;
-      dmem_wen  : out std_ulogic_vector (1 downto 0);
-      dmem_din  : out std_ulogic_vector (15 downto 0);
-      dmem_addr : out std_ulogic_vector (DMEM_MSB downto 0);
-      dmem_dout : in  std_ulogic_vector (15 downto 0);
+      dmem_cen  : out std_logic;
+      dmem_wen  : out std_logic_vector (1 downto 0);
+      dmem_din  : out std_logic_vector (15 downto 0);
+      dmem_addr : out std_logic_vector (DMEM_MSB downto 0);
+      dmem_dout : in  std_logic_vector (15 downto 0);
 
       --INSTRUCTION MEMORY
-      pmem_cen  : out std_ulogic;
-      pmem_wen  : out std_ulogic_vector (1 downto 0);
-      pmem_din  : out std_ulogic_vector (15 downto 0);
-      pmem_addr : out std_ulogic_vector (PMEM_MSB downto 0);
-      pmem_dout : in  std_ulogic_vector (15 downto 0);
+      pmem_cen  : out std_logic;
+      pmem_wen  : out std_logic_vector (1 downto 0);
+      pmem_din  : out std_logic_vector (15 downto 0);
+      pmem_addr : out std_logic_vector (PMEM_MSB downto 0);
+      pmem_dout : in  std_logic_vector (15 downto 0);
 
       --PERIPHERAL MEMORY
-      per_en   : out std_ulogic;
-      per_we   : out std_ulogic_vector (1 downto 0);
-      per_addr : out std_ulogic_vector (13 downto 0);
-      per_din  : out std_ulogic_vector (15 downto 0);
-      per_dout : in  std_ulogic_vector (15 downto 0);
+      per_en   : out std_logic;
+      per_we   : out std_logic_vector (1 downto 0);
+      per_addr : out std_logic_vector (13 downto 0);
+      per_din  : out std_logic_vector (15 downto 0);
+      per_dout : in  std_logic_vector (15 downto 0);
 
       --EXECUTION - REGISTERS
-      r0  : out std_ulogic_vector (15 downto 0);
-      r1  : out std_ulogic_vector (15 downto 0);
-      r2  : out std_ulogic_vector (15 downto 0);
-      r3  : out std_ulogic_vector (15 downto 0);
-      r4  : out std_ulogic_vector (15 downto 0);
-      r5  : out std_ulogic_vector (15 downto 0);
-      r6  : out std_ulogic_vector (15 downto 0);
-      r7  : out std_ulogic_vector (15 downto 0);
-      r8  : out std_ulogic_vector (15 downto 0);
-      r9  : out std_ulogic_vector (15 downto 0);
-      r10 : out std_ulogic_vector (15 downto 0);
-      r11 : out std_ulogic_vector (15 downto 0);
-      r12 : out std_ulogic_vector (15 downto 0);
-      r13 : out std_ulogic_vector (15 downto 0);
-      r14 : out std_ulogic_vector (15 downto 0);
-      r15 : out std_ulogic_vector (15 downto 0);
+      r0  : out std_logic_vector (15 downto 0);
+      r1  : out std_logic_vector (15 downto 0);
+      r2  : out std_logic_vector (15 downto 0);
+      r3  : out std_logic_vector (15 downto 0);
+      r4  : out std_logic_vector (15 downto 0);
+      r5  : out std_logic_vector (15 downto 0);
+      r6  : out std_logic_vector (15 downto 0);
+      r7  : out std_logic_vector (15 downto 0);
+      r8  : out std_logic_vector (15 downto 0);
+      r9  : out std_logic_vector (15 downto 0);
+      r10 : out std_logic_vector (15 downto 0);
+      r11 : out std_logic_vector (15 downto 0);
+      r12 : out std_logic_vector (15 downto 0);
+      r13 : out std_logic_vector (15 downto 0);
+      r14 : out std_logic_vector (15 downto 0);
+      r15 : out std_logic_vector (15 downto 0);
 
-      dbg_clk    : out std_ulogic;
-      dbg_rst    : out std_ulogic;
-      irq_detect : out std_ulogic;
-      nmi_detect : out std_ulogic;
+      dbg_clk    : out std_logic;
+      dbg_rst    : out std_logic;
+      irq_detect : out std_logic;
+      nmi_detect : out std_logic;
 
-      i_state : out std_ulogic_vector (2 downto 0);
-      e_state : out std_ulogic_vector (3 downto 0);
-      decode  : out std_ulogic;
-      ir      : out std_ulogic_vector (15 downto 0);
-      irq_num : out std_ulogic_vector (5 downto 0);
-      pc      : out std_ulogic_vector (15 downto 0);
+      i_state : out std_logic_vector (2 downto 0);
+      e_state : out std_logic_vector (3 downto 0);
+      decode  : out std_logic;
+      ir      : out std_logic_vector (15 downto 0);
+      irq_num : out std_logic_vector (5 downto 0);
+      pc      : out std_logic_vector (15 downto 0);
 
-      nodiv_smclk : out std_ulogic;
+      nodiv_smclk : out std_logic;
 
       --DBG
-      dbg_freeze : out std_ulogic;
-      dbg_en     : in  std_ulogic;
+      dbg_freeze : out std_logic;
+      dbg_en     : in  std_logic;
 
       --DBG - I2C
-      dbg_i2c_sda_out   : out std_ulogic;
-      dbg_i2c_scl       : in  std_ulogic;
-      dbg_i2c_sda_in    : in  std_ulogic;
-      dbg_i2c_addr      : in  std_ulogic_vector (6 downto 0);
-      dbg_i2c_broadcast : in  std_ulogic_vector (6 downto 0);
+      dbg_i2c_sda_out   : out std_logic;
+      dbg_i2c_scl       : in  std_logic;
+      dbg_i2c_sda_in    : in  std_logic;
+      dbg_i2c_addr      : in  std_logic_vector (6 downto 0);
+      dbg_i2c_broadcast : in  std_logic_vector (6 downto 0);
 
       --DBG - UART
-      dbg_uart_txd : out std_ulogic;
-      dbg_uart_rxd : in  std_ulogic;
+      dbg_uart_txd : out std_logic;
+      dbg_uart_rxd : in  std_logic;
 
       --BCM
-      aclk        : out std_ulogic;
-      aclk_en     : out std_ulogic;
-      dco_enable  : out std_ulogic;
-      dco_wkup    : out std_ulogic;
-      lfxt_enable : out std_ulogic;
-      lfxt_wkup   : out std_ulogic;
-      mclk        : out std_ulogic;
-      smclk       : out std_ulogic;
-      smclk_en    : out std_ulogic;
-      cpu_en      : in  std_ulogic;
-      dco_clk     : in  std_ulogic;
-      lfxt_clk    : in  std_ulogic;
-      wkup        : in  std_ulogic);
+      aclk        : out std_logic;
+      aclk_en     : out std_logic;
+      dco_enable  : out std_logic;
+      dco_wkup    : out std_logic;
+      lfxt_enable : out std_logic;
+      lfxt_wkup   : out std_logic;
+      mclk        : out std_logic;
+      smclk       : out std_logic;
+      smclk_en    : out std_logic;
+      cpu_en      : in  std_logic;
+      dco_clk     : in  std_logic;
+      lfxt_clk    : in  std_logic;
+      wkup        : in  std_logic);
   end component MSP430_CORE;
 
   component GPIO
     port (
-      p1_dout : out std_ulogic_vector (7 downto 0);
-      p2_dout : out std_ulogic_vector (7 downto 0);
-      p3_dout : out std_ulogic_vector (7 downto 0);
-      p4_dout : out std_ulogic_vector (7 downto 0);
-      p5_dout : out std_ulogic_vector (7 downto 0);
-      p6_dout : out std_ulogic_vector (7 downto 0);
+      p1_dout : out std_logic_vector (7 downto 0);
+      p2_dout : out std_logic_vector (7 downto 0);
+      p3_dout : out std_logic_vector (7 downto 0);
+      p4_dout : out std_logic_vector (7 downto 0);
+      p5_dout : out std_logic_vector (7 downto 0);
+      p6_dout : out std_logic_vector (7 downto 0);
 
-      p1_dout_en : out std_ulogic_vector (7 downto 0);
-      p2_dout_en : out std_ulogic_vector (7 downto 0);
-      p3_dout_en : out std_ulogic_vector (7 downto 0);
-      p4_dout_en : out std_ulogic_vector (7 downto 0);
-      p5_dout_en : out std_ulogic_vector (7 downto 0);
-      p6_dout_en : out std_ulogic_vector (7 downto 0);
+      p1_dout_en : out std_logic_vector (7 downto 0);
+      p2_dout_en : out std_logic_vector (7 downto 0);
+      p3_dout_en : out std_logic_vector (7 downto 0);
+      p4_dout_en : out std_logic_vector (7 downto 0);
+      p5_dout_en : out std_logic_vector (7 downto 0);
+      p6_dout_en : out std_logic_vector (7 downto 0);
 
-      p1_sel : out std_ulogic_vector (7 downto 0);
-      p2_sel : out std_ulogic_vector (7 downto 0);
-      p3_sel : out std_ulogic_vector (7 downto 0);
-      p4_sel : out std_ulogic_vector (7 downto 0);
-      p5_sel : out std_ulogic_vector (7 downto 0);
-      p6_sel : out std_ulogic_vector (7 downto 0);
+      p1_sel : out std_logic_vector (7 downto 0);
+      p2_sel : out std_logic_vector (7 downto 0);
+      p3_sel : out std_logic_vector (7 downto 0);
+      p4_sel : out std_logic_vector (7 downto 0);
+      p5_sel : out std_logic_vector (7 downto 0);
+      p6_sel : out std_logic_vector (7 downto 0);
 
-      p1dir : out std_ulogic_vector (7 downto 0);
-      p1ifg : out std_ulogic_vector (7 downto 0);
+      p1dir : out std_logic_vector (7 downto 0);
+      p1ifg : out std_logic_vector (7 downto 0);
 
-      p1_din : in std_ulogic_vector (7 downto 0);
-      p2_din : in std_ulogic_vector (7 downto 0);
-      p3_din : in std_ulogic_vector (7 downto 0);
-      p4_din : in std_ulogic_vector (7 downto 0);
-      p5_din : in std_ulogic_vector (7 downto 0);
-      p6_din : in std_ulogic_vector (7 downto 0);
+      p1_din : in std_logic_vector (7 downto 0);
+      p2_din : in std_logic_vector (7 downto 0);
+      p3_din : in std_logic_vector (7 downto 0);
+      p4_din : in std_logic_vector (7 downto 0);
+      p5_din : in std_logic_vector (7 downto 0);
+      p6_din : in std_logic_vector (7 downto 0);
 
-      irq_port1 : out std_ulogic;
-      irq_port2 : out std_ulogic;
+      irq_port1 : out std_logic;
+      irq_port2 : out std_logic;
 
-      per_dout : out std_ulogic_vector (15 downto 0);
-      mclk     : in  std_ulogic;
-      per_en   : in  std_ulogic;
-      puc_rst  : in  std_ulogic;
-      per_we   : in  std_ulogic_vector (1 downto 0);
-      per_addr : in  std_ulogic_vector (13 downto 0);
-      per_din  : in  std_ulogic_vector (15 downto 0));
+      per_dout : out std_logic_vector (15 downto 0);
+      mclk     : in  std_logic;
+      per_en   : in  std_logic;
+      puc_rst  : in  std_logic;
+      per_we   : in  std_logic_vector (1 downto 0);
+      per_addr : in  std_logic_vector (13 downto 0);
+      per_din  : in  std_logic_vector (15 downto 0));
   end component GPIO;
 
   component UART
     port (
-      uart_txd : out std_ulogic;
-      uart_rxd : in  std_ulogic;
-      smclk_en : in  std_ulogic;
+      uart_txd : out std_logic;
+      uart_rxd : in  std_logic;
+      smclk_en : in  std_logic;
 
-      irq_uart_rx : out std_ulogic;
-      irq_uart_tx : out std_ulogic;
+      irq_uart_rx : out std_logic;
+      irq_uart_tx : out std_logic;
 
-      per_dout : out std_ulogic_vector (15 downto 0);
-      mclk     : in  std_ulogic;
-      per_en   : in  std_ulogic;
-      puc_rst  : in  std_ulogic;
-      per_we   : in  std_ulogic_vector (1 downto 0);
-      per_addr : in  std_ulogic_vector (13 downto 0);
-      per_din  : in  std_ulogic_vector (15 downto 0));
+      per_dout : out std_logic_vector (15 downto 0);
+      mclk     : in  std_logic;
+      per_en   : in  std_logic;
+      puc_rst  : in  std_logic;
+      per_we   : in  std_logic_vector (1 downto 0);
+      per_addr : in  std_logic_vector (13 downto 0);
+      per_din  : in  std_logic_vector (15 downto 0));
   end component UART;
 
 begin

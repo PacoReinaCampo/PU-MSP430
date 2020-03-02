@@ -1,5 +1,5 @@
 # vsim -c -do "run.do" work.MSP430_TESTBENCH 
-# Start time: 15:41:50 on Feb 11,2020
+# Start time: 01:23:11 on Mar 02,2020
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
@@ -11,8 +11,8 @@
 # Loading work.msp430_pu(msp430_pu_arq)
 # Loading work.msp430_core(msp430_core_arq)
 # Loading work.frontend(frontend_arq)
-# Loading work.omsp_state_machine(control_b1_arq)
-# Loading work.omsp_interrupt(control_b2_arq)
+# Loading work.omsp_state_machine(frontend_b1_arq)
+# Loading work.omsp_interrupt(frontend_b2_arq)
 # Loading work.omsp_clock_gate(omsp_clock_gate_arq)
 # Loading work.memory(memory_arq)
 # Loading work.execution(execution_arq)
@@ -35,8 +35,8 @@
 # Loading work.instruction_memory_distributed_singleport(instruction_memory_distributed_singleport_arq)
 # Loading work.data_memory_distributed_singleport(data_memory_distributed_singleport_arq)
 # Loading work.io_cell(io_cell_arq)
-# ** Warning: Design size of 14959 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
+# ** Warning: Design size of 14907 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
 # Expect performance to be adversely affected.
 # do run.do
-# End time: 15:41:50 on Feb 11,2020, Elapsed time: 0:00:00
+# End time: 01:23:11 on Mar 02,2020, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1
