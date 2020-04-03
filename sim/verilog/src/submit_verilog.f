@@ -39,11 +39,12 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
++incdir+../../../rtl/verilog/pkg/
+
 //=============================================================================
 // Testbench related
 //=============================================================================
 
-+incdir+../../../bench/verilog/
 ../../../bench/verilog/tb_openMSP430.v
 ../../../bench/verilog/ram.v
 ../../../bench/verilog/io_cell.v
@@ -54,7 +55,6 @@
 // CPU
 //=============================================================================
 
-+incdir+../../../rtl/verilog/
 ../../../rtl/verilog/core/main/FRONTEND.v
 ../../../rtl/verilog/core/main/SFR.v
 ../../../rtl/verilog/core/main/T_A.v

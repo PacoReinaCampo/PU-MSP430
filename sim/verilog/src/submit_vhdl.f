@@ -39,11 +39,10 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
+../../../rtl/vhdl/pkg/MSP430_PACK.vhd
 //=============================================================================
 // CPU
 //=============================================================================
-
-../../../rtl/vhdl/pkg/MSP430_PACK.vhd
 
 ../../../rtl/vhdl/core/fuse/omsp_and_gate.vhd
 ../../../rtl/vhdl/core/fuse/omsp_clock_gate.vhd
