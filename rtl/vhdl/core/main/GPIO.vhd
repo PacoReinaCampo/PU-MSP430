@@ -100,36 +100,28 @@ architecture GPIO_ARQ of GPIO is
   constant DEC_WD_G : integer := 6;
 
   --0.3.        Register one-hot decoder utilities
-  constant DEC_SZ_G   : integer                                   := 2**DEC_WD_G;
+  constant DEC_SZ_G   : integer := 2**DEC_WD_G;
+
   constant BASE_REG_G : std_logic_vector (DEC_SZ_G - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_G));
 
   --0.7.        Masks
   constant P_EN : std_logic_vector (DEC_WD_G - 1 downto 0) := "111111";
 
-  type M_DEC_WD_G5_7 is array (DEC_WD_G - 5 downto 0) of std_logic_vector (7 downto 0);
-  type M_DEC_WD_G5_15 is array (DEC_WD_G - 5 downto 0) of std_logic_vector (15 downto 0);
-  type M_DEC_WD_G5_DEC_WD_G1 is array (DEC_WD_G - 5 downto 0) of std_logic_vector (DEC_WD_G - 1 downto 0);
-  type M_DEC_WD_G5_DEC_SZ_G1 is array (DEC_WD_G - 5 downto 0) of std_logic_vector (DEC_SZ_G - 1 downto 0);
-  type M_DEC_WD_G1_7 is array (DEC_WD_G - 1 downto 0) of std_logic_vector (7 downto 0);
-  type M_DEC_WD_G1_15 is array (DEC_WD_G - 1 downto 0) of std_logic_vector (15 downto 0);
-  type M_DEC_WD_G1_DEC_WD_G1 is array (DEC_WD_G - 1 downto 0) of std_logic_vector (DEC_WD_G - 1 downto 0);
-  type M_DEC_WD_G1_DEC_SZ_G1 is array (DEC_WD_G - 1 downto 0) of std_logic_vector (DEC_SZ_G - 1 downto 0);
+  constant P_IN   : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_WD_G - 1 downto 0) := ("110100", "110000", "011100", "011000", "101000", "100000");
+  constant P_OUT  : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_WD_G - 1 downto 0) := ("110101", "110001", "011101", "011001", "101001", "100001");
+  constant P_DIR  : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_WD_G - 1 downto 0) := ("110110", "110010", "011110", "011010", "101010", "100010");
+  constant P_SELC : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_WD_G - 1 downto 0) := ("110111", "110011", "011111", "011011", "101110", "100110");
 
-  constant P_IN   : M_DEC_WD_G1_DEC_WD_G1 := ("110100", "110000", "011100", "011000", "101000", "100000");
-  constant P_OUT  : M_DEC_WD_G1_DEC_WD_G1 := ("110101", "110001", "011101", "011001", "101001", "100001");
-  constant P_DIR  : M_DEC_WD_G1_DEC_WD_G1 := ("110110", "110010", "011110", "011010", "101010", "100010");
-  constant P_SELC : M_DEC_WD_G1_DEC_WD_G1 := ("110111", "110011", "011111", "011011", "101110", "100110");
-
-  constant P_IFG : M_DEC_WD_G5_DEC_WD_G1 := ("101011", "100011");
-  constant P_IES : M_DEC_WD_G5_DEC_WD_G1 := ("101100", "100100");
-  constant P_IE  : M_DEC_WD_G5_DEC_WD_G1 := ("101101", "100101");
+  constant P_IFG : std_logic_matrix (DEC_WD_G - 5 downto 0)(DEC_WD_G - 1 downto 0) := ("101011", "100011");
+  constant P_IES : std_logic_matrix (DEC_WD_G - 5 downto 0)(DEC_WD_G - 1 downto 0) := ("101100", "100100");
+  constant P_IE  : std_logic_matrix (DEC_WD_G - 5 downto 0)(DEC_WD_G - 1 downto 0) := ("101101", "100101");
 
   --SIGNAL INOUT
-  signal p_dout    : M_DEC_WD_G1_7;
-  signal p_dout_en : M_DEC_WD_G1_7;
-  signal p_sel     : M_DEC_WD_G1_7;
-  signal p_din     : M_DEC_WD_G1_7;
-  signal p_din_en  : M_DEC_WD_G1_7;
+  signal p_dout    : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
+  signal p_dout_en : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
+  signal p_sel     : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
+  signal p_din     : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
+  signal p_din_en  : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
 
   --1.  REGISTER_DECODER
   --1.1.        Local register selection
@@ -153,63 +145,63 @@ architecture GPIO_ARQ of GPIO is
 
   --2.  REGISTERS       
   --2.1.        PIN Register
-  signal pin : M_DEC_WD_G1_7;
+  signal pin : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
 
   --2.2.        POUT Register
   signal pout_wr  : std_logic_vector (DEC_SZ_G - 1 downto 0);
-  signal pout     : M_DEC_WD_G1_7;
-  signal pout_nxt : M_DEC_WD_G1_7;
+  signal pout     : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
+  signal pout_nxt : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
 
   --2.3.        PDIR Register
   signal pdir_wr  : std_logic_vector (DEC_SZ_G - 1 downto 0);
-  signal pdir     : M_DEC_WD_G1_7;
-  signal pdir_nxt : M_DEC_WD_G1_7;
+  signal pdir     : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
+  signal pdir_nxt : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
 
   --2.4.        PIFG Register
   signal pifg_wr  : std_logic_vector (DEC_SZ_G - 5 downto 0);
-  signal pifg     : M_DEC_WD_G5_7;
-  signal pifg_nxt : M_DEC_WD_G5_7;
-  signal pifg_set : M_DEC_WD_G5_7;
+  signal pifg     : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
+  signal pifg_nxt : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
+  signal pifg_set : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
 
   --2.5.        PIES Register
   signal pies_wr  : std_logic_vector (DEC_SZ_G - 5 downto 0);
-  signal pies     : M_DEC_WD_G5_7;
-  signal pies_nxt : M_DEC_WD_G5_7;
+  signal pies     : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
+  signal pies_nxt : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
 
   --2.6.        PIE Register
   signal pie_wr  : std_logic_vector (DEC_SZ_G - 5 downto 0);
-  signal pie     : M_DEC_WD_G5_7;
-  signal pie_nxt : M_DEC_WD_G5_7;
+  signal pie     : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
+  signal pie_nxt : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
 
   --2.7.        PSEL Register
   signal psel_wr  : std_logic_vector (DEC_SZ_G - 5 downto 0);
-  signal psel     : M_DEC_WD_G1_7;
-  signal psel_nxt : M_DEC_WD_G1_7;
+  signal psel     : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
+  signal psel_nxt : std_logic_matrix (DEC_WD_G - 1 downto 0)(7 downto 0);
 
   --3.  INTERRRUPT_GENERATION
   signal irq_port : std_logic_vector (1 downto 0);
 
   --3.1.        Delay input
-  signal p_in_dly : M_DEC_WD_G5_7;
+  signal p_in_dly : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
 
   --3.2.        Edge detection
-  signal p_in_re : M_DEC_WD_G5_7;
-  signal p_in_fe : M_DEC_WD_G5_7;
+  signal p_in_re : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
+  signal p_in_fe : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
 
   --3.3.        Set interrupt flag
   --3.4.        Generate CPU interrupt
   --4.  DATA_OUTPUT_GENERATION
   --4.1.        Data output mux
-  signal p_in_rd  : M_DEC_WD_G1_15;
-  signal p_out_rd : M_DEC_WD_G1_15;
-  signal p_dir_rd : M_DEC_WD_G1_15;
-  signal p_sel_rd : M_DEC_WD_G1_15;
+  signal p_in_rd  : std_logic_matrix (DEC_WD_G - 1 downto 0)(15 downto 0);
+  signal p_out_rd : std_logic_matrix (DEC_WD_G - 1 downto 0)(15 downto 0);
+  signal p_dir_rd : std_logic_matrix (DEC_WD_G - 1 downto 0)(15 downto 0);
+  signal p_sel_rd : std_logic_matrix (DEC_WD_G - 1 downto 0)(15 downto 0);
 
-  signal p_ifg_rd : M_DEC_WD_G5_15;
-  signal p_ies_rd : M_DEC_WD_G5_15;
-  signal p_ie_rd  : M_DEC_WD_G5_15;
+  signal p_ifg_rd : std_logic_matrix (DEC_WD_G - 5 downto 0)(15 downto 0);
+  signal p_ies_rd : std_logic_matrix (DEC_WD_G - 5 downto 0)(15 downto 0);
+  signal p_ie_rd  : std_logic_matrix (DEC_WD_G - 5 downto 0)(15 downto 0);
 
-  function matrixA5G_or (matrix : M_DEC_WD_G5_15) return std_logic_vector is
+  function matrixA5G_or (matrix : std_logic_matrix) return std_logic_vector is
     variable RESULT : std_logic_vector (15 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
@@ -218,7 +210,7 @@ architecture GPIO_ARQ of GPIO is
     return RESULT;
   end matrixA5G_or;
 
-  function matrixA1G_or (matrix : M_DEC_WD_G1_15) return std_logic_vector is
+  function matrixA1G_or (matrix : std_logic_matrix) return std_logic_vector is
     variable RESULT : std_logic_vector (15 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
@@ -227,7 +219,7 @@ architecture GPIO_ARQ of GPIO is
     return RESULT;
   end matrixA1G_or;
 
-  function matrixB5G_or (matrix : M_DEC_WD_G5_DEC_SZ_G1) return std_logic_vector is
+  function matrixB5G_or (matrix : std_logic_matrix) return std_logic_vector is
     variable RESULT : std_logic_vector (DEC_SZ_G - 1 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
@@ -236,7 +228,7 @@ architecture GPIO_ARQ of GPIO is
     return RESULT;
   end matrixB5G_or;
 
-  function matrixB1G_or (matrix : M_DEC_WD_G1_DEC_SZ_G1) return std_logic_vector is
+  function matrixB1G_or (matrix : std_logic_matrix) return std_logic_vector is
     variable RESULT : std_logic_vector (DEC_SZ_G - 1 downto 0) := (others => '0');
   begin
     for i in matrix'range loop
@@ -256,23 +248,23 @@ begin
 
     --1.3.      Register address decode
     process (reg_addr_g)
-      variable P_IN_D   : M_DEC_WD_G1_DEC_SZ_G1;
-      variable P_OUT_D  : M_DEC_WD_G1_DEC_SZ_G1;
-      variable P_DIR_D  : M_DEC_WD_G1_DEC_SZ_G1;
-      variable P_SELC_D : M_DEC_WD_G1_DEC_SZ_G1;
+      variable P_IN_D   : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_SZ_G - 1 downto 0);
+      variable P_OUT_D  : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_SZ_G - 1 downto 0);
+      variable P_DIR_D  : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_SZ_G - 1 downto 0);
+      variable P_SELC_D : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_SZ_G - 1 downto 0);
 
-      variable P_IFG_D : M_DEC_WD_G5_DEC_SZ_G1;
-      variable P_IES_D : M_DEC_WD_G5_DEC_SZ_G1;
-      variable P_IE_D  : M_DEC_WD_G5_DEC_SZ_G1;
+      variable P_IFG_D : std_logic_matrix (DEC_WD_G - 5 downto 0)(DEC_SZ_G - 1 downto 0);
+      variable P_IES_D : std_logic_matrix (DEC_WD_G - 5 downto 0)(DEC_SZ_G - 1 downto 0);
+      variable P_IE_D  : std_logic_matrix (DEC_WD_G - 5 downto 0)(DEC_SZ_G - 1 downto 0);
 
-      variable P_IN_DX   : M_DEC_WD_G1_DEC_SZ_G1;
-      variable P_OUT_DX  : M_DEC_WD_G1_DEC_SZ_G1;
-      variable P_DIR_DX  : M_DEC_WD_G1_DEC_SZ_G1;
-      variable P_SELC_DX : M_DEC_WD_G1_DEC_SZ_G1;
+      variable P_IN_DX   : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_SZ_G - 1 downto 0);
+      variable P_OUT_DX  : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_SZ_G - 1 downto 0);
+      variable P_DIR_DX  : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_SZ_G - 1 downto 0);
+      variable P_SELC_DX : std_logic_matrix (DEC_WD_G - 1 downto 0)(DEC_SZ_G - 1 downto 0);
 
-      variable P_IFG_DX : M_DEC_WD_G5_DEC_SZ_G1;
-      variable P_IES_DX : M_DEC_WD_G5_DEC_SZ_G1;
-      variable P_IE_DX  : M_DEC_WD_G5_DEC_SZ_G1;
+      variable P_IFG_DX : std_logic_matrix (DEC_WD_G - 5 downto 0)(DEC_SZ_G - 1 downto 0);
+      variable P_IES_DX : std_logic_matrix (DEC_WD_G - 5 downto 0)(DEC_SZ_G - 1 downto 0);
+      variable P_IE_DX  : std_logic_matrix (DEC_WD_G - 5 downto 0)(DEC_SZ_G - 1 downto 0);
 
     begin
       for i in DEC_WD_G - 1 downto 0 loop
@@ -473,7 +465,7 @@ begin
 
       --3.3.    Set interrupt flag
       process (p_in_fe, p_in_re, pies)
-        variable dout : M_DEC_WD_G5_7;
+        variable dout : std_logic_matrix (DEC_WD_G - 5 downto 0)(7 downto 0);
       begin
         for j in 7 downto 0 loop
           if pies(i)(j) = '1' then
