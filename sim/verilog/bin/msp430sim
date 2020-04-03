@@ -57,8 +57,8 @@ fi
 ###############################################################################
 #                     Check if the required files exist                       #
 ###############################################################################
-asmfile=../src/$1.s43;
-verfile=../src/$1.v;
+asmfile=../../../software/tests/regression/$1.s43;
+verfile=../../../bench/verilog/regression/$1.v;
 incfile=../../../rtl/verilog/pkg/openMSP430_defines.v;
 linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
