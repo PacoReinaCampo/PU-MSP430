@@ -669,7 +669,7 @@ begin
       end if;
     end process;
 
-    is_const <= or_reduce(inst_as_nxt(12 downto 7));
+    is_const <= reduce_or(inst_as_nxt(12 downto 7));
 
     R_6_1i_2ci : process (mclk_decode, puc_rst)
     begin

@@ -60,7 +60,7 @@ end TEMPLATE_16;
 
 architecture TEMPLATE_16_ARQ of TEMPLATE_16 is
 
-  constant ORDEN_P16 : integer := 4;
+  constant SIZE_P16 : integer := 4;
 
   --0.  PARAMETER_DECLARATION
   --0.1.        Register base address (must be aligned to decoder bit width)
@@ -76,7 +76,8 @@ architecture TEMPLATE_16_ARQ of TEMPLATE_16 is
   constant CNTRL4B16 : std_logic_vector (DEC_WD_P16 - 1 downto 0) := std_logic_vector(to_unsigned(6, DEC_WD_P16));
 
   --0.4.        Register one-hot decoder utilities
-  constant DEC_SZ_P16   : integer                                     := 2**DEC_WD_P16;
+  constant DEC_SZ_P16 : integer := 2**DEC_WD_P16;
+
   constant BASE_REG_P16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_P16));
 
   --0.5.        Register one-hot decoder
@@ -85,26 +86,22 @@ architecture TEMPLATE_16_ARQ of TEMPLATE_16 is
   constant CNTRL3_D16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_P16) sll to_integer(unsigned(CNTRL3B16)));
   constant CNTRL4_D16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0) := std_logic_vector(unsigned(BASE_REG_P16) sll to_integer(unsigned(CNTRL4B16)));
 
+  type M_SIZE_P16_I is array (SIZE_P16 - 1 downto 0) of integer;
 
-  type M_ORDEN_P161_15 is array (ORDEN_P16 - 1 downto 0) of std_logic_vector (15 downto 0);
-  type M_ORDEN_P161_DEC_SZ_P161 is array (ORDEN_P16 - 1 downto 0) of std_logic_vector (DEC_SZ_P16 - 1 downto 0);
-  type M_ORDEN_P161_DEC_WD_P161 is array (ORDEN_P16 - 1 downto 0) of std_logic_vector (DEC_WD_P16 - 1 downto 0);
-  type M_ORDEN_P161_I is array (ORDEN_P16 - 1 downto 0) of integer;
+  constant CNTRLB16 : std_logic_matrix (SIZE_P16 - 1 downto 0)(DEC_WD_P16 - 1 downto 0) := (CNTRL4B16,
+                                                                                            CNTRL3B16,
+                                                                                            CNTRL2B16,
+                                                                                            CNTRL1B16);
 
-  constant CNTRLB16 : M_ORDEN_P161_DEC_WD_P161 := (CNTRL4B16,
-                                                   CNTRL3B16,
-                                                   CNTRL2B16,
-                                                   CNTRL1B16);
+  constant CNTRLI16 : M_SIZE_P16_I := (to_integer(unsigned(CNTRL4B16)),
+                                       to_integer(unsigned(CNTRL3B16)),
+                                       to_integer(unsigned(CNTRL2B16)),
+                                       to_integer(unsigned(CNTRL1B16)));
 
-  constant CNTRLI16 : M_ORDEN_P161_I := (to_integer(unsigned(CNTRL4B16)),
-                                         to_integer(unsigned(CNTRL3B16)),
-                                         to_integer(unsigned(CNTRL2B16)),
-                                         to_integer(unsigned(CNTRL1B16)));
-
-  constant CNTRL_D16 : M_ORDEN_P161_DEC_SZ_P161 := (CNTRL4_D16,
-                                                    CNTRL3_D16,
-                                                    CNTRL2_D16,
-                                                    CNTRL1_D16);
+  constant CNTRL_D16 : std_logic_matrix (SIZE_P16 - 1 downto 0)(DEC_SZ_P16 - 1 downto 0) := (CNTRL4_D16,
+                                                                                             CNTRL3_D16,
+                                                                                             CNTRL2_D16,
+                                                                                             CNTRL1_D16);
 
   --1.  REGISTER_DECODER
   --1.1.        Local register selection
@@ -127,27 +124,27 @@ architecture TEMPLATE_16_ARQ of TEMPLATE_16 is
   signal reg_rd_p16 : std_logic_vector (DEC_SZ_P16 - 1 downto 0);
 
   --2.  REGISTERS       
-  signal cntrl_wr_p16 : std_logic_vector (ORDEN_P16 - 1 downto 0);
+  signal cntrl_wr_p16 : std_logic_vector (SIZE_P16 - 1 downto 0);
 
-  signal cntrl_p16 : M_ORDEN_P161_15;
+  signal cntrl_p16 : std_logic_matrix (SIZE_P16 - 1 downto 0)(15 downto 0);
 
   --4.  DATA_OUTPUT_GENERATION
   --4.1.        Data output mux
-  signal cntrl_rd16 : M_ORDEN_P161_15;
+  signal cntrl_rd16 : std_logic_matrix (SIZE_P16 - 1 downto 0)(15 downto 0);
 
-  function matrixAP_or (matrix : M_ORDEN_P161_15) return std_logic_vector is
+  function matrixAP_or (matrix : std_logic_matrix) return std_logic_vector is
     variable RESULT : std_logic_vector (15 downto 0) := (others => '0');
   begin
-    for i in matrix'range loop
+    for i in 0 to SIZE_P16-1 loop
       RESULT := RESULT or matrix(i);
     end loop;
     return RESULT;
   end matrixAP_or;
 
-  function matrixBP_or (matrix : M_ORDEN_P161_DEC_SZ_P161) return std_logic_vector is
+  function matrixBP_or (matrix : std_logic_matrix) return std_logic_vector is
     variable RESULT : std_logic_vector (DEC_SZ_P16 - 1 downto 0) := (others => '0');
   begin
-    for i in matrix'range loop
+    for i in 0 to SIZE_P16-1 loop
       RESULT := RESULT or matrix(i);
     end loop;
     return RESULT;
@@ -165,9 +162,9 @@ begin
 
     --1.3.      Register address decode 
     address_decode : process (reg_addr_p16)
-      variable decode : M_ORDEN_P161_DEC_SZ_P161;
+      variable decode : std_logic_matrix (SIZE_P16 - 1 downto 0)(DEC_SZ_P16 - 1 downto 0);
     begin
-      for i in ORDEN_P16 - 1 downto 0 loop
+      for i in SIZE_P16 - 1 downto 0 loop
         decode(i) := CNTRL_D16(i) and (0 to DEC_SZ_P16 - 1 =>
                                        to_stdlogic(reg_addr_p16 = CNTRLB16(i)));
       end loop;
@@ -176,9 +173,9 @@ begin
     end process address_decode;
 
     --1.4.      Read/Write probes
-    reg_write_p <= or_reduce(per_we) and reg_sel_p16;
+    reg_write_p <= reduce_or(per_we) and reg_sel_p16;
 
-    reg_read_p16 <= not or_reduce(per_we) and reg_sel_p16;
+    reg_read_p16 <= not reduce_or(per_we) and reg_sel_p16;
 
     --1.5.      Read/Write vectors
     reg_wr_p <= reg_dec_p16 and (0 to DEC_SZ_P16 - 1 => reg_write_p);
@@ -188,7 +185,7 @@ begin
 
   REGISTERS : block
   begin
-    PCNTRL_Register : for i in ORDEN_P16 - 1 downto 0 generate
+    PCNTRL_Register : for i in SIZE_P16 - 1 downto 0 generate
       cntrl_wr_p16(i) <= reg_wr_p(CNTRLI16(i));
 
       R_1c_1 : process (mclk, puc_rst)
@@ -206,7 +203,7 @@ begin
 
   DATA_OUTPUT_GENERATION : block
   begin
-    data_output_mux : for i in ORDEN_P16 - 1 downto 0 generate
+    data_output_mux : for i in SIZE_P16 - 1 downto 0 generate
       cntrl_rd16 (i) <= cntrl_p16(i) and (0 to 15 => reg_rd_p16(CNTRLI16(i)));
     end generate data_output_mux;
 

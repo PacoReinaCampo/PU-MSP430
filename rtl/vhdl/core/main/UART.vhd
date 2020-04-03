@@ -263,7 +263,7 @@ begin
     --1.4.      Read/Write probes
     reg_hi_write_u <= per_we(0) and reg_sel_u;
     reg_lo_write_u <= per_we(1) and reg_sel_u;
-    reg_read_u     <= not or_reduce(per_we) and reg_sel_u;
+    reg_read_u     <= not reduce_or(per_we) and reg_sel_u;
 
     --1.5.      Read/Write vectors
     reg_hi_wr_u <= reg_dec_u and (0 to DEC_SZ_U - 1 => reg_hi_write_u);
@@ -532,7 +532,7 @@ begin
         elsif (uclk_en = '1') then
           if (rxfer_bit_inc = '1') then
             rxfer_cnt <= baudrate;
-          elsif (or_reduce(rxfer_cnt) = '1') then
+          elsif (reduce_or(rxfer_cnt) = '1') then
             rxfer_cnt <= std_logic_vector(unsigned(rxfer_cnt) + X"FFFF");
           end if;
         end if;
@@ -625,7 +625,7 @@ begin
         elsif (uclk_en = '1') then
           if (txfer_bit_inc = '1') then
             txfer_cnt <= baudrate;
-          elsif (or_reduce(txfer_cnt) = '1') then
+          elsif (reduce_or(txfer_cnt) = '1') then
             txfer_cnt <= std_logic_vector(unsigned(txfer_cnt) + X"FFFF");
           end if;
         end if;

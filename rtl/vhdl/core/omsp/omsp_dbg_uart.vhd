@@ -321,7 +321,7 @@ begin
           xfer_cnt <= ('0' & bit_cnt_max(DBG_UART_XFER_CNT_W - 1 downto 1));
         elsif ((txd_start or xfer_bit_inc) = '1') then
           xfer_cnt <= bit_cnt_max;
-        elsif (or_reduce(xfer_cnt) = '1') then
+        elsif (reduce_or(xfer_cnt) = '1') then
           xfer_cnt <= std_logic_vector(unsigned(xfer_cnt) + (0 to DBG_UART_XFER_CNT_W - 1 => '1'));
         end if;
       end if;

@@ -77,16 +77,12 @@ architecture DATA_MEMORY_SHARED_QUADPORT_ARQ of DATA_MEMORY_SHARED_QUADPORT is
 
   constant nd : integer := 4;
 
-  type M_ND1_15 is array (nd - 1 downto 0) of std_logic_vector (15 downto 0);
-  type M_ND1_DMEM_MSB1 is array (nd - 1 downto 0) of std_logic_vector (DMEM_MSB downto 0);
-  type M_ND1_1 is array (nd - 1 downto 0) of std_logic_vector (1 downto 0);
-
-  signal dout   : M_ND1_15;
-  signal addr   : M_ND1_DMEM_MSB1;
+  signal dout   : std_logic_matrix (nd - 1 downto 0)(15 downto 0);
+  signal addr   : std_logic_matrix (nd - 1 downto 0)(DMEM_MSB downto 0);
   signal not_en : std_logic_vector (nd - 1 downto 0);
   signal clk    : std_logic_vector (nd - 1 downto 0);
-  signal din    : M_ND1_15;
-  signal not_we : M_ND1_1;
+  signal din    : std_logic_matrix (nd - 1 downto 0)(15 downto 0);
+  signal not_we : std_logic_matrix (nd - 1 downto 0)(1 downto 0);
 
   component DATA_MEMORY_SHARED_SINGLEPORT
     port (

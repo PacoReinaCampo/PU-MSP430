@@ -155,7 +155,7 @@ begin
     end process R_1c_e;
 
     --Detect other interrupts
-    irq_detect_omsp <= (nmi_pnd or ((or_reduce(irq) or wdt_irq) and gie))
+    irq_detect_omsp <= (nmi_pnd or ((reduce_or(irq) or wdt_irq) and gie))
                        and not cpu_halt_cmd and not dbg_halt_st and (exec_done or to_stdlogic(i_state = I_IDLE));
 
     irq_detect <= irq_detect_omsp;

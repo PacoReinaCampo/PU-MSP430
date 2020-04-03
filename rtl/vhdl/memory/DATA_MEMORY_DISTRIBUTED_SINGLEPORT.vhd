@@ -57,15 +57,9 @@ end DATA_MEMORY_DISTRIBUTED_SINGLEPORT;
 architecture DATA_MEMORY_DISTRIBUTED_SINGLEPORT_ARQ of DATA_MEMORY_DISTRIBUTED_SINGLEPORT is
   --////////////////////////////////////////////////////////////////
   --
-  -- Types
-  --
-  type type_mem_array is array (2**DMEM_MSB-1 downto 0) of std_logic_vector(15 downto 0);  --memory array
-
-  --////////////////////////////////////////////////////////////////
-  --
   -- Variables
   --
-  signal mem_array : type_mem_array;  --memory array
+  signal mem_array : std_logic_matrix (2**DMEM_MSB-1 downto 0)(15 downto 0);  --memory array
 
 begin
   --////////////////////////////////////////////////////////////////

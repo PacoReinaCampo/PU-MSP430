@@ -151,8 +151,8 @@ architecture BCM_ARQ of BCM is
   --2.1.        BCSCTL1C Register
   signal bcsctl_wr  : std_logic_vector (1 downto 0);
   signal divax_mask : std_logic_vector (7 downto 0);
-  signal bcsctl     : M_01_07;
-  signal bcsctl_nxt : M_01_07;
+  signal bcsctl     : std_logic_matrix (1 downto 0)(7 downto 0);
+  signal bcsctl_nxt : std_logic_matrix (1 downto 0)(7 downto 0);
 
   --2.2.        BCSCTL2C Register
   signal selmx_mask : std_logic_vector (7 downto 0);
@@ -162,7 +162,7 @@ architecture BCM_ARQ of BCM is
 
   --3.  DATA OUTPUT GENERATION
   --3.1.        Data output mux
-  signal bcsctl_rd : M_01_15;
+  signal bcsctl_rd : std_logic_matrix (1 downto 0)(15 downto 0);
 
   --4.  DCO_CLK / LFXT_CLK INTERFACES (WAKEUP, ENABLE, ...)
   signal cpuoff_and_mclk_enable : std_logic;

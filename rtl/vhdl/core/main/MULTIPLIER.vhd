@@ -129,8 +129,8 @@ architecture MULTIPLIER_ARQ of MULTIPLIER is
   --2.1.        OP1 Register    
   signal op_wr   : std_logic_vector (1 downto 0);
   signal mclk_op : std_logic_vector (1 downto 0);
-  signal op      : M_01_15;
-  signal op_rd   : M_01_15;
+  signal op      : std_logic_matrix (1 downto 0)(15 downto 0);
+  signal op_rd   : std_logic_matrix (1 downto 0)(15 downto 0);
 
   --2.2.        OP2C Register
 
@@ -233,8 +233,8 @@ begin
                  (SUMEXTC_D and (0 to DEC_SZ_M - 1  => to_stdlogic(reg_addr_m = SUMEXTCB)));
 
     --1.4.      Read/Write probes
-    reg_write_m <= or_reduce(per_we) and reg_sel_m;
-    reg_read_m  <= not or_reduce(per_we) and reg_sel_m;
+    reg_write_m <= reduce_or(per_we) and reg_sel_m;
+    reg_read_m  <= not reduce_or(per_we) and reg_sel_m;
 
     --1.5.      Read/Write vectors
     reg_wr_m <= reg_dec_m and (0 to DEC_SZ_M - 1 => reg_write_m);
@@ -496,7 +496,7 @@ begin
         end if;
       end process R_1;
 
-      result_wr <= or_reduce(cycle2);
+      result_wr <= reduce_or(cycle2);
 
       --Expand the operands to support signed & unsigned operations
       op1_xp    <= (sign_sel and op(0)(15)) & op(0);

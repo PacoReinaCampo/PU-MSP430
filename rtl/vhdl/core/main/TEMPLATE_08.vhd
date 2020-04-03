@@ -58,7 +58,7 @@ end TEMPLATE_08;
 
 architecture TEMPLATE_08_ARQ of TEMPLATE_08 is
 
-  constant ORDEN_P08 : integer := 4;
+  constant SIZE_P08 : integer := 4;
 
   --0.  PARAMETER_DECLARATION
   --0.1.        Register base address (must be aligned to decoder bit width)
@@ -74,7 +74,8 @@ architecture TEMPLATE_08_ARQ of TEMPLATE_08 is
   constant CNTRL4B08 : std_logic_vector (DEC_WD_P08 - 1 downto 0) := std_logic_vector(to_unsigned(3, DEC_WD_P08));
 
   --0.4.        Register one-hot decoder utilities
-  constant DEC_SZ_P08   : integer                                     := 2**DEC_WD_P08;
+  constant DEC_SZ_P08 : integer := 2**DEC_WD_P08;
+
   constant BASE_REG_P08 : std_logic_vector (0 to DEC_SZ_P08 - 1) := std_logic_vector(to_unsigned(1, DEC_SZ_P08));
 
   --0.5.        Register one-hot decoder
@@ -83,26 +84,22 @@ architecture TEMPLATE_08_ARQ of TEMPLATE_08 is
   constant CNTRL3_D08 : std_logic_vector (0 to DEC_SZ_P08 - 1) := std_logic_vector(unsigned(BASE_REG_P08) sll to_integer(unsigned(CNTRL3B08)));
   constant CNTRL4_D08 : std_logic_vector (0 to DEC_SZ_P08 - 1) := std_logic_vector(unsigned(BASE_REG_P08) sll to_integer(unsigned(CNTRL4B08)));
 
-  type M_ORDEN_P081_7 is array (ORDEN_P08 - 1 downto 0) of std_logic_vector (7 downto 0);
-  type M_ORDEN_P081_15 is array (ORDEN_P08 - 1 downto 0) of std_logic_vector (15 downto 0);
-  type M_ORDEN_P081_DEC_SZ_P081 is array (ORDEN_P08 - 1 downto 0) of std_logic_vector (0 to DEC_SZ_P08 - 1);
-  type M_ORDEN_P081_DEC_WD_P081 is array (ORDEN_P08 - 1 downto 0) of std_logic_vector (DEC_WD_P08 - 1 downto 0);
-  type M_ORDEN_P081_I is array (ORDEN_P08 - 1 downto 0) of integer;
+  type M_SIZE_P081_I is array (SIZE_P08 - 1 downto 0) of integer;
 
-  constant CNTRLB08 : M_ORDEN_P081_DEC_WD_P081 := (CNTRL4B08,
-                                                   CNTRL3B08,
-                                                   CNTRL2B08,
-                                                   CNTRL1B08);
+  constant CNTRLB08 : std_logic_matrix (SIZE_P08 - 1 downto 0)(DEC_WD_P08 - 1 downto 0) := (CNTRL4B08,
+                                                                                            CNTRL3B08,
+                                                                                            CNTRL2B08,
+                                                                                            CNTRL1B08);
 
-  constant CNTRLI08 : M_ORDEN_P081_I := (to_integer(unsigned(CNTRL4B08)),
-                                         to_integer(unsigned(CNTRL3B08)),
-                                         to_integer(unsigned(CNTRL2B08)),
-                                         to_integer(unsigned(CNTRL1B08)));
+  constant CNTRLI08 : M_SIZE_P081_I := (to_integer(unsigned(CNTRL4B08)),
+                                        to_integer(unsigned(CNTRL3B08)),
+                                        to_integer(unsigned(CNTRL2B08)),
+                                        to_integer(unsigned(CNTRL1B08)));
 
-  constant CNTRL_D08 : M_ORDEN_P081_DEC_SZ_P081 := (CNTRL4_D08,
-                                                    CNTRL3_D08,
-                                                    CNTRL2_D08,
-                                                    CNTRL1_D08);
+  constant CNTRL_D08 : std_logic_matrix (SIZE_P08 - 1 downto 0)(0 to DEC_SZ_P08 - 1) := (CNTRL4_D08,
+                                                                                         CNTRL3_D08,
+                                                                                         CNTRL2_D08,
+                                                                                         CNTRL1_D08);
 
   --1.  REGISTER_DECODER
   --1.1.        Local register selection
@@ -125,27 +122,27 @@ architecture TEMPLATE_08_ARQ of TEMPLATE_08 is
   signal reg_rd_p08  : std_logic_vector (0 to DEC_SZ_P08 - 1);
 
   --2.  REGISTERS       
-  signal cntrl_wr_p08   : std_logic_vector (ORDEN_P08 - 1 downto 0);
-  signal cntrl_next_p08 : M_ORDEN_P081_7;
-  signal cntrl_p08      : M_ORDEN_P081_7;
+  signal cntrl_wr_p08   : std_logic_vector (SIZE_P08 - 1 downto 0);
+  signal cntrl_next_p08 : std_logic_matrix (SIZE_P08 - 1 downto 0)(7 downto 0);
+  signal cntrl_p08      : std_logic_matrix (SIZE_P08 - 1 downto 0)(7 downto 0);
 
   --4.  DATA_OUTPUT_GENERATION
   --4.1.        Data output mux
-  signal cntrl_rd08 : M_ORDEN_P081_15;
+  signal cntrl_rd08 : std_logic_matrix (SIZE_P08 - 1 downto 0)(15 downto 0);
 
-  function matrixAP_or (matrix : M_ORDEN_P081_15) return std_logic_vector is
+  function matrixAP_or (matrix : std_logic_matrix) return std_logic_vector is
     variable RESULT : std_logic_vector (15 downto 0) := (others => '0');
   begin
-    for i in matrix'range loop
+    for i in 0 to SIZE_P08-1 loop
       RESULT := RESULT or matrix(i);
     end loop;
     return RESULT;
   end matrixAP_or;
 
-  function matrixBP_or (matrix : M_ORDEN_P081_DEC_SZ_P081) return std_logic_vector is
+  function matrixBP_or (matrix : std_logic_matrix) return std_logic_vector is
     variable RESULT : std_logic_vector (0 to DEC_SZ_P08 - 1) := (others => '0');
   begin
-    for i in matrix'range loop
+    for i in 0 to SIZE_P08-1 loop
       RESULT := RESULT or matrix(i);
     end loop;
     return RESULT;
@@ -163,9 +160,9 @@ begin
 
     --1.3.      Register address decode 
     address_decode : process (reg_addr_p08)
-      variable decode : M_ORDEN_P081_DEC_SZ_P081;
+      variable decode : std_logic_matrix (SIZE_P08 - 1 downto 0)(0 to DEC_SZ_P08 - 1);
     begin
-      for i in ORDEN_P08 - 1 downto 0 loop
+      for i in SIZE_P08 - 1 downto 0 loop
         decode(i) := CNTRL_D08(i) and (0 to DEC_SZ_P08 - 1 =>
                                        to_stdlogic(reg_addr_p08 = std_logic_vector(unsigned(CNTRLB08(i)) srl 1)));
       end loop;
@@ -176,7 +173,7 @@ begin
     --1.4.      Read/Write probes
     reg_lo_write_p <= per_we(0) and reg_sel_p08;
     reg_hi_write_p <= per_we(1) and reg_sel_p08;
-    reg_read_p08   <= not or_reduce(per_we) and reg_sel_p08;
+    reg_read_p08   <= not reduce_or(per_we) and reg_sel_p08;
 
     --1.5.      Read/Write vectors
     reg_lo_wr_p <= reg_dec_p08 and (0 to DEC_SZ_P08 - 1 => reg_lo_write_p);
@@ -186,7 +183,7 @@ begin
 
   REGISTERS : block
   begin
-    PCNTRL_Register : for i in ORDEN_P08 - 1 downto 0 generate
+    PCNTRL_Register : for i in SIZE_P08 - 1 downto 0 generate
       cntrl_wr_p08(i) <= reg_hi_wr_p(CNTRLI08(i))
                          when CNTRLB08(i)(0) = '1' else reg_lo_wr_p(CNTRLI08(i));
       cntrl_next_p08(i) <= per_din(15 downto 8)
@@ -207,10 +204,9 @@ begin
 
   DATA_OUTPUT_GENERATION : block
   begin
-    data_output_mux : for i in ORDEN_P08 - 1 downto 0 generate
-      cntrl_rd08 (i) <= std_logic_vector((X"00" & (unsigned(cntrl_p08(i)) and
-                                                    (0 to 7 => reg_rd_p08(CNTRLI08(i)))))
-                                          sll to_integer((0 to 3 => CNTRLB08(i)(0)) and to_unsigned(8, 4)));
+    data_output_mux : for i in SIZE_P08 - 1 downto 0 generate
+      cntrl_rd08 (i) <= std_logic_vector((X"00" & (unsigned(cntrl_p08(i)) and (0 to 7 => reg_rd_p08(CNTRLI08(i)))))
+                        sll to_integer((0 to 3 => CNTRLB08(i)(0)) and to_unsigned(8, 4)));
     end generate data_output_mux;
 
     per_dout <= matrixAP_or(cntrl_rd08);

@@ -160,7 +160,7 @@ begin
   M2_ROM_INTERFACE : block
   begin
     --Execution unit access (only read access are accepted)     
-    eu_pmem_cen  <= not (eu_mb_en and not or_reduce(eu_mb_wr) and to_stdlogic(eu_mab >= PMEM_OFFSET));
+    eu_pmem_cen  <= not (eu_mb_en and not reduce_or(eu_mb_wr) and to_stdlogic(eu_mab >= PMEM_OFFSET));
     eu_pmem_addr <= std_logic_vector(unsigned(eu_mab) - unsigned(PMEM_OFFSET));
 
     --Front-end access
@@ -175,14 +175,14 @@ begin
     pmem_addr <= dbg_pmem_addr(PMEM_MSB downto 0)
                  when dbg_pmem_cen = '0' else
                  eu_pmem_addr(PMEM_MSB downto 0)
-                 when (eu_mb_en and not or_reduce(eu_mb_wr) and to_stdlogic(eu_mab >= PMEM_OFFSET)) = '1' else
+                 when (eu_mb_en and not reduce_or(eu_mb_wr) and to_stdlogic(eu_mab >= PMEM_OFFSET)) = '1' else
                  fe_pmem_addr(PMEM_MSB downto 0);
     pmem_cen <= not (fe_mb_en and to_stdlogic(fe_mab >= PMEM_OFFSET)) and
-                not (eu_mb_en and not or_reduce(eu_mb_wr) and to_stdlogic(eu_mab >= PMEM_OFFSET)) and dbg_pmem_cen;
+                not (eu_mb_en and not reduce_or(eu_mb_wr) and to_stdlogic(eu_mab >= PMEM_OFFSET)) and dbg_pmem_cen;
     pmem_wen     <= not dbg_mem_wr;
     pmem_din     <= dbg_mem_dout;
     fe_pmem_wait <= (fe_mb_en and to_stdlogic(fe_mab >= PMEM_OFFSET)) and
-                    (eu_mb_en and not or_reduce(eu_mb_wr) and to_stdlogic(eu_mab >= PMEM_OFFSET));
+                    (eu_mb_en and not reduce_or(eu_mb_wr) and to_stdlogic(eu_mab >= PMEM_OFFSET));
   end block M2_ROM_INTERFACE;
 
   M3_PERIPHERALS : block

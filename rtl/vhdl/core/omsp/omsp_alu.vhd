@@ -95,7 +95,7 @@ architecture omsp_alu_ARQ of omsp_alu is
 
   --Decimal adder (DADD) 
   signal alu_dadd_s   : std_logic_vector (16 downto 0);
-  signal alu_dadd_v_s : M_03_04;
+  signal alu_dadd_v_s : std_logic_matrix (3 downto 0)(4 downto 0);
 
   --Shifter for rotate instructions (RRC & RRA) 
   signal alu_shift_msb : std_logic;

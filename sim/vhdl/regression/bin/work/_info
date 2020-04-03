@@ -23,9 +23,9 @@ VaOeeT3]lfA5]=k;[[Vkk62
 !s100 7?1Z`jNYgcZgSO51hA6n^3
 Z8 OV;C;10.6d;65
 33
-Z9 !s110 1585920734
+Z9 !s110 1585925937
 !i10b 1
-Z10 !s108 1585920734.000000
+Z10 !s108 1585925937.000000
 Z11 !s90 -2008|-f|msp430.vc|
 !s107 ../../../../bench/vhdl/MSP430_TESTBENCH.vhd|../../../../bench/vhdl/MSP430_MODEL.vhd|../../../../rtl/vhdl/pu/io_cell.vhd|../../../../rtl/vhdl/pu/MSP430_PU.vhd|../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_SHARED_SINGLEPORT.vhd|../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_SHARED_QUADPORT.vhd|../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT.vhd|../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_DISTRIBUTED_QUADPORT.vhd|../../../../rtl/vhdl/memory/DATA_MEMORY_SHARED_SINGLEPORT.vhd|../../../../rtl/vhdl/memory/DATA_MEMORY_SHARED_QUADPORT.vhd|../../../../rtl/vhdl/memory/DATA_MEMORY_DISTRIBUTED_SINGLEPORT.vhd|../../../../rtl/vhdl/memory/DATA_MEMORY_DISTRIBUTED_QUADPORT.vhd|../../../../rtl/vhdl/core/omsp/omsp_state_machine.vhd|../../../../rtl/vhdl/core/omsp/omsp_register_file.vhd|../../../../rtl/vhdl/core/omsp/omsp_interrupt.vhd|../../../../rtl/vhdl/core/omsp/omsp_dbg_uart.vhd|../../../../rtl/vhdl/core/omsp/omsp_dbg_i2c.vhd|../../../../rtl/vhdl/core/omsp/omsp_dbg_hwbrk.vhd|../../../../rtl/vhdl/core/omsp/omsp_alu.vhd|../../../../rtl/vhdl/core/main/UART.vhd|../../../../rtl/vhdl/core/main/TEMPLATE_16.vhd|../../../../rtl/vhdl/core/main/TEMPLATE_08.vhd|../../../../rtl/vhdl/core/main/T_WATCHDOG.vhd|../../../../rtl/vhdl/core/main/SFR.vhd|../../../../rtl/vhdl/core/main/MULTIPLIER.vhd|../../../../rtl/vhdl/core/main/MEMORY.vhd|../../../../rtl/vhdl/core/main/GPIO.vhd|../../../../rtl/vhdl/core/main/FRONTEND.vhd|../../../../rtl/vhdl/core/main/EXECUTION.vhd|../../../../rtl/vhdl/core/main/DBG.vhd|../../../../rtl/vhdl/core/main/BCM.vhd|../../../../rtl/vhdl/core/fuse/omsp_wakeup_cell.vhd|../../../../rtl/vhdl/core/fuse/omsp_sync_reset.vhd|../../../../rtl/vhdl/core/fuse/omsp_sync_cell.vhd|../../../../rtl/vhdl/core/fuse/omsp_scan_mux.vhd|../../../../rtl/vhdl/core/fuse/omsp_clock_mux.vhd|../../../../rtl/vhdl/core/fuse/omsp_clock_gate.vhd|../../../../rtl/vhdl/core/fuse/omsp_and_gate.vhd|../../../../rtl/vhdl/core/MSP430_CORE.vhd|../../../../rtl/vhdl/pkg/MSP430_PACK.vhd|
 !i113 1
@@ -52,7 +52,7 @@ Z14 !s107 ../../../../bench/vhdl/MSP430_TESTBENCH.vhd|../../../../bench/vhdl/MSP
 R12
 R13
 Edata_memory_distributed_quadport
-Z15 w1584381995
+Z15 w1585925584
 R2
 R3
 R4
@@ -80,10 +80,10 @@ R3
 R4
 R5
 DEx4 work 32 data_memory_distributed_quadport 0 22 :B0814?1Mh`EjcUY8j88z0
-l101
+l97
 L76
-VXUV:P;gAL8zmP`^B5DeT62
-!s100 miLP6DZiR_U1An84O=FWj3
+VMSQ0Yz<=AKBWaN7HflEAA3
+!s100 K6U@`Ofdo>QAJaWD?k[HZ3
 R8
 33
 R9
@@ -95,14 +95,14 @@ R14
 R12
 R13
 Edata_memory_distributed_singleport
-R15
+Z18 w1585925628
 R2
 R3
 R4
 R5
 R0
-Z18 8../../../../rtl/vhdl/memory/DATA_MEMORY_DISTRIBUTED_SINGLEPORT.vhd
-Z19 F../../../../rtl/vhdl/memory/DATA_MEMORY_DISTRIBUTED_SINGLEPORT.vhd
+Z19 8../../../../rtl/vhdl/memory/DATA_MEMORY_DISTRIBUTED_SINGLEPORT.vhd
+Z20 F../../../../rtl/vhdl/memory/DATA_MEMORY_DISTRIBUTED_SINGLEPORT.vhd
 l0
 L47
 V@c=8ozh11Ja5jb2;5>V[N1
@@ -123,10 +123,10 @@ R3
 R4
 R5
 DEx4 work 34 data_memory_distributed_singleport 0 22 @c=8ozh11Ja5jb2;5>V[N1
-l70
+l64
 L57
-VgL@9ZWKi<i:T>6:JICF:W3
-!s100 hViD<O7ome9G9ND@7gG;E1
+VTU5AzIndH[CKhPgkfgS^V1
+!s100 WLHhElR<AMHJnM_MjQmo>0
 R8
 33
 R9
@@ -138,14 +138,14 @@ R14
 R12
 R13
 Edata_memory_shared_quadport
-R15
+Z21 w1585925506
 R2
 R3
 R4
 R5
 R0
-Z20 8../../../../rtl/vhdl/memory/DATA_MEMORY_SHARED_QUADPORT.vhd
-Z21 F../../../../rtl/vhdl/memory/DATA_MEMORY_SHARED_QUADPORT.vhd
+Z22 8../../../../rtl/vhdl/memory/DATA_MEMORY_SHARED_QUADPORT.vhd
+Z23 F../../../../rtl/vhdl/memory/DATA_MEMORY_SHARED_QUADPORT.vhd
 l0
 L47
 V51AoTWM;^X4e=b@B9@de?0
@@ -166,10 +166,10 @@ R3
 R4
 R5
 DEx4 work 27 data_memory_shared_quadport 0 22 51AoTWM;^X4e=b@B9@de?0
-l101
+l97
 L76
-VB=:<emCY]n1<Z9=CF3dg;1
-!s100 nT;VkXH[jaJI1XFTiL;Kn0
+VHUfL_XmN7L_]Rf0nz^DY_1
+!s100 LBz=VSEGC5>KShY=MXOX93
 R8
 33
 R9
@@ -181,14 +181,14 @@ R14
 R12
 R13
 Edata_memory_shared_singleport
-R15
+Z24 w1585925898
 R2
 R3
 R4
 R5
 R0
-Z22 8../../../../rtl/vhdl/memory/DATA_MEMORY_SHARED_SINGLEPORT.vhd
-Z23 F../../../../rtl/vhdl/memory/DATA_MEMORY_SHARED_SINGLEPORT.vhd
+Z25 8../../../../rtl/vhdl/memory/DATA_MEMORY_SHARED_SINGLEPORT.vhd
+Z26 F../../../../rtl/vhdl/memory/DATA_MEMORY_SHARED_SINGLEPORT.vhd
 l0
 L47
 Vl5n0`UNghNk0X:o^kV5K21
@@ -209,10 +209,10 @@ R3
 R4
 R5
 DEx4 work 29 data_memory_shared_singleport 0 22 l5n0`UNghNk0X:o^kV5K21
-l70
+l64
 L57
-VRhbo^d_RAWailBelakTnl1
-!s100 NdHWSjEmI9DUm?5]Z_aLk1
+VjnzfKLg6Ci@O^<<IYklj:0
+!s100 S:2kLSU7H<[Z9oB[znlX22
 R8
 33
 R9
@@ -224,14 +224,14 @@ R14
 R12
 R13
 Edbg
-Z24 w1585912126
+Z27 w1585912126
 R2
 R3
 R4
 R5
 R0
-Z25 8../../../../rtl/vhdl/core/main/DBG.vhd
-Z26 F../../../../rtl/vhdl/core/main/DBG.vhd
+Z28 8../../../../rtl/vhdl/core/main/DBG.vhd
+Z29 F../../../../rtl/vhdl/core/main/DBG.vhd
 l0
 L47
 V54RFabfCd?<UzJZZIabd`1
@@ -267,14 +267,14 @@ R14
 R12
 R13
 Eexecution
-R15
+Z30 w1584381995
 R2
 R3
 R4
 R5
 R0
-Z27 8../../../../rtl/vhdl/core/main/EXECUTION.vhd
-Z28 F../../../../rtl/vhdl/core/main/EXECUTION.vhd
+Z31 8../../../../rtl/vhdl/core/main/EXECUTION.vhd
+Z32 F../../../../rtl/vhdl/core/main/EXECUTION.vhd
 l0
 L47
 VoF_Ue64NSKRM5WHiMkn390
@@ -310,14 +310,14 @@ R14
 R12
 R13
 Efrontend
-Z29 w1585912156
+Z33 w1585912156
 R2
 R3
 R4
 R5
 R0
-Z30 8../../../../rtl/vhdl/core/main/FRONTEND.vhd
-Z31 F../../../../rtl/vhdl/core/main/FRONTEND.vhd
+Z34 8../../../../rtl/vhdl/core/main/FRONTEND.vhd
+Z35 F../../../../rtl/vhdl/core/main/FRONTEND.vhd
 l0
 L47
 VFWhn01m]g:3L4X7CIXgPm0
@@ -353,14 +353,14 @@ R14
 R12
 R13
 Egpio
-Z32 w1585912192
+Z36 w1585912192
 R2
 R3
 R4
 R5
 R0
-Z33 8../../../../rtl/vhdl/core/main/GPIO.vhd
-Z34 F../../../../rtl/vhdl/core/main/GPIO.vhd
+Z37 8../../../../rtl/vhdl/core/main/GPIO.vhd
+Z38 F../../../../rtl/vhdl/core/main/GPIO.vhd
 l0
 L47
 V2Lac8adbH@iOWz>hVCLe<3
@@ -396,14 +396,14 @@ R14
 R12
 R13
 Einstruction_memory_distributed_quadport
-R15
+Z39 w1585925792
 R2
 R3
 R4
 R5
 R0
-Z35 8../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_DISTRIBUTED_QUADPORT.vhd
-Z36 F../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_DISTRIBUTED_QUADPORT.vhd
+Z40 8../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_DISTRIBUTED_QUADPORT.vhd
+Z41 F../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_DISTRIBUTED_QUADPORT.vhd
 l0
 L47
 V^oDj?c;hZJ?Lf4inhk_]B0
@@ -424,10 +424,10 @@ R3
 R4
 R5
 DEx4 work 39 instruction_memory_distributed_quadport 0 22 ^oDj?c;hZJ?Lf4inhk_]B0
-l101
+l97
 L76
-VP^XKGX;WjdkD[7_n;L5>I1
-!s100 2NgY7VUTA:3@@bZUk@ZT11
+VC;8AcT@e=JP:IT=5IJC5Z1
+!s100 o5m3FKjU8MnXcFGGZ^Mz41
 R8
 33
 R9
@@ -439,14 +439,14 @@ R14
 R12
 R13
 Einstruction_memory_distributed_singleport
-R15
+Z42 w1585925694
 R2
 R3
 R4
 R5
 R0
-Z37 8../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT.vhd
-Z38 F../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT.vhd
+Z43 8../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT.vhd
+Z44 F../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT.vhd
 l0
 L47
 V6UR]J<R5TM6=k5PRjG7lm2
@@ -467,10 +467,10 @@ R3
 R4
 R5
 DEx4 work 41 instruction_memory_distributed_singleport 0 22 6UR]J<R5TM6=k5PRjG7lm2
-l70
+l64
 L57
-VaJ`4`@`KRD3GJmgkLBlo72
-!s100 B2BDgj<i0m<5k5@S:iM;R0
+VXW6HCJzo75fClg_X]_fj_1
+!s100 kQ9]j=Pmhi0h]cUG>A<Sf3
 R8
 33
 R9
@@ -482,14 +482,14 @@ R14
 R12
 R13
 Einstruction_memory_shared_quadport
-R15
+Z45 w1585925865
 R2
 R3
 R4
 R5
 R0
-Z39 8../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_SHARED_QUADPORT.vhd
-Z40 F../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_SHARED_QUADPORT.vhd
+Z46 8../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_SHARED_QUADPORT.vhd
+Z47 F../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_SHARED_QUADPORT.vhd
 l0
 L47
 VdOcQkT4gJKCFO=A9ROZ^]3
@@ -510,10 +510,10 @@ R3
 R4
 R5
 DEx4 work 34 instruction_memory_shared_quadport 0 22 dOcQkT4gJKCFO=A9ROZ^]3
-l101
+l97
 L76
-VJ>f:[cDhi00TQOm_E[lK:2
-!s100 aV2Z50OYl3IAP6iW^cOEf2
+V_Ti3^oMZKA0DoL87:keYg1
+!s100 ^VgjWbkIXXIVDUZEj3KTa3
 R8
 33
 R9
@@ -525,14 +525,14 @@ R14
 R12
 R13
 Einstruction_memory_shared_singleport
-R15
+Z48 w1585925934
 R2
 R3
 R4
 R5
 R0
-Z41 8../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_SHARED_SINGLEPORT.vhd
-Z42 F../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_SHARED_SINGLEPORT.vhd
+Z49 8../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_SHARED_SINGLEPORT.vhd
+Z50 F../../../../rtl/vhdl/memory/INSTRUCTION_MEMORY_SHARED_SINGLEPORT.vhd
 l0
 L47
 V]W`S;c2Oo0JXTg34WOfF_0
@@ -553,10 +553,10 @@ R3
 R4
 R5
 DEx4 work 36 instruction_memory_shared_singleport 0 22 ]W`S;c2Oo0JXTg34WOfF_0
-l70
+l64
 L57
-VAFe^T66L<C20]WSi^04AK2
-!s100 [3Y`GP@AR2BGD^S3i;F7>0
+VU3XPHY2^dZzM=ENkz?Ld:1
+!s100 ;JQR9<4QJnQk9MKPY[bHj1
 R8
 33
 R9
@@ -568,12 +568,12 @@ R14
 R12
 R13
 Eio_cell
-R15
+R30
 R4
 R5
 R0
-Z43 8../../../../rtl/vhdl/pu/io_cell.vhd
-Z44 F../../../../rtl/vhdl/pu/io_cell.vhd
+Z51 8../../../../rtl/vhdl/pu/io_cell.vhd
+Z52 F../../../../rtl/vhdl/pu/io_cell.vhd
 l0
 L45
 VTZk8SzcgHM83FKZ<f_RVT0
@@ -607,14 +607,14 @@ R14
 R12
 R13
 Ememory
-Z45 w1585912257
+Z53 w1585912257
 R2
 R3
 R4
 R5
 R0
-Z46 8../../../../rtl/vhdl/core/main/MEMORY.vhd
-Z47 F../../../../rtl/vhdl/core/main/MEMORY.vhd
+Z54 8../../../../rtl/vhdl/core/main/MEMORY.vhd
+Z55 F../../../../rtl/vhdl/core/main/MEMORY.vhd
 l0
 L47
 V_<3T4KXA`AKad1SO@`7`31
@@ -650,14 +650,14 @@ R14
 R12
 R13
 Emsp430_core
-R15
+R30
 R2
 R3
 R4
 R5
 R0
-Z48 8../../../../rtl/vhdl/core/MSP430_CORE.vhd
-Z49 F../../../../rtl/vhdl/core/MSP430_CORE.vhd
+Z56 8../../../../rtl/vhdl/core/MSP430_CORE.vhd
+Z57 F../../../../rtl/vhdl/core/MSP430_CORE.vhd
 l0
 L47
 VDa>Yi3Lzann>WSd^2IkZh0
@@ -693,14 +693,14 @@ R14
 R12
 R13
 Emsp430_model
-R15
+R30
 R2
 R3
 R4
 R5
 R0
-Z50 8../../../../bench/vhdl/MSP430_MODEL.vhd
-Z51 F../../../../bench/vhdl/MSP430_MODEL.vhd
+Z58 8../../../../bench/vhdl/MSP430_MODEL.vhd
+Z59 F../../../../bench/vhdl/MSP430_MODEL.vhd
 l0
 L47
 V7QJ@KJm>3l=^Hij@L?;a02
@@ -736,13 +736,13 @@ R14
 R12
 R13
 Pmsp430_pack
-Z52 DBx4 ieee 11 numeric_std 4 body 22 I914AMN_?Qk;P<9Bm[VT=2
+Z60 DBx4 ieee 11 numeric_std 4 body 22 I914AMN_?Qk;P<9Bm[VT=2
 R4
 R5
-Z53 w1585911943
+Z61 w1585911943
 R0
-Z54 8../../../../rtl/vhdl/pkg/MSP430_PACK.vhd
-Z55 F../../../../rtl/vhdl/pkg/MSP430_PACK.vhd
+Z62 8../../../../rtl/vhdl/pkg/MSP430_PACK.vhd
+Z63 F../../../../rtl/vhdl/pkg/MSP430_PACK.vhd
 l0
 L46
 VIKUjHXmL8keSQcLMm=ZcP0
@@ -760,7 +760,7 @@ R12
 R13
 Bbody
 R2
-R52
+R60
 R4
 R5
 l0
@@ -778,14 +778,14 @@ R14
 R12
 R13
 Emsp430_pu
-R15
+R30
 R2
 R3
 R4
 R5
 R0
-Z56 8../../../../rtl/vhdl/pu/MSP430_PU.vhd
-Z57 F../../../../rtl/vhdl/pu/MSP430_PU.vhd
+Z64 8../../../../rtl/vhdl/pu/MSP430_PU.vhd
+Z65 F../../../../rtl/vhdl/pu/MSP430_PU.vhd
 l0
 L47
 VlCk3=hokKnnUH2cUDR>c=3
@@ -821,14 +821,14 @@ R14
 R12
 R13
 Emsp430_testbench
-R15
+R30
 R2
 R3
 R4
 R5
 R0
-Z58 8../../../../bench/vhdl/MSP430_TESTBENCH.vhd
-Z59 F../../../../bench/vhdl/MSP430_TESTBENCH.vhd
+Z66 8../../../../bench/vhdl/MSP430_TESTBENCH.vhd
+Z67 F../../../../bench/vhdl/MSP430_TESTBENCH.vhd
 l0
 L47
 VFXQc_4Va:C8ZTGdK05IJ42
@@ -864,14 +864,14 @@ R14
 R12
 R13
 Emultiplier
-Z60 w1585912378
+Z68 w1585912378
 R2
 R3
 R4
 R5
 R0
-Z61 8../../../../rtl/vhdl/core/main/MULTIPLIER.vhd
-Z62 F../../../../rtl/vhdl/core/main/MULTIPLIER.vhd
+Z69 8../../../../rtl/vhdl/core/main/MULTIPLIER.vhd
+Z70 F../../../../rtl/vhdl/core/main/MULTIPLIER.vhd
 l0
 L47
 VO[110zTfizoj1Vj5_IidZ3
@@ -907,14 +907,14 @@ R14
 R12
 R13
 Eomsp_alu
-Z63 w1585912524
+Z71 w1585912524
 R2
 R3
 R4
 R5
 R0
-Z64 8../../../../rtl/vhdl/core/omsp/omsp_alu.vhd
-Z65 F../../../../rtl/vhdl/core/omsp/omsp_alu.vhd
+Z72 8../../../../rtl/vhdl/core/omsp/omsp_alu.vhd
+Z73 F../../../../rtl/vhdl/core/omsp/omsp_alu.vhd
 l0
 L47
 VKUcLJ@dg:lPhaATz5JbLe1
@@ -950,12 +950,12 @@ R14
 R12
 R13
 Eomsp_and_gate
-R15
+R30
 R4
 R5
 R0
-Z66 8../../../../rtl/vhdl/core/fuse/omsp_and_gate.vhd
-Z67 F../../../../rtl/vhdl/core/fuse/omsp_and_gate.vhd
+Z74 8../../../../rtl/vhdl/core/fuse/omsp_and_gate.vhd
+Z75 F../../../../rtl/vhdl/core/fuse/omsp_and_gate.vhd
 l0
 L45
 VcTejjCMgY=Z^CQ@jk9AlE1
@@ -989,12 +989,12 @@ R14
 R12
 R13
 Eomsp_clock_gate
-R15
+R30
 R4
 R5
 R0
-Z68 8../../../../rtl/vhdl/core/fuse/omsp_clock_gate.vhd
-Z69 F../../../../rtl/vhdl/core/fuse/omsp_clock_gate.vhd
+Z76 8../../../../rtl/vhdl/core/fuse/omsp_clock_gate.vhd
+Z77 F../../../../rtl/vhdl/core/fuse/omsp_clock_gate.vhd
 l0
 L45
 Va0:`mgOla4B@B[;mSKT3Y0
@@ -1028,12 +1028,12 @@ R14
 R12
 R13
 Eomsp_clock_mux
-R15
+R30
 R4
 R5
 R0
-Z70 8../../../../rtl/vhdl/core/fuse/omsp_clock_mux.vhd
-Z71 F../../../../rtl/vhdl/core/fuse/omsp_clock_mux.vhd
+Z78 8../../../../rtl/vhdl/core/fuse/omsp_clock_mux.vhd
+Z79 F../../../../rtl/vhdl/core/fuse/omsp_clock_mux.vhd
 l0
 L45
 VJHJ<Q4R904T6L]gI0_R1l1
@@ -1067,14 +1067,14 @@ R14
 R12
 R13
 Eomsp_dbg_hwbrk
-Z72 w1585912617
+Z80 w1585912617
 R2
 R3
 R4
 R5
 R0
-Z73 8../../../../rtl/vhdl/core/omsp/omsp_dbg_hwbrk.vhd
-Z74 F../../../../rtl/vhdl/core/omsp/omsp_dbg_hwbrk.vhd
+Z81 8../../../../rtl/vhdl/core/omsp/omsp_dbg_hwbrk.vhd
+Z82 F../../../../rtl/vhdl/core/omsp/omsp_dbg_hwbrk.vhd
 l0
 L47
 V;Pg=kHZhZncm5ZbaIg?`z2
@@ -1110,14 +1110,14 @@ R14
 R12
 R13
 Eomsp_dbg_i2c
-R15
+R30
 R2
 R3
 R4
 R5
 R0
-Z75 8../../../../rtl/vhdl/core/omsp/omsp_dbg_i2c.vhd
-Z76 F../../../../rtl/vhdl/core/omsp/omsp_dbg_i2c.vhd
+Z83 8../../../../rtl/vhdl/core/omsp/omsp_dbg_i2c.vhd
+Z84 F../../../../rtl/vhdl/core/omsp/omsp_dbg_i2c.vhd
 l0
 L47
 VJ5[o]Aj4dWfN2ML0APAH50
@@ -1153,14 +1153,14 @@ R14
 R12
 R13
 Eomsp_dbg_uart
-Z77 w1585912643
+Z85 w1585912643
 R2
 R3
 R4
 R5
 R0
-Z78 8../../../../rtl/vhdl/core/omsp/omsp_dbg_uart.vhd
-Z79 F../../../../rtl/vhdl/core/omsp/omsp_dbg_uart.vhd
+Z86 8../../../../rtl/vhdl/core/omsp/omsp_dbg_uart.vhd
+Z87 F../../../../rtl/vhdl/core/omsp/omsp_dbg_uart.vhd
 l0
 L47
 VzL[g33KOfTS>hJZBBLicS2
@@ -1196,14 +1196,14 @@ R14
 R12
 R13
 Eomsp_interrupt
-Z80 w1585912669
+Z88 w1585912669
 R2
 R3
 R4
 R5
 R0
-Z81 8../../../../rtl/vhdl/core/omsp/omsp_interrupt.vhd
-Z82 F../../../../rtl/vhdl/core/omsp/omsp_interrupt.vhd
+Z89 8../../../../rtl/vhdl/core/omsp/omsp_interrupt.vhd
+Z90 F../../../../rtl/vhdl/core/omsp/omsp_interrupt.vhd
 l0
 L47
 V_B>?7kdUJUkaEJJgaOedd0
@@ -1239,14 +1239,14 @@ R14
 R12
 R13
 Eomsp_register_file
-Z83 w1585912752
+Z91 w1585912752
 R2
 R3
 R4
 R5
 R0
-Z84 8../../../../rtl/vhdl/core/omsp/omsp_register_file.vhd
-Z85 F../../../../rtl/vhdl/core/omsp/omsp_register_file.vhd
+Z92 8../../../../rtl/vhdl/core/omsp/omsp_register_file.vhd
+Z93 F../../../../rtl/vhdl/core/omsp/omsp_register_file.vhd
 l0
 L47
 V3V6hOaB9Y5eOLlQc@UMAF3
@@ -1282,12 +1282,12 @@ R14
 R12
 R13
 Eomsp_scan_mux
-R15
+R30
 R4
 R5
 R0
-Z86 8../../../../rtl/vhdl/core/fuse/omsp_scan_mux.vhd
-Z87 F../../../../rtl/vhdl/core/fuse/omsp_scan_mux.vhd
+Z94 8../../../../rtl/vhdl/core/fuse/omsp_scan_mux.vhd
+Z95 F../../../../rtl/vhdl/core/fuse/omsp_scan_mux.vhd
 l0
 L45
 V[D2]cVLn6]Y2lbb:[k__k2
@@ -1321,14 +1321,14 @@ R14
 R12
 R13
 Eomsp_state_machine
-R15
+R30
 R2
 R3
 R4
 R5
 R0
-Z88 8../../../../rtl/vhdl/core/omsp/omsp_state_machine.vhd
-Z89 F../../../../rtl/vhdl/core/omsp/omsp_state_machine.vhd
+Z96 8../../../../rtl/vhdl/core/omsp/omsp_state_machine.vhd
+Z97 F../../../../rtl/vhdl/core/omsp/omsp_state_machine.vhd
 l0
 L47
 V`3J[[[[oYPdjG[<J60I0Z2
@@ -1364,12 +1364,12 @@ R14
 R12
 R13
 Eomsp_sync_cell
-R15
+R30
 R4
 R5
 R0
-Z90 8../../../../rtl/vhdl/core/fuse/omsp_sync_cell.vhd
-Z91 F../../../../rtl/vhdl/core/fuse/omsp_sync_cell.vhd
+Z98 8../../../../rtl/vhdl/core/fuse/omsp_sync_cell.vhd
+Z99 F../../../../rtl/vhdl/core/fuse/omsp_sync_cell.vhd
 l0
 L45
 V?z=<>8a5F]4]VE_2R3_Rl1
@@ -1403,12 +1403,12 @@ R14
 R12
 R13
 Eomsp_sync_reset
-R15
+R30
 R4
 R5
 R0
-Z92 8../../../../rtl/vhdl/core/fuse/omsp_sync_reset.vhd
-Z93 F../../../../rtl/vhdl/core/fuse/omsp_sync_reset.vhd
+Z100 8../../../../rtl/vhdl/core/fuse/omsp_sync_reset.vhd
+Z101 F../../../../rtl/vhdl/core/fuse/omsp_sync_reset.vhd
 l0
 L45
 VWE7MnnNBadg7SNfSR[0[g3
@@ -1442,14 +1442,14 @@ R14
 R12
 R13
 Eomsp_wakeup_cell
-R15
+R30
 R3
 R2
 R4
 R5
 R0
-Z94 8../../../../rtl/vhdl/core/fuse/omsp_wakeup_cell.vhd
-Z95 F../../../../rtl/vhdl/core/fuse/omsp_wakeup_cell.vhd
+Z102 8../../../../rtl/vhdl/core/fuse/omsp_wakeup_cell.vhd
+Z103 F../../../../rtl/vhdl/core/fuse/omsp_wakeup_cell.vhd
 l0
 L46
 VzhDNSXmX2aR`LkX;LWD_C2
@@ -1485,14 +1485,14 @@ R14
 R12
 R13
 Esfr
-Z96 w1585912406
+Z104 w1585912406
 R2
 R3
 R4
 R5
 R0
-Z97 8../../../../rtl/vhdl/core/main/SFR.vhd
-Z98 F../../../../rtl/vhdl/core/main/SFR.vhd
+Z105 8../../../../rtl/vhdl/core/main/SFR.vhd
+Z106 F../../../../rtl/vhdl/core/main/SFR.vhd
 l0
 L47
 VmUgzRX`@0:SiCj6YSdzb_2
@@ -1528,14 +1528,14 @@ R14
 R12
 R13
 Et_watchdog
-Z99 w1585912426
+Z107 w1585912426
 R2
 R3
 R4
 R5
 R0
-Z100 8../../../../rtl/vhdl/core/main/T_WATCHDOG.vhd
-Z101 F../../../../rtl/vhdl/core/main/T_WATCHDOG.vhd
+Z108 8../../../../rtl/vhdl/core/main/T_WATCHDOG.vhd
+Z109 F../../../../rtl/vhdl/core/main/T_WATCHDOG.vhd
 l0
 L47
 VgiXnbGK;6cGUPH3h`ZaeX0
@@ -1571,14 +1571,14 @@ R14
 R12
 R13
 Etemplate_08
-Z102 w1585920720
+Z110 w1585920720
 R2
 R3
 R4
 R5
 R0
-Z103 8../../../../rtl/vhdl/core/main/TEMPLATE_08.vhd
-Z104 F../../../../rtl/vhdl/core/main/TEMPLATE_08.vhd
+Z111 8../../../../rtl/vhdl/core/main/TEMPLATE_08.vhd
+Z112 F../../../../rtl/vhdl/core/main/TEMPLATE_08.vhd
 l0
 L47
 V@7C7nI]QISzali:LJcDaW2
@@ -1614,14 +1614,14 @@ R14
 R12
 R13
 Etemplate_16
-Z105 w1585920721
+Z113 w1585920721
 R2
 R3
 R4
 R5
 R0
-Z106 8../../../../rtl/vhdl/core/main/TEMPLATE_16.vhd
-Z107 F../../../../rtl/vhdl/core/main/TEMPLATE_16.vhd
+Z114 8../../../../rtl/vhdl/core/main/TEMPLATE_16.vhd
+Z115 F../../../../rtl/vhdl/core/main/TEMPLATE_16.vhd
 l0
 L47
 VGkiP::8WK4eO:5>Z:7D2n3
@@ -1657,14 +1657,14 @@ R14
 R12
 R13
 Euart
-Z108 w1585912468
+Z116 w1585912468
 R2
 R3
 R4
 R5
 R0
-Z109 8../../../../rtl/vhdl/core/main/UART.vhd
-Z110 F../../../../rtl/vhdl/core/main/UART.vhd
+Z117 8../../../../rtl/vhdl/core/main/UART.vhd
+Z118 F../../../../rtl/vhdl/core/main/UART.vhd
 l0
 L47
 Vz8`do35`Ig9@cK5JZV@dY0

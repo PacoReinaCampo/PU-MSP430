@@ -92,7 +92,7 @@ architecture omsp_dbg_hwbrk_ARQ of omsp_dbg_hwbrk is
 
   --BRK_ADDR0 Register
   signal brk_addr_wr : std_logic_vector (1 downto 0);
-  signal brk_addr    : M_01_15;
+  signal brk_addr    : std_logic_matrix (1 downto 0)(15 downto 0);
 
   --2.DATA OUTPUT GENERATION
   signal brk_ctl_rd   : std_logic_vector (15 downto 0);
@@ -162,7 +162,7 @@ begin
     end process;
 
     brk_stat_full <= "00" & brk_stat;
-    brk_pnd       <= or_reduce(brk_stat);
+    brk_pnd       <= reduce_or(brk_stat);
 
     --BRK_ADDR0 Register
     brk_addr_wr(0) <= brk_reg_wr(BRK_ADDR0C);
@@ -218,13 +218,13 @@ begin
     i_addr1_rd <= equ_i_addr1 and brk_ctl(BRK_I_EN);
     i_range_rd <= equ_i_range and brk_ctl(BRK_I_EN);
 
-    d_addr0_wr <= equ_d_addr0 and not brk_ctl(BRK_I_EN) and (or_reduce(eu_mb_wr));
-    d_addr1_wr <= equ_d_addr1 and not brk_ctl(BRK_I_EN) and (or_reduce(eu_mb_wr));
-    d_range_wr <= equ_d_range and not brk_ctl(BRK_I_EN) and (or_reduce(eu_mb_wr));
+    d_addr0_wr <= equ_d_addr0 and not brk_ctl(BRK_I_EN) and (reduce_or(eu_mb_wr));
+    d_addr1_wr <= equ_d_addr1 and not brk_ctl(BRK_I_EN) and (reduce_or(eu_mb_wr));
+    d_range_wr <= equ_d_range and not brk_ctl(BRK_I_EN) and (reduce_or(eu_mb_wr));
 
-    d_addr0_rd <= equ_d_addr0 and not brk_ctl(BRK_I_EN) and not (or_reduce(eu_mb_wr));
-    d_addr1_rd <= equ_d_addr1 and not brk_ctl(BRK_I_EN) and not (or_reduce(eu_mb_wr));
-    d_range_rd <= equ_d_range and not brk_ctl(BRK_I_EN) and not (or_reduce(eu_mb_wr));
+    d_addr0_rd <= equ_d_addr0 and not brk_ctl(BRK_I_EN) and not (reduce_or(eu_mb_wr));
+    d_addr1_rd <= equ_d_addr1 and not brk_ctl(BRK_I_EN) and not (reduce_or(eu_mb_wr));
+    d_range_rd <= equ_d_range and not brk_ctl(BRK_I_EN) and not (reduce_or(eu_mb_wr));
 
     addr0_rd_set <= brk_ctl(BRK_MODE_RD) and (d_addr0_rd or i_addr0_rd);
     addr0_wr_set <= brk_ctl(BRK_MODE_WR) and d_addr0_wr;
@@ -233,6 +233,6 @@ begin
     range_rd_set <= brk_ctl(BRK_MODE_RD) and (d_range_rd or i_range_rd);
     range_wr_set <= brk_ctl(BRK_MODE_WR) and d_range_wr;
 
-    brk_halt <= brk_ctl(BRK_EN) and or_reduce(brk_stat_set);
+    brk_halt <= brk_ctl(BRK_EN) and reduce_or(brk_stat_set);
   end block BREAKPOINT_WATCHPOINT_GENERATION;
 end omsp_dbg_hwbrk_ARQ;

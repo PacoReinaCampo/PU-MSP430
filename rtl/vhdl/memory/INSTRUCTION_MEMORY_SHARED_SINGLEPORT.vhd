@@ -57,15 +57,9 @@ end INSTRUCTION_MEMORY_SHARED_SINGLEPORT;
 architecture INSTRUCTION_MEMORY_SHARED_SINGLEPORT_ARQ of INSTRUCTION_MEMORY_SHARED_SINGLEPORT is
   --////////////////////////////////////////////////////////////////
   --
-  -- Types
-  --
-  type type_mem_array is array (2**PMEM_MSB-1 downto 0) of std_logic_vector(15 downto 0);  --memory array
-
-  --////////////////////////////////////////////////////////////////
-  --
   -- Variables
   --
-  signal mem_array : type_mem_array;  --memory array
+  signal mem_array : std_logic_matrix (2**PMEM_MSB-1 downto 0)(15 downto 0);  --memory array
 
 begin
   --////////////////////////////////////////////////////////////////

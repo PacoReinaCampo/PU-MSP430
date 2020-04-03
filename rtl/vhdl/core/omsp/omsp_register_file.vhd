@@ -107,7 +107,7 @@ architecture omsp_register_file_ARQ of omsp_register_file is
 
   --1.2.SPECIAL REGISTERS (R1/R2/R3)
   --R0: Program counter
-  signal re : M_03_15;
+  signal re : std_logic_matrix (3 downto 0)(15 downto 0);
 
   --R1: Stack pointer
   signal mclk_r1 : std_logic;
@@ -127,7 +127,7 @@ architecture omsp_register_file_ARQ of omsp_register_file is
   signal cpuoff_mask : std_logic_vector (15 downto 0);
   signal oscoff_mask : std_logic_vector (15 downto 0);
   signal r2_mask     : std_logic_vector (15 downto 0);
-  signal scg_mask    : M_01_15;
+  signal scg_mask    : std_logic_matrix (1 downto 0)(15 downto 0);
 
   --R3: Constant generator
   signal mclk_r3 : std_logic;
@@ -135,7 +135,7 @@ architecture omsp_register_file_ARQ of omsp_register_file is
   signal r3_wr   : std_logic;
 
   --1.3.GENERAL PURPOSE REGISTERS (R4...R15)
-  signal rg      : M_15_15;
+  signal rg      : std_logic_matrix (15 downto 0)(15 downto 0);
   signal mclk_rg : std_logic_vector (15 downto 4);
   signal rg_en   : std_logic_vector (15 downto 4);
   signal rg_inc  : std_logic_vector (15 downto 4);
@@ -201,7 +201,7 @@ begin
     r2_n   <= alu_stat(2)                 when alu_stat_wr(2) = '1' else reg_dest_val_in(2);
     r2_nxt <= reg_dest_val_in(7 downto 3) when r2_wr = '1'          else re(2)(7 downto 3);
     r2_v   <= alu_stat(3)                 when alu_stat_wr(3) = '1' else reg_dest_val_in(8);
-    r2_en  <= or_reduce(alu_stat_wr) or r2_wr or reg_sr_clr;
+    r2_en  <= reduce_or(alu_stat_wr) or r2_wr or reg_sr_clr;
 
     clock_gate_r2 : omsp_clock_gate
       port map (

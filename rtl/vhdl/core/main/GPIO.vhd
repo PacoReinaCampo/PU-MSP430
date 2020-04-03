@@ -317,7 +317,7 @@ begin
     --1.4.      Read/Write probes
     reg_lo_write_g <= per_we(0) and reg_sel_g;
     reg_hi_write_g <= per_we(1) and reg_sel_g;
-    reg_read_g     <= not or_reduce(per_we) and reg_sel_g;
+    reg_read_g     <= not reduce_or(per_we) and reg_sel_g;
 
     --1.5.      Read/Write vectors
     reg_hi_wr_g <= reg_dec_g and (0 to DEC_SZ_G - 1 => reg_hi_write_g);

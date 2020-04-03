@@ -45,15 +45,39 @@ use IEEE.NUMERIC_STD .all;
 
 package MSP430_PACK is
 
-  function or_reduce (vector    : std_logic_vector) return std_logic;
-  function to_stdlogic (entrada : boolean) return std_logic;
+  function reduce_or (reduce_or_in : std_logic_vector) return std_logic;
+  function to_stdlogic (input : boolean) return std_logic;
 
-  type M_01_07 is array (1 downto 0) of std_logic_vector (7 downto 0);
-  type M_01_15 is array (1 downto 0) of std_logic_vector (15 downto 0);
-  type M_03_04 is array (3 downto 0) of std_logic_vector (4 downto 0);
-  type M_03_15 is array (3 downto 0) of std_logic_vector (15 downto 0);
-  type M_04_03 is array (4 downto 0) of std_logic_vector (3 downto 0);
-  type M_15_15 is array (15 downto 4) of std_logic_vector (15 downto 0);
+  type std_logic_matrix is array (natural range <>) of std_logic_vector;
+  type std_logic_3array is array (natural range <>) of std_logic_matrix;
+  type std_logic_4array is array (natural range <>) of std_logic_3array;
+  type std_logic_5array is array (natural range <>) of std_logic_4array;
+  type std_logic_6array is array (natural range <>) of std_logic_5array;
+  type std_logic_7array is array (natural range <>) of std_logic_6array;
+  type std_logic_8array is array (natural range <>) of std_logic_7array;
+  type std_logic_9array is array (natural range <>) of std_logic_8array;
+
+  type xy_std_logic        is array (natural range <>, natural range <>) of std_logic;
+  type xy_std_logic_vector is array (natural range <>, natural range <>) of std_logic_vector;
+  type xy_std_logic_matrix is array (natural range <>, natural range <>) of std_logic_matrix;
+  type xy_std_logic_3array is array (natural range <>, natural range <>) of std_logic_3array;
+  type xy_std_logic_4array is array (natural range <>, natural range <>) of std_logic_4array;
+  type xy_std_logic_5array is array (natural range <>, natural range <>) of std_logic_5array;
+  type xy_std_logic_6array is array (natural range <>, natural range <>) of std_logic_6array;
+  type xy_std_logic_7array is array (natural range <>, natural range <>) of std_logic_7array;
+  type xy_std_logic_8array is array (natural range <>, natural range <>) of std_logic_8array;
+  type xy_std_logic_9array is array (natural range <>, natural range <>) of std_logic_9array;
+
+  type xyz_std_logic        is array (natural range <>, natural range <>, natural range <>) of std_logic;
+  type xyz_std_logic_vector is array (natural range <>, natural range <>, natural range <>) of std_logic_vector;
+  type xyz_std_logic_matrix is array (natural range <>, natural range <>, natural range <>) of std_logic_matrix;
+  type xyz_std_logic_3array is array (natural range <>, natural range <>, natural range <>) of std_logic_3array;
+  type xyz_std_logic_4array is array (natural range <>, natural range <>, natural range <>) of std_logic_4array;
+  type xyz_std_logic_5array is array (natural range <>, natural range <>, natural range <>) of std_logic_5array;
+  type xyz_std_logic_6array is array (natural range <>, natural range <>, natural range <>) of std_logic_6array;
+  type xyz_std_logic_7array is array (natural range <>, natural range <>, natural range <>) of std_logic_7array;
+  type xyz_std_logic_8array is array (natural range <>, natural range <>, natural range <>) of std_logic_8array;
+  type xyz_std_logic_9array is array (natural range <>, natural range <>, natural range <>) of std_logic_9array;
 
   constant INST_NR  : integer := 0;
   constant TOTAL_NR : integer := 0;
@@ -259,7 +283,7 @@ package MSP430_PACK is
   constant E_IRQ_3 : std_logic_vector (3 downto 0) := X"3";
   constant E_IRQ_4 : std_logic_vector (3 downto 0) := X"4";
 
-  constant E_IRQ : M_04_03 := (X"4", X"3", X"0", X"1", X"2");
+  constant E_IRQ : std_logic_matrix(4 downto 0)(3 downto 0) := (X"4", X"3", X"0", X"1", X"2");
 
   --ALU control signals
   constant ALU_SRC_INV : integer := 0;
@@ -569,18 +593,22 @@ end MSP430_PACK;
 
 package body MSP430_PACK is
 
-  function or_reduce (vector : std_logic_vector) return std_logic is
-    variable RESULT : std_logic := '0';
+  function reduce_or (
+    reduce_or_in : std_logic_vector
+    ) return std_logic is
+    variable reduce_or_out : std_logic := '0';
   begin
-    for i in vector'range loop
-      RESULT := RESULT or vector(i);
+    for i in reduce_or_in'range loop
+      reduce_or_out := reduce_or_out or reduce_or_in(i);
     end loop;
-    return RESULT;
-  end or_reduce;
+    return reduce_or_out;
+  end reduce_or;
 
-  function to_stdlogic (entrada : boolean) return std_logic is
+  function to_stdlogic (
+    input : boolean
+    ) return std_logic is
   begin
-    if entrada then
+    if input then
       return('1');
     else
       return('0');

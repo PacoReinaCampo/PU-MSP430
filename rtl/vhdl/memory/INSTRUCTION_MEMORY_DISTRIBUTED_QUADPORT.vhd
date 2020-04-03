@@ -77,16 +77,12 @@ architecture INSTRUCTION_MEMORY_DISTRIBUTED_QUADPORT_ARQ of INSTRUCTION_MEMORY_D
 
   constant ni : integer := 4;
 
-  type M_NI1_15 is array (ni - 1 downto 0) of std_logic_vector (15 downto 0);
-  type M_NI1_PMEM_MSB1 is array (ni - 1 downto 0) of std_logic_vector (PMEM_MSB - 1 downto 0);
-  type M_NI1_1 is array (ni - 1 downto 0) of std_logic_vector (1 downto 0);
-
-  signal dout   : M_NI1_15;
-  signal addr   : M_NI1_PMEM_MSB1;
+  signal dout   : std_logic_matrix (ni - 1 downto 0)(15 downto 0);
+  signal addr   : std_logic_matrix (ni - 1 downto 0)(PMEM_MSB - 1 downto 0);
   signal not_en : std_logic_vector (ni - 1 downto 0);
   signal clk    : std_logic_vector (ni - 1 downto 0);
-  signal din    : M_NI1_15;
-  signal not_we : M_NI1_1;
+  signal din    : std_logic_matrix (ni - 1 downto 0)(15 downto 0);
+  signal not_we : std_logic_matrix (ni - 1 downto 0)(1 downto 0);
 
   component INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT
     port (
