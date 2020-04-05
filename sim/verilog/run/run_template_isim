@@ -1,5 +1,5 @@
 #!/bin/bash
-export PATH=$PATH:/opt/Xilinx/14.7/ISE_DS/ISE/bin/lin64
+export XILINX=/opt/Xilinx/14.7/ISE_DS/ISE
 export PLATFORM=lin64
 export PATH=$PATH:${XILINX}/bin/${PLATFORM}
 export LD_LIBRARY_PATH=${XILINX}/lib/${PLATFORM}
