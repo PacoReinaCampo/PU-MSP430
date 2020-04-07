@@ -39,64 +39,53 @@
 --   Francisco Javier Reina Campo <frareicam@gmail.com>
 --
 
-library IEEE;
-use IEEE.STD_LOGIC_1164 .all;
-use IEEE.NUMERIC_STD .all;
-use WORK.MSP430_PACK .all;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
-entity INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT is
+entity ram is
+generic (
+
+  constant ADDR_MSB : integer := 6;  -- MSB of the address bus
+  constant MEM_SIZE : integer := 256;  -- Memory size in bytes
+);
   port (
-    clka  : in  std_logic;
-    ena   : in  std_logic;
-    wea   : in  std_logic_vector(1 downto 0);
-    addra : in  std_logic_vector(PMEM_MSB - 1 downto 0);
-    dina  : in  std_logic_vector(15 downto 0);
-    douta : out std_logic_vector(15 downto 0));
-end INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT;
+  -- OUTPUTs
+    ram_dout : out std_logic_vector(15 downto 0);  -- RAM data output
 
-architecture INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT_ARQ of INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT is
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Variables
-  --
-  signal mem_array : std_logic_matrix(2**PMEM_MSB-1 downto 0)(15 downto 0);  --memory array
+  -- INPUTs
+    ram_addr : in std_logic_vector(ADDR_MSB downto 0);  -- RAM address
+    ram_cen : in std_logic;  -- RAM chip enable (low active)
+    ram_clk : in std_logic;  -- RAM clock
+    ram_din : in std_logic_vector(15 downto 0);  -- RAM data input
+    ram_wen : in std_logic_vector(1 downto 0)   -- RAM write enable (low active)
+  );
+end ram;
+
+architecture RTL of ram is
+
+  signal mem : std_logic_matrix((MEM_SIZE/2)-1 downto 0)(15 downto 0);
+  signal ram_addr_reg : std_logic_vector(ADDR_MSB downto 0);
+  signal mem_val : std_logic_vector(15 downto 0);
 
 begin
-  --////////////////////////////////////////////////////////////////
-  --
-  -- Module Body
-  --
+  mem_val <= mem(ram_addr);
 
-  --write side
-  generating_0 : for i in 0 to (16+7)/8 - 1 generate
-    generating_1 : if (i*8+8 > 16) generate
-      processing_0 : process (clka)
-      begin
-        if (rising_edge(clka)) then
-          if (wea(0) ='0' and ena ='0' and to_unsigned(i, PMEM_MSB) = unsigned(addra)) then
-            mem_array(i)(15 downto i*8) <= dina(15 downto i*8);
-          end if;
-        end if;
-      end process;
-    end generate;
-    generating_2 : if (i*8+8 <= 16) generate
-      processing_1 : process (clka)
-      begin
-        if (rising_edge(clka)) then
-          if (wea(0) ='0' and ena ='0' and to_unsigned(i, PMEM_MSB) = unsigned(addra)) then
-            mem_array(i)(i*8 downto i) <= dina(i*8 downto i);
-          end if;
-        end if;
-      end process;
-    end generate;
-  end generate;
-
-  --read side
-  --per Altera's recommendations; avoids bypass logic
-  processing_2 : process (clka)
+  processing_0 : process (ram_clk)
   begin
-    if (rising_edge(clka)) then
-      douta <= mem_array(to_integer(unsigned(addra)));
+    if (rising_edge(ram_clk)) then
+      if (not ram_cen and ram_addr < (MEM_SIZE/2)) then
+        if (ram_wen = "00") then
+          mem(ram_addr) <= ram_din;
+        elsif (ram_wen = "01") then
+          mem(ram_addr) <= (ram_din(15 downto 8) & mem_val(7 downto 0));
+        elsif (ram_wen = "10") then
+          mem(ram_addr) <= (mem_val(15 downto 8) & ram_din(7 downto 0));
+        end if;
+        ram_addr_reg <= ram_addr;
+      end if;
     end if;
   end process;
-end INSTRUCTION_MEMORY_DISTRIBUTED_SINGLEPORT_ARQ;
+
+  ram_dout <= mem(ram_addr_reg);
+end RTL;
