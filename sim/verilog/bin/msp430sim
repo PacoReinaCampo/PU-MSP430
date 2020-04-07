@@ -64,6 +64,7 @@ linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
 submit_verilog=../src/submit_verilog.f;
 submit_vhdl=../src/submit_vhdl.f;
+submit=../src/submit.f;
 if [ $OMSP_SIMULATOR == "isim" ]; then
     submit_verilog=../src/submit.prj;
 fi
@@ -147,4 +148,4 @@ echo "Convert IHEX file to Verilog MEMH format..."
 
 # Start verilog simulation
 echo "Start Verilog simulation..."
-../bin/rtlsim.sh    stimulus.v pmem.mem $submit_verilog $submit_vhdl
+../bin/rtlsim.sh    stimulus.v pmem.mem $submit_verilog $submit_vhdl $submit

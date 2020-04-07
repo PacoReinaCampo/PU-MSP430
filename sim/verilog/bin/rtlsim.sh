@@ -34,7 +34,7 @@
 ###############################################################################
 #                            Parameter Check                                  #
 ###############################################################################
-EXPECTED_ARGS=4
+EXPECTED_ARGS=5
 if [ $# -ne $EXPECTED_ARGS ]; then
   echo "ERROR    : wrong number of arguments"
   echo "USAGE    : rtlsim.sh <verilog stimulus file> <memory file> <submit file>"
@@ -73,9 +73,9 @@ if [ "${OMSP_SIMULATOR:-iverilog}" = iverilog ]; then
     NODUMP=${OMSP_NODUMP-0}
     if [ $NODUMP -eq 1 ]
       then
-        iverilog -o simv -c $3 -D NODUMP
+        iverilog -o simv -c $5 -D NODUMP
       else
-        iverilog -o simv -c $3
+        iverilog -o simv -c $5
     fi
     
 if [ `uname -o` = "Cygwin" ]

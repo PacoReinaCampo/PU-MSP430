@@ -39,34 +39,51 @@
  *   Francisco Javier Reina Campo <frareicam@gmail.com>
  */
 
-../../../rtl/vhdl/pkg/MSP430_PACK.vhd
++incdir+../../../rtl/verilog/pkg/
+
+//=============================================================================
+// Testbench related
+//=============================================================================
+
++incdir+../../../bench/verilog/
+
+../../../bench/verilog/tb_openMSP430.v
+../../../bench/verilog/ram.v
+../../../bench/verilog/io_cell.v
+../../../bench/verilog/msp_debug.v
+
 
 //=============================================================================
 // CPU
 //=============================================================================
 
-../../../rtl/vhdl/core/fuse/omsp_and_gate.vhd
-../../../rtl/vhdl/core/fuse/omsp_clock_gate.vhd
-../../../rtl/vhdl/core/fuse/omsp_clock_mux.vhd
-../../../rtl/vhdl/core/fuse/omsp_scan_mux.vhd
-../../../rtl/vhdl/core/fuse/omsp_sync_cell.vhd
-../../../rtl/vhdl/core/fuse/omsp_sync_reset.vhd
-../../../rtl/vhdl/core/fuse/omsp_wakeup_cell.vhd
+../../../rtl/verilog/core/fuse/omsp_and_gate.v
+../../../rtl/verilog/core/fuse/omsp_clock_gate.v
+../../../rtl/verilog/core/fuse/omsp_clock_mux.v
+../../../rtl/verilog/core/fuse/omsp_scan_mux.v
+../../../rtl/verilog/core/fuse/omsp_sync_cell.v
+../../../rtl/verilog/core/fuse/omsp_sync_reset.v
+../../../rtl/verilog/core/fuse/omsp_wakeup_cell.v
 
-../../../rtl/vhdl/core/omsp/omsp_alu.vhd
-../../../rtl/vhdl/core/omsp/omsp_dbg_hwbrk.vhd
-../../../rtl/vhdl/core/omsp/omsp_dbg_i2c.vhd
-../../../rtl/vhdl/core/omsp/omsp_dbg_uart.vhd
-../../../rtl/vhdl/core/omsp/omsp_interrupt.vhd
-../../../rtl/vhdl/core/omsp/omsp_register_file.vhd
-../../../rtl/vhdl/core/omsp/omsp_state_machine.vhd
+../../../rtl/verilog/core/omsp/omsp_alu.v
+../../../rtl/verilog/core/omsp/omsp_dbg_hwbrk.v
+../../../rtl/verilog/core/omsp/omsp_dbg_i2c.v
+../../../rtl/verilog/core/omsp/omsp_dbg_uart.v
+../../../rtl/verilog/core/omsp/omsp_register_file.v
 
-../../../rtl/vhdl/core/main/BCM.vhd
-../../../rtl/vhdl/core/main/DBG.vhd
-../../../rtl/vhdl/core/main/EXECUTION.vhd
-../../../rtl/vhdl/core/main/GPIO.vhd
-../../../rtl/vhdl/core/main/MEMORY.vhd
-../../../rtl/vhdl/core/main/MULTIPLIER.vhd
-../../../rtl/vhdl/core/main/TEMPLATE_08.vhd
-../../../rtl/vhdl/core/main/TEMPLATE_16.vhd
-../../../rtl/vhdl/core/main/UART.vhd
+../../../rtl/verilog/core/main/BCM.v
+../../../rtl/verilog/core/main/DBG.v
+../../../rtl/verilog/core/main/EXECUTION.v
+../../../rtl/verilog/core/main/GPIO.v
+../../../rtl/verilog/core/main/MEMORY.v
+../../../rtl/verilog/core/main/MULTIPLIER.v
+../../../rtl/verilog/core/main/TEMPLATE_08.v
+../../../rtl/verilog/core/main/TEMPLATE_16.v
+../../../rtl/verilog/core/main/UART.v
+
+../../../rtl/verilog/core/main/FRONTEND.v
+../../../rtl/verilog/core/main/SFR.v
+../../../rtl/verilog/core/main/T_A.v
+../../../rtl/verilog/core/main/T_WATCHDOG.v
+
+../../../rtl/verilog/core/MSP430_CORE.v

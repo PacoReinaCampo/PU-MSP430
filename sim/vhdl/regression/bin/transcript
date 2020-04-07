@@ -1,5 +1,5 @@
 # vsim -c -do "run.do" work.MSP430_TESTBENCH 
-# Start time: 16:58:57 on Apr 03,2020
+# Start time: 05:33:13 on Apr 07,2020
 # Loading std.standard
 # Loading std.textio(body)
 # Loading ieee.std_logic_1164(body)
@@ -38,5 +38,5 @@
 # ** Warning: Design size of 14915 statements exceeds ModelSim-Intel FPGA Starter Edition recommended capacity.
 # Expect performance to be adversely affected.
 # do run.do
-# End time: 16:58:58 on Apr 03,2020, Elapsed time: 0:00:01
+# End time: 05:33:13 on Apr 07,2020, Elapsed time: 0:00:00
 # Errors: 0, Warnings: 1
