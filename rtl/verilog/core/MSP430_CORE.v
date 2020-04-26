@@ -42,263 +42,178 @@
 `include "openMSP430_defines.v"
 `endif
 
-module MSP430_CORE (
+module MSP430_CORE #(
+  parameter AW = 16,
+  parameter DW = 16,
 
-// OUTPUTs
-    r0,
-    r1,
-    r2,
-    r3,
-    r4,
-    r5,
-    r6,
-    r7,
-    r8,
-    r9,
-    r10,
-    r11,
-    r12,
-    r13,
-    r14,
-    r15,
+  parameter INST_NR  = 8'h00,  // Current oMSP instance number     (for multicore systems)
+  parameter TOTAL_NR = 8'h00   // Total number of oMSP instances-1 (for multicore systems)
+)
+  (
+    output               dbg_clk,
+    output               dbg_rst,
+    output               irq_detect,
+    output               nmi_detect,
 
-    dbg_clk,
-    dbg_rst,
-    irq_detect,
-    nmi_detect,
+    output         [2:0] i_state,
+    output         [3:0] e_state,
+    output               decode,
+    output      [DW-1:0] ir,
+    output         [5:0] irq_num,
+    output      [DW-1:0] pc,
 
-    i_state,
-    e_state,
-    decode,
-    ir,
-    irq_num,
-    pc,
+    output               nodiv_smclk,
 
-    nodiv_smclk,
+    output               aclk,              // ASIC ONLY: ACLK
+    output               aclk_en,           // FPGA ONLY: ACLK enable
+    output               dbg_freeze,        // Freeze peripherals
+    output               dbg_i2c_sda_out,   // Debug interface: I2C SDA OUT
+    output               dbg_uart_txd,      // Debug interface: UART TXD
+    output               dco_enable,        // ASIC ONLY: Fast oscillator enable
+    output               dco_wkup,          // ASIC ONLY: Fast oscillator wake-up (asynchronous)
+    output [`IRQ_NR-3:0] irq_acc,           // Interrupt request accepted (one-hot signal)
+    output               lfxt_enable,       // ASIC ONLY: Low frequency oscillator enable
+    output               lfxt_wkup,         // ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
+    output               mclk,              // Main system clock
+    output               puc_rst,           // Main system reset
+    output               smclk,             // ASIC ONLY: SMCLK
+    output               smclk_en,          // FPGA ONLY: SMCLK enable
 
-    aclk,                               // ASIC ONLY: ACLK
-    aclk_en,                            // FPGA ONLY: ACLK enable
-    dbg_freeze,                         // Freeze peripherals
-    dbg_i2c_sda_out,                    // Debug interface: I2C SDA OUT
-    dbg_uart_txd,                       // Debug interface: UART TXD
-    dco_enable,                         // ASIC ONLY: Fast oscillator enable
-    dco_wkup,                           // ASIC ONLY: Fast oscillator wake-up (asynchronous)
-    dmem_addr,                          // Data Memory address
-    dmem_cen,                           // Data Memory chip enable (low active)
-    dmem_din,                           // Data Memory data input
-    dmem_wen,                           // Data Memory write enable (low active)
-    irq_acc,                            // Interrupt request accepted (one-hot signal)
-    lfxt_enable,                        // ASIC ONLY: Low frequency oscillator enable
-    lfxt_wkup,                          // ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
-    mclk,                               // Main system clock
-    per_addr,                           // Peripheral address
-    per_din,                            // Peripheral data input
-    per_we,                             // Peripheral write enable (high active)
-    per_en,                             // Peripheral enable (high active)
-    pmem_addr,                          // Program Memory address
-    pmem_cen,                           // Program Memory chip enable (low active)
-    pmem_din,                           // Program Memory data input (optional)
-    pmem_wen,                           // Program Memory write enable (low active) (optional)
-    puc_rst,                            // Main system reset
-    smclk,                              // ASIC ONLY: SMCLK
-    smclk_en,                           // FPGA ONLY: SMCLK enable
+    input                cpu_en,            // Enable CPU code execution (asynchronous and non-glitchy)
+    input                dbg_en,            // Debug interface enable (asynchronous and non-glitchy)
+    input          [6:0] dbg_i2c_addr,      // Debug interface: I2C Address
+    input          [6:0] dbg_i2c_broadcast, // Debug interface: I2C Broadcast Address (for multicore systems)
+    input                dbg_i2c_scl,       // Debug interface: I2C SCL
+    input                dbg_i2c_sda_in,    // Debug interface: I2C SDA IN
+    input                dbg_uart_rxd,      // Debug interface: UART RXD (asynchronous)
+    input                dco_clk,           // Fast oscillator (fast clock)
+    input  [`IRQ_NR-3:0] irq,               // Maskable interrupts (14, 30 or 62)
+    input                lfxt_clk,          // Low frequency oscillator (typ 32kHz)
+    input                nmi,               // Non-maskable interrupt (asynchronous and non-glitchy)
+    input                reset_n,           // Reset Pin (active low, asynchronous and non-glitchy)
+    input                scan_enable,       // ASIC ONLY: Scan enable (active during scan shifting)
+    input                scan_mode,         // ASIC ONLY: Scan mode
+    input                wkup,              // ASIC ONLY: System Wake-up (asynchronous and non-glitchy)
 
-// INPUTs
-    cpu_en,                             // Enable CPU code execution (asynchronous and non-glitchy)
-    dbg_en,                             // Debug interface enable (asynchronous and non-glitchy)
-    dbg_i2c_addr,                       // Debug interface: I2C Address
-    dbg_i2c_broadcast,                  // Debug interface: I2C Broadcast Address (for multicore systems)
-    dbg_i2c_scl,                        // Debug interface: I2C SCL
-    dbg_i2c_sda_in,                     // Debug interface: I2C SDA IN
-    dbg_uart_rxd,                       // Debug interface: UART RXD (asynchronous)
-    dco_clk,                            // Fast oscillator (fast clock)
-    dmem_dout,                          // Data Memory data output
-    irq,                                // Maskable interrupts
-    lfxt_clk,                           // Low frequency oscillator (typ 32kHz)
-    nmi,                                // Non-maskable interrupt (asynchronous)
-    per_dout,                           // Peripheral data output
-    pmem_dout,                          // Program Memory data output
-    reset_n,                            // Reset Pin (low active, asynchronous and non-glitchy)
-    scan_enable,                        // ASIC ONLY: Scan enable (active during scan shifting)
-    scan_mode,                          // ASIC ONLY: Scan mode
-    wkup                                // ASIC ONLY: System Wake-up (asynchronous and non-glitchy)
-);
-
-// PARAMETERs
-//============
-parameter            INST_NR  = 8'h00;  // Current oMSP instance number     (for multicore systems)
-parameter            TOTAL_NR = 8'h00;  // Total number of oMSP instances-1 (for multicore systems)
-
-// OUTPUTs
-//============
-output        [15:0] r0;
-output        [15:0] r1;
-output        [15:0] r2;
-output        [15:0] r3;
-output        [15:0] r4;
-output        [15:0] r5;
-output        [15:0] r6;
-output        [15:0] r7;
-output        [15:0] r8;
-output        [15:0] r9;
-output        [15:0] r10;
-output        [15:0] r11;
-output        [15:0] r12;
-output        [15:0] r13;
-output        [15:0] r14;
-output        [15:0] r15;
-
-output               dbg_clk;
-output               dbg_rst;
-output               irq_detect;
-output               nmi_detect;
-
-output         [2:0] i_state;
-output         [3:0] e_state;
-output               decode;
-output        [15:0] ir;
-output         [5:0] irq_num;
-output        [15:0] pc;
-
-output               nodiv_smclk;
-
-output               aclk;              // ASIC ONLY: ACLK
-output               aclk_en;           // FPGA ONLY: ACLK enable
-output               dbg_freeze;        // Freeze peripherals
-output               dbg_i2c_sda_out;   // Debug interface: I2C SDA OUT
-output               dbg_uart_txd;      // Debug interface: UART TXD
-output               dco_enable;        // ASIC ONLY: Fast oscillator enable
-output               dco_wkup;          // ASIC ONLY: Fast oscillator wake-up (asynchronous)
-output [`DMEM_MSB:0] dmem_addr;         // Data Memory address
-output               dmem_cen;          // Data Memory chip enable (low active)
-output        [15:0] dmem_din;          // Data Memory data input
-output         [1:0] dmem_wen;          // Data Memory write enable (low active)
-output [`IRQ_NR-3:0] irq_acc;           // Interrupt request accepted (one-hot signal)
-output               lfxt_enable;       // ASIC ONLY: Low frequency oscillator enable
-output               lfxt_wkup;         // ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
-output               mclk;              // Main system clock
-output        [13:0] per_addr;          // Peripheral address
-output        [15:0] per_din;           // Peripheral data input
-output         [1:0] per_we;            // Peripheral write enable (high active)
-output               per_en;            // Peripheral enable (high active)
-output [`PMEM_MSB:0] pmem_addr;         // Program Memory address
-output               pmem_cen;          // Program Memory chip enable (low active)
-output        [15:0] pmem_din;          // Program Memory data input (optional)
-output         [1:0] pmem_wen;          // Program Memory write enable (low active) (optional)
-output               puc_rst;           // Main system reset
-output               smclk;             // ASIC ONLY: SMCLK
-output               smclk_en;          // FPGA ONLY: SMCLK enable
+    output [`PMEM_MSB:0] pmem_addr,         // Program Memory address
+    output               pmem_cen,          // Program Memory chip enable (low active)
+    output      [DW-1:0] pmem_din,          // Program Memory data input (optional)
+    output         [1:0] pmem_wen,          // Program Memory write enable (low active) (optional)
+    input       [DW-1:0] pmem_dout,         // Program Memory data output
 
 
-// INPUTs
-//============
-input                cpu_en;            // Enable CPU code execution (asynchronous and non-glitchy)
-input                dbg_en;            // Debug interface enable (asynchronous and non-glitchy)
-input          [6:0] dbg_i2c_addr;      // Debug interface: I2C Address
-input          [6:0] dbg_i2c_broadcast; // Debug interface: I2C Broadcast Address (for multicore systems)
-input                dbg_i2c_scl;       // Debug interface: I2C SCL
-input                dbg_i2c_sda_in;    // Debug interface: I2C SDA IN
-input                dbg_uart_rxd;      // Debug interface: UART RXD (asynchronous)
-input                dco_clk;           // Fast oscillator (fast clock)
-input         [15:0] dmem_dout;         // Data Memory data output
-input  [`IRQ_NR-3:0] irq;               // Maskable interrupts (14, 30 or 62)
-input                lfxt_clk;          // Low frequency oscillator (typ 32kHz)
-input  	             nmi;               // Non-maskable interrupt (asynchronous and non-glitchy)
-input         [15:0] per_dout;          // Peripheral data output
-input         [15:0] pmem_dout;         // Program Memory data output
-input                reset_n;           // Reset Pin (active low, asynchronous and non-glitchy)
-input                scan_enable;       // ASIC ONLY: Scan enable (active during scan shifting)
-input                scan_mode;         // ASIC ONLY: Scan mode
-input                wkup;              // ASIC ONLY: System Wake-up (asynchronous and non-glitchy)
+    output [`DMEM_MSB:0] dmem_addr,         // Data Memory address
+    output               dmem_cen,          // Data Memory chip enable (low active)
+    output      [DW-1:0] dmem_din,          // Data Memory data input
+    output         [1:0] dmem_wen,          // Data Memory write enable (low active)
+    input       [DW-1:0] dmem_dout,         // Data Memory data output
 
+    output        [13:0] per_addr,          // Peripheral address
+    output      [DW-1:0] per_din,           // Peripheral data input
+    output         [1:0] per_we,            // Peripheral write enable (high active)
+    output               per_en,            // Peripheral enable (high active)
+    input       [DW-1:0] per_dout,          // Peripheral data output
 
+    output      [DW-1:0] r0,
+    output      [DW-1:0] r1,
+    output      [DW-1:0] r2,
+    output      [DW-1:0] r3,
+    output      [DW-1:0] r4,
+    output      [DW-1:0] r5,
+    output      [DW-1:0] r6,
+    output      [DW-1:0] r7,
+    output      [DW-1:0] r8,
+    output      [DW-1:0] r9,
+    output      [DW-1:0] r10,
+    output      [DW-1:0] r11,
+    output      [DW-1:0] r12,
+    output      [DW-1:0] r13,
+    output      [DW-1:0] r14,
+    output      [DW-1:0] r15
+  );
 
-//=============================================================================
-// 1)  INTERNAL WIRES/REGISTERS/PARAMETERS DECLARATION
-//=============================================================================
+  //=============================================================================
+  // 1)  INTERNAL WIRES/REGISTERS/PARAMETERS DECLARATION
+  //=============================================================================
+  wire          [7:0] inst_ad;
+  wire          [7:0] inst_as;
+  wire         [11:0] inst_alu;
+  wire                inst_bw;
+  wire                inst_irq_rst;
+  wire                inst_mov;
+  wire       [DW-1:0] inst_dest;
+  wire       [DW-1:0] inst_dext;
+  wire       [DW-1:0] inst_sext;
+  wire          [7:0] inst_so;
+  wire       [DW-1:0] inst_src;
+  wire          [2:0] inst_type;
+  wire          [7:0] inst_jmp;
+  wire                exec_done;
+  wire                decode_noirq;
+  wire                cpu_en_s;
+  wire                cpuoff;
+  wire                oscoff;
+  wire                scg0;
+  wire                scg1;
+  wire                por;
+  wire                gie;
+  wire                mclk_enable;
+  wire                mclk_wkup;
+  wire         [31:0] cpu_id;
+  wire          [7:0] cpu_nr_inst  = INST_NR;
+  wire          [7:0] cpu_nr_total = TOTAL_NR;
 
-wire          [7:0] inst_ad;
-wire          [7:0] inst_as;
-wire         [11:0] inst_alu;
-wire                inst_bw;
-wire                inst_irq_rst;
-wire                inst_mov;
-wire         [15:0] inst_dest;
-wire         [15:0] inst_dext;
-wire         [15:0] inst_sext;
-wire          [7:0] inst_so;
-wire         [15:0] inst_src;
-wire          [2:0] inst_type;
-wire          [7:0] inst_jmp;
-wire                exec_done;
-wire                decode_noirq;
-wire                cpu_en_s;
-wire                cpuoff;
-wire                oscoff;
-wire                scg0;
-wire                scg1;
-wire                por;
-wire                gie;
-wire                mclk_enable;
-wire                mclk_wkup;
-wire         [31:0] cpu_id;
-wire          [7:0] cpu_nr_inst  = INST_NR;
-wire          [7:0] cpu_nr_total = TOTAL_NR;
-   
-wire         [15:0] eu_mab;
-wire         [15:0] eu_mdb_in;
-wire         [15:0] eu_mdb_out;
-wire          [1:0] eu_mb_wr;
-wire                eu_mb_en;
-wire         [15:0] fe_mab;
-wire         [15:0] fe_mdb_in;
-wire                fe_mb_en;
-wire                fe_pmem_wait;
+  wire       [DW-1:0] eu_mab;
+  wire       [DW-1:0] eu_mdb_in;
+  wire       [DW-1:0] eu_mdb_out;
+  wire          [1:0] eu_mb_wr;
+  wire                eu_mb_en;
+  wire       [DW-1:0] fe_mab;
+  wire       [DW-1:0] fe_mdb_in;
+  wire                fe_mb_en;
+  wire                fe_pmem_wait;
 
-wire                pc_sw_wr;
-wire         [15:0] pc_sw;
-wire         [15:0] pc_nxt;
+  wire                pc_sw_wr;
+  wire       [DW-1:0] pc_sw;
+  wire       [DW-1:0] pc_nxt;
 
-wire                nmi_acc;
-wire                nmi_pnd;
-wire                nmi_wkup;
+  wire                nmi_acc;
+  wire                nmi_pnd;
+  wire                nmi_wkup;
 
-wire                wdtie;
-wire                wdtnmies;
-wire                wdtifg;
-wire                wdt_irq;
-wire                wdt_wkup;
-wire                wdt_reset;
-wire                wdtifg_sw_clr;
-wire                wdtifg_sw_set;
+  wire                wdtie;
+  wire                wdtnmies;
+  wire                wdtifg;
+  wire                wdt_irq;
+  wire                wdt_wkup;
+  wire                wdt_reset;
+  wire                wdtifg_sw_clr;
+  wire                wdtifg_sw_set;
 
-wire                dbg_en_s;
-wire                dbg_halt_st;
-wire                dbg_halt_cmd;
-wire                dbg_mem_en;
-wire                dbg_reg_wr;
-wire                dbg_cpu_reset;
-wire         [15:0] dbg_mem_addr;
-wire         [15:0] dbg_mem_dout;
-wire         [15:0] dbg_mem_din;
-wire         [15:0] dbg_reg_din;
-wire          [1:0] dbg_mem_wr;
-wire                puc_pnd_set;
-   
-wire         [15:0] per_dout_or;
-wire         [15:0] per_dout_sfr;
-wire         [15:0] per_dout_wdog;
-wire         [15:0] per_dout_mpy;
-wire         [15:0] per_dout_clk;
+  wire                dbg_en_s;
+  wire                dbg_halt_st;
+  wire                dbg_halt_cmd;
+  wire                dbg_mem_en;
+  wire                dbg_reg_wr;
+  wire                dbg_cpu_reset;
+  wire       [DW-1:0] dbg_mem_addr;
+  wire       [DW-1:0] dbg_mem_dout;
+  wire       [DW-1:0] dbg_mem_din;
+  wire       [DW-1:0] dbg_reg_din;
+  wire          [1:0] dbg_mem_wr;
+  wire                puc_pnd_set;
 
-   
-//=============================================================================
-// 2)  GLOBAL CLOCK & RESET MANAGEMENT
-//=============================================================================
+  wire       [DW-1:0] per_dout_or;
+  wire       [DW-1:0] per_dout_sfr;
+  wire       [DW-1:0] per_dout_wdog;
+  wire       [DW-1:0] per_dout_mpy;
+  wire       [DW-1:0] per_dout_clk;
 
-BCM BCM_0 (
-
-// OUTPUTs
+  //=============================================================================
+  // 2)  GLOBAL CLOCK & RESET MANAGEMENT
+  //=============================================================================
+  BCM BCM_0 (
+    // OUTPUTs
     .aclk         (aclk),          // ACLK
     .aclk_en      (aclk_en),       // ACLK enablex
     .cpu_en_s     (cpu_en_s),      // Enable CPU code execution (synchronous)
@@ -316,10 +231,10 @@ BCM BCM_0 (
     .puc_rst      (puc_rst),       // Main system reset
     .smclk        (smclk),         // SMCLK
     .smclk_en     (smclk_en),      // SMCLK enable
- 
+
     .nodiv_smclk  (nodiv_smclk),
-            
-// INPUTs
+
+    // INPUTs
     .cpu_en       (cpu_en),        // Enable CPU code execution (asynchronous)
     .cpuoff       (cpuoff),        // Turns off the CPU
     .dbg_cpu_reset(dbg_cpu_reset), // Reset CPU from debug interface
@@ -339,16 +254,13 @@ BCM BCM_0 (
     .scg0         (scg0),          // System clock generator 1. Turns off the DCO
     .scg1         (scg1),          // System clock generator 1. Turns off the SMCLK
     .wdt_reset    (wdt_reset)      // Watchdog-timer reset
-);
+  );
 
-   
-//=============================================================================
-// 3)  FRONTEND (<=> FETCH & DECODE)
-//=============================================================================
-
-FRONTEND FRONTEND_0 (
-
-// OUTPUTs
+  //=============================================================================
+  // 3)  FRONTEND (<=> FETCH & DECODE)
+  //=============================================================================
+  FRONTEND FRONTEND_0 (
+    // OUTPUTs
     .dbg_halt_st  (dbg_halt_st),   // Halt/Run status from CPU
     .decode_noirq (decode_noirq),  // Frontend decode instruction
     .e_state      (e_state),       // Execution state
@@ -380,8 +292,8 @@ FRONTEND FRONTEND_0 (
     .i_state      (i_state),
     .irq_num      (irq_num),
     .ir           (ir),
-                      
-// INPUTs
+
+    // INPUTs
     .cpu_en_s     (cpu_en_s),      // Enable CPU code execution (synchronous)
     .cpuoff       (cpuoff),        // Turns off the CPU
     .dbg_halt_cmd (dbg_halt_cmd),  // Halt CPU command
@@ -400,26 +312,23 @@ FRONTEND FRONTEND_0 (
     .wdt_irq      (wdt_irq),       // Watchdog-timer interrupt
     .wdt_wkup     (wdt_wkup),      // Watchdog Wakeup
     .wkup         (wkup)           // System Wake-up (asynchronous)
-);
+  );
 
-assign nmi_detect    = nmi_pnd;
+  assign nmi_detect    = nmi_pnd;
 
-
-//=============================================================================
-// 4)  EXECUTION UNIT
-//=============================================================================
-
-EXECUTION EXECUTION_0 (
-
-// OUTPUTs
+  //=============================================================================
+  // 4)  EXECUTION UNIT
+  //=============================================================================
+  EXECUTION EXECUTION_0 (
+    // OUTPUTs
     .r0           (r0),
     .r1           (r1),
     .r2           (r2),
     .r3           (r3),
     .r4           (r4),
     .r5           (r5),
-    .r6		      (r6),
-    .r7		      (r7),
+    .r6           (r6),
+    .r7           (r7),
     .r8           (r8),
     .r9           (r9),
     .r10          (r10),
@@ -441,7 +350,7 @@ EXECUTION EXECUTION_0 (
     .scg0         (scg0),          // System clock generator 1. Turns off the DCO
     .scg1         (scg1),          // System clock generator 1. Turns off the SMCLK
 
-// INPUTs
+    // INPUTs
     .dbg_halt_st  (dbg_halt_st),   // Halt/Run status from CPU
     .dbg_mem_dout (dbg_mem_dout),  // Debug unit data output
     .dbg_reg_wr   (dbg_reg_wr),    // Debug unit CPU register write
@@ -467,16 +376,13 @@ EXECUTION EXECUTION_0 (
     .pc_nxt       (pc_nxt),        // Next PC value (for CALL & IRQ)
     .puc_rst      (puc_rst),       // Main system reset
     .scan_enable  (scan_enable)    // Scan enable (active during scan shifting)
-);
+  );
 
-
-//=============================================================================
-// 5)  MEMORY BACKBONE
-//=============================================================================
-
-MEMORY MEMORY_0 (
-
-// OUTPUTs
+  //=============================================================================
+  // 5)  MEMORY BACKBONE
+  //=============================================================================
+  MEMORY MEMORY_0 (
+    // OUTPUTs
     .dbg_mem_din  (dbg_mem_din),   // Debug unit Memory data input
     .dmem_addr    (dmem_addr),     // Data Memory address
     .dmem_cen     (dmem_cen),      // Data Memory chip enable (low active)
@@ -493,8 +399,8 @@ MEMORY MEMORY_0 (
     .pmem_cen     (pmem_cen),      // Program Memory chip enable (low active)
     .pmem_din     (pmem_din),      // Program Memory data input (optional)
     .pmem_wen     (pmem_wen),      // Program Memory write enable (low active) (optional)
-                             
-// INPUTs
+
+    // INPUTs
     .dbg_halt_st  (dbg_halt_st),   // Halt/Run status from CPU
     .dbg_mem_addr (dbg_mem_addr),  // Debug address for rd/wr access
     .dbg_mem_dout (dbg_mem_dout),  // Debug unit data output
@@ -512,15 +418,13 @@ MEMORY MEMORY_0 (
     .pmem_dout    (pmem_dout),     // Program Memory data output
     .puc_rst      (puc_rst),       // Main system reset
     .scan_enable  (scan_enable)    // Scan enable (active during scan shifting)
-);
+  );
 
-
-//=============================================================================
-// 6)  SPECIAL FUNCTION REGISTERS
-//=============================================================================
-SFR SFR_0 (
-
-// OUTPUTs
+  //=============================================================================
+  // 6)  SPECIAL FUNCTION REGISTERS
+  //=============================================================================
+  SFR SFR_0 (
+    // OUTPUTs
     .cpu_id       (cpu_id),        // CPU ID
     .nmi_pnd      (nmi_pnd),       // NMI Pending
     .nmi_wkup     (nmi_wkup),      // NMI Wakeup
@@ -528,8 +432,8 @@ SFR SFR_0 (
     .wdtie        (wdtie),         // Watchdog-timer interrupt enable
     .wdtifg_sw_clr(wdtifg_sw_clr), // Watchdog-timer interrupt flag software clear
     .wdtifg_sw_set(wdtifg_sw_set), // Watchdog-timer interrupt flag software set
-                             
-// INPUTs
+
+    // INPUTs
     .cpu_nr_inst  (cpu_nr_inst),   // Current oMSP instance number
     .cpu_nr_total (cpu_nr_total),  // Total number of oMSP instances-1
     .mclk         (mclk),          // Main system clock
@@ -543,24 +447,22 @@ SFR SFR_0 (
     .scan_mode    (scan_mode),     // Scan mode
     .wdtifg       (wdtifg),        // Watchdog-timer interrupt flag
     .wdtnmies     (wdtnmies)       // Watchdog-timer NMI edge selection
-);
+  );
 
-
-//=============================================================================
-// 7)  WATCHDOG TIMER
-//=============================================================================
-`ifdef WATCHDOG
-T_WATCHDOG T_WATCHDOG_0 (
-
-// OUTPUTs
+  //=============================================================================
+  // 7)  WATCHDOG TIMER
+  //=============================================================================
+  `ifdef WATCHDOG
+  T_WATCHDOG T_WATCHDOG_0 (
+    // OUTPUTs
     .per_dout       (per_dout_wdog),      // Peripheral data output
     .wdt_irq        (wdt_irq),            // Watchdog-timer interrupt
     .wdt_reset      (wdt_reset),          // Watchdog-timer reset
     .wdt_wkup       (wdt_wkup),           // Watchdog Wakeup
     .wdtifg         (wdtifg),             // Watchdog-timer interrupt flag
     .wdtnmies       (wdtnmies),           // Watchdog-timer NMI edge selection
-                             
-// INPUTs
+
+    // INPUTs
     .aclk           (aclk),               // ACLK
     .aclk_en        (aclk_en),            // ACLK enable
     .dbg_freeze     (dbg_freeze),         // Freeze Watchdog counter
@@ -579,27 +481,25 @@ T_WATCHDOG T_WATCHDOG_0 (
     .wdtifg_irq_clr (irq_acc[`IRQ_NR-6]), // Clear Watchdog-timer interrupt flag
     .wdtifg_sw_clr  (wdtifg_sw_clr),      // Watchdog-timer interrupt flag software clear
     .wdtifg_sw_set  (wdtifg_sw_set)       // Watchdog-timer interrupt flag software set
-);
-`else
-assign per_dout_wdog = 16'h0000;
-assign wdt_irq       =  1'b0;
-assign wdt_reset     =  1'b0;
-assign wdt_wkup      =  1'b0;
-assign wdtifg        =  1'b0;
-assign wdtnmies      =  1'b0;
-`endif
+  );
+  `else
+  assign per_dout_wdog = 16'h0000;
+  assign wdt_irq       =  1'b0;
+  assign wdt_reset     =  1'b0;
+  assign wdt_wkup      =  1'b0;
+  assign wdtifg        =  1'b0;
+  assign wdtnmies      =  1'b0;
+  `endif
 
-
-//=============================================================================
-// 8)  HARDWARE MULTIPLIER
-//=============================================================================
-`ifdef MULTIPLYING
-MULTIPLIER MULTIPLIER_0 (
-
-// OUTPUTs
+  //=============================================================================
+  // 8)  HARDWARE MULTIPLIER
+  //=============================================================================
+  `ifdef MULTIPLYING
+  MULTIPLIER MULTIPLIER_0 (
+    // OUTPUTs
     .per_dout     (per_dout_mpy),  // Peripheral data output
-                             
-// INPUTs
+
+    // INPUTs
     .mclk         (mclk),          // Main system clock
     .per_addr     (per_addr),      // Peripheral address
     .per_din      (per_din),       // Peripheral data input
@@ -607,30 +507,26 @@ MULTIPLIER MULTIPLIER_0 (
     .per_we       (per_we),        // Peripheral write enable (high active)
     .puc_rst      (puc_rst),       // Main system reset
     .scan_enable  (scan_enable)    // Scan enable (active during scan shifting)
-);
-`else
-assign per_dout_mpy = 16'h0000;
-`endif
-   
-//=============================================================================
-// 9)  PERIPHERALS' OUTPUT BUS
-//=============================================================================
+  );
+  `else
+  assign per_dout_mpy = 16'h0000;
+  `endif
 
-assign  per_dout_or  =  per_dout      |
-                        per_dout_clk  |
-                        per_dout_sfr  |
-                        per_dout_wdog |
-                        per_dout_mpy;
+  //=============================================================================
+  // 9)  PERIPHERALS' OUTPUT BUS
+  //=============================================================================
+  assign  per_dout_or  =  per_dout      |
+                          per_dout_clk  |
+                          per_dout_sfr  |
+                          per_dout_wdog |
+                          per_dout_mpy;
 
-   
-//=============================================================================
-// 10)  DEBUG INTERFACE
-//=============================================================================
-
-`ifdef DBG_EN
-DBG DBG_0 (
-
-// OUTPUTs
+  //=============================================================================
+  // 10)  DEBUG INTERFACE
+  //=============================================================================
+  `ifdef DBG_EN
+  DBG DBG_0 (
+    // OUTPUTs
     .dbg_cpu_reset     (dbg_cpu_reset),     // Reset CPU from debug interface
     .dbg_freeze        (dbg_freeze),        // Freeze peripherals
     .dbg_halt_cmd      (dbg_halt_cmd),      // Halt CPU command
@@ -641,8 +537,8 @@ DBG DBG_0 (
     .dbg_mem_wr        (dbg_mem_wr),        // Debug unit memory write
     .dbg_reg_wr        (dbg_reg_wr),        // Debug unit CPU register write
     .dbg_uart_txd      (dbg_uart_txd),      // Debug interface: UART TXD
-                             
-// INPUTs
+
+    // INPUTs
     .cpu_en_s          (cpu_en_s),          // Enable CPU code execution (synchronous)
     .cpu_id            (cpu_id),            // CPU ID
     .cpu_nr_inst       (cpu_nr_inst),       // Current oMSP instance number
@@ -665,22 +561,19 @@ DBG DBG_0 (
     .fe_mdb_in         (fe_mdb_in),         // Frontend Memory data bus input
     .pc                (pc),                // Program counter
     .puc_pnd_set       (puc_pnd_set)        // PUC pending set for the serial debug interface
-);
-
-`else
-assign dbg_cpu_reset   =  1'b0;
-assign dbg_freeze      =  ~cpu_en_s;
-assign dbg_halt_cmd    =  1'b0;
-assign dbg_i2c_sda_out =  1'b1;
-assign dbg_mem_addr    = 16'h0000;
-assign dbg_mem_dout    = 16'h0000;
-assign dbg_mem_en      =  1'b0;
-assign dbg_mem_wr      =  2'b00;
-assign dbg_reg_wr      =  1'b0;
-assign dbg_uart_txd    =  1'b1;
-`endif
-
-   
+  );
+  `else
+  assign dbg_cpu_reset   =  1'b0;
+  assign dbg_freeze      =  ~cpu_en_s;
+  assign dbg_halt_cmd    =  1'b0;
+  assign dbg_i2c_sda_out =  1'b1;
+  assign dbg_mem_addr    = 16'h0000;
+  assign dbg_mem_dout    = 16'h0000;
+  assign dbg_mem_en      =  1'b0;
+  assign dbg_mem_wr      =  2'b00;
+  assign dbg_reg_wr      =  1'b0;
+  assign dbg_uart_txd    =  1'b1;
+  `endif
 endmodule // MSP430_CORE
 
 `ifdef OMSP_NO_INCLUDE
