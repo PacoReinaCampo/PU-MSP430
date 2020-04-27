@@ -44,101 +44,53 @@
 
 module  omsp_register_file (
   // OUTPUTs
-  r0,
-  r1,
-  r2,
-  r3,
-  r4,
-  r5,
-  r6,
-  r7,
-  r8,
-  r9,
-  r10,
-  r11,
-  r12,
-  r13,
-  r14,
-  r15,
+  output       [15:0] r0,
+  output reg   [15:0] r1,
+  output reg   [15:0] r2,
+  output reg   [15:0] r3,
+  output reg   [15:0] r4,
+  output reg   [15:0] r5,
+  output reg   [15:0] r6,
+  output reg   [15:0] r7,
+  output reg   [15:0] r8,
+  output reg   [15:0] r9,
+  output reg   [15:0] r10,
+  output reg   [15:0] r11,
+  output reg   [15:0] r12,
+  output reg   [15:0] r13,
+  output reg   [15:0] r14,
+  output reg   [15:0] r15,
 
-  cpuoff,                       // Turns off the CPU
-  gie,                          // General interrupt enable
-  oscoff,                       // Turns off LFXT1 clock input
-  pc_sw,                        // Program counter software value
-  pc_sw_wr,                     // Program counter software write
-  reg_dest,                     // Selected register destination content
-  reg_src,                      // Selected register source content
-  scg0,                         // System clock generator 1. Turns off the DCO
-  scg1,                         // System clock generator 1. Turns off the SMCLK
-  status,                       // R2 Status {V,N,Z,C}
+  output              cpuoff,       // Turns off the CPU
+  output              gie,          // General interrupt enable
+  output              oscoff,       // Turns off LFXT1 clock input
+  output       [15:0] pc_sw,        // Program counter software value
+  output              pc_sw_wr,     // Program counter software write
+  output       [15:0] reg_dest,     // Selected register destination content
+  output       [15:0] reg_src,      // Selected register source content
+  output              scg0,         // System clock generator 1. Turns off the DCO
+  output              scg1,         // System clock generator 1. Turns off the SMCLK
+  output        [3:0] status,       // R2 Status {V,N,Z,C}
 
   // INPUTs
-  alu_stat,                     // ALU Status {V,N,Z,C}
-  alu_stat_wr,                  // ALU Status write {V,N,Z,C}
-  inst_bw,                      // Decoded Inst: byte width
-  inst_dest,                    // Register destination selection
-  inst_src,                     // Register source selection
-  mclk,                         // Main system clock
-  pc,                           // Program counter
-  puc_rst,                      // Main system reset
-  reg_dest_val,                 // Selected register destination value
-  reg_dest_wr,                  // Write selected register destination
-  reg_pc_call,                  // Trigger PC update for a CALL instruction
-  reg_sp_val,                   // Stack Pointer next value
-  reg_sp_wr,                    // Stack Pointer write
-  reg_sr_wr,                    // Status register update for RETI instruction
-  reg_sr_clr,                   // Status register clear for interrupts
-  reg_incr,                     // Increment source register
-  scan_enable                   // Scan enable (active during scan shifting)
+  input         [3:0] alu_stat,     // ALU Status {V,N,Z,C}
+  input         [3:0] alu_stat_wr,  // ALU Status write {V,N,Z,C}
+  input               inst_bw,      // Decoded Inst: byte width
+  input        [15:0] inst_dest,    // Register destination selection
+  input        [15:0] inst_src,     // Register source selection
+  input               mclk,         // Main system clock
+  input        [15:0] pc,           // Program counter
+  input               puc_rst,      // Main system reset
+  input        [15:0] reg_dest_val, // Selected register destination value
+  input               reg_dest_wr,  // Write selected register destination
+  input               reg_pc_call,  // Trigger PC update for a CALL instruction
+  input        [15:0] reg_sp_val,   // Stack Pointer next value
+  input               reg_sp_wr,    // Stack Pointer write
+  input               reg_sr_wr,    // Status register update for RETI instruction
+  input               reg_sr_clr,   // Status register clear for interrupts
+  input               reg_incr,     // Increment source register
+  input               scan_enable   // Scan enable (active during scan shifting)
 );
-
-  // OUTPUTs
-  output       [15:0] r0;
-  output       [15:0] r1;
-  output       [15:0] r2;
-  output       [15:0] r3;
-  output       [15:0] r4;
-  output       [15:0] r5;
-  output       [15:0] r6;
-  output       [15:0] r7;
-  output       [15:0] r8;
-  output       [15:0] r9;
-  output       [15:0] r10;
-  output       [15:0] r11;
-  output       [15:0] r12;
-  output       [15:0] r13;
-  output       [15:0] r14;
-  output       [15:0] r15;
-
-  output              cpuoff;       // Turns off the CPU
-  output              gie;          // General interrupt enable
-  output              oscoff;       // Turns off LFXT1 clock input
-  output       [15:0] pc_sw;        // Program counter software value
-  output              pc_sw_wr;     // Program counter software write
-  output       [15:0] reg_dest;     // Selected register destination content
-  output       [15:0] reg_src;      // Selected register source content
-  output              scg0;         // System clock generator 1. Turns off the DCO
-  output              scg1;         // System clock generator 1. Turns off the SMCLK
-  output        [3:0] status;       // R2 Status {V,N,Z,C}
-
-  // INPUTs
-  input         [3:0] alu_stat;     // ALU Status {V,N,Z,C}
-  input         [3:0] alu_stat_wr;  // ALU Status write {V,N,Z,C}
-  input               inst_bw;      // Decoded Inst: byte width
-  input        [15:0] inst_dest;    // Register destination selection
-  input        [15:0] inst_src;     // Register source selection
-  input               mclk;         // Main system clock
-  input        [15:0] pc;           // Program counter
-  input               puc_rst;      // Main system reset
-  input        [15:0] reg_dest_val; // Selected register destination value
-  input               reg_dest_wr;  // Write selected register destination
-  input               reg_pc_call;  // Trigger PC update for a CALL instruction
-  input        [15:0] reg_sp_val;   // Stack Pointer next value
-  input               reg_sp_wr;    // Stack Pointer write
-  input               reg_sr_wr;    // Status register update for RETI instruction
-  input               reg_sr_clr;   // Status register clear for interrupts
-  input               reg_incr;     // Increment source register
-  input               scan_enable;  // Scan enable (active during scan shifting)
 
   //=============================================================================
   // 1)  AUTOINCREMENT UNIT
@@ -162,14 +114,13 @@ module  omsp_register_file (
   // R0: Program counter
   //---------------------
 
-  wire [15:0] r0       = pc;
+  assign      r0       = pc;
 
-  wire [15:0] pc_sw    = reg_dest_val_in;
-  wire        pc_sw_wr = (inst_dest[0] & reg_dest_wr) | reg_pc_call;
+  assign      pc_sw    = reg_dest_val_in;
+  assign      pc_sw_wr = (inst_dest[0] & reg_dest_wr) | reg_pc_call;
 
   // R1: Stack pointer
   //-------------------
-  reg [15:0] r1;
   wire       r1_wr  = inst_dest[1] & reg_dest_wr;
   wire       r1_inc = inst_src_in[1]  & reg_incr;
 
@@ -200,7 +151,6 @@ module  omsp_register_file (
 
   // R2: Status register
   //---------------------
-  reg  [15:0] r2;
   wire        r2_wr  = (inst_dest[2] & reg_dest_wr) | reg_sr_wr;
 
   `ifdef CLOCK_GATING                                                              //      -- WITH CLOCK GATING --
@@ -290,7 +240,6 @@ module  omsp_register_file (
   // Note: the auto-increment feature is not implemented for R3
   //       because the @R3+ addressing mode is used for constant
   //       generation (#-1).
-  reg [15:0] r3;
   wire       r3_wr  = inst_dest[3] & reg_dest_wr;
 
   `ifdef CLOCK_GATING
@@ -322,7 +271,6 @@ module  omsp_register_file (
 
   // R4
   //------------
-  reg [15:0] r4;
   wire       r4_wr  = inst_dest[4] & reg_dest_wr;
   wire       r4_inc = inst_src_in[4]  & reg_incr;
 
@@ -352,7 +300,6 @@ module  omsp_register_file (
 
   // R5
   //------------
-  reg [15:0] r5;
   wire       r5_wr  = inst_dest[5] & reg_dest_wr;
   wire       r5_inc = inst_src_in[5]  & reg_incr;
 
@@ -382,7 +329,6 @@ module  omsp_register_file (
 
   // R6
   //------------
-  reg [15:0] r6;
   wire       r6_wr  = inst_dest[6] & reg_dest_wr;
   wire       r6_inc = inst_src_in[6]  & reg_incr;
 
@@ -412,7 +358,6 @@ module  omsp_register_file (
 
   // R7
   //------------
-  reg [15:0] r7;
   wire       r7_wr  = inst_dest[7] & reg_dest_wr;
   wire       r7_inc = inst_src_in[7]  & reg_incr;
 
@@ -442,7 +387,6 @@ module  omsp_register_file (
 
   // R8
   //------------
-  reg [15:0] r8;
   wire       r8_wr  = inst_dest[8] & reg_dest_wr;
   wire       r8_inc = inst_src_in[8]  & reg_incr;
 
@@ -472,7 +416,6 @@ module  omsp_register_file (
 
   // R9
   //------------
-  reg [15:0] r9;
   wire       r9_wr  = inst_dest[9] & reg_dest_wr;
   wire       r9_inc = inst_src_in[9]  & reg_incr;
 
@@ -502,7 +445,6 @@ module  omsp_register_file (
 
   // R10
   //------------
-  reg [15:0] r10;
   wire       r10_wr  = inst_dest[10] & reg_dest_wr;
   wire       r10_inc = inst_src_in[10]  & reg_incr;
 
@@ -532,7 +474,6 @@ module  omsp_register_file (
 
   // R11
   //------------
-  reg [15:0] r11;
   wire       r11_wr  = inst_dest[11] & reg_dest_wr;
   wire       r11_inc = inst_src_in[11]  & reg_incr;
 
@@ -562,7 +503,6 @@ module  omsp_register_file (
 
   // R12
   //------------
-  reg [15:0] r12;
   wire       r12_wr  = inst_dest[12] & reg_dest_wr;
   wire       r12_inc = inst_src_in[12]  & reg_incr;
 
@@ -592,7 +532,6 @@ module  omsp_register_file (
 
   // R13
   //------------
-  reg [15:0] r13;
   wire       r13_wr  = inst_dest[13] & reg_dest_wr;
   wire       r13_inc = inst_src_in[13]  & reg_incr;
 
@@ -622,7 +561,6 @@ module  omsp_register_file (
 
   // R14
   //------------
-  reg [15:0] r14;
   wire       r14_wr  = inst_dest[14] & reg_dest_wr;
   wire       r14_inc = inst_src_in[14]  & reg_incr;
 
@@ -652,7 +590,6 @@ module  omsp_register_file (
 
   // R15
   //------------
-  reg [15:0] r15;
   wire       r15_wr  = inst_dest[15] & reg_dest_wr;
   wire       r15_inc = inst_src_in[15]  & reg_incr;
 
