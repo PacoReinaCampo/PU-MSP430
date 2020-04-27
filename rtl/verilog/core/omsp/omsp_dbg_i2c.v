@@ -43,423 +43,401 @@
 `endif
 
 module  omsp_dbg_i2c (
+  // OUTPUTs
+  output reg    [5:0] dbg_addr,          // Debug register address
+  output       [15:0] dbg_din,           // Debug register data input
+  output reg          dbg_i2c_sda_out,   // Debug interface: I2C SDA OUT
+  output reg          dbg_rd,            // Debug register data read
+  output reg          dbg_wr,            // Debug register data write
 
-// OUTPUTs
-    dbg_addr,                          // Debug register address
-    dbg_din,                           // Debug register data input
-    dbg_i2c_sda_out,                   // Debug interface: I2C SDA OUT
-    dbg_rd,                            // Debug register data read
-    dbg_wr,                            // Debug register data write
-
-// INPUTs
-    dbg_clk,                           // Debug unit clock
-    dbg_dout,                          // Debug register data output
-    dbg_i2c_addr,                      // Debug interface: I2C ADDRESS
-    dbg_i2c_broadcast,                 // Debug interface: I2C Broadcast Address (for multicore systems)
-    dbg_i2c_scl,                       // Debug interface: I2C SCL
-    dbg_i2c_sda_in,                    // Debug interface: I2C SDA IN
-    dbg_rd_rdy,                        // Debug register data is ready for read
-    dbg_rst,                           // Debug unit reset
-    mem_burst,                         // Burst on going
-    mem_burst_end,                     // End TX/RX burst
-    mem_burst_rd,                      // Start TX burst
-    mem_burst_wr,                      // Start RX burst
-    mem_bw                             // Burst byte width
+  // INPUTs
+  input               dbg_clk,           // Debug unit clock
+  input        [15:0] dbg_dout,          // Debug register data output
+  input         [6:0] dbg_i2c_addr,      // Debug interface: I2C ADDRESS
+  input         [6:0] dbg_i2c_broadcast, // Debug interface: I2C Broadcast Address (for multicore systems)
+  input               dbg_i2c_scl,       // Debug interface: I2C SCL
+  input               dbg_i2c_sda_in,    // Debug interface: I2C SDA IN
+  input               dbg_rd_rdy,        // Debug register data is ready for read
+  input               dbg_rst,           // Debug unit reset
+  input               mem_burst,         // Burst on going
+  input               mem_burst_end,     // End TX/RX burst
+  input               mem_burst_rd,      // Start TX burst
+  input               mem_burst_wr,      // Start RX burst
+  input               mem_bw             // Burst byte width
 );
 
-// OUTPUTs
-//=========
-output        [5:0] dbg_addr;          // Debug register address
-output       [15:0] dbg_din;           // Debug register data input
-output              dbg_i2c_sda_out;   // Debug interface: I2C SDA OUT
-output              dbg_rd;            // Debug register data read
-output              dbg_wr;            // Debug register data write
+  //=============================================================================
+  // 1) I2C RECEIVE LINE SYNCHRONIZTION & FILTERING
+  //=============================================================================
 
-// INPUTs
-//=========
-input               dbg_clk;           // Debug unit clock
-input        [15:0] dbg_dout;          // Debug register data output
-input         [6:0] dbg_i2c_addr;      // Debug interface: I2C ADDRESS
-input         [6:0] dbg_i2c_broadcast; // Debug interface: I2C Broadcast Address (for multicore systems)
-input               dbg_i2c_scl;       // Debug interface: I2C SCL
-input               dbg_i2c_sda_in;    // Debug interface: I2C SDA IN
-input               dbg_rd_rdy;        // Debug register data is ready for read
-input               dbg_rst;           // Debug unit reset
-input               mem_burst;         // Burst on going
-input               mem_burst_end;     // End TX/RX burst
-input               mem_burst_rd;      // Start TX burst
-input               mem_burst_wr;      // Start RX burst
-input               mem_bw;            // Burst byte width
+  // Synchronize SCL/SDA inputs
+  //--------------------------------
 
+  wire scl_sync_n;
 
-//=============================================================================
-// 1) I2C RECEIVE LINE SYNCHRONIZTION & FILTERING
-//=============================================================================
-
-// Synchronize SCL/SDA inputs
-//--------------------------------
-
-wire scl_sync_n;
-omsp_sync_cell sync_cell_i2c_scl (
+  omsp_sync_cell sync_cell_i2c_scl (
     .data_out  (scl_sync_n),
     .data_in   (~dbg_i2c_scl),
     .clk       (dbg_clk),
     .rst       (dbg_rst)
-);
-wire scl_sync = ~scl_sync_n;
+  );
 
-wire sda_in_sync_n;
-omsp_sync_cell sync_cell_i2c_sda (
+  wire scl_sync = ~scl_sync_n;
+
+  wire sda_in_sync_n;
+
+  omsp_sync_cell sync_cell_i2c_sda (
     .data_out  (sda_in_sync_n),
     .data_in   (~dbg_i2c_sda_in),
     .clk       (dbg_clk),
     .rst       (dbg_rst)
-);
-wire sda_in_sync = ~sda_in_sync_n;
+  );
 
-    
-// SCL/SDA input buffers
-//--------------------------------
+  wire sda_in_sync = ~sda_in_sync_n;
 
-reg  [1:0] scl_buf;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) scl_buf <=  2'h3;
-  else         scl_buf <=  {scl_buf[0], scl_sync};
+  // SCL/SDA input buffers
+  //--------------------------------
 
-reg  [1:0] sda_in_buf;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) sda_in_buf <=  2'h3;
-  else         sda_in_buf <=  {sda_in_buf[0], sda_in_sync};
+  reg  [1:0] scl_buf;
 
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) scl_buf <=  2'h3;
+    else         scl_buf <=  {scl_buf[0], scl_sync};
+  end
 
-// SCL/SDA Majority decision
-//------------------------------
+  reg  [1:0] sda_in_buf;
 
-wire scl         =  (scl_sync      & scl_buf[0])    |
-                    (scl_sync      & scl_buf[1])    |
-                    (scl_buf[0]    & scl_buf[1]);
-   
-wire sda_in      =  (sda_in_sync   & sda_in_buf[0]) |
-                    (sda_in_sync   & sda_in_buf[1]) |
-                    (sda_in_buf[0] & sda_in_buf[1]);
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) sda_in_buf <=  2'h3;
+    else         sda_in_buf <=  {sda_in_buf[0], sda_in_sync};
+  end
 
+  // SCL/SDA Majority decision
+  //------------------------------
 
-// SCL/SDA Edge detection
-//------------------------------
+  wire scl         =  (scl_sync      & scl_buf[0])    |
+                      (scl_sync      & scl_buf[1])    |
+                      (scl_buf[0]    & scl_buf[1]);
 
-// SDA Edge detection
-reg        sda_in_dly;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) sda_in_dly <=  1'b1;
-  else         sda_in_dly <=  sda_in;
+  wire sda_in      =  (sda_in_sync   & sda_in_buf[0]) |
+                      (sda_in_sync   & sda_in_buf[1]) |
+                      (sda_in_buf[0] & sda_in_buf[1]);
 
-wire sda_in_fe   =  sda_in_dly & ~sda_in;
-wire sda_in_re   = ~sda_in_dly &  sda_in;
-wire sda_in_edge =  sda_in_dly ^  sda_in;
+  // SCL/SDA Edge detection
+  //------------------------------
 
-// SCL Edge detection
-reg        scl_dly;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) scl_dly <=  1'b1;
-  else         scl_dly <=  scl;
+  // SDA Edge detection
+  reg        sda_in_dly;
 
-wire scl_fe      =  scl_dly    & ~scl;
-wire scl_re      = ~scl_dly    &  scl;
-wire scl_edge    =  scl_dly    ^  scl;
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) sda_in_dly <=  1'b1;
+    else         sda_in_dly <=  sda_in;
+  end
 
+  wire sda_in_fe   =  sda_in_dly & ~sda_in;
+  wire sda_in_re   = ~sda_in_dly &  sda_in;
+  wire sda_in_edge =  sda_in_dly ^  sda_in;
 
-// Delayed SCL Rising-Edge for SDA data sampling
-reg  [1:0] scl_re_dly;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) scl_re_dly <=  2'b00;
-  else         scl_re_dly <=  {scl_re_dly[0], scl_re};
+  // SCL Edge detection
+  reg        scl_dly;
 
-wire scl_sample  =  scl_re_dly[1];
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) scl_dly <=  1'b1;
+    else         scl_dly <=  scl;
+  end
 
-   
-//=============================================================================
-// 2) I2C START & STOP CONDITION DETECTION
-//=============================================================================
+  wire scl_fe      =  scl_dly    & ~scl;
+  wire scl_re      = ~scl_dly    &  scl;
+  wire scl_edge    =  scl_dly    ^  scl;
 
-//-----------------
-// Start condition
-//-----------------
+  // Delayed SCL Rising-Edge for SDA data sampling
+  reg  [1:0] scl_re_dly;
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) scl_re_dly <=  2'b00;
+    else         scl_re_dly <=  {scl_re_dly[0], scl_re};
+  end
 
-wire start_detect = sda_in_fe & scl;
+  wire scl_sample  =  scl_re_dly[1];
 
-//-----------------
-// Stop condition
-//-----------------
+  //=============================================================================
+  // 2) I2C START & STOP CONDITION DETECTION
+  //=============================================================================
 
- wire stop_detect = sda_in_re & scl;
-  
-//-----------------
-// I2C Slave Active
-//-----------------
-// The I2C logic will be activated whenever a start condition
-// is detected and will be disactivated if the slave address
-// doesn't match or if a stop condition is detected.
+  //-----------------
+  // Start condition
+  //-----------------
 
-wire i2c_addr_not_valid;
+  wire start_detect = sda_in_fe & scl;
 
-reg  i2c_active_seq;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)                                 i2c_active_seq <= 1'b0;
-  else if (start_detect)                       i2c_active_seq <= 1'b1;
-  else if (stop_detect || i2c_addr_not_valid)  i2c_active_seq <= 1'b0;
+  //-----------------
+  // Stop condition
+  //-----------------
 
-wire i2c_active =  i2c_active_seq & ~stop_detect;
-wire i2c_init   = ~i2c_active     |  start_detect;
-   
+  wire stop_detect = sda_in_re & scl;
 
-//=============================================================================
-// 3) I2C STATE MACHINE
-//=============================================================================
+  //-----------------
+  // I2C Slave Active
+  //-----------------
+  // The I2C logic will be activated whenever a start condition
+  // is detected and will be disactivated if the slave address
+  // doesn't match or if a stop condition is detected.
 
-// State register/wires
-reg   [2:0] i2c_state;
-reg   [2:0] i2c_state_nxt;
+  wire i2c_addr_not_valid;
 
-// Utility signals
-reg   [8:0] shift_buf;
-wire        shift_rx_done;
-wire        shift_tx_done;
-reg         dbg_rd;
-   
-// State machine definition
-parameter   RX_ADDR      =  3'h0;
-parameter   RX_ADDR_ACK  =  3'h1;
-parameter   RX_DATA      =  3'h2;
-parameter   RX_DATA_ACK  =  3'h3;
-parameter   TX_DATA      =  3'h4;
-parameter   TX_DATA_ACK  =  3'h5;
+  reg  i2c_active_seq;
 
-// State transition
-always @(i2c_state or i2c_init or shift_rx_done or i2c_addr_not_valid or shift_tx_done or scl_fe or shift_buf or sda_in)
-  case (i2c_state)
-    RX_ADDR     : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
-                                   ~shift_rx_done      ?  RX_ADDR      :
-                                    i2c_addr_not_valid ?  RX_ADDR      :
-                                                          RX_ADDR_ACK;
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)                                 i2c_active_seq <= 1'b0;
+    else if (start_detect)                       i2c_active_seq <= 1'b1;
+    else if (stop_detect || i2c_addr_not_valid)  i2c_active_seq <= 1'b0;
+  end
 
-    RX_ADDR_ACK : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
-                                   ~scl_fe             ?  RX_ADDR_ACK  :
-                                    shift_buf[0]       ?  TX_DATA      :
-                                                          RX_DATA;
+  wire i2c_active =  i2c_active_seq & ~stop_detect;
+  wire i2c_init   = ~i2c_active     |  start_detect;
 
-    RX_DATA     : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
-                                   ~shift_rx_done      ?  RX_DATA      :
-                                                          RX_DATA_ACK;
+  //=============================================================================
+  // 3) I2C STATE MACHINE
+  //=============================================================================
 
-    RX_DATA_ACK : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
-                                   ~scl_fe             ?  RX_DATA_ACK  :
-                                                          RX_DATA;
+  // State register/wires
+  reg   [2:0] i2c_state;
+  reg   [2:0] i2c_state_nxt;
 
-    TX_DATA     : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
-                                   ~shift_tx_done      ?  TX_DATA      :
-                                                          TX_DATA_ACK;
+  // Utility signals
+  reg   [8:0] shift_buf;
+  wire        shift_rx_done;
+  wire        shift_tx_done;
 
-    TX_DATA_ACK : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
-                                   ~scl_fe             ?  TX_DATA_ACK  :
-                                   ~sda_in             ?  TX_DATA      :
-                                                          RX_ADDR;
-  // pragma coverage off
-    default     : i2c_state_nxt =                         RX_ADDR;
-  // pragma coverage on
-  endcase
-   
-// State machine
-always @(posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)       i2c_state <= RX_ADDR;
-  else               i2c_state <= i2c_state_nxt;
+  // State machine definition
+  parameter   RX_ADDR      =  3'h0;
+  parameter   RX_ADDR_ACK  =  3'h1;
+  parameter   RX_DATA      =  3'h2;
+  parameter   RX_DATA_ACK  =  3'h3;
+  parameter   TX_DATA      =  3'h4;
+  parameter   TX_DATA_ACK  =  3'h5;
 
+  // State transition
+  always @(i2c_state or i2c_init or shift_rx_done or i2c_addr_not_valid or shift_tx_done or scl_fe or shift_buf or sda_in) begin
+    case (i2c_state)
+      RX_ADDR     : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
+                                     ~shift_rx_done      ?  RX_ADDR      :
+                                      i2c_addr_not_valid ?  RX_ADDR      :
+                                      RX_ADDR_ACK;
 
-//=============================================================================
-// 4) I2C SHIFT REGISTER (FOR RECEIVING & TRANSMITING)
-//=============================================================================
+      RX_ADDR_ACK : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
+                                     ~scl_fe             ?  RX_ADDR_ACK  :
+                                      shift_buf[0]       ?  TX_DATA      :
+                                      RX_DATA;
 
-wire       shift_rx_en       = ((i2c_state==RX_ADDR) | (i2c_state    ==RX_DATA) | (i2c_state    ==RX_DATA_ACK));
-wire       shift_tx_en       =                         (i2c_state    ==TX_DATA) | (i2c_state    ==TX_DATA_ACK);
-wire       shift_tx_en_pre   =                         (i2c_state_nxt==TX_DATA) | (i2c_state_nxt==TX_DATA_ACK);
+      RX_DATA     : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
+                                     ~shift_rx_done      ?  RX_DATA      :
+                                      RX_DATA_ACK;
 
-assign     shift_rx_done     = shift_rx_en & scl_fe & shift_buf[8];
-assign     shift_tx_done     = shift_tx_en & scl_fe & (shift_buf==9'h100);
+      RX_DATA_ACK : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
+                                     ~scl_fe             ?  RX_DATA_ACK  :
+                                      RX_DATA;
 
-wire       shift_buf_rx_init = i2c_init | ((i2c_state==RX_ADDR_ACK) & scl_fe & ~shift_buf[0]) |
-                                          ((i2c_state==RX_DATA_ACK) & scl_fe);
-wire       shift_buf_rx_en   = shift_rx_en     & scl_sample;
+      TX_DATA     : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
+                                     ~shift_tx_done      ?  TX_DATA      :
+                                      TX_DATA_ACK;
 
-wire       shift_buf_tx_init =            ((i2c_state==RX_ADDR_ACK) & scl_re &  shift_buf[0]) |
-                                          ((i2c_state==TX_DATA_ACK) & scl_re);
-wire       shift_buf_tx_en   = shift_tx_en_pre & scl_fe & (shift_buf!=9'h100);
+      TX_DATA_ACK : i2c_state_nxt =   i2c_init           ?  RX_ADDR      :
+                                     ~scl_fe             ?  TX_DATA_ACK  :
+                                     ~sda_in             ?  TX_DATA      :
+                                      RX_ADDR;
+      // pragma coverage off
+      default     : i2c_state_nxt =                         RX_ADDR;
+      // pragma coverage on
+    endcase
+  end
 
-wire [7:0] shift_tx_val;
-   
-wire [8:0] shift_buf_nxt     = shift_buf_rx_init  ? 9'h001                   : // RX Init 
-                               shift_buf_tx_init  ? {shift_tx_val,   1'b1}   : // TX Init 
-                               shift_buf_rx_en    ? {shift_buf[7:0], sda_in} : // RX Shift
-                               shift_buf_tx_en    ? {shift_buf[7:0], 1'b0}   : // TX Shift
-                                                     shift_buf[8:0];           // Hold
+  // State machine
+  always @(posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)       i2c_state <= RX_ADDR;
+    else               i2c_state <= i2c_state_nxt;
+  end
 
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) shift_buf <= 9'h001;
-  else         shift_buf <= shift_buf_nxt;
+  //=============================================================================
+  // 4) I2C SHIFT REGISTER (FOR RECEIVING & TRANSMITING)
+  //=============================================================================
 
-// Detect when the received I2C device address is not valid
-assign i2c_addr_not_valid =  (i2c_state == RX_ADDR) && shift_rx_done && (
-`ifdef DBG_I2C_BROADCAST
-                              (shift_buf[7:1] != dbg_i2c_broadcast[6:0]) &&
-`endif
-                              (shift_buf[7:1] != dbg_i2c_addr[6:0]));
+  wire       shift_rx_en       = ((i2c_state==RX_ADDR) | (i2c_state    ==RX_DATA) | (i2c_state    ==RX_DATA_ACK));
+  wire       shift_tx_en       =                         (i2c_state    ==TX_DATA) | (i2c_state    ==TX_DATA_ACK);
+  wire       shift_tx_en_pre   =                         (i2c_state_nxt==TX_DATA) | (i2c_state_nxt==TX_DATA_ACK);
 
-// Utility signals
-wire        shift_rx_data_done = shift_rx_done & (i2c_state==RX_DATA); 
-wire        shift_tx_data_done = shift_tx_done; 
+  assign     shift_rx_done     = shift_rx_en & scl_fe & shift_buf[8];
+  assign     shift_tx_done     = shift_tx_en & scl_fe & (shift_buf==9'h100);
 
+  wire       shift_buf_rx_init = i2c_init | ((i2c_state==RX_ADDR_ACK) & scl_fe & ~shift_buf[0]) |
+                                            ((i2c_state==RX_DATA_ACK) & scl_fe);
+  wire       shift_buf_rx_en   = shift_rx_en     & scl_sample;
 
-//=============================================================================
-// 5) I2C TRANSMIT BUFFER
-//=============================================================================
+  wire       shift_buf_tx_init =            ((i2c_state==RX_ADDR_ACK) & scl_re &  shift_buf[0]) |
+                                            ((i2c_state==TX_DATA_ACK) & scl_re);
+  wire       shift_buf_tx_en   = shift_tx_en_pre & scl_fe & (shift_buf!=9'h100);
 
-reg dbg_i2c_sda_out;
+  wire [7:0] shift_tx_val;
 
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)     dbg_i2c_sda_out <= 1'b1;
-  else if (scl_fe) dbg_i2c_sda_out <= ~((i2c_state_nxt==RX_ADDR_ACK) ||
-                                        (i2c_state_nxt==RX_DATA_ACK) ||
-                                       (shift_buf_tx_en & ~shift_buf[8]));
-   
-   
-//=============================================================================
-// 6) DEBUG INTERFACE STATE MACHINE
-//=============================================================================
+  wire [8:0] shift_buf_nxt     = shift_buf_rx_init  ? 9'h001                   : // RX Init 
+                                 shift_buf_tx_init  ? {shift_tx_val,   1'b1}   : // TX Init 
+                                 shift_buf_rx_en    ? {shift_buf[7:0], sda_in} : // RX Shift
+                                 shift_buf_tx_en    ? {shift_buf[7:0], 1'b0}   : // TX Shift
+                                                       shift_buf[8:0];           // Hold
 
-// State register/wires
-reg   [2:0] dbg_state;
-reg   [2:0] dbg_state_nxt;
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) shift_buf <= 9'h001;
+    else         shift_buf <= shift_buf_nxt;
+  end
 
-// Utility signals
-reg         dbg_bw;
+  // Detect when the received I2C device address is not valid
+  assign i2c_addr_not_valid =  (i2c_state == RX_ADDR) && shift_rx_done && (
+                               `ifdef DBG_I2C_BROADCAST
+                               (shift_buf[7:1] != dbg_i2c_broadcast[6:0]) &&
+                               `endif
+                               (shift_buf[7:1] != dbg_i2c_addr[6:0]));
 
-// State machine definition
-parameter  RX_CMD     = 3'h0;
-parameter  RX_BYTE_LO = 3'h1;
-parameter  RX_BYTE_HI = 3'h2;
-parameter  TX_BYTE_LO = 3'h3;
-parameter  TX_BYTE_HI = 3'h4;
+  // Utility signals
+  wire        shift_rx_data_done = shift_rx_done & (i2c_state==RX_DATA); 
+  wire        shift_tx_data_done = shift_tx_done; 
 
-// State transition
-always @(dbg_state    or shift_rx_data_done or shift_tx_data_done or shift_buf     or dbg_bw or
-         mem_burst_wr or mem_burst_rd       or mem_burst          or mem_burst_end or mem_bw)
-  case (dbg_state)
-    RX_CMD     : dbg_state_nxt =  mem_burst_wr                ? RX_BYTE_LO  :
-                                  mem_burst_rd                ? TX_BYTE_LO  :
-                                  ~shift_rx_data_done         ? RX_CMD      :
-                                   shift_buf[7]               ? RX_BYTE_LO  :
-                                                                TX_BYTE_LO;
+  //=============================================================================
+  // 5) I2C TRANSMIT BUFFER
+  //=============================================================================
 
-    RX_BYTE_LO : dbg_state_nxt = (mem_burst &  mem_burst_end) ? RX_CMD      :
-                                  ~shift_rx_data_done         ? RX_BYTE_LO  :
-                                 (mem_burst & ~mem_burst_end) ?
-                                 (mem_bw                      ? RX_BYTE_LO  :
-                                                                RX_BYTE_HI) :
-                                  dbg_bw                      ? RX_CMD      :
-                                                                RX_BYTE_HI;
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)     dbg_i2c_sda_out <= 1'b1;
+    else if (scl_fe) dbg_i2c_sda_out <= ~((i2c_state_nxt==RX_ADDR_ACK) ||
+                                          (i2c_state_nxt==RX_DATA_ACK) ||
+                                          (shift_buf_tx_en & ~shift_buf[8]));
+  end
 
-    RX_BYTE_HI : dbg_state_nxt =  ~shift_rx_data_done         ? RX_BYTE_HI  :
-                                 (mem_burst & ~mem_burst_end) ? RX_BYTE_LO  :
-                                                                RX_CMD;
+  //=============================================================================
+  // 6) DEBUG INTERFACE STATE MACHINE
+  //=============================================================================
 
-    TX_BYTE_LO : dbg_state_nxt =  ~shift_tx_data_done         ? TX_BYTE_LO  :
-                                 ( mem_burst &  mem_bw)       ? TX_BYTE_LO  :
-                                 ( mem_burst & ~mem_bw)       ? TX_BYTE_HI  :
-                                  ~dbg_bw                     ? TX_BYTE_HI  :
-                                                                RX_CMD;
+  // State register/wires
+  reg   [2:0] dbg_state;
+  reg   [2:0] dbg_state_nxt;
 
-    TX_BYTE_HI : dbg_state_nxt =  ~shift_tx_data_done         ? TX_BYTE_HI  :
-                                   mem_burst                  ? TX_BYTE_LO  :
-                                                                RX_CMD;
+  // Utility signals
+  reg         dbg_bw;
 
-  // pragma coverage off
-    default    : dbg_state_nxt =                                RX_CMD;
-  // pragma coverage on
-  endcase
-   
-// State machine
-always @(posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) dbg_state <= RX_CMD;
-  else         dbg_state <= dbg_state_nxt;
+  // State machine definition
+  parameter  RX_CMD     = 3'h0;
+  parameter  RX_BYTE_LO = 3'h1;
+  parameter  RX_BYTE_HI = 3'h2;
+  parameter  TX_BYTE_LO = 3'h3;
+  parameter  TX_BYTE_HI = 3'h4;
 
-// Utility signals
-wire cmd_valid   = (dbg_state==RX_CMD)     & shift_rx_data_done;
-wire rx_lo_valid = (dbg_state==RX_BYTE_LO) & shift_rx_data_done;
-wire rx_hi_valid = (dbg_state==RX_BYTE_HI) & shift_rx_data_done;
+  // State transition
+  always @(dbg_state    or shift_rx_data_done or shift_tx_data_done or shift_buf     or dbg_bw or
+           mem_burst_wr or mem_burst_rd       or mem_burst          or mem_burst_end or mem_bw) begin
+    case (dbg_state)
+      RX_CMD     : dbg_state_nxt =  mem_burst_wr                ? RX_BYTE_LO  :
+                                    mem_burst_rd                ? TX_BYTE_LO  :
+                                   ~shift_rx_data_done          ? RX_CMD      :
+                                    shift_buf[7]                ? RX_BYTE_LO  :
+                                    TX_BYTE_LO;
 
+      RX_BYTE_LO : dbg_state_nxt = (mem_burst &  mem_burst_end) ? RX_CMD      :
+                                    ~shift_rx_data_done         ? RX_BYTE_LO  :
+                                   (mem_burst & ~mem_burst_end) ?
+                                   (mem_bw                      ? RX_BYTE_LO  :
+                                                                  RX_BYTE_HI) :
+                                    dbg_bw                      ? RX_CMD      :
+                                                                  RX_BYTE_HI;
 
-//=============================================================================
-// 7) REGISTER READ/WRITE ACCESS
-//=============================================================================
+      RX_BYTE_HI : dbg_state_nxt =  ~shift_rx_data_done         ? RX_BYTE_HI  :
+                                   (mem_burst & ~mem_burst_end) ? RX_BYTE_LO  :
+                                                                  RX_CMD;
 
-parameter MEM_DATA = 6'h06;
+      TX_BYTE_LO : dbg_state_nxt =  ~shift_tx_data_done         ? TX_BYTE_LO  :
+                                   ( mem_burst &  mem_bw)       ? TX_BYTE_LO  :
+                                   ( mem_burst & ~mem_bw)       ? TX_BYTE_HI  :
+                                    ~dbg_bw                     ? TX_BYTE_HI  :
+                                                                  RX_CMD;
 
-// Debug register address & bit width
-reg [5:0] dbg_addr;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)
-    begin
-       dbg_bw   <= 1'b0;
-       dbg_addr <= 6'h00;
+      TX_BYTE_HI : dbg_state_nxt =  ~shift_tx_data_done         ? TX_BYTE_HI  :
+                                     mem_burst                  ? TX_BYTE_LO  :
+                                                                  RX_CMD;
+      // pragma coverage off
+      default    : dbg_state_nxt =                                RX_CMD;
+      // pragma coverage on
+    endcase
+  end
+
+  // State machine
+  always @(posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) dbg_state <= RX_CMD;
+    else         dbg_state <= dbg_state_nxt;
+  end
+
+  // Utility signals
+  wire cmd_valid   = (dbg_state==RX_CMD)     & shift_rx_data_done;
+  wire rx_lo_valid = (dbg_state==RX_BYTE_LO) & shift_rx_data_done;
+  wire rx_hi_valid = (dbg_state==RX_BYTE_HI) & shift_rx_data_done;
+
+  //=============================================================================
+  // 7) REGISTER READ/WRITE ACCESS
+  //=============================================================================
+
+  parameter MEM_DATA = 6'h06;
+
+  // Debug register address & bit width
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) begin
+      dbg_bw   <= 1'b0;
+      dbg_addr <= 6'h00;
     end
-  else if (cmd_valid)
-    begin
-       dbg_bw   <= shift_buf[6];
-       dbg_addr <= shift_buf[5:0];
+    else if (cmd_valid) begin
+      dbg_bw   <= shift_buf[6];
+      dbg_addr <= shift_buf[5:0];
     end
-  else if (mem_burst)
-    begin
-       dbg_bw   <= mem_bw;
-       dbg_addr <= MEM_DATA;
+    else if (mem_burst) begin
+      dbg_bw   <= mem_bw;
+      dbg_addr <= MEM_DATA;
     end
+  end
 
+  // Debug register data input
+  reg [7:0] dbg_din_lo;
 
-// Debug register data input
-reg [7:0] dbg_din_lo;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)          dbg_din_lo <= 8'h00;
-  else if (rx_lo_valid) dbg_din_lo <= shift_buf[7:0];
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)          dbg_din_lo <= 8'h00;
+    else if (rx_lo_valid) dbg_din_lo <= shift_buf[7:0];
+  end
 
-reg [7:0] dbg_din_hi;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)          dbg_din_hi <= 8'h00;
-  else if (rx_lo_valid) dbg_din_hi <= 8'h00;
-  else if (rx_hi_valid) dbg_din_hi <= shift_buf[7:0];
-   
-assign dbg_din = {dbg_din_hi, dbg_din_lo};
+  reg [7:0] dbg_din_hi;
 
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)          dbg_din_hi <= 8'h00;
+    else if (rx_lo_valid) dbg_din_hi <= 8'h00;
+    else if (rx_hi_valid) dbg_din_hi <= shift_buf[7:0];
+  end
 
-// Debug register data write command
-reg  dbg_wr;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) dbg_wr <= 1'b0;
-  else         dbg_wr <= (mem_burst &  mem_bw) ? rx_lo_valid :
-                         (mem_burst & ~mem_bw) ? rx_hi_valid :
-                         dbg_bw                ? rx_lo_valid :
-                                                 rx_hi_valid;
+  assign dbg_din = {dbg_din_hi, dbg_din_lo};
 
+  // Debug register data write command
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) dbg_wr <= 1'b0;
+    else         dbg_wr <= (mem_burst &  mem_bw) ? rx_lo_valid :
+                           (mem_burst & ~mem_bw) ? rx_hi_valid :
+                           dbg_bw                ? rx_lo_valid :
+                                                   rx_hi_valid;
+  end
 
-// Debug register data read command
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) dbg_rd <= 1'b0;
-  else         dbg_rd <= (mem_burst &  mem_bw) ? (shift_tx_data_done & (dbg_state==TX_BYTE_LO)) :
-                         (mem_burst & ~mem_bw) ? (shift_tx_data_done & (dbg_state==TX_BYTE_HI)) :        
-                         cmd_valid             ?  ~shift_buf[7]                                 :
-                                                  1'b0;
+  // Debug register data read command
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) dbg_rd <= 1'b0;
+    else         dbg_rd <= (mem_burst &  mem_bw) ? (shift_tx_data_done & (dbg_state==TX_BYTE_LO)) :
+                           (mem_burst & ~mem_bw) ? (shift_tx_data_done & (dbg_state==TX_BYTE_HI)) :        
+                           cmd_valid             ?  ~shift_buf[7]                                 :
+                           1'b0;
+  end
 
-
-// Debug register data read value 
-assign shift_tx_val = (dbg_state==TX_BYTE_HI) ? dbg_dout[15:8] :
-                                                dbg_dout[7:0];
-
+  // Debug register data read value 
+  assign shift_tx_val = (dbg_state==TX_BYTE_HI) ? dbg_dout[15:8] :
+    dbg_dout[7:0];
 endmodule
 
 `ifdef OMSP_NO_INCLUDE

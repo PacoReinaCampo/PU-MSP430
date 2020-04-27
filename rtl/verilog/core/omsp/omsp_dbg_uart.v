@@ -43,250 +43,233 @@
 `endif
 
 module  omsp_dbg_uart (
+  // OUTPUTs
+  output reg    [5:0] dbg_addr,       // Debug register address
+  output       [15:0] dbg_din,        // Debug register data input
+  output              dbg_rd,         // Debug register data read
+  output reg          dbg_uart_txd,   // Debug interface: UART TXD
+  output              dbg_wr,         // Debug register data write
 
-// OUTPUTs
-    dbg_addr,                       // Debug register address
-    dbg_din,                        // Debug register data input
-    dbg_rd,                         // Debug register data read
-    dbg_uart_txd,                   // Debug interface: UART TXD
-    dbg_wr,                         // Debug register data write
-			     
-// INPUTs
-    dbg_clk,                        // Debug unit clock
-    dbg_dout,                       // Debug register data output
-    dbg_rd_rdy,                     // Debug register data is ready for read
-    dbg_rst,                        // Debug unit reset
-    dbg_uart_rxd,                   // Debug interface: UART RXD
-    mem_burst,                      // Burst on going
-    mem_burst_end,                  // End TX/RX burst
-    mem_burst_rd,                   // Start TX burst
-    mem_burst_wr,                   // Start RX burst
-    mem_bw                          // Burst byte width
+  // INPUTs
+  input               dbg_clk,        // Debug unit clock
+  input        [15:0] dbg_dout,       // Debug register data output
+  input               dbg_rd_rdy,     // Debug register data is ready for read
+  input               dbg_rst,        // Debug unit reset
+  input               dbg_uart_rxd,   // Debug interface: UART RXD
+  input               mem_burst,      // Burst on going
+  input               mem_burst_end,  // End TX/RX burst
+  input               mem_burst_rd,   // Start TX burst
+  input               mem_burst_wr,   // Start RX burst
+  input               mem_bw          // Burst byte width
 );
 
-// OUTPUTs
-//=========
-output        [5:0] dbg_addr;       // Debug register address
-output       [15:0] dbg_din;        // Debug register data input
-output              dbg_rd;         // Debug register data read
-output              dbg_uart_txd;   // Debug interface: UART TXD
-output              dbg_wr;         // Debug register data write
+  //=============================================================================
+  // 1)  UART RECEIVE LINE SYNCHRONIZTION & FILTERING
+  //=============================================================================
 
-// INPUTs
-//=========
-input               dbg_clk;        // Debug unit clock
-input        [15:0] dbg_dout;       // Debug register data output
-input               dbg_rd_rdy;     // Debug register data is ready for read
-input               dbg_rst;        // Debug unit reset
-input               dbg_uart_rxd;   // Debug interface: UART RXD
-input               mem_burst;      // Burst on going
-input               mem_burst_end;  // End TX/RX burst
-input               mem_burst_rd;   // Start TX burst
-input               mem_burst_wr;   // Start RX burst
-input               mem_bw;         // Burst byte width
+  // Synchronize RXD input
+  //--------------------------------
+  `ifdef SYNC_DBG_UART_RXD
 
+  wire uart_rxd_n;
 
-//=============================================================================
-// 1)  UART RECEIVE LINE SYNCHRONIZTION & FILTERING
-//=============================================================================
+  omsp_sync_cell sync_cell_uart_rxd (
+    .data_out  (uart_rxd_n),
+    .data_in   (~dbg_uart_rxd),
+    .clk       (dbg_clk),
+    .rst       (dbg_rst)
+  );
 
-// Synchronize RXD input
-//--------------------------------
-`ifdef SYNC_DBG_UART_RXD
+  wire uart_rxd = ~uart_rxd_n;
+  `else
+  wire uart_rxd = dbg_uart_rxd;
+  `endif
 
-    wire uart_rxd_n;
+  // RXD input buffer
+  //--------------------------------
+  reg  [1:0] rxd_buf;
 
-    omsp_sync_cell sync_cell_uart_rxd (
-        .data_out  (uart_rxd_n),
-        .data_in   (~dbg_uart_rxd),
-        .clk       (dbg_clk),
-        .rst       (dbg_rst)
-    );
-    wire uart_rxd = ~uart_rxd_n;
-`else
-    wire uart_rxd = dbg_uart_rxd;
-`endif
-   
-// RXD input buffer
-//--------------------------------
-reg  [1:0] rxd_buf;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) rxd_buf <=  2'h3;
-  else         rxd_buf <=  {rxd_buf[0], uart_rxd};
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) rxd_buf <=  2'h3;
+    else         rxd_buf <=  {rxd_buf[0], uart_rxd};
+  end
 
-// Majority decision
-//------------------------
-reg        rxd_maj;
+  // Majority decision
+  //------------------------
+  reg        rxd_maj;
 
-wire       rxd_maj_nxt = (uart_rxd   & rxd_buf[0]) |
-			 (uart_rxd   & rxd_buf[1]) |
-			 (rxd_buf[0] & rxd_buf[1]);
-   
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst) rxd_maj <=  1'b1;
-  else         rxd_maj <=  rxd_maj_nxt;
+  wire       rxd_maj_nxt = (uart_rxd   & rxd_buf[0]) |
+  (uart_rxd   & rxd_buf[1]) |
+  (rxd_buf[0] & rxd_buf[1]);
 
-wire rxd_s    =  rxd_maj;
-wire rxd_fe   =  rxd_maj & ~rxd_maj_nxt;
-wire rxd_re   = ~rxd_maj &  rxd_maj_nxt;
-wire rxd_edge =  rxd_maj ^  rxd_maj_nxt;
-   
-//=============================================================================
-// 2)  UART STATE MACHINE
-//=============================================================================
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst) rxd_maj <=  1'b1;
+    else         rxd_maj <=  rxd_maj_nxt;
+  end
 
-// Receive state
-//------------------------
-reg   [2:0] uart_state;
-reg   [2:0] uart_state_nxt;
+  wire rxd_s    =  rxd_maj;
+  wire rxd_fe   =  rxd_maj & ~rxd_maj_nxt;
+  wire rxd_re   = ~rxd_maj &  rxd_maj_nxt;
+  wire rxd_edge =  rxd_maj ^  rxd_maj_nxt;
 
-wire        sync_done;
-wire        xfer_done;
-reg  [19:0] xfer_buf;
-wire [19:0] xfer_buf_nxt;
+  //=============================================================================
+  // 2)  UART STATE MACHINE
+  //=============================================================================
 
-// State machine definition
-parameter  RX_SYNC  = 3'h0;
-parameter  RX_CMD   = 3'h1;
-parameter  RX_DATA1 = 3'h2;
-parameter  RX_DATA2 = 3'h3;
-parameter  TX_DATA1 = 3'h4;
-parameter  TX_DATA2 = 3'h5;
+  // Receive state
+  //------------------------
+  reg   [2:0] uart_state;
+  reg   [2:0] uart_state_nxt;
 
-// State transition
-always @(uart_state or xfer_buf_nxt or mem_burst or mem_burst_wr or mem_burst_rd or mem_burst_end or mem_bw)
-  case (uart_state)
-    RX_SYNC  : uart_state_nxt =  RX_CMD;
-    RX_CMD   : uart_state_nxt =  mem_burst_wr                ?
-                                (mem_bw                      ? RX_DATA2 : RX_DATA1) :
-                                 mem_burst_rd                ?
-                                (mem_bw                      ? TX_DATA2 : TX_DATA1) :
-                                (xfer_buf_nxt[`DBG_UART_WR]  ?
-                                (xfer_buf_nxt[`DBG_UART_BW]  ? RX_DATA2 : RX_DATA1) :
-                                (xfer_buf_nxt[`DBG_UART_BW]  ? TX_DATA2 : TX_DATA1));
-    RX_DATA1 : uart_state_nxt =  RX_DATA2;
-    RX_DATA2 : uart_state_nxt = (mem_burst & ~mem_burst_end) ?
-                                (mem_bw                      ? RX_DATA2 : RX_DATA1) :
-                                 RX_CMD;
-    TX_DATA1 : uart_state_nxt =  TX_DATA2;
-    TX_DATA2 : uart_state_nxt = (mem_burst & ~mem_burst_end) ?
-                                (mem_bw                      ? TX_DATA2 : TX_DATA1) :
-                                 RX_CMD;
-  // pragma coverage off
-    default  : uart_state_nxt =  RX_CMD;
-  // pragma coverage on
-  endcase
-   
-// State machine
-always @(posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)                          uart_state <= RX_SYNC;
-  else if (xfer_done    | sync_done |
-           mem_burst_wr | mem_burst_rd) uart_state <= uart_state_nxt;
+  wire        sync_done;
+  wire        xfer_done;
+  reg  [19:0] xfer_buf;
+  wire [19:0] xfer_buf_nxt;
 
-// Utility signals
-wire cmd_valid = (uart_state==RX_CMD) & xfer_done;
-wire rx_active = (uart_state==RX_DATA1) | (uart_state==RX_DATA2) | (uart_state==RX_CMD);
-wire tx_active = (uart_state==TX_DATA1) | (uart_state==TX_DATA2);
+  // State machine definition
+  parameter  RX_SYNC  = 3'h0;
+  parameter  RX_CMD   = 3'h1;
+  parameter  RX_DATA1 = 3'h2;
+  parameter  RX_DATA2 = 3'h3;
+  parameter  TX_DATA1 = 3'h4;
+  parameter  TX_DATA2 = 3'h5;
 
-   
-//=============================================================================
-// 3)  UART SYNCHRONIZATION
-//=============================================================================
-// After DBG_RST, the host needs to fist send a synchronization character (0x80)
-// If this feature doesn't work properly, it is possible to disable it by
-// commenting the DBG_UART_AUTO_SYNC define in the openMSP430.inc file.
+  // State transition
+  always @(uart_state or xfer_buf_nxt or mem_burst or mem_burst_wr or mem_burst_rd or mem_burst_end or mem_bw) begin
+    case (uart_state)
+      RX_SYNC  : uart_state_nxt =  RX_CMD;
+      RX_CMD   : uart_state_nxt =  mem_burst_wr                ?
+                                  (mem_bw                      ? RX_DATA2 : RX_DATA1) :
+                                   mem_burst_rd                ?
+                                  (mem_bw                      ? TX_DATA2 : TX_DATA1) :
+                                  (xfer_buf_nxt[`DBG_UART_WR]  ?
+                                  (xfer_buf_nxt[`DBG_UART_BW]  ? RX_DATA2 : RX_DATA1) :
+                                  (xfer_buf_nxt[`DBG_UART_BW]  ? TX_DATA2 : TX_DATA1));
+      RX_DATA1 : uart_state_nxt =  RX_DATA2;
+      RX_DATA2 : uart_state_nxt = (mem_burst & ~mem_burst_end) ?
+                                  (mem_bw                      ? RX_DATA2 : RX_DATA1) :
+                                                                 RX_CMD;
+      TX_DATA1 : uart_state_nxt =  TX_DATA2;
+      TX_DATA2 : uart_state_nxt = (mem_burst & ~mem_burst_end) ?
+                                  (mem_bw                      ? TX_DATA2 : TX_DATA1) :
+                                                                 RX_CMD;
+      // pragma coverage off
+      default  : uart_state_nxt =  RX_CMD;
+      // pragma coverage on
+    endcase
+  end
 
-reg        sync_busy;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)                             sync_busy <=  1'b0;
-  else if ((uart_state==RX_SYNC) & rxd_fe) sync_busy <=  1'b1;
-  else if ((uart_state==RX_SYNC) & rxd_re) sync_busy <=  1'b0;
+  // State machine
+  always @(posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)                          uart_state <= RX_SYNC;
+    else if (xfer_done    | sync_done |
+      mem_burst_wr | mem_burst_rd) uart_state <= uart_state_nxt;
+  end
 
-assign sync_done =  (uart_state==RX_SYNC) & rxd_re & sync_busy;
+  // Utility signals
+  wire cmd_valid = (uart_state==RX_CMD) & xfer_done;
+  wire rx_active = (uart_state==RX_DATA1) | (uart_state==RX_DATA2) | (uart_state==RX_CMD);
+  wire tx_active = (uart_state==TX_DATA1) | (uart_state==TX_DATA2);
 
-`ifdef DBG_UART_AUTO_SYNC
+  //=============================================================================
+  // 3)  UART SYNCHRONIZATION
+  //=============================================================================
+  // After DBG_RST, the host needs to fist send a synchronization character (0x80)
+  // If this feature doesn't work properly, it is possible to disable it by
+  // commenting the DBG_UART_AUTO_SYNC define in the openMSP430.inc file.
 
-reg [`DBG_UART_XFER_CNT_W+2:0] sync_cnt;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)                                     sync_cnt <=  {{`DBG_UART_XFER_CNT_W{1'b1}}, 3'b000};
-  else if (sync_busy | (~sync_busy & sync_cnt[2])) sync_cnt <=  sync_cnt+{{`DBG_UART_XFER_CNT_W+2{1'b0}}, 1'b1};
+  reg        sync_busy;
 
-wire [`DBG_UART_XFER_CNT_W-1:0] bit_cnt_max = sync_cnt[`DBG_UART_XFER_CNT_W+2:3];
-`else
-wire [`DBG_UART_XFER_CNT_W-1:0] bit_cnt_max = `DBG_UART_CNT;
-`endif
-   
-   
-//=============================================================================
-// 4)  UART RECEIVE / TRANSMIT
-//=============================================================================
-   
-// Transfer counter
-//------------------------
-reg                      [3:0] xfer_bit;
-reg [`DBG_UART_XFER_CNT_W-1:0] xfer_cnt;
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)                             sync_busy <=  1'b0;
+    else if ((uart_state==RX_SYNC) & rxd_fe) sync_busy <=  1'b1;
+    else if ((uart_state==RX_SYNC) & rxd_re) sync_busy <=  1'b0;
+  end
 
-wire       txd_start    = dbg_rd_rdy | (xfer_done & (uart_state==TX_DATA1));
-wire       rxd_start    = (xfer_bit==4'h0) & rxd_fe & ((uart_state!=RX_SYNC));
-wire       xfer_bit_inc = (xfer_bit!=4'h0) & (xfer_cnt=={`DBG_UART_XFER_CNT_W{1'b0}});
-assign     xfer_done    = rx_active ? (xfer_bit==4'ha) : (xfer_bit==4'hb);
-   
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)                       xfer_bit <=  4'h0;
-  else if (txd_start | rxd_start)    xfer_bit <=  4'h1;
-  else if (xfer_done)                xfer_bit <=  4'h0;
-  else if (xfer_bit_inc)             xfer_bit <=  xfer_bit+4'h1;
+  assign sync_done =  (uart_state==RX_SYNC) & rxd_re & sync_busy;
 
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)                       xfer_cnt <=  {`DBG_UART_XFER_CNT_W{1'b0}};
-  else if (rx_active & rxd_edge)     xfer_cnt <=  {1'b0, bit_cnt_max[`DBG_UART_XFER_CNT_W-1:1]};
-  else if (txd_start | xfer_bit_inc) xfer_cnt <=  bit_cnt_max;
-  else if (|xfer_cnt)                xfer_cnt <=  xfer_cnt+{`DBG_UART_XFER_CNT_W{1'b1}};
+  `ifdef DBG_UART_AUTO_SYNC
 
+  reg [`DBG_UART_XFER_CNT_W+2:0] sync_cnt;
 
-// Receive/Transmit buffer
-//-------------------------
-assign xfer_buf_nxt =  {rxd_s, xfer_buf[19:1]};
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)                                     sync_cnt <=  {{`DBG_UART_XFER_CNT_W{1'b1}}, 3'b000};
+    else if (sync_busy | (~sync_busy & sync_cnt[2])) sync_cnt <=  sync_cnt+{{`DBG_UART_XFER_CNT_W+2{1'b0}}, 1'b1};
+  end
 
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)           xfer_buf <=  20'h00000;
-  else if (dbg_rd_rdy)   xfer_buf <=  {1'b1, dbg_dout[15:8], 2'b01, dbg_dout[7:0], 1'b0};
-  else if (xfer_bit_inc) xfer_buf <=  xfer_buf_nxt;
+  wire [`DBG_UART_XFER_CNT_W-1:0] bit_cnt_max = sync_cnt[`DBG_UART_XFER_CNT_W+2:3];
+  `else
+  wire [`DBG_UART_XFER_CNT_W-1:0] bit_cnt_max = `DBG_UART_CNT;
+  `endif
 
+  //=============================================================================
+  // 4)  UART RECEIVE / TRANSMIT
+  //=============================================================================
 
-// Generate TXD output
-//------------------------
-reg dbg_uart_txd;
-   
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)                       dbg_uart_txd <=  1'b1;
-  else if (xfer_bit_inc & tx_active) dbg_uart_txd <=  xfer_buf[0];
+  // Transfer counter
+  //------------------------
+  reg                      [3:0] xfer_bit;
+  reg [`DBG_UART_XFER_CNT_W-1:0] xfer_cnt;
 
- 
-//=============================================================================
-// 5) INTERFACE TO DEBUG REGISTERS
-//=============================================================================
+  wire       txd_start    = dbg_rd_rdy | (xfer_done & (uart_state==TX_DATA1));
+  wire       rxd_start    = (xfer_bit==4'h0) & rxd_fe & ((uart_state!=RX_SYNC));
+  wire       xfer_bit_inc = (xfer_bit!=4'h0) & (xfer_cnt=={`DBG_UART_XFER_CNT_W{1'b0}});
+  assign     xfer_done    = rx_active ? (xfer_bit==4'ha) : (xfer_bit==4'hb);
 
-reg [5:0] dbg_addr;
- always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)        dbg_addr <=  6'h00;
-  else if (cmd_valid) dbg_addr <=  xfer_buf_nxt[`DBG_UART_ADDR];
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)                       xfer_bit <=  4'h0;
+    else if (txd_start | rxd_start)    xfer_bit <=  4'h1;
+    else if (xfer_done)                xfer_bit <=  4'h0;
+    else if (xfer_bit_inc)             xfer_bit <=  xfer_bit+4'h1;
+  end
 
-reg       dbg_bw;
-always @ (posedge dbg_clk or posedge dbg_rst)
-  if (dbg_rst)        dbg_bw   <=  1'b0;
-  else if (cmd_valid) dbg_bw   <=  xfer_buf_nxt[`DBG_UART_BW];
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)                       xfer_cnt <=  {`DBG_UART_XFER_CNT_W{1'b0}};
+    else if (rx_active & rxd_edge)     xfer_cnt <=  {1'b0, bit_cnt_max[`DBG_UART_XFER_CNT_W-1:1]};
+    else if (txd_start | xfer_bit_inc) xfer_cnt <=  bit_cnt_max;
+    else if (|xfer_cnt)                xfer_cnt <=  xfer_cnt+{`DBG_UART_XFER_CNT_W{1'b1}};
+  end
 
-wire        dbg_din_bw =  mem_burst  ? mem_bw : dbg_bw;
+  // Receive/Transmit buffer
+  //-------------------------
+  assign xfer_buf_nxt =  {rxd_s, xfer_buf[19:1]};
 
-wire [15:0] dbg_din    =  dbg_din_bw ? {8'h00,           xfer_buf_nxt[18:11]} :
-                                       {xfer_buf_nxt[18:11], xfer_buf_nxt[9:2]};
-wire        dbg_wr     = (xfer_done & (uart_state==RX_DATA2));
-wire        dbg_rd     = mem_burst ? (xfer_done & (uart_state==TX_DATA2)) :
-                                     (cmd_valid & ~xfer_buf_nxt[`DBG_UART_WR]) | mem_burst_rd;
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)           xfer_buf <=  20'h00000;
+    else if (dbg_rd_rdy)   xfer_buf <=  {1'b1, dbg_dout[15:8], 2'b01, dbg_dout[7:0], 1'b0};
+    else if (xfer_bit_inc) xfer_buf <=  xfer_buf_nxt;
+  end
 
-	    
-   
+  // Generate TXD output
+  //------------------------
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)                       dbg_uart_txd <=  1'b1;
+    else if (xfer_bit_inc & tx_active) dbg_uart_txd <=  xfer_buf[0];
+  end
+
+  //=============================================================================
+  // 5) INTERFACE TO DEBUG REGISTERS
+  //=============================================================================
+
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)        dbg_addr <=  6'h00;
+    else if (cmd_valid) dbg_addr <=  xfer_buf_nxt[`DBG_UART_ADDR];
+  end
+
+  reg       dbg_bw;
+
+  always @ (posedge dbg_clk or posedge dbg_rst) begin
+    if (dbg_rst)        dbg_bw   <=  1'b0;
+    else if (cmd_valid) dbg_bw   <=  xfer_buf_nxt[`DBG_UART_BW];
+  end
+
+  wire        dbg_din_bw =  mem_burst  ? mem_bw : dbg_bw;
+
+  assign      dbg_din    =  dbg_din_bw ? {8'h00,           xfer_buf_nxt[18:11]} :
+                                         {xfer_buf_nxt[18:11], xfer_buf_nxt[9:2]};
+  assign      dbg_wr     = (xfer_done & (uart_state==RX_DATA2));
+  assign      dbg_rd     = mem_burst ? (xfer_done & (uart_state==TX_DATA2)) :
+                                       (cmd_valid & ~xfer_buf_nxt[`DBG_UART_WR]) | mem_burst_rd;   
 endmodule // omsp_dbg_uart
 
 `ifdef OMSP_NO_INCLUDE
