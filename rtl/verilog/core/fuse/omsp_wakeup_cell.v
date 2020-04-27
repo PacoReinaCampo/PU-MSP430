@@ -44,7 +44,7 @@
 
 module  omsp_wakeup_cell (
   // OUTPUTs
-  output         wkup_out,       // Wakup signal (asynchronous)
+  output reg     wkup_out,       // Wakup signal (asynchronous)
 
   // INPUTs
   input          scan_clk,       // Scan clock
@@ -82,7 +82,6 @@ module  omsp_wakeup_cell (
   `endif
 
   // Wakeup capture
-  reg    wkup_out;
   always @(posedge wkup_clk or posedge wkup_rst) begin
     if (wkup_rst) wkup_out <= 1'b0;
     else          wkup_out <= 1'b1;

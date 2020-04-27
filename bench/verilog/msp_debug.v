@@ -39,17 +39,17 @@
 
 module msp_debug (
   // OUTPUTs
-  output  [8*32-1:0] e_state,        // Execution state
-  output  [8*32-1:0] i_state,        // Instruction fetch state
-  output      [31:0] inst_cycle,     // Cycle number within current instruction
-  output  [8*32-1:0] inst_full,      // Currently executed instruction (full version)
-  output      [31:0] inst_number,    // Instruction number since last system reset
-  output      [15:0] inst_pc,        // Instruction Program counter
-  output  [8*32-1:0] inst_short,     // Currently executed instruction (short version)
+  output reg [8*32-1:0] e_state,        // Execution state
+  output reg [8*32-1:0] i_state,        // Instruction fetch state
+  output reg [    31:0] inst_cycle,     // Cycle number within current instruction
+  output reg [8*32-1:0] inst_full,      // Currently executed instruction (full version)
+  output reg [    31:0] inst_number,    // Instruction number since last system reset
+  output reg [    15:0] inst_pc,        // Instruction Program counter
+  output     [8*32-1:0] inst_short,     // Currently executed instruction (short version)
 
   // INPUTs
-  input              mclk,           // Main system clock
-  input              puc_rst         // Main system reset
+  input                 mclk,           // Main system clock
+  input                 puc_rst         // Main system reset
 );
 
   //=============================================================================
@@ -105,8 +105,6 @@ module msp_debug (
 
   // Instruction fetch state
   //=========================
-  reg [8*32-1:0] i_state;
-
   always @(i_state_bin) begin
     case(i_state_bin)
       3'h0    : i_state =  "IRQ_FETCH";
@@ -121,8 +119,6 @@ module msp_debug (
 
   // Execution state
   //=========================
-  reg [8*32-1:0] e_state;
-
   always @(e_state_bin) begin
     case(e_state_bin)
       4'h2    : e_state =  "IRQ_0";
@@ -145,15 +141,10 @@ module msp_debug (
 
   // Count instruction number & cycles
   //====================================
-
-  reg [31:0]  inst_number;
-
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst)     inst_number  <= 0;
     else if (decode) inst_number  <= inst_number+1;
   end
-
-  reg [31:0]  inst_cycle;
 
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst)     inst_cycle <= 0;
@@ -406,9 +397,7 @@ module msp_debug (
 
   // Currently executed instruction
   //================================
-  wire [8*32-1:0] inst_short = inst_name;
-
-  reg  [8*32-1:0] inst_full;
+  assign inst_short = inst_name;
 
   always @(inst_type or inst_name or inst_bw or inst_as or inst_ad) begin
     inst_full   = myFormat(inst_name, inst_bw, 0);
@@ -424,8 +413,6 @@ module msp_debug (
 
   // Instruction program counter
   //================================
-  reg  [15:0] inst_pc;
-
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst)     inst_pc  <=  16'h0000;
     else if (decode) inst_pc  <=  pc;
