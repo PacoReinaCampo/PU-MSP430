@@ -38,45 +38,30 @@
 //----------------------------------------------------------------------------
 
 module  omsp_clock_gate (
+  // OUTPUTs
+  output         gclk,           // Gated clock
 
-// OUTPUTs
-    gclk,                      // Gated clock
-
-// INPUTs
-    clk,                       // Clock
-    enable,                    // Clock enable
-    scan_enable                // Scan enable (active during scan shifting)
+  // INPUTs
+  input          clk,            // Clock
+  input          enable,         // Clock enable
+  input          scan_enable     // Scan enable (active during scan shifting)
 );
 
-// OUTPUTs
-//=========
-output         gclk;           // Gated clock
+  //=============================================================================
+  // CLOCK GATE: LATCH + AND
+  //=============================================================================
 
-// INPUTs
-//=========
-input          clk;            // Clock
-input          enable;         // Clock enable
-input          scan_enable;    // Scan enable (active during scan shifting)
+  // Enable clock gate during scan shift
+  // (the gate itself is checked with the scan capture cycle)
+  wire enable_in = (enable | scan_enable);
 
+  // LATCH the enable signal
+  reg enable_latch;
+  always @(clk or enable_in) begin
+    if (~clk)
+      enable_latch <= enable_in;
+  end
 
-//=============================================================================
-// CLOCK GATE: LATCH + AND
-//=============================================================================
-   
-// Enable clock gate during scan shift
-// (the gate itself is checked with the scan capture cycle)
-wire    enable_in =   (enable | scan_enable);
-
-// LATCH the enable signal
-reg     enable_latch;
-always @(clk or enable_in)
-  if (~clk)
-    enable_latch <= enable_in;
-
-// AND gate
-assign  gclk      =  (clk & enable_latch);
-
-
+  // AND gate
+  assign  gclk =  (clk & enable_latch);
 endmodule // omsp_clock_gate
-
-

@@ -50,6 +50,7 @@ module MSP430_CORE #(
   parameter TOTAL_NR = 8'h00   // Total number of oMSP instances-1 (for multicore systems)
 )
   (
+    // OUTPUTs
     output               dbg_clk,
     output               dbg_rst,
     output               irq_detect,
@@ -79,6 +80,7 @@ module MSP430_CORE #(
     output               smclk,             // ASIC ONLY: SMCLK
     output               smclk_en,          // FPGA ONLY: SMCLK enable
 
+    // INPUTs
     input                cpu_en,            // Enable CPU code execution (asynchronous and non-glitchy)
     input                dbg_en,            // Debug interface enable (asynchronous and non-glitchy)
     input          [6:0] dbg_i2c_addr,      // Debug interface: I2C Address

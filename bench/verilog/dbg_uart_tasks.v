@@ -66,7 +66,6 @@ parameter           DBG_RD       =   8'h00;
 // Synchronization value
 parameter           DBG_SYNC     =   8'h80;
 
-
 //----------------------------------------------------------------------------
 // UART COMMUNICATION DATA RATE CONFIGURATION
 //----------------------------------------------------------------------------
@@ -85,141 +84,133 @@ integer   UART_PERIOD = `DBG_UART_CNT;
 //----------------------------------------------------------------------------
 
 task dbg_uart_rx;
-   output [7:0] dbg_rxbuf;
-      
-   reg [7:0] 	dbg_rxbuf;
-   reg [7:0] 	rxbuf;
-   integer 	rxcnt;
-   begin
-      #(1);
-      dbg_uart_rx_busy = 1'b1;
-      @(negedge dbg_uart_txd);  
-      dbg_rxbuf = 0;      
-      rxbuf     = 0;      
-      #(3*UART_PERIOD/2);
-      for (rxcnt = 0; rxcnt < 8; rxcnt = rxcnt + 1)
-	begin
-	   rxbuf = {dbg_uart_txd, rxbuf[7:1]};
-	   #(UART_PERIOD);
-	end
-      dbg_rxbuf        = rxbuf; 
-      dbg_uart_rx_busy = 1'b0;
-   end
+  output [7:0] dbg_rxbuf;
+
+  reg [7:0] 	dbg_rxbuf;
+  reg [7:0] 	rxbuf;
+  integer 	rxcnt;
+  begin
+    #(1);
+    dbg_uart_rx_busy = 1'b1;
+    @(negedge dbg_uart_txd);  
+    dbg_rxbuf = 0;      
+    rxbuf     = 0;      
+    #(3*UART_PERIOD/2);
+    for (rxcnt = 0; rxcnt < 8; rxcnt = rxcnt + 1)
+      begin
+        rxbuf = {dbg_uart_txd, rxbuf[7:1]};
+        #(UART_PERIOD);
+      end
+    dbg_rxbuf        = rxbuf; 
+    dbg_uart_rx_busy = 1'b0;
+  end
 endtask
 
 task dbg_uart_rx16;
-
-   reg [7:0] rxbuf_lo;
-   reg [7:0] rxbuf_hi;
-   begin
-      rxbuf_lo = 8'h00;
-      rxbuf_hi = 8'h00;
-      dbg_uart_rx(rxbuf_lo);
-      dbg_uart_rx(rxbuf_hi);
-      dbg_uart_buf = {rxbuf_hi, rxbuf_lo};
-   end
+  reg [7:0] rxbuf_lo;
+  reg [7:0] rxbuf_hi;
+  begin
+    rxbuf_lo = 8'h00;
+    rxbuf_hi = 8'h00;
+    dbg_uart_rx(rxbuf_lo);
+    dbg_uart_rx(rxbuf_hi);
+    dbg_uart_buf = {rxbuf_hi, rxbuf_lo};
+  end
 endtask
 
 task dbg_uart_rx8;
-
-   reg [7:0] rxbuf;
-   begin
-      rxbuf = 8'h00;
-      dbg_uart_rx(rxbuf);
-      dbg_uart_buf = {8'h00, rxbuf};
-   end
+  reg [7:0] rxbuf;
+  begin
+    rxbuf = 8'h00;
+    dbg_uart_rx(rxbuf);
+    dbg_uart_buf = {8'h00, rxbuf};
+  end
 endtask
 
 //----------------------------------------------------------------------------
 // Transmit UART frame to CPU Debug interface (8N1)
 //----------------------------------------------------------------------------
 task dbg_uart_tx;
-   input  [7:0] txbuf;
-   
-   reg [9:0] 	txbuf_full;
-   integer 	txcnt;
-   begin
-      #(1);
-      dbg_uart_tx_busy = 1'b1;
-      dbg_uart_rxd_pre = 1'b1;
-      txbuf_full       = {1'b1, txbuf, 1'b0};
-      for (txcnt = 0; txcnt < 10; txcnt = txcnt + 1)
-	begin
-	   #(UART_PERIOD);
-	   dbg_uart_rxd_pre =  txbuf_full[txcnt];
-	end
-      dbg_uart_tx_busy = 1'b0;
-   end
+  input  [7:0] txbuf;
+
+  reg [9:0] 	txbuf_full;
+  integer 	txcnt;
+  begin
+    #(1);
+    dbg_uart_tx_busy = 1'b1;
+    dbg_uart_rxd_pre = 1'b1;
+    txbuf_full       = {1'b1, txbuf, 1'b0};
+    for (txcnt = 0; txcnt < 10; txcnt = txcnt + 1) begin
+      #(UART_PERIOD);
+      dbg_uart_rxd_pre =  txbuf_full[txcnt];
+    end
+    dbg_uart_tx_busy = 1'b0;
+  end
 endtask
 
 task dbg_uart_tx16;
-   input  [15:0] txbuf;
-   
-   begin
-      dbg_uart_tx(txbuf[7:0]);
-      dbg_uart_tx(txbuf[15:8]);
-   end
+  input  [15:0] txbuf;
+
+  begin
+    dbg_uart_tx(txbuf[7:0]);
+    dbg_uart_tx(txbuf[15:8]);
+  end
 endtask
 
-always @(posedge mclk or posedge dbg_rst)
-  if (dbg_rst)
-    begin
-       dbg_uart_rxd_sel <= 1'b0;
-       dbg_uart_rxd_dly <= 1'b1;
-    end
-  else if (dbg_en)
-    begin
-       dbg_uart_rxd_sel <= dbg_uart_rxd_meta ? $random : 1'b0;
-       dbg_uart_rxd_dly <= dbg_uart_rxd_pre;
-    end
+always @(posedge mclk or posedge dbg_rst) begin
+  if (dbg_rst) begin
+    dbg_uart_rxd_sel <= 1'b0;
+    dbg_uart_rxd_dly <= 1'b1;
+  end
+  else if (dbg_en) begin
+    dbg_uart_rxd_sel <= dbg_uart_rxd_meta ? $random : 1'b0;
+    dbg_uart_rxd_dly <= dbg_uart_rxd_pre;
+  end
+end
 
 assign dbg_uart_rxd = dbg_uart_rxd_sel ? dbg_uart_rxd_dly : dbg_uart_rxd_pre;
-
 
 //----------------------------------------------------------------------------
 // Write to Debug register
 //----------------------------------------------------------------------------
 task dbg_uart_wr;
-   input  [7:0] dbg_reg;
-   input [15:0] dbg_data;
-   
-   begin
-      dbg_uart_tx(DBG_WR | dbg_reg);
-      dbg_uart_tx(dbg_data[7:0]);
-      if (~dbg_reg[6])
-	dbg_uart_tx(dbg_data[15:8]);
-   end
-endtask
+  input  [7:0] dbg_reg;
+  input [15:0] dbg_data;
 
+  begin
+    dbg_uart_tx(DBG_WR | dbg_reg);
+    dbg_uart_tx(dbg_data[7:0]);
+    if (~dbg_reg[6])
+      dbg_uart_tx(dbg_data[15:8]);
+  end
+endtask
 
 //----------------------------------------------------------------------------
 // Read Debug register
 //----------------------------------------------------------------------------
 task dbg_uart_rd;
-   input  [7:0] dbg_reg;
-   
-   reg [7:0] 	rxbuf_lo;
-   reg [7:0] 	rxbuf_hi;
-   begin
-      rxbuf_lo = 8'h00;
-      rxbuf_hi = 8'h00;
-      dbg_uart_tx(DBG_RD | dbg_reg);
-      dbg_uart_rx(rxbuf_lo);
-      if (~dbg_reg[6])
-	dbg_uart_rx(rxbuf_hi);
+  input  [7:0] dbg_reg;
 
-      dbg_uart_buf = {rxbuf_hi, rxbuf_lo};
-      end
+  reg [7:0] 	rxbuf_lo;
+  reg [7:0] 	rxbuf_hi;
+  begin
+    rxbuf_lo = 8'h00;
+    rxbuf_hi = 8'h00;
+    dbg_uart_tx(DBG_RD | dbg_reg);
+    dbg_uart_rx(rxbuf_lo);
+    if (~dbg_reg[6])
+      dbg_uart_rx(rxbuf_hi);
+
+    dbg_uart_buf = {rxbuf_hi, rxbuf_lo};
+  end
 endtask
 
 //----------------------------------------------------------------------------
 // Send synchronization frame
 //----------------------------------------------------------------------------
 task dbg_uart_sync;
-   begin
-      dbg_uart_tx(DBG_SYNC);
-      repeat(10) @(posedge mclk);
-   end
+  begin
+    dbg_uart_tx(DBG_SYNC);
+    repeat(10) @(posedge mclk);
+  end
 endtask
-
-
