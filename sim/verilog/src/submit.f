@@ -57,33 +57,33 @@
 // CPU
 //=============================================================================
 
-../../../rtl/verilog/core/fuse/omsp_and_gate.v
-../../../rtl/verilog/core/fuse/omsp_clock_gate.v
-../../../rtl/verilog/core/fuse/omsp_clock_mux.v
-../../../rtl/verilog/core/fuse/omsp_scan_mux.v
-../../../rtl/verilog/core/fuse/omsp_sync_cell.v
-../../../rtl/verilog/core/fuse/omsp_sync_reset.v
-../../../rtl/verilog/core/fuse/omsp_wakeup_cell.v
+../../../rtl/verilog/core/fuse/msp430_and_gate.v
+../../../rtl/verilog/core/fuse/msp430_clock_gate.v
+../../../rtl/verilog/core/fuse/msp430_clock_mux.v
+../../../rtl/verilog/core/fuse/msp430_scan_mux.v
+../../../rtl/verilog/core/fuse/msp430_sync_cell.v
+../../../rtl/verilog/core/fuse/msp430_sync_reset.v
+../../../rtl/verilog/core/fuse/msp430_wakeup_cell.v
 
-../../../rtl/verilog/core/omsp/omsp_alu.v
-../../../rtl/verilog/core/omsp/omsp_dbg_hwbrk.v
-../../../rtl/verilog/core/omsp/omsp_dbg_i2c.v
-../../../rtl/verilog/core/omsp/omsp_dbg_uart.v
-../../../rtl/verilog/core/omsp/omsp_register_file.v
+../../../rtl/verilog/core/omsp/msp430_alu.v
+../../../rtl/verilog/core/omsp/msp430_dbg_hwbrk.v
+../../../rtl/verilog/core/omsp/msp430_dbg_i2c.v
+../../../rtl/verilog/core/omsp/msp430_dbg_uart.v
+../../../rtl/verilog/core/omsp/msp430_register_file.v
 
-../../../rtl/verilog/core/main/BCM.v
-../../../rtl/verilog/core/main/DBG.v
-../../../rtl/verilog/core/main/EXECUTION.v
-../../../rtl/verilog/core/main/GPIO.v
-../../../rtl/verilog/core/main/MEMORY.v
-../../../rtl/verilog/core/main/MULTIPLIER.v
-../../../rtl/verilog/core/main/TEMPLATE_08.v
-../../../rtl/verilog/core/main/TEMPLATE_16.v
-../../../rtl/verilog/core/main/UART.v
+../../../rtl/verilog/core/main/msp430_bcm.v
+../../../rtl/verilog/core/main/msp430_dbg.v
+../../../rtl/verilog/core/main/msp430_execution.v
+../../../rtl/verilog/core/main/msp430_gpio.v
+../../../rtl/verilog/core/main/msp430_memory.v
+../../../rtl/verilog/core/main/msp430_multiplier.v
+../../../rtl/verilog/core/main/msp430_template08.v
+../../../rtl/verilog/core/main/msp430_template16.v
+../../../rtl/verilog/core/main/msp430_uart.v
 
-../../../rtl/verilog/core/main/FRONTEND.v
-../../../rtl/verilog/core/main/SFR.v
-../../../rtl/verilog/core/main/T_A.v
-../../../rtl/verilog/core/main/T_WATCHDOG.v
+../../../rtl/verilog/core/main/msp430_frontend.v
+../../../rtl/verilog/core/main/msp430_sfr.v
+../../../rtl/verilog/core/main/msp430_ta.v
+../../../rtl/verilog/core/main/msp430_watchdog.v
 
-../../../rtl/verilog/core/MSP430_CORE.v
+../../../rtl/verilog/core/msp430_pu.v

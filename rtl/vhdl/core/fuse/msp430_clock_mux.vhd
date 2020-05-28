@@ -39,19 +39,88 @@
 --   Francisco Javier Reina Campo <frareicam@gmail.com>
 --
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
 
-entity io_cell is
+entity msp430_clock_mux is
   port (
-    pad         : inout std_logic;
-    data_in     : out   std_logic;
-    data_out    : in    std_logic;
-    data_out_en : in    std_logic);
-end io_cell;
+    clk_out   : out std_logic;
+    clk_in0   : in  std_logic;
+    clk_in1   : in  std_logic;
+    reset     : in  std_logic;
+    scan_mode : in  std_logic;
+    selection : in  std_logic);
+end msp430_clock_mux;
 
-architecture rtl of io_cell is
+architecture rtl of msp430_clock_mux is
+
+  signal in0_select    : std_logic;
+  signal in0_select_s  : std_logic;
+  signal in0_select_ss : std_logic;
+  signal in0_enable    : std_logic;
+
+  signal in1_select    : std_logic;
+  signal in1_select_s  : std_logic;
+  signal in1_select_ss : std_logic;
+  signal in1_enable    : std_logic;
+
+  signal clk_in0_inv : std_logic;
+  signal clk_in1_inv : std_logic;
+
+  signal gated_clk_in0 : std_logic;
+  signal gated_clk_in1 : std_logic;
+
 begin
-  data_in <= pad;
-  pad     <= data_out when data_out_en = '1' else 'Z';
+  --CLK_IN0 Selection
+  in0_select <= not selection and not in1_select_ss;
+
+  process (clk_in0_inv, reset)
+  begin
+    if (reset = '1') then
+      in0_select_s <= '1';
+    elsif (rising_edge(clk_in0_inv)) then
+      in0_select_s <= in0_select;
+    end if;
+  end process;
+
+  process (clk_in0, reset)
+  begin
+    if (reset = '1') then
+      in0_select_ss <= '1';
+    elsif (rising_edge(clk_in0)) then
+      in0_select_ss <= in0_select_s;
+    end if;
+  end process;
+
+  in0_enable <= in0_select_ss or scan_mode;
+
+  --CLK_IN1 Selection   
+  in1_select <= selection and not in0_select_ss;
+
+  process (clk_in1_inv, reset)
+  begin
+    if (reset = '1') then
+      in1_select_s <= '0';
+    elsif (rising_edge(clk_in1_inv)) then
+      in1_select_s <= in1_select;
+    end if;
+  end process;
+
+  process (clk_in1, reset)
+  begin
+    if (reset = '1') then
+      in1_select_ss <= '0';
+    elsif (rising_edge(clk_in1)) then
+      in1_select_ss <= in1_select_s;
+    end if;
+  end process;
+
+  in1_enable <= in1_select_ss and not scan_mode;
+
+  --Clock MUX
+  clk_in0_inv   <= not clk_in0;
+  clk_in1_inv   <= not clk_in1;
+  gated_clk_in0 <= not (clk_in0_inv and in0_enable);
+  gated_clk_in1 <= not (clk_in1_inv and in1_enable);
+  clk_out       <= gated_clk_in0 and gated_clk_in1;
 end rtl;

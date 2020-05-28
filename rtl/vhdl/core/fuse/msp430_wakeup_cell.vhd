@@ -39,19 +39,55 @@
 --   Francisco Javier Reina Campo <frareicam@gmail.com>
 --
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
+use work.msp430_pkg.all;
 
-entity io_cell is
+entity msp430_wakeup_cell is
   port (
-    pad         : inout std_logic;
-    data_in     : out   std_logic;
-    data_out    : in    std_logic;
-    data_out_en : in    std_logic);
-end io_cell;
+    wkup_out   : out std_logic;
+    scan_clk   : in  std_logic;
+    scan_mode  : in  std_logic;
+    scan_rst   : in  std_logic;
+    wkup_clear : in  std_logic;
+    wkup_event : in  std_logic);
+end msp430_wakeup_cell;
 
-architecture rtl of io_cell is
+architecture rtl of msp430_wakeup_cell is
+
+  signal wkup_rst : std_logic;
+  signal wkup_clk : std_logic;
+
 begin
-  data_in <= pad;
-  pad     <= data_out when data_out_en = '1' else 'Z';
+  --Scan stuff for the ASIC mode
+  asic_on : if (ASIC = '1') generate
+    scan_mux_rst : msp430_scan_mux
+      port map (
+        data_out     => wkup_rst,
+        data_in_scan => scan_rst,
+        data_in_func => wkup_clear,
+        scan_mode    => scan_mode);
+
+    scan_mux_clk : msp430_scan_mux
+      port map (
+        data_out     => wkup_clk,
+        data_in_scan => scan_clk,
+        data_in_func => wkup_event,
+        scan_mode    => scan_mode);
+  end generate asic_on;
+
+  asic_off : if (ASIC = '0') generate
+    wkup_rst <= wkup_clear;
+    wkup_clk <= wkup_event;
+  end generate asic_off;
+
+  --Wakeup capture
+  process (wkup_clk, wkup_rst)
+  begin
+    if (wkup_rst = '1') then
+      wkup_out <= '0';
+    elsif (rising_edge(wkup_clk)) then
+      wkup_out <= '1';
+    end if;
+  end process;
 end rtl;

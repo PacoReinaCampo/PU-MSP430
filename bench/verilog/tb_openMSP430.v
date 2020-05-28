@@ -377,7 +377,7 @@ module tb_openMSP430;
   // openMSP430 Instance
   //----------------------------------
 
-  MSP430_CORE dut (
+  msp430_pu dut (
     // OUTPUTs
     .r0                (r0),
     .r1                (r1),
@@ -462,7 +462,7 @@ module tb_openMSP430;
   // Digital I/O
   //----------------------------------
 
-  GPIO GPIO_0 (
+  msp430_gpio gpio (
     // OUTPUTs
     .irq_port1    (irq_port1),         // Port 1 interrupt
     .irq_port2    (irq_port2),         // Port 2 interrupt
@@ -507,7 +507,7 @@ module tb_openMSP430;
   // Timers
   //----------------------------------
 
-  T_A T_A_0 (
+  msp430_ta ta (
     // OUTPUTs
     .irq_ta0      (irq_ta0),           // Timer A interrupt: TACCR0
     .irq_ta1      (irq_ta1),           // Timer A interrupt: TAIV, TACCR1, TACCR2
@@ -545,7 +545,7 @@ module tb_openMSP430;
   //
   // Simple full duplex UART (8N1 protocol)
   //----------------------------------------
-  UART UART_0 (
+  msp430_uart uart (
     // OUTPUTs
     .irq_uart_rx  (irq_uart_rx),   // UART receive interrupt
     .irq_uart_tx  (irq_uart_tx),   // UART transmit interrupt
@@ -567,7 +567,7 @@ module tb_openMSP430;
   // Peripheral templates
   //----------------------------------
 
-  TEMPLATE_08 TEMPLATE_08_0 (
+  msp430_template08 template08 (
     // OUTPUTs
     .per_dout     (per_dout_temp_8b),  // Peripheral data output
 
@@ -580,7 +580,7 @@ module tb_openMSP430;
     .puc_rst      (puc_rst)            // Main system reset
   );
 
-  TEMPLATE_16 TEMPLATE_16_0 (
+  msp430_template16 template16 (
     // OUTPUTs
     .per_dout     (per_dout_temp_16b), // Peripheral data output
     .cntrl2_16b   (cntrl2_16b),

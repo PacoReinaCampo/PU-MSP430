@@ -39,19 +39,29 @@
 --   Francisco Javier Reina Campo <frareicam@gmail.com>
 --
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
 
-entity io_cell is
+entity msp430_sync_reset is
   port (
-    pad         : inout std_logic;
-    data_in     : out   std_logic;
-    data_out    : in    std_logic;
-    data_out_en : in    std_logic);
-end io_cell;
+    rst_s : out std_logic;
+    clk   : in  std_logic;
+    rst_a : in  std_logic);
+end msp430_sync_reset;
 
-architecture rtl of io_cell is
+architecture rtl of msp430_sync_reset is
+
+  signal data_sync : std_logic_vector (1 downto 0);
+
 begin
-  data_in <= pad;
-  pad     <= data_out when data_out_en = '1' else 'Z';
+  process (clk, rst_a)
+  begin
+    if (rst_a = '1') then
+      data_sync <= (others => '1');
+    elsif (rising_edge(clk)) then
+      data_sync <= data_sync(0) & '0';
+    end if;
+  end process;
+
+  rst_s <= data_sync(1);
 end rtl;

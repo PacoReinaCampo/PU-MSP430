@@ -39,19 +39,31 @@
 --   Francisco Javier Reina Campo <frareicam@gmail.com>
 --
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
 
-entity io_cell is
+entity msp430_clock_gate is
   port (
-    pad         : inout std_logic;
-    data_in     : out   std_logic;
-    data_out    : in    std_logic;
-    data_out_en : in    std_logic);
-end io_cell;
+    gclk        : out std_logic;
+    clk         : in  std_logic;
+    enable      : in  std_logic;
+    scan_enable : in  std_logic);
+end msp430_clock_gate;
 
-architecture rtl of io_cell is
+architecture rtl of msp430_clock_gate is
+
+  signal enable_in    : std_logic;
+  signal enable_latch : std_logic;
+
 begin
-  data_in <= pad;
-  pad     <= data_out when data_out_en = '1' else 'Z';
+  enable_in <= enable or scan_enable;
+
+  process (clk, enable_in)
+  begin
+    if (clk = '0') then
+      enable_latch <= enable_in;
+    end if;
+  end process;
+
+  gclk <= clk and enable_latch;
 end rtl;
