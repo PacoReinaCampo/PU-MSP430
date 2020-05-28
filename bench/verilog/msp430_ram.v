@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 // 
-// *File Name: ram.v
+// *File Name: msp430_ram.v
 // 
 // *Module Description:
 //                      Scalable RAM model
@@ -32,7 +32,7 @@
 //
 //----------------------------------------------------------------------------
 
-module ram #(
+module msp430_ram #(
   parameter ADDR_MSB   =  6,         // MSB of the address bus
   parameter MEM_SIZE   =  256        // Memory size in bytes
 )
@@ -66,4 +66,4 @@ module ram #(
   end
 
   assign ram_dout = mem[ram_addr_reg];
-endmodule // ram
+endmodule // msp430_ram

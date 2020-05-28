@@ -39,18 +39,18 @@
 --   Francisco Javier Reina Campo <frareicam@gmail.com>
 --
 
-library IEEE;
-use IEEE.STD_LOGIC_1164.all;
+library ieee;
+use ieee.std_logic_1164.all;
 
-entity io_cell is
+entity msp430_io_cell is
   port (
     pad         : inout std_logic;
     data_in     : out   std_logic;
     data_out    : in    std_logic;
     data_out_en : in    std_logic);
-end io_cell;
+end msp430_io_cell;
 
-architecture rtl of io_cell is
+architecture rtl of msp430_io_cell is
 begin
   data_in <= pad;
   pad     <= data_out when data_out_en = '1' else 'Z';

@@ -1,7 +1,7 @@
-verilog work ../../../bench/verilog/tb_openMSP430.v
-verilog work ../../../bench/verilog/ram.v
-verilog work ../../../bench/verilog/io_cell.v
-verilog work ../../../bench/verilog/msp_debug.v
+verilog work ../../../bench/verilog/msp430_testbench.v
+verilog work ../../../bench/verilog/msp430_ram.v
+verilog work ../../../bench/verilog/msp430_io_cell.v
+verilog work ../../../bench/verilog/msp430_debug.v
 
 verilog work ../../../rtl/verilog/core/fuse/msp430_and_gate.v
 verilog work ../../../rtl/verilog/core/fuse/msp430_clock_gate.v

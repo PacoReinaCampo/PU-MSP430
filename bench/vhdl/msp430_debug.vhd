@@ -39,12 +39,11 @@
 --   Francisco Javier Reina Campo <frareicam@gmail.com>
 --
 
-library IEEE;
-use IEEE.STD_LOGIC_1164 .all;
-use IEEE.NUMERIC_STD .all;
-----use WORK.MSP430PACK .all;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
-entity msp_debug is
+entity msp430_debug is
   port (
     -- OUTPUTs
     inst_pc : out std_logic_vector(15 downto 0);  -- Instruction Program counter
@@ -52,9 +51,9 @@ entity msp_debug is
     -- INPUTs
     mclk    : in std_logic;             -- Main system clock
     puc_rst : in std_logic);            -- Main system reset  
-end msp_debug;
+end msp430_debug;
 
-architecture RTL of msp_debug is
+architecture rtl of msp430_debug is
   constant VXL : std_logic := '0';
 
   constant DBG_SWBRK_OP : std_logic_vector(15 downto 0) := X"0000";
@@ -146,13 +145,13 @@ architecture RTL of msp_debug is
   signal inst_full  : string(8 downto 0);
 
 begin
-  ----i_state_bin <= tb_openMSP430.i_state_bin;
-  ----e_state_bin <= tb_openMSP430.e_state_bin;
-  ----decode      <= tb_openMSP430.decode;
-  ----ir          <= tb_openMSP430.ir;
-  ----irq_detect  <= tb_openMSP430.irq_detect;
-  ----irq_num     <= tb_openMSP430.irq_num;
-  ----pc          <= tb_openMSP430.pc;
+  ----i_state_bin <= msp430_testbench.i_state_bin;
+  ----e_state_bin <= msp430_testbench.e_state_bin;
+  ----decode      <= msp430_testbench.decode;
+  ----ir          <= msp430_testbench.ir;
+  ----irq_detect  <= msp430_testbench.irq_detect;
+  ----irq_num     <= msp430_testbench.irq_num;
+  ----pc          <= msp430_testbench.pc;
 
   processing_0 : process (i_state_bin)
   begin
@@ -607,4 +606,4 @@ begin
       end if;
     end if;
   end process;
-end RTL;
+end rtl;

@@ -39,12 +39,12 @@
 --   Francisco Javier Reina Campo <frareicam@gmail.com>
 --
 
-library IEEE;
-use IEEE.STD_LOGIC_1164 .all;
-use IEEE.NUMERIC_STD .all;
-use WORK.MSP430_PACK .all;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.msp430_pkg.all;
 
-entity ram is
+entity msp430_ram is
   generic (
     ADDR_MSB : integer := 6;     -- MSB of the address bus
     MEM_SIZE : integer := 256);  -- Memory size in bytes
@@ -58,9 +58,9 @@ entity ram is
     ram_clk  : in std_logic;                            -- RAM clock
     ram_din  : in std_logic_vector(15 downto 0);        -- RAM data input
     ram_wen  : in std_logic_vector(1 downto 0));        -- RAM write enable (low active)    
-end ram;
+end msp430_ram;
 
-architecture RTL of ram is
+architecture rtl of msp430_ram is
 
   signal mem          : std_logic_matrix((MEM_SIZE/2)-1 downto 0)(15 downto 0);
   signal ram_addr_reg : std_logic_vector(ADDR_MSB downto 0);
@@ -86,4 +86,4 @@ begin
   end process;
 
   ram_dout <= mem(to_integer(unsigned(ram_addr_reg)));
-end RTL;
+end rtl;

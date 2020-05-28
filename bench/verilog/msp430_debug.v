@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 // 
-// *File Name: msp_debug.v
+// *File Name: msp430_debug.v
 // 
 // *Module Description:
 //                      MSP430 core debug utility signals
@@ -37,7 +37,7 @@
 `include "openMSP430_defines.v"
 `endif
 
-module msp_debug (
+module msp430_debug (
   // OUTPUTs
   output reg [8*32-1:0] e_state,        // Execution state
   output reg [8*32-1:0] i_state,        // Instruction fetch state
@@ -90,14 +90,14 @@ module msp_debug (
   // 2) CONNECTIONS TO MSP430 CORE INTERNALS
   //=============================================================================
 
-  wire  [2:0] i_state_bin = tb_openMSP430.i_state_bin;
-  wire  [3:0] e_state_bin = tb_openMSP430.e_state_bin;
+  wire  [2:0] i_state_bin = msp430_testbench.i_state_bin;
+  wire  [3:0] e_state_bin = msp430_testbench.e_state_bin;
 
-  wire        decode      = tb_openMSP430.decode;
-  wire [15:0] ir          = tb_openMSP430.ir;
-  wire        irq_detect  = tb_openMSP430.irq_detect;
-  wire  [3:0] irq_num     = tb_openMSP430.irq_num;
-  wire [15:0] pc          = tb_openMSP430.pc;
+  wire        decode      = msp430_testbench.decode;
+  wire [15:0] ir          = msp430_testbench.ir;
+  wire        irq_detect  = msp430_testbench.irq_detect;
+  wire  [3:0] irq_num     = msp430_testbench.irq_num;
+  wire [15:0] pc          = msp430_testbench.pc;
 
   //=============================================================================
   // 3) GENERATE DEBUG SIGNALS
@@ -417,4 +417,4 @@ module msp_debug (
     if (puc_rst)     inst_pc  <=  16'h0000;
     else if (decode) inst_pc  <=  pc;
   end
-endmodule // msp_debug
+endmodule // msp430_debug

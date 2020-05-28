@@ -22,7 +22,7 @@
 //
 //----------------------------------------------------------------------------
 // 
-// *File Name: tb_openMSP430.v
+// *File Name: msp430_testbench.v
 // 
 // *Module Description:
 //                      openMSP430 testbench
@@ -38,7 +38,7 @@
 `include "openMSP430_defines.v"
 `endif
 
-module tb_openMSP430;
+module msp430_testbench;
   wire        [15:0] r0;
   wire        [15:0] r1;
   wire        [15:0] r2;
@@ -239,11 +239,11 @@ module tb_openMSP430;
   //------------------------------
 
   // CPU & Memory registers
-  `include "registers.v"
+  `include "msp430_registers.v"
 
   // Debug interface tasks
-  `include "dbg_uart_tasks.v"
-  `include "dbg_i2c_tasks.v"
+  `include "msp430_dbg_uart_tasks.v"
+  `include "msp430_dbg_i2c_tasks.v"
 
   // Simple uart tasks
   //`include "uart_tasks.v"
@@ -345,7 +345,7 @@ module tb_openMSP430;
   // Program Memory
   //----------------------------------
 
-  ram #(`PMEM_MSB, `PMEM_SIZE) pmem_0 (
+  msp430_ram #(`PMEM_MSB, `PMEM_SIZE) pmem_0 (
     // OUTPUTs
     .ram_dout    (pmem_dout),          // Program Memory data output
 
@@ -361,7 +361,7 @@ module tb_openMSP430;
   // Data Memory
   //----------------------------------
 
-  ram #(`DMEM_MSB, `DMEM_SIZE) dmem_0 (
+  msp430_ram #(`DMEM_MSB, `DMEM_SIZE) dmem_0 (
     // OUTPUTs
     .ram_dout    (dmem_dout),          // Data Memory data output
 
@@ -651,14 +651,14 @@ module tb_openMSP430;
 
   // I2C Slave (openMSP430)
   //.........................
-  io_cell scl_slave_inst (
+  msp430_io_cell scl_slave_inst (
     .pad         (dbg_scl),             // I/O pad
     .data_in     (dbg_scl_slave),       // Input
     .data_out_en (1'b0),                // Output enable
     .data_out    (1'b0)                 // Output
   );
 
-  io_cell sda_slave_inst (
+  msp430_io_cell sda_slave_inst (
     .pad         (dbg_sda),             // I/O pad
     .data_in     (dbg_sda_slave_in),    // Input
     .data_out_en (!dbg_sda_slave_out),  // Output enable
@@ -667,14 +667,14 @@ module tb_openMSP430;
 
   // I2C Master (Debugger)
   //.........................
-  io_cell scl_master_inst (
+  msp430_io_cell scl_master_inst (
     .pad         (dbg_scl),             // I/O pad
     .data_in     (),                    // Input
     .data_out_en (!dbg_scl_master),     // Output enable
     .data_out    (1'b0)                 // Output
   );
 
-  io_cell sda_master_inst (
+  msp430_io_cell sda_master_inst (
     .pad         (dbg_sda),             // I/O pad
     .data_in     (dbg_sda_master_in),   // Input
     .data_out_en (!dbg_sda_master_out), // Output enable
@@ -684,7 +684,7 @@ module tb_openMSP430;
   //
   // Debug utility signals
   //----------------------------------------
-  msp_debug msp_debug_0 (
+  msp430_debug debug (
     // OUTPUTs
     .e_state      (e_state),           // Execution state
     .i_state      (i_state),           // Instruction fetch state
@@ -707,15 +707,15 @@ module tb_openMSP430;
       `ifdef NODUMP
       `else
       `ifdef VPD_FILE
-      $vcdplusfile("tb_openMSP430.vpd");
+      $vcdplusfile("msp430_testbench.vpd");
       $vcdpluson();
       `else
       `ifdef TRN_FILE
-      $recordfile ("tb_openMSP430.trn");
+      $recordfile ("msp430_testbench.trn");
       $recordvars;
       `else
-      $dumpfile("tb_openMSP430.vcd");
-      $dumpvars(0, tb_openMSP430);
+      $dumpfile("msp430_testbench.vcd");
+      $dumpvars(0, msp430_testbench);
       `endif
       `endif
       `endif

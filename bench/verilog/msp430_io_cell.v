@@ -27,7 +27,7 @@
 //
 //----------------------------------------------------------------------------
 //
-// *File Name: io_cell.v
+// *File Name: msp430_io_cell.v
 // 
 // *Module Description:
 //                       I/O cell model
@@ -37,7 +37,7 @@
 //
 //----------------------------------------------------------------------------
 
-module  io_cell (
+module  msp430_io_cell (
   // INOUTs
   inout          pad,            // I/O Pad
 
@@ -55,4 +55,4 @@ module  io_cell (
 
   assign  data_in  =  pad;
   assign  pad      =  data_out_en ? data_out : 1'bz;
-endmodule // io_cell
+endmodule // msp430_io_cell
