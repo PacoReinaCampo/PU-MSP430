@@ -84,7 +84,7 @@ sudo make install
 
 ```
 cd synthesis/yosys
-source SIMULATE-IT
+source SYNTHESIZE-IT
 ```
 
 
