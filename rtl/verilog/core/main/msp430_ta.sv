@@ -39,7 +39,7 @@
 
 `ifdef OMSP_TA_NO_INCLUDE
 `else
-`include "openMSP430_defines.v"
+`include "msp430_defines.sv"
 `endif
 
 module  msp430_ta (
@@ -701,5 +701,5 @@ endmodule // msp430_ta
 
 `ifdef OMSP_TA_NO_INCLUDE
 `else
-`include "openMSP430_undefines.v"
+`include "msp430_undefines.sv"
 `endif

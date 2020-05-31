@@ -27,7 +27,7 @@
 //
 //----------------------------------------------------------------------------
 //
-// *File Name: openMSP430.v
+// *File Name: msp430_pu.v
 // 
 // *Module Description:
 //                       openMSP430 Top level file
@@ -39,7 +39,7 @@
 
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "openMSP430_defines.v"
+`include "msp430_defines.sv"
 `endif
 
 module msp430_pu #(
@@ -576,9 +576,9 @@ module msp430_pu #(
   assign dbg_reg_wr      =  1'b0;
   assign dbg_uart_txd    =  1'b1;
   `endif
-endmodule // MSP430_CORE
+endmodule // msp430_pu
 
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "openMSP430_undefines.v"
+`include "msp430_undefines.sv"
 `endif

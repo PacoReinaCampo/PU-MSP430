@@ -39,7 +39,7 @@
 
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "openMSP430_defines.v"
+`include "msp430_defines.sv"
 `endif
 
 module  msp430_watchdog (
@@ -509,5 +509,5 @@ endmodule // msp430_watchdog
 
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "openMSP430_undefines.v"
+`include "msp430_undefines.sv"
 `endif

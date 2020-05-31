@@ -39,7 +39,7 @@
 
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "openMSP430_defines.v"
+`include "msp430_defines.sv"
 `endif
 
 module  msp430_dbg_uart (
@@ -274,5 +274,5 @@ endmodule // msp430_dbg_uart
 
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "openMSP430_undefines.v"
+`include "msp430_undefines.sv"
 `endif

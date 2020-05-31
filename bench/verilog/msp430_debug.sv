@@ -34,7 +34,7 @@
 
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "openMSP430_defines.v"
+`include "msp430_defines.sv"
 `endif
 
 module msp430_debug (

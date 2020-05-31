@@ -32,10 +32,10 @@
 //
 //----------------------------------------------------------------------------
 
-`include "timescale.v"
+`include "timescale.sv"
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "openMSP430_defines.v"
+`include "msp430_defines.sv"
 `endif
 
 module msp430_testbench;
@@ -239,17 +239,17 @@ module msp430_testbench;
   //------------------------------
 
   // CPU & Memory registers
-  `include "msp430_registers.v"
+  `include "msp430_registers.sv"
 
   // Debug interface tasks
-  `include "msp430_dbg_uart_tasks.v"
-  `include "msp430_dbg_i2c_tasks.v"
+  `include "msp430_dbg_uart_tasks.sv"
+  `include "msp430_dbg_i2c_tasks.sv"
 
   // Simple uart tasks
-  //`include "uart_tasks.v"
+  //`include "uart_tasks.sv"
 
   // Verilog stimulus
-  `include "stimulus.v"
+  `include "stimulus.sv"
 
   //
   // Initialize ROM

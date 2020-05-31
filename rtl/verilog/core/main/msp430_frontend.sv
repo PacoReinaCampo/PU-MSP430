@@ -39,7 +39,7 @@
 
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "openMSP430_defines.v"
+`include "msp430_defines.sv"
 `endif
 
 module  msp430_frontend (
@@ -955,5 +955,5 @@ module  msp430_frontend (
 endmodule // msp430_frontend
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "openMSP430_undefines.v"
+`include "msp430_undefines.sv"
 `endif

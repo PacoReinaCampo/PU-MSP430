@@ -58,8 +58,8 @@ fi
 #                     Check if the required files exist                       #
 ###############################################################################
 asmfile=../../../software/tests/regression/$1.s43;
-verfile=../../../bench/verilog/regression/$1.v;
-incfile=../../../rtl/verilog/pkg/openMSP430_defines.v;
+verfile=../../../bench/verilog/regression/$1.sv;
+incfile=../../../rtl/verilog/pkg/msp430_defines.sv;
 linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
 submit_verilog=../src/submit_verilog.f;
@@ -100,7 +100,7 @@ rm -rf *.vpd
 rm -rf *.trn
 rm -rf *.dsn
 rm -rf pmem*
-rm -rf stimulus.v
+rm -rf stimulus.sv
 
 
 ###############################################################################
@@ -114,10 +114,10 @@ echo " ======================================================="
 if [ `uname -o` = "Cygwin" ]
 then
     cp $asmfile pmem.s43
-    cp $verfile stimulus.v
+    cp $verfile stimulus.sv
 else
     ln -s $asmfile pmem.s43
-    ln -s $verfile stimulus.v
+    ln -s $verfile stimulus.sv
 fi
 
 # Make local copy of the openMSP403 configuration file
@@ -148,4 +148,4 @@ echo "Convert IHEX file to Verilog MEMH format..."
 
 # Start verilog simulation
 echo "Start Verilog simulation..."
-../bin/rtlsim.sh    stimulus.v pmem.mem $submit_verilog $submit_vhdl $submit
+../bin/rtlsim.sh    stimulus.sv pmem.mem $submit_verilog $submit_vhdl $submit
