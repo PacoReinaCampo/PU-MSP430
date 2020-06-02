@@ -74,7 +74,7 @@ initial
       repeat(5) @(posedge mclk);
       stimulus_done = 0;
 
-      force tb_openMSP430.dut.wdt_reset = 1'b0;
+      force msp430_testbench.dut.wdt_reset = 1'b0;
 
 `ifdef ASIC_CLOCKING
 

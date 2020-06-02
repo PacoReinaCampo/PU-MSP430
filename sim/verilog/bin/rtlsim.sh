@@ -114,7 +114,7 @@ else
     isim )
        # Xilinx simulator
        rm -rf fuse* isim*
-       fuse tb_openMSP430 -prj $3 -o isim.exe -i ../../../rtl/verilog/pkg/
+       fuse msp430_testbench -prj $3 -o isim.exe -i ../../../rtl/verilog/pkg/
        echo "run all" > isim.tcl
        ./isim.exe -tclbatch isim.tcl
        exit

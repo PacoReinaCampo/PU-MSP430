@@ -11,7 +11,7 @@ rm -rf pmem.x
 rm -rf pmem_defs.asm
 rm -rf stimulus.sv
 rm -rf transcript
-rm -rf tb_openMSP430.vcd
+rm -rf msp430_testbench.vcd
 rm -rf log
 rm -rf work
 
