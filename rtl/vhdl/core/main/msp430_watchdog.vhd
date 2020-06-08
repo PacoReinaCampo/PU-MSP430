@@ -39,10 +39,10 @@
 --   Francisco Javier Reina Campo <frareicam@gmail.com>
 --
 
-library IEEE;
-use IEEE.STD_LOGIC_1164 .all;
-use IEEE.NUMERIC_STD .all;
-use WORK.MSP430_PACK .all;
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.msp430_pkg.all;
 
 entity msp430_watchdog is
   port (
