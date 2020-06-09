@@ -110,7 +110,7 @@ else
        if [ -d work ]; then  vdel -all; fi
        vlib work
        vcom -2008 -f $4
-       exec vlog +acc=prn -f $3 $vargs -R -c -do "run -all" ;;
+       exec vlog -sv +acc=prn -f $3 $vargs -R -c -do "run -all" ;;
     isim )
        # Xilinx simulator
        rm -rf fuse* isim*

@@ -45,7 +45,6 @@ use ieee.numeric_std.all;
 use work.msp430_pkg.all;
 
 entity msp430_gpio is
-
   port (
     p1_dout : out std_logic_vector (7 downto 0);
     p2_dout : out std_logic_vector (7 downto 0);
