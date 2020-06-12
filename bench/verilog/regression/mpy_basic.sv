@@ -44,7 +44,7 @@ initial
       $display(" ===============================================");
       $display("|                 START SIMULATION              |");
       $display(" ===============================================");
-`ifdef MULTIPLIER
+`ifdef MULTIPLYING
       repeat(5) @(posedge mclk);
       stimulus_done = 0;
 
