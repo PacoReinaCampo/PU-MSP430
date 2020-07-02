@@ -34,9 +34,7 @@ linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
 submit_verilog=../src/submit_verilog.f;
 submit_vhdl=../src/submit_vhdl.f;
-if [ $OMSP_SIMULATOR == "isim" ]; then
-    submit=../src/submit.prj;
-fi
+submit=../src/submit.prj;
 
 if [ ! -e $asmfile ]; then
     echo "Assembler file $asmfile doesn't exist: $asmfile"
