@@ -36,7 +36,8 @@
 --
 -- =============================================================================
 -- Author(s):
---   Francisco Javier Reina Campo <frareicam@gmail.com>
+--   Olivier Girard <olgirard@gmail.com>
+--   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 --
 
 library IEEE;
