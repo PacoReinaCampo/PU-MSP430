@@ -299,11 +299,14 @@ module  msp430_dbg_i2c (
   end
 
   // Detect when the received I2C device address is not valid
+  `ifdef DBG_I2C_BROADCAST
   assign i2c_addr_not_valid =  (i2c_state == RX_ADDR) && shift_rx_done && (
-                               `ifdef DBG_I2C_BROADCAST
                                (shift_buf[7:1] != dbg_i2c_broadcast[6:0]) &&
-                               `endif
                                (shift_buf[7:1] != dbg_i2c_addr[6:0]));
+  `else
+  assign i2c_addr_not_valid =  (i2c_state == RX_ADDR) && shift_rx_done &&
+                               (shift_buf[7:1] != dbg_i2c_addr[6:0]);
+  `endif
 
   // Utility signals
   wire        shift_rx_data_done = shift_rx_done & (i2c_state==RX_DATA); 
