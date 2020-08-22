@@ -1,0 +1,1 @@
+../../../../bench/verilog/baremetal/regression/leds.sv
