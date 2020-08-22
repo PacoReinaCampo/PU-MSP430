@@ -27,9 +27,9 @@ fi
 ###############################################################################
 #                     Check if the required files exist                       #
 ###############################################################################
-asmfile=../../../software/tests/regression/$1.s43;
-verfile=../../../bench/verilog/regression/$1.sv;
-incfile=../../../rtl/verilog/pkg/msp430_defines.sv;
+asmfile=../../../../software/tests/$1.s43;
+verfile=../../../../bench/verilog/tests/regression/$1.sv;
+incfile=../../../../rtl/verilog/pkg/msp430_defines.sv;
 linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
 submit=../src/submit.f;
