@@ -1,0 +1,410 @@
+Running: /opt/Xilinx/14.7/ISE_DS/ISE/bin/lin64/unwrapped/fuse msp430_testbench glbl -mt off -v 1 -prj ../src/submit.prj -o isim.exe -i ../../../../rtl/verilog/pkg/ 
+ISim P.20131013 (signature 0xfbc00daa)
+Turned off multi-threading for compilation
+Determining compilation order of HDL files
+INFO:Simulator:958 - Library Mapping: Sourcing library mapping file "/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/xilinxsim.ini"
+The vhdl library search path for library \"std\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/std\"
+The veri library search path for library \"std\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/std\"
+The vhdl library search path for library \"ieee\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/ieee\"
+The veri library search path for library \"ieee\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/ieee\"
+The vhdl library search path for library \"ieee_proposed\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/ieee_proposed\"
+The veri library search path for library \"ieee_proposed\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/ieee_proposed\"
+The vhdl library search path for library \"vl\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/vl\"
+The veri library search path for library \"vl\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/vl\"
+The vhdl library search path for library \"synopsys\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/synopsys\"
+The veri library search path for library \"synopsys\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/synopsys\"
+The vhdl library search path for library \"simprim\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/simprim\"
+The veri library search path for library \"simprim\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/simprim\"
+The vhdl library search path for library \"unisim\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/unisim\"
+The veri library search path for library \"unisim\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/unisim\"
+The vhdl library search path for library \"unimacro\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/unimacro\"
+The veri library search path for library \"unimacro\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/unimacro\"
+The vhdl library search path for library \"aim\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/aim\"
+The veri library search path for library \"aim\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/aim\"
+The vhdl library search path for library \"cpld\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/cpld\"
+The veri library search path for library \"cpld\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/cpld\"
+The vhdl library search path for library \"pls\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/pls\"
+The veri library search path for library \"pls\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/pls\"
+The vhdl library search path for library \"xilinxcorelib\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/xilinxcorelib\"
+The veri library search path for library \"xilinxcorelib\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/vhdl/hdp/lin64/xilinxcorelib\"
+The vhdl library search path for library \"aim_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/aim_ver\"
+The veri library search path for library \"aim_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/aim_ver\"
+The vhdl library search path for library \"cpld_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/cpld_ver\"
+The veri library search path for library \"cpld_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/cpld_ver\"
+The vhdl library search path for library \"simprims_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/simprims_ver\"
+The veri library search path for library \"simprims_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/simprims_ver\"
+The vhdl library search path for library \"unisims_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/unisims_ver\"
+The veri library search path for library \"unisims_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/unisims_ver\"
+The vhdl library search path for library \"uni9000_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/uni9000_ver\"
+The veri library search path for library \"uni9000_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/uni9000_ver\"
+The vhdl library search path for library \"unimacro_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/unimacro_ver\"
+The veri library search path for library \"unimacro_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/unimacro_ver\"
+The vhdl library search path for library \"xilinxcorelib_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/xilinxcorelib_ver\"
+The veri library search path for library \"xilinxcorelib_ver\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/xilinxcorelib_ver\"
+The vhdl library search path for library \"secureip\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/xip/secureip\"
+The veri library search path for library \"secureip\" is now \"/opt/Xilinx/14.7/ISE_DS/ISE/verilog/hdp/lin64/xip/secureip\"
+The vhdl library search path for library \"work\" is now \"/home/us1/github/PU-MSP430/sim/mixed/baremetal/run/isim/work\"
+The veri library search path for library \"work\" is now \"/home/us1/github/PU-MSP430/sim/mixed/baremetal/run/isim/work\"
+
+-- Dumping Relevant Parameters
+XILINX = /opt/Xilinx/14.7/ISE_DS/ISE/
+PATH = /opt/Xilinx/14.7/ISE_DS/ISE//bin/lin64:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/opt/Xilinx/14.7/ISE_DS/ISE/bin/lin64
+LD_LIBRARY_PATH = /opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64:/opt/Xilinx/14.7/ISE_DS/ISE/lib/lin64
+PWD = /home/us1/github/PU-MSP430/sim/mixed/baremetal/run
+CWD = /home/us1/github/PU-MSP430/sim/mixed/baremetal/run
+GCC = /usr/bin/gcc
+-- Done dumping Relevant Parameters
+
+-- Dumping System Information
+sysname = Linux
+release = 5.4.0-42-generic
+version = #46-Ubuntu SMP Fri Jul 10 00:24:02 UTC 2020
+machine = x86_64
+ram = 16272124 KB
+-- Done dumping System Information
+
+-- Dumping Loaded Modules
+
+/lib/x86_64-linux-gnu/libc.so.6
+/lib/x86_64-linux-gnu/libdl.so.2
+/lib/x86_64-linux-gnu/libgcc_s.so.1
+/lib/x86_64-linux-gnu/libm.so.6
+/lib/x86_64-linux-gnu/libpthread.so.0
+/lib/x86_64-linux-gnu/libuuid.so.1
+/lib64/ld-linux-x86-64.so.2
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libCit_Core.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libICR.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libMiniZip.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libPersonalityModule.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libPort_Std.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libPortability.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libPrjrep_Clientac.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libStaticFileParsers.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libThread.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libUtilities.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libVrfc_Verific.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libVrfc_Vhdl_Sort.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libZlib.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libboost_bzip2-gcc41-mt-p-1_38.so.1.38.0
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libboost_date_time-gcc41-mt-p-1_38.so.1.38.0
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libboost_filesystem-gcc41-mt-p-1_38.so.1.38.0
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libboost_iostreams-gcc41-mt-p-1_38.so.1.38.0
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libboost_program_options-gcc41-mt-p-1_38.so.1.38.0
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libboost_regex-gcc41-mt-p-1_38.so.1.38.0
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libboost_system-gcc41-mt-p-1_38.so.1.38.0
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libboost_thread-gcc41-mt-p-1_38.so.1.38.0
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libboost_zlib-gcc41-mt-p-1_38.so.1.38.0
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libisl_iostreams.so
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libstdc++.so.6
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libstlport.so.5.1
+/opt/Xilinx/14.7/ISE_DS/ISE//lib/lin64/libxercesc.so
+/opt/Xilinx/14.7/ISE_DS/ISE/lib/lin64/libUtilC_MessageDispatcher.so
+linux-vdso.so.1
+-- Done dumping Loaded Modules
+
+-- Dumping library mapping
+aim=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/aim
+aim_ver=/opt/Xilinx/14.7/ISE_DS/ISE/./verilog/hdp/lin64/aim_ver
+cpld=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/cpld
+cpld_ver=/opt/Xilinx/14.7/ISE_DS/ISE/./verilog/hdp/lin64/cpld_ver
+ieee=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/ieee
+ieee_proposed=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/ieee_proposed
+pls=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/pls
+secureip=/opt/Xilinx/14.7/ISE_DS/ISE/./verilog/hdp/lin64/xip/secureip
+simprim=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/simprim
+simprims_ver=/opt/Xilinx/14.7/ISE_DS/ISE/./verilog/hdp/lin64/simprims_ver
+std=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/std
+synopsys=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/synopsys
+uni9000_ver=/opt/Xilinx/14.7/ISE_DS/ISE/./verilog/hdp/lin64/uni9000_ver
+unimacro=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/unimacro
+unimacro_ver=/opt/Xilinx/14.7/ISE_DS/ISE/./verilog/hdp/lin64/unimacro_ver
+unisim=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/unisim
+unisims_ver=/opt/Xilinx/14.7/ISE_DS/ISE/./verilog/hdp/lin64/unisims_ver
+vl=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/vl
+work=isim/work
+xilinxcorelib=/opt/Xilinx/14.7/ISE_DS/ISE/./vhdl/hdp/lin64/xilinxcorelib
+xilinxcorelib_ver=/opt/Xilinx/14.7/ISE_DS/ISE/./verilog/hdp/lin64/xilinxcorelib_ver
+-- Done dumping library mapping
+
+Analyzing Verilog file "../src/../../../../bench/verilog/baremetal/ram_d1.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 42.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <ram_d1>.
+Analyzing Verilog file "../src/../../../../bench/verilog/baremetal/ram_d2.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 42.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <ram_d2>.
+Analyzing Verilog file "../src/../../../../bench/verilog/baremetal/ram_dp.sv" into library work
+Parsing module <ram_dp>.
+Analyzing Verilog file "../src/../../../../bench/verilog/baremetal/ram_p2.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 42.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <ram_p2>.
+Analyzing Verilog file "../src/../../../../bench/verilog/baremetal/ram_sp.sv" into library work
+Parsing module <ram_sp>.
+Analyzing Verilog file "../src/../../../../bench/verilog/baremetal/glbl.sv" into library work
+Parsing module <glbl>.
+Analyzing Verilog file "../src/../../../../bench/verilog/baremetal/msp430_debug.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 44.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_debug>.
+Analyzing Verilog file "../src/../../../../bench/verilog/baremetal/msp430_testbench.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/timescale.sv" included at line 42.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 45.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_testbench>.
+Parsing verilog file "../src/../../../../bench/verilog/baremetal/registers_omsp0.sv" included at line 215.
+Parsing verilog file "../src/../../../../bench/verilog/baremetal/registers_omsp1.sv" included at line 216.
+Parsing verilog file "stimulus.sv" included at line 219.
+Analyzing Verilog file "../src/../../../../rtl/verilog/soc/msp430_core0.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 42.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_core0>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/soc/msp430_core1.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 42.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_core1>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/soc/msp430_soc.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 42.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_soc>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/fuse/msp430_and_gate.sv" into library work
+Parsing module <msp430_and_gate>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/fuse/msp430_clock_gate.sv" into library work
+Parsing module <msp430_clock_gate>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/fuse/msp430_clock_mux.sv" into library work
+Parsing module <msp430_clock_mux>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/fuse/msp430_scan_mux.sv" into library work
+Parsing module <msp430_scan_mux>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/fuse/msp430_sync_cell.sv" into library work
+Parsing module <msp430_sync_cell>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/fuse/msp430_sync_reset.sv" into library work
+Parsing module <msp430_sync_reset>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/fuse/msp430_wakeup_cell.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_wakeup_cell>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 102.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/omsp/msp430_alu.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_alu>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 230.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/omsp/msp430_dbg_hwbrk.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_dbg_hwbrk>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 235.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/omsp/msp430_dbg_i2c.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_dbg_i2c>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 457.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/omsp/msp430_dbg_uart.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_dbg_uart>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 286.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/omsp/msp430_register_file.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_register_file>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 726.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_bcm.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_bcm>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 1020.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_dbg.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_dbg>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 816.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_execution.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_execution>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 432.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_gpio.sv" into library work
+Parsing module <msp430_gpio>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_memory.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_memory>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 250.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_multiplier.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_multiplier>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 441.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_template08.sv" into library work
+Parsing module <msp430_template08>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_template16.sv" into library work
+Parsing module <msp430_template16>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_uart.sv" into library work
+Parsing module <msp430_uart>.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_frontend.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_frontend>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 1007.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_sfr.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_sfr>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 349.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_ta.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_ta>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 713.
+Analyzing Verilog file "../src/../../../../rtl/verilog/core/main/msp430_watchdog.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_watchdog>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 528.
+Analyzing Verilog file "../src/../../../../rtl/verilog/pu/msp430_pu.sv" into library work
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_defines.sv" included at line 51.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 52.
+Parsing module <msp430_pu>.
+Parsing verilog file "../../../../rtl/verilog/pkg/msp430_undefines.sv" included at line 592.
+Parsing VHDL file "../src/../../../../rtl/vhdl/soc/msp430_io_cell.vhd" into library work
+Parsing entity <msp430_io_cell>.
+Parsing architecture <rtl> of entity <msp430_io_cell>.
+Starting static elaboration
+
+Elaborating module <msp430_testbench>.
+
+Elaborating module <glbl>.
+Going to vhdl side to elaborate module msp430_io_cell
+Executing msp430_io_cell_default(rtl)
+Back to verilog to continue elaboration
+Completed static elaboration
+Fuse Memory Usage: 87876 KB
+Fuse CPU Usage: 1180 ms
+Compiling module msp430_sync_reset - m_16850873805691003130_2749264731
+Compiling isim/isim.exe.sim/work/m_16850873805691003130_2749264731.c to isim/isim.exe.sim/work/m_16850873805691003130_2749264731.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_16850873805691003130_2749264731.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_16850873805691003130_2749264731.c"
+Compiling module msp430_and_gate - m_08408788558305578110_3531405266
+Compiling isim/isim.exe.sim/work/m_08408788558305578110_3531405266.c to isim/isim.exe.sim/work/m_08408788558305578110_3531405266.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_08408788558305578110_3531405266.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_08408788558305578110_3531405266.c"
+Compiling module msp430_sync_cell - m_03448955683645603318_2419603527
+Compiling isim/isim.exe.sim/work/m_03448955683645603318_2419603527.c to isim/isim.exe.sim/work/m_03448955683645603318_2419603527.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_03448955683645603318_2419603527.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_03448955683645603318_2419603527.c"
+Compiling module msp430_scan_mux - m_08874057887209913425_0119657587
+Compiling isim/isim.exe.sim/work/m_08874057887209913425_0119657587.c to isim/isim.exe.sim/work/m_08874057887209913425_0119657587.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_08874057887209913425_0119657587.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_08874057887209913425_0119657587.c"
+Compiling module msp430_clock_mux - m_11231247881543713886_3477158735
+Compiling isim/isim.exe.sim/work/m_11231247881543713886_3477158735.c to isim/isim.exe.sim/work/m_11231247881543713886_3477158735.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_11231247881543713886_3477158735.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_11231247881543713886_3477158735.c"
+Compiling module msp430_clock_gate - m_13572556910479466828_2230708074
+Compiling isim/isim.exe.sim/work/m_13572556910479466828_2230708074.c to isim/isim.exe.sim/work/m_13572556910479466828_2230708074.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_13572556910479466828_2230708074.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_13572556910479466828_2230708074.c"
+Compiling module msp430_bcm_default - m_16326129204203745241_1658147827
+Compiling isim/isim.exe.sim/work/m_16326129204203745241_1658147827.c to isim/isim.exe.sim/work/m_16326129204203745241_1658147827.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_16326129204203745241_1658147827.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_16326129204203745241_1658147827.c"
+Compiling module msp430_frontend - m_05220251948854965197_0214889316
+Compiling isim/isim.exe.sim/work/m_05220251948854965197_0214889316.c to isim/isim.exe.sim/work/m_05220251948854965197_0214889316.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_05220251948854965197_0214889316.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_05220251948854965197_0214889316.c"
+Compiling module msp430_register_file - m_05486813418608902300_1561380554
+Compiling isim/isim.exe.sim/work/m_05486813418608902300_1561380554.c to isim/isim.exe.sim/work/m_05486813418608902300_1561380554.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_05486813418608902300_1561380554.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_05486813418608902300_1561380554.c"
+Compiling module msp430_alu - m_01228052405830855554_0452600502
+Compiling isim/isim.exe.sim/work/m_01228052405830855554_0452600502.c to isim/isim.exe.sim/work/m_01228052405830855554_0452600502.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_01228052405830855554_0452600502.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_01228052405830855554_0452600502.c"
+Compiling module msp430_execution - m_00904434262971486680_0197772496
+Compiling isim/isim.exe.sim/work/m_00904434262971486680_0197772496.c to isim/isim.exe.sim/work/m_00904434262971486680_0197772496.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_00904434262971486680_0197772496.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_00904434262971486680_0197772496.c"
+Compiling module msp430_memory - m_09194965258366543846_3730725449
+Compiling isim/isim.exe.sim/work/m_09194965258366543846_3730725449.c to isim/isim.exe.sim/work/m_09194965258366543846_3730725449.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_09194965258366543846_3730725449.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_09194965258366543846_3730725449.c"
+Compiling module msp430_wakeup_cell - m_10121313228056834074_1163325552
+Compiling isim/isim.exe.sim/work/m_10121313228056834074_1163325552.c to isim/isim.exe.sim/work/m_10121313228056834074_1163325552.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_10121313228056834074_1163325552.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_10121313228056834074_1163325552.c"
+Compiling module msp430_sfr_default - m_08824549853394121796_2566721052
+Compiling isim/isim.exe.sim/work/m_08824549853394121796_2566721052.c to isim/isim.exe.sim/work/m_08824549853394121796_2566721052.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_08824549853394121796_2566721052.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_08824549853394121796_2566721052.c"
+Compiling module msp430_watchdog_default - m_03223848447303962765_1912599265
+Compiling isim/isim.exe.sim/work/m_03223848447303962765_1912599265.c to isim/isim.exe.sim/work/m_03223848447303962765_1912599265.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_03223848447303962765_1912599265.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_03223848447303962765_1912599265.c"
+Compiling module msp430_multiplier_default - m_00122602872656763436_2142758568
+Compiling isim/isim.exe.sim/work/m_00122602872656763436_2142758568.c to isim/isim.exe.sim/work/m_00122602872656763436_2142758568.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_00122602872656763436_2142758568.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_00122602872656763436_2142758568.c"
+Compiling module msp430_dbg_hwbrk - m_17137561736872359431_0477667360
+Compiling isim/isim.exe.sim/work/m_17137561736872359431_0477667360.c to isim/isim.exe.sim/work/m_17137561736872359431_0477667360.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_17137561736872359431_0477667360.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_17137561736872359431_0477667360.c"
+Compiling module msp430_dbg_i2c - m_08456171468785800144_2533162339
+Compiling isim/isim.exe.sim/work/m_08456171468785800144_2533162339.c to isim/isim.exe.sim/work/m_08456171468785800144_2533162339.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_08456171468785800144_2533162339.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_08456171468785800144_2533162339.c"
+Compiling module msp430_dbg_default - m_10380626877179092055_4035737616
+Compiling isim/isim.exe.sim/work/m_10380626877179092055_4035737616.c to isim/isim.exe.sim/work/m_10380626877179092055_4035737616.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_10380626877179092055_4035737616.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_10380626877179092055_4035737616.c"
+Compiling module msp430_pu(INST_NR=0,TOTAL_NR=1) - m_17292133202214719783_3657639695
+Compiling isim/isim.exe.sim/work/m_17292133202214719783_3657639695.c to isim/isim.exe.sim/work/m_17292133202214719783_3657639695.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_17292133202214719783_3657639695.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_17292133202214719783_3657639695.c"
+Compiling module msp430_gpio_default - m_03942737937697333438_0683859125
+Compiling isim/isim.exe.sim/work/m_03942737937697333438_0683859125.c to isim/isim.exe.sim/work/m_03942737937697333438_0683859125.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_03942737937697333438_0683859125.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_03942737937697333438_0683859125.c"
+Compiling module msp430_ta_default - m_01850995754964045491_2960564227
+Compiling isim/isim.exe.sim/work/m_01850995754964045491_2960564227.c to isim/isim.exe.sim/work/m_01850995754964045491_2960564227.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_01850995754964045491_2960564227.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_01850995754964045491_2960564227.c"
+Compiling module msp430_uart_default - m_16982370223339690097_1447170670
+Compiling isim/isim.exe.sim/work/m_16982370223339690097_1447170670.c to isim/isim.exe.sim/work/m_16982370223339690097_1447170670.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_16982370223339690097_1447170670.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_16982370223339690097_1447170670.c"
+Compiling module msp430_core0 - m_06338128324121169063_3685462661
+Compiling isim/isim.exe.sim/work/m_06338128324121169063_3685462661.c to isim/isim.exe.sim/work/m_06338128324121169063_3685462661.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_06338128324121169063_3685462661.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_06338128324121169063_3685462661.c"
+Compiling module msp430_pu(INST_NR=1,TOTAL_NR=1) - m_17292133202214719783_0127270538
+Compiling isim/isim.exe.sim/work/m_17292133202214719783_0127270538.c to isim/isim.exe.sim/work/m_17292133202214719783_0127270538.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_17292133202214719783_0127270538.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_17292133202214719783_0127270538.c"
+Compiling module msp430_core1 - m_15360898330073332972_2896986643
+Compiling isim/isim.exe.sim/work/m_15360898330073332972_2896986643.c to isim/isim.exe.sim/work/m_15360898330073332972_2896986643.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_15360898330073332972_2896986643.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_15360898330073332972_2896986643.c"
+Compiling module msp430_soc - m_12568076249909730752_3668030266
+Compiling isim/isim.exe.sim/work/m_12568076249909730752_3668030266.c to isim/isim.exe.sim/work/m_12568076249909730752_3668030266.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_12568076249909730752_3668030266.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_12568076249909730752_3668030266.c"
+Compiling module ram_sp(ADDR_MSB=9,MEM_SIZE=4096) - m_06664925723333534785_3530608706
+Compiling isim/isim.exe.sim/work/m_06664925723333534785_3530608706.c to isim/isim.exe.sim/work/m_06664925723333534785_3530608706.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_06664925723333534785_3530608706.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_06664925723333534785_3530608706.c"
+Compiling module ram_d1 - m_10340560417326697755_3389192672
+Compiling isim/isim.exe.sim/work/m_10340560417326697755_3389192672.c to isim/isim.exe.sim/work/m_10340560417326697755_3389192672.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_10340560417326697755_3389192672.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_10340560417326697755_3389192672.c"
+Compiling module ram_dp(ADDR_MSB=9,MEM_SIZE=4096) - m_15231152502650725885_3441881793
+Compiling isim/isim.exe.sim/work/m_15231152502650725885_3441881793.c to isim/isim.exe.sim/work/m_15231152502650725885_3441881793.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_15231152502650725885_3441881793.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_15231152502650725885_3441881793.c"
+Compiling module ram_d2 - m_16518622366933697429_1393272922
+Compiling isim/isim.exe.sim/work/m_16518622366933697429_1393272922.c to isim/isim.exe.sim/work/m_16518622366933697429_1393272922.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_16518622366933697429_1393272922.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_16518622366933697429_1393272922.c"
+Compiling module ram_dp(ADDR_MSB=12,MEM_SIZE=1638... - m_15231152502650725885_2967517005
+Compiling isim/isim.exe.sim/work/m_15231152502650725885_2967517005.c to isim/isim.exe.sim/work/m_15231152502650725885_2967517005.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_15231152502650725885_2967517005.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_15231152502650725885_2967517005.c"
+Compiling module ram_p2 - m_16518622366933697429_2107997967
+Compiling isim/isim.exe.sim/work/m_16518622366933697429_2107997967.c to isim/isim.exe.sim/work/m_16518622366933697429_2107997967.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_16518622366933697429_2107997967.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_16518622366933697429_2107997967.c"
+Compiling module msp430_debug - m_10837781273876780936_2782788487
+Compiling isim/isim.exe.sim/work/m_10837781273876780936_2782788487.c to isim/isim.exe.sim/work/m_10837781273876780936_2782788487.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_10837781273876780936_2782788487.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_10837781273876780936_2782788487.c"
+Compiling module msp430_testbench - m_10090245821116140969_0938322459
+Compiling isim/isim.exe.sim/work/m_10090245821116140969_0938322459.c to isim/isim.exe.sim/work/m_10090245821116140969_0938322459.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_10090245821116140969_0938322459.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_10090245821116140969_0938322459.c"
+Compiling module glbl - m_16105224043767616615_2073120511
+Compiling isim/isim.exe.sim/work/m_16105224043767616615_2073120511.c to isim/isim.exe.sim/work/m_16105224043767616615_2073120511.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/m_16105224043767616615_2073120511.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/m_16105224043767616615_2073120511.c"
+Compiling package standard - standard
+Compiling package std_logic_1164 - p_2592010699
+Compiling isim/precompiled.exe.sim/ieee/p_2592010699.c to isim/precompiled.exe.sim/ieee/p_2592010699.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/precompiled.exe.sim/ieee/p_2592010699.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/precompiled.exe.sim/ieee/p_2592010699.c"
+Compiling architecture rtl of entity msp430_io_cell [msp430_io_cell_default] - a_4035447140_1516540902
+Compiling isim/isim.exe.sim/work/a_4035447140_1516540902.c to isim/isim.exe.sim/work/a_4035447140_1516540902.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/a_4035447140_1516540902.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/a_4035447140_1516540902.c"
+Time Resolution for simulation is 1ps.
+Compiling isim/isim.exe.sim/work/isim.exe_main.c to isim/isim.exe.sim/work/isim.exe_main.lin64.o with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -c -o "isim/isim.exe.sim/work/isim.exe_main.lin64.o" -I"/opt/Xilinx/14.7/ISE_DS/ISE/./data/include" "isim/isim.exe.sim/work/isim.exe_main.c"
+Linking with command:
+"/usr/bin/gcc" -Wa,-W  -O  -fPIC  -m64  -o "isim/isim.exe.sim/isim.exe" "isim/isim.exe.sim/work/isim.exe_main.lin64.o"  "isim/isim.exe.sim/work/m_16850873805691003130_2749264731.lin64.o" "isim/isim.exe.sim/work/m_08408788558305578110_3531405266.lin64.o" "isim/isim.exe.sim/work/m_03448955683645603318_2419603527.lin64.o" "isim/isim.exe.sim/work/m_08874057887209913425_0119657587.lin64.o" "isim/isim.exe.sim/work/m_11231247881543713886_3477158735.lin64.o" "isim/isim.exe.sim/work/m_13572556910479466828_2230708074.lin64.o" "isim/isim.exe.sim/work/m_16326129204203745241_1658147827.lin64.o" "isim/isim.exe.sim/work/m_05220251948854965197_0214889316.lin64.o" "isim/isim.exe.sim/work/m_05486813418608902300_1561380554.lin64.o" "isim/isim.exe.sim/work/m_01228052405830855554_0452600502.lin64.o" "isim/isim.exe.sim/work/m_00904434262971486680_0197772496.lin64.o" "isim/isim.exe.sim/work/m_09194965258366543846_3730725449.lin64.o" "isim/isim.exe.sim/work/m_10121313228056834074_1163325552.lin64.o" "isim/isim.exe.sim/work/m_08824549853394121796_2566721052.lin64.o" "isim/isim.exe.sim/work/m_03223848447303962765_1912599265.lin64.o" "isim/isim.exe.sim/work/m_00122602872656763436_2142758568.lin64.o" "isim/isim.exe.sim/work/m_17137561736872359431_0477667360.lin64.o" "isim/isim.exe.sim/work/m_08456171468785800144_2533162339.lin64.o" "isim/isim.exe.sim/work/m_10380626877179092055_4035737616.lin64.o" "isim/isim.exe.sim/work/m_17292133202214719783_3657639695.lin64.o" "isim/isim.exe.sim/work/m_03942737937697333438_0683859125.lin64.o" "isim/isim.exe.sim/work/m_01850995754964045491_2960564227.lin64.o" "isim/isim.exe.sim/work/m_16982370223339690097_1447170670.lin64.o" "isim/isim.exe.sim/work/m_06338128324121169063_3685462661.lin64.o" "isim/isim.exe.sim/work/m_17292133202214719783_0127270538.lin64.o" "isim/isim.exe.sim/work/m_15360898330073332972_2896986643.lin64.o" "isim/isim.exe.sim/work/m_12568076249909730752_3668030266.lin64.o" "isim/isim.exe.sim/work/m_06664925723333534785_3530608706.lin64.o" "isim/isim.exe.sim/work/m_10340560417326697755_3389192672.lin64.o" "isim/isim.exe.sim/work/m_15231152502650725885_3441881793.lin64.o" "isim/isim.exe.sim/work/m_16518622366933697429_1393272922.lin64.o" "isim/isim.exe.sim/work/m_15231152502650725885_2967517005.lin64.o" "isim/isim.exe.sim/work/m_16518622366933697429_2107997967.lin64.o" "isim/isim.exe.sim/work/m_10837781273876780936_2782788487.lin64.o" "isim/isim.exe.sim/work/m_10090245821116140969_0938322459.lin64.o" "isim/isim.exe.sim/work/m_16105224043767616615_2073120511.lin64.o" "isim/precompiled.exe.sim/ieee/p_2592010699.lin64.o" "isim/isim.exe.sim/work/a_4035447140_1516540902.lin64.o" "/opt/Xilinx/14.7/ISE_DS/ISE/./lib/lin64/libhsimengine.so"
+Compiled 4 VHDL Units
+Compiled 36 Verilog Units
+Built simulation executable isim.exe
+Fuse Memory Usage: 104380 KB
+Fuse CPU Usage: 1760 ms
+GCC CPU Usage: 12690 ms
