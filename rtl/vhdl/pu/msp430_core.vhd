@@ -45,7 +45,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use work.msp430_pkg.all;
 
-entity msp430_pu is
+entity msp430_core is
   port (
     --FRONTEND - SCAN
     scan_enable : in std_logic;
@@ -142,9 +142,9 @@ entity msp430_pu is
     dco_clk     : in  std_logic;
     lfxt_clk    : in  std_logic;
     wkup        : in  std_logic);
-end msp430_pu;
+end msp430_core;
 
-architecture rtl of msp430_pu is
+architecture rtl of msp430_core is
 
   --SIGNAL INOUT--
   --FRONTEND - INTERRUPTION

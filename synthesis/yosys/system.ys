@@ -26,4 +26,4 @@ read_verilog -I ../../rtl/verilog/pkg -sv ../../rtl/verilog/core/omsp/msp430_dbg
 read_verilog -I ../../rtl/verilog/pkg -sv ../../rtl/verilog/core/omsp/msp430_dbg_uart.sv
 read_verilog -I ../../rtl/verilog/pkg -sv ../../rtl/verilog/core/omsp/msp430_register_file.sv
 
-read_verilog -I ../../rtl/verilog/pkg -sv ../../rtl/verilog/pu/msp430_pu.sv
+read_verilog -I ../../rtl/verilog/pkg -sv ../../rtl/verilog/pu/msp430_core.sv

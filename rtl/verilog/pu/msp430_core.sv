@@ -51,7 +51,7 @@
 `include "msp430_defines.sv"
 `endif
 
-module msp430_pu #(
+module msp430_core #(
   parameter AW = 16,
   parameter DW = 16,
 
@@ -585,7 +585,7 @@ module msp430_pu #(
   assign dbg_reg_wr      =  1'b0;
   assign dbg_uart_txd    =  1'b1;
   `endif
-endmodule // msp430_pu
+endmodule // msp430_core
 
 `ifdef OMSP_NO_INCLUDE
 `else

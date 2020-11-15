@@ -391,7 +391,7 @@ module msp430_testbench;
   // openMSP430 Instance
   //----------------------------------
 
-  msp430_pu dut (
+  msp430_core dut (
     // OUTPUTs
     .r0                (r0),
     .r1                (r1),

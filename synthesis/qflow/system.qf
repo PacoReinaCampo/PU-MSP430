@@ -1,44 +1,44 @@
 rm -rf synthesis
 mkdir synthesis
-mkdir synthesis/msp430_pu
-mkdir synthesis/msp430_pu/source
-mkdir synthesis/msp430_pu/synthesis
-mkdir synthesis/msp430_pu/layout
+mkdir synthesis/msp430_core
+mkdir synthesis/msp430_core/source
+mkdir synthesis/msp430_core/synthesis
+mkdir synthesis/msp430_core/layout
 
-cp ../../rtl/verilog/core/fuse/msp430_and_gate.sv      synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/fuse/msp430_clock_gate.sv    synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/fuse/msp430_clock_mux.sv     synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/fuse/msp430_scan_mux.sv      synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/fuse/msp430_sync_cell.sv     synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/fuse/msp430_sync_reset.sv    synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/fuse/msp430_wakeup_cell.sv   synthesis/msp430_pu/source
+cp ../../rtl/verilog/core/fuse/msp430_and_gate.sv      synthesis/msp430_core/source
+cp ../../rtl/verilog/core/fuse/msp430_clock_gate.sv    synthesis/msp430_core/source
+cp ../../rtl/verilog/core/fuse/msp430_clock_mux.sv     synthesis/msp430_core/source
+cp ../../rtl/verilog/core/fuse/msp430_scan_mux.sv      synthesis/msp430_core/source
+cp ../../rtl/verilog/core/fuse/msp430_sync_cell.sv     synthesis/msp430_core/source
+cp ../../rtl/verilog/core/fuse/msp430_sync_reset.sv    synthesis/msp430_core/source
+cp ../../rtl/verilog/core/fuse/msp430_wakeup_cell.sv   synthesis/msp430_core/source
 
-cp ../../rtl/verilog/core/main/msp430_bcm.sv           synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_dbg.sv           synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_execution.sv     synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_frontend.sv      synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_gpio.sv          synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_memory.sv        synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_multiplier.sv    synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_sfr.sv           synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_ta.sv            synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_template08.sv    synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_template16.sv    synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_uart.sv          synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/main/msp430_watchdog.sv      synthesis/msp430_pu/source
+cp ../../rtl/verilog/core/main/msp430_bcm.sv           synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_dbg.sv           synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_execution.sv     synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_frontend.sv      synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_gpio.sv          synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_memory.sv        synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_multiplier.sv    synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_sfr.sv           synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_ta.sv            synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_template08.sv    synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_template16.sv    synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_uart.sv          synthesis/msp430_core/source
+cp ../../rtl/verilog/core/main/msp430_watchdog.sv      synthesis/msp430_core/source
 
-cp ../../rtl/verilog/core/omsp/msp430_alu.sv           synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/omsp/msp430_dbg_hwbrk.sv     synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/omsp/msp430_dbg_i2c.sv       synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/omsp/msp430_dbg_uart.sv      synthesis/msp430_pu/source
-cp ../../rtl/verilog/core/omsp/msp430_register_file.sv synthesis/msp430_pu/source
+cp ../../rtl/verilog/core/omsp/msp430_alu.sv           synthesis/msp430_core/source
+cp ../../rtl/verilog/core/omsp/msp430_dbg_hwbrk.sv     synthesis/msp430_core/source
+cp ../../rtl/verilog/core/omsp/msp430_dbg_i2c.sv       synthesis/msp430_core/source
+cp ../../rtl/verilog/core/omsp/msp430_dbg_uart.sv      synthesis/msp430_core/source
+cp ../../rtl/verilog/core/omsp/msp430_register_file.sv synthesis/msp430_core/source
 
-cp ../../rtl/verilog/pkg/msp430_defines.sv             synthesis/msp430_pu/source
-cp ../../rtl/verilog/pkg/msp430_undefines.sv           synthesis/msp430_pu/source
-cp ../../rtl/verilog/pkg/timescale.sv                  synthesis/msp430_pu/source
+cp ../../rtl/verilog/pkg/msp430_defines.sv             synthesis/msp430_core/source
+cp ../../rtl/verilog/pkg/msp430_undefines.sv           synthesis/msp430_core/source
+cp ../../rtl/verilog/pkg/timescale.sv                  synthesis/msp430_core/source
 
-cp ../../rtl/verilog/pu/msp430_pu.sv                   synthesis/msp430_pu/source
+cp ../../rtl/verilog/pu/msp430_core.sv                   synthesis/msp430_core/source
 
-cd synthesis/msp430_pu
+cd synthesis/msp430_core
 
-qflow -T osu018 synthesize place route msp430_pu
+qflow -T osu018 synthesize place route msp430_core
