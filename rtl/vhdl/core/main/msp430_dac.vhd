@@ -64,8 +64,8 @@ entity msp430_dac is
     );
   port (
     -- OUTPUTs
-    cntrl1   : out std_logic_vector(15 downto 0);   -- Control value 1
-    cntrl2   : out std_logic_vector(15 downto 0);   -- Control value 2
+    cntrl1   : out std_logic_vector(15 downto 0);  -- Control value 1
+    cntrl2   : out std_logic_vector(15 downto 0);  -- Control value 2
     din      : out std_logic;                      -- SPI Serial Data
     per_dout : out std_logic_vector(15 downto 0);  -- Peripheral data output
     sclk     : out std_logic;                      -- SPI Serial Clock
@@ -344,4 +344,3 @@ begin
   sclk   <= sclk_s;
   sync_n <= sync_n_s;
 end RTL;
-

@@ -46,6 +46,7 @@ use IEEE.NUMERIC_STD .all;
 
 package msp430_pkg is
 
+  function reduce_nor (reduce_nor_in : std_logic_vector) return std_logic;
   function reduce_or (reduce_or_in : std_logic_vector) return std_logic;
   function to_stdlogic (input : boolean) return std_logic;
 
@@ -604,6 +605,17 @@ package body msp430_pkg is
     end loop;
     return reduce_or_out;
   end reduce_or;
+
+  function reduce_nor (
+    reduce_nor_in : std_logic_vector
+    ) return std_logic is
+    variable reduce_nor_out : std_logic := '0';
+  begin
+    for i in reduce_nor_in'range loop
+      reduce_nor_out := reduce_nor_out nor reduce_nor_in(i);
+    end loop;
+    return reduce_nor_out;
+  end reduce_nor;
 
   function to_stdlogic (
     input : boolean
