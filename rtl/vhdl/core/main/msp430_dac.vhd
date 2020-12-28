@@ -52,6 +52,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.msp430_pkg.all;
 
 entity msp430_dac is
   generic (
@@ -90,20 +91,20 @@ architecture RTL of msp430_dac is
   constant DEC_WD : integer := 3;
 
   -- Register addresses offset
-  constant DAC_VALX  : std_logic_vector(DEC_WD-1 downto 0) := X"0";
-  constant DAC_STATX : std_logic_vector(DEC_WD-1 downto 0) := X"2";
-  constant CNTRLX1   : std_logic_vector(DEC_WD-1 downto 0) := X"4";
-  constant CNTRLX2   : std_logic_vector(DEC_WD-1 downto 0) := X"6";
+  constant DAC_VALX  : integer := 0;
+  constant DAC_STATX : integer := 3;
+  constant CNTRLX1   : integer := 4;
+  constant CNTRLX2   : integer := 6;
 
   -- Register one-hot decoder utilities
   constant DEC_SZ   : integer                             := 2**DEC_WD;
-  constant BASE_REG : std_logic_vector(DEC_SZ-1 downto 0) := (concatenate(DEC_SZ-1, '0') & '1');
+  constant BASE_REG : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ));
 
   -- Register one-hot decoder
-  constant DAC_VAL_D  : std_logic_vector(DEC_SZ-1 downto 0) := (BASE_REG sll DAC_VALX);
-  constant DAC_STAT_D : std_logic_vector(DEC_SZ-1 downto 0) := (BASE_REG sll DAC_STATX);
-  constant CNTRL1_D   : std_logic_vector(DEC_SZ-1 downto 0) := (BASE_REG sll CNTRLX1);
-  constant CNTRL2_D   : std_logic_vector(DEC_SZ-1 downto 0) := (BASE_REG sll CNTRLX2);
+  constant DAC_VAL_D  : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(unsigned(BASE_REG) sll DAC_VALX);
+  constant DAC_STAT_D : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(unsigned(BASE_REG) sll DAC_STATX);
+  constant CNTRL1_D   : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(unsigned(BASE_REG) sll CNTRLX1);
+  constant CNTRL2_D   : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(unsigned(BASE_REG) sll CNTRLX2);
 
   --============================================================================
   -- 2)  REGISTER DECODER
@@ -270,7 +271,7 @@ begin
     elsif (rising_edge(mclk)) then
       if (dac_val_wr = '1') then
         spi_tfx_trig <= '1';
-      elsif (sclk_re = '1' and sync_n = '1') then
+      elsif (sclk_re = '1' and sync_n = "1111") then
         spi_tfx_trig <= '0';
       end if;
     end if;
@@ -326,3 +327,4 @@ begin
 
   din <= dac_shifter(15);
 end RTL;
+
