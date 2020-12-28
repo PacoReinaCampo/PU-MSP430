@@ -64,8 +64,8 @@ entity msp430_dac is
     );
   port (
     -- OUTPUTs
-    cntrl1   : out std_logic_vector(3 downto 0);   -- Control value 1
-    cntrl2   : out std_logic_vector(3 downto 0);   -- Control value 2
+    cntrl1   : out std_logic_vector(15 downto 0);   -- Control value 1
+    cntrl2   : out std_logic_vector(15 downto 0);   -- Control value 2
     din      : out std_logic;                      -- SPI Serial Data
     per_dout : out std_logic_vector(15 downto 0);  -- Peripheral data output
     sclk     : out std_logic;                      -- SPI Serial Clock
@@ -95,7 +95,7 @@ architecture RTL of msp430_dac is
   constant DAC_STATX : integer := 3;
   constant CNTRLX1   : integer := 4;
   constant CNTRLX2   : integer := 6;
-
+  
   -- Register one-hot decoder utilities
   constant DEC_SZ   : integer                             := 2**DEC_WD;
   constant BASE_REG : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ));
@@ -105,6 +105,11 @@ architecture RTL of msp430_dac is
   constant DAC_STAT_D : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(unsigned(BASE_REG) sll DAC_STATX);
   constant CNTRL1_D   : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(unsigned(BASE_REG) sll CNTRLX1);
   constant CNTRL2_D   : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(unsigned(BASE_REG) sll CNTRLX2);
+
+  constant DAC_VAL_X  : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(to_unsigned(DAC_VALX, DEC_SZ));
+  constant DAC_STAT_X : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(to_unsigned(DAC_STATX, DEC_SZ));
+  constant CNTRL1_X   : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(to_unsigned(CNTRLX1, DEC_SZ));
+  constant CNTRL2_X   : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(to_unsigned(CNTRLX2, DEC_SZ));
 
   --============================================================================
   -- 2)  REGISTER DECODER
@@ -177,19 +182,25 @@ architecture RTL of msp430_dac is
   -- Value to be shifted_out
   signal dac_shifter : std_logic_vector(15 downto 0);
 
+  signal cntrl1_s : std_logic_vector(15 downto 0);
+  signal cntrl2_s : std_logic_vector(15 downto 0);
+
+  signal sclk_s   : std_logic;
+  signal sync_n_s : std_logic;
+
 begin
 
-  reg_sel  <= per_en and (per_addr(13 downto DEC_WD-1) = BASE_ADDR(14 downto DEC_WD));
+  reg_sel  <= per_en and to_stdlogic(per_addr(13 downto DEC_WD-1) = BASE_ADDR(14 downto DEC_WD));
   reg_addr <= (per_addr(DEC_WD-2 downto 0) & '0');
-  reg_dec  <= (DAC_VAL_D and concatenate(DEC_SZ, (reg_addr = DAC_VALX))) or
-              (DAC_STAT_D and concatenate(DEC_SZ, (reg_addr = DAC_STATX))) or
-              (CNTRL1_D and concatenate(DEC_SZ, (reg_addr = CNTRLX1))) or
-              (CNTRL2_D and concatenate(DEC_SZ, (reg_addr = CNTRLX2)));
+  reg_dec  <= (DAC_VAL_D and (DEC_SZ-1 downto 0 => to_stdlogic(reg_addr = DAC_VAL_X))) or
+              (DAC_STAT_D and (DEC_SZ-1 downto 0 => to_stdlogic(reg_addr = DAC_STAT_X))) or
+              (CNTRL1_D and (DEC_SZ-1 downto 0 => to_stdlogic(reg_addr = CNTRL1_X))) or
+              (CNTRL2_D and (DEC_SZ-1 downto 0 => to_stdlogic(reg_addr = CNTRL2_X)));
 
-  reg_write  <= or per_we and reg_sel;
-  reg_read   <= nor per_we and reg_sel;
-  reg_wr     <= reg_dec and concatenate(DEC_SZ, reg_write);
-  reg_rd     <= reg_dec and concatenate(DEC_SZ, reg_read);
+  reg_write  <= reduce_or(per_we) and reg_sel;
+  reg_read   <= reduce_nor(per_we) and reg_sel;
+  reg_wr     <= reg_dec and (DEC_SZ-1 downto 0 => reg_write);
+  reg_rd     <= reg_dec and (DEC_SZ-1 downto 0 => reg_read);
   dac_val_wr <= reg_wr(DAC_VALX);
 
   processing_0 : process (mclk, puc_rst)
@@ -212,10 +223,10 @@ begin
   processing_1 : process (mclk, puc_rst)
   begin
     if (puc_rst = '1') then
-      cntrl1 <= X"0";
+      cntrl1_s <= X"0000";
     elsif (rising_edge(mclk)) then
       if (cntrl1_wr = '1') then
-        cntrl1 <= per_din;
+        cntrl1_s <= per_din;
       end if;
     end if;
   end process;
@@ -225,29 +236,29 @@ begin
   processing_2 : process (mclk, puc_rst)
   begin
     if (puc_rst = '1') then
-      cntrl2 <= X"0";
+      cntrl2_s <= X"0000";
     elsif (rising_edge(mclk)) then
       if (cntrl2_wr = '1') then
-        cntrl2 <= per_din;
+        cntrl2_s <= per_din;
       end if;
     end if;
   end process;
 
-  dac_val_rd  <= ("00" & dac_pd1 & dac_pd0 & dac_val) and concatenate(16, reg_rd(DAC_VALX));
-  dac_stat_rd <= (X"0000" & not sync_n) and concatenate(16, reg_rd(DAC_STATX));
-  cntrl1_rd   <= (X"000" & cntrl1) and concatenate(16, reg_rd(CNTRLX1));
-  cntrl2_rd   <= (X"000" & cntrl2) and concatenate(16, reg_rd(CNTRLX2));
+  dac_val_rd  <= ("00" & dac_pd1 & dac_pd0 & dac_val) and (15 downto 0 => reg_rd(DAC_VALX));
+  dac_stat_rd <= ("000000000000000" & not sync_n_s) and (15 downto 0 => reg_rd(DAC_STATX));
+  cntrl1_rd   <= cntrl1_s and (15 downto 0 => reg_rd(CNTRLX1));
+  cntrl2_rd   <= cntrl2_s and (15 downto 0 => reg_rd(CNTRLX2));
   per_dout    <= dac_val_rd or dac_stat_rd or cntrl1_rd or cntrl2_rd;
 
   processing_3 : process (mclk, puc_rst)
   begin
     if (puc_rst = '1') then
-      spi_clk_div <= SCLK_DIV;
+      spi_clk_div <= std_logic_vector(to_unsigned(SCLK_DIV, 4));
     elsif (rising_edge(mclk)) then
-      if (spi_clk_div = '0') then
-        spi_clk_div <= SCLK_DIV;
+      if (spi_clk_div = "0000") then
+        spi_clk_div <= std_logic_vector(to_unsigned(SCLK_DIV, 4));
       else
-        spi_clk_div <= spi_clk_div-1;
+        spi_clk_div <= std_logic_vector(unsigned(spi_clk_div)-"0001");
       end if;
     end if;
   end process;
@@ -257,12 +268,12 @@ begin
     if (puc_rst = '1') then
       sclk <= '0';
     elsif (rising_edge(mclk)) then
-      if (spi_clk_div = 0) then
-        sclk <= not sclk;
+      if (spi_clk_div = "0000") then
+        sclk_s <= not sclk_s;
       end if;
     end if;
   end process;
-  sclk_re <= (spi_clk_div = 0) and not sclk;
+  sclk_re <= to_stdlogic(spi_clk_div = "0000") and not sclk_s;
 
   processing_5 : process (mclk, puc_rst)
   begin
@@ -271,14 +282,14 @@ begin
     elsif (rising_edge(mclk)) then
       if (dac_val_wr = '1') then
         spi_tfx_trig <= '1';
-      elsif (sclk_re = '1' and sync_n = "1111") then
+      elsif (sclk_re = '1' and sync_n_s = '1') then
         spi_tfx_trig <= '0';
       end if;
     end if;
   end process;
 
-  spi_tfx_init <= spi_tfx_trig and sync_n;
-  spi_cnt_done <= (spi_cnt = X"f");
+  spi_tfx_init <= spi_tfx_trig and sync_n_s;
+  spi_cnt_done <= to_stdlogic(spi_cnt = X"f");
 
   processing_6 : process (mclk, puc_rst)
   begin
@@ -289,7 +300,7 @@ begin
         if (spi_tfx_init = '1') then
           spi_cnt <= X"e";
         elsif (spi_cnt_done = '0') then
-          spi_cnt <= spi_cnt-1;
+          spi_cnt <= std_logic_vector(unsigned(spi_cnt)-"0001");
         end if;
       end if;
     end if;
@@ -313,7 +324,7 @@ begin
   processing_8 : process (mclk, puc_rst)
   begin
     if (puc_rst = '1') then
-      dac_shifter <= X"000";
+      dac_shifter <= X"0000";
     elsif (rising_edge(mclk)) then
       if (sclk_re = '1') then
         if (spi_tfx_init = '1') then
@@ -326,5 +337,11 @@ begin
   end process;
 
   din <= dac_shifter(15);
+
+  cntrl1 <= cntrl1_s;
+  cntrl2 <= cntrl2_s;
+
+  sclk   <= sclk_s;
+  sync_n <= sync_n_s;
 end RTL;
 
