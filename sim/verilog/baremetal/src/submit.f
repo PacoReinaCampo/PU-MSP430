@@ -83,6 +83,7 @@
 ../../../../rtl/verilog/core/omsp/msp430_register_file.sv
 
 ../../../../rtl/verilog/core/main/msp430_bcm.sv
+../../../../rtl/verilog/core/main/msp430_dac.sv
 ../../../../rtl/verilog/core/main/msp430_dbg.sv
 ../../../../rtl/verilog/core/main/msp430_execution.sv
 ../../../../rtl/verilog/core/main/msp430_frontend.sv

@@ -70,6 +70,7 @@
 ../../../../rtl/vhdl/core/omsp/msp430_state_machine.vhd
 
 ../../../../rtl/vhdl/core/main/msp430_bcm.vhd
+../../../../rtl/vhdl/core/main/msp430_dac.vhd
 ../../../../rtl/vhdl/core/main/msp430_dbg.vhd
 ../../../../rtl/vhdl/core/main/msp430_execution.vhd
 ../../../../rtl/vhdl/core/main/msp430_frontend.vhd

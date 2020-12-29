@@ -25,6 +25,7 @@ verilog work ../../../../rtl/verilog/core/omsp/msp430_dbg_uart.sv
 verilog work ../../../../rtl/verilog/core/omsp/msp430_register_file.sv
 
 verilog work ../../../../rtl/verilog/core/main/msp430_bcm.sv
+verilog work ../../../../rtl/verilog/core/main/msp430_dac.sv
 verilog work ../../../../rtl/verilog/core/main/msp430_dbg.sv
 verilog work ../../../../rtl/verilog/core/main/msp430_execution.sv
 verilog work ../../../../rtl/verilog/core/main/msp430_gpio.sv

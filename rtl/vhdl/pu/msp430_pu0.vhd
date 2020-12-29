@@ -113,6 +113,14 @@ entity msp430_pu0 is
     uart_rxd : in  std_logic;           -- UART Data Receive (RXD)
     uart_txd : out std_logic;           -- UART Data Transmit (TXD)
 
+    -- DACs
+    din_x    : out std_logic;  -- SPI Serial Data
+    din_y    : out std_logic;  -- SPI Serial Data
+    sclk_x   : out std_logic;  -- SPI Serial Clock
+    sclk_y   : out std_logic;  -- SPI Serial Clock
+    sync_n_x : out std_logic;  -- SPI Frame synchronization signal (low active)
+    sync_n_y : out std_logic;  -- SPI Frame synchronization signal (low active)
+
     -- Switches & LEDs
     switch : in  std_logic_vector(3 downto 0);   -- Input switches
     led    : out std_logic_vector(1 downto 0));  -- LEDs
@@ -321,6 +329,33 @@ component msp430_uart
     per_din  : in  std_logic_vector (15 downto 0));
 end component msp430_uart;
 
+component msp430_dac
+  generic (
+    -- Serial clock divider (Tsclk=Tmclk*(SCLK_DIV+1)*2)
+    constant SCLK_DIV  : integer := 0;
+
+    -- Registers base address
+    constant BASE_ADDR : std_logic_vector(15 downto 0) := X"0190"
+    );
+  port (
+    -- OUTPUTs
+    cntrl1   : out std_logic_vector(15 downto 0);  -- Control value 1
+    cntrl2   : out std_logic_vector(15 downto 0);  -- Control value 2
+    din      : out std_logic;                      -- SPI Serial Data
+    per_dout : out std_logic_vector(15 downto 0);  -- Peripheral data output
+    sclk     : out std_logic;                      -- SPI Serial Clock
+    sync_n   : out std_logic;                      -- SPI Frame synchronization signal (low active)
+
+    -- INPUTs
+    mclk     : in std_logic;                      -- Main system clock
+    per_addr : in std_logic_vector(13 downto 0);  -- Peripheral address
+    per_din  : in std_logic_vector(15 downto 0);  -- Peripheral data input
+    per_en   : in std_logic;                      -- Peripheral enable (high active)
+    per_we   : in std_logic_vector(1 downto 0);   -- Peripheral write enable (high active)
+    puc_rst  : in std_logic                       -- Main system reset
+    );
+end component msp430_dac;
+
   --=============================================================================
   -- 1)  INTERNAL WIRES/REGISTERS/PARAMETERS DECLARATION
   --=============================================================================
@@ -369,6 +404,14 @@ end component msp430_uart;
   signal irq_uart_tx   : std_logic;
   signal per_dout_uart : std_logic_vector(15 downto 0);
 
+  -- DAC
+  signal cntrl1_x       : std_logic_vector(15 downto 0);
+  signal cntrl2_x       : std_logic_vector(15 downto 0);
+  signal cntrl1_y       : std_logic_vector(15 downto 0);
+  signal cntrl2_y       : std_logic_vector(15 downto 0);
+  signal per_dout_dac_x : std_logic_vector(15 downto 0);
+  signal per_dout_dac_y : std_logic_vector(15 downto 0);
+  
 begin
   --=============================================================================
   -- 2)  OPENMSP430 CORE
@@ -567,8 +610,57 @@ begin
       smclk_en => smclk_en,             -- SMCLK enable (from CPU)
       uart_rxd => uart_rxd);            -- UART Data Receive (RXD)
 
+  -- SPI Interface for the 16 bit DACs
+  dac_x : msp430_dac
+    generic map (
+      -- Serial clock divider (Tsclk=Tmclk*(SCLK_DIV+1)*2)
+      SCLK_DIV => 0,
+
+      -- Registers base address
+      BASE_ADDR => X"0190")
+    port map (
+      -- OUTPUTs
+      cntrl1   => cntrl1_x,        -- Control value 1
+      cntrl2   => cntrl2_x,        -- Control value 2
+      din      => din_x,           -- SPI Serial Data
+      per_dout => per_dout_dac_x,  -- Peripheral data output
+      sclk     => sclk_x,          -- SPI Serial Clock
+      sync_n   => sync_n_x,        -- SPI Frame synchronization signal (low active)
+
+      -- INPUTs
+      mclk     => mclk,      -- Main system clock
+      per_addr => per_addr,  -- Peripheral address
+      per_din  => per_din,   -- Peripheral data input
+      per_en   => per_en,    -- Peripheral enable (high active)
+      per_we   => per_we,    -- Peripheral write enable (high active)
+      puc_rst  => puc_rst);  -- Main system reset
+
+  dac_y : msp430_dac
+    generic map (
+      -- Serial clock divider (Tsclk=Tmclk*(SCLK_DIV+1)*2)
+      SCLK_DIV => 0,
+
+      -- Registers base address
+      BASE_ADDR => X"0190")
+    port map (
+      -- OUTPUTs
+      cntrl1   => cntrl1_x,        -- Control value 1
+      cntrl2   => cntrl2_y,        -- Control value 2
+      din      => din_y,           -- SPI Serial Data
+      per_dout => per_dout_dac_y,  -- Peripheral data output
+      sclk     => sclk_y,          -- SPI Serial Clock
+      sync_n   => sync_n_y,        -- SPI Frame synchronization signal (low active)
+
+      -- INPUTs
+      mclk     => mclk,      -- Main system clock
+      per_addr => per_addr,  -- Peripheral address
+      per_din  => per_din,   -- Peripheral data input
+      per_en   => per_en,    -- Peripheral enable (high active)
+      per_we   => per_we,    -- Peripheral write enable (high active)
+      puc_rst  => puc_rst);  -- Main system reset
+
   -- Combine peripheral data buses
-  per_dout <= per_dout_gpio or per_dout_uart or per_dout_tA;
+  per_dout <= per_dout_gpio or per_dout_uart or per_dout_tA or per_dout_dac_x or per_dout_dac_y;
 
   -- Assign interrupts
   nmi <= '0';

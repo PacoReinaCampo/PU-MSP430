@@ -156,6 +156,14 @@ module msp430_pu0 (
   // Hardware UART
   wire        [15:0] per_dout_uart;
 
+  // DAC
+  wire        [3:0] cntrl1_x;
+  wire        [3:0] cntrl2_x;
+  wire        [3:0] cntrl1_y;
+  wire        [3:0] cntrl2_y;
+  wire       [15:0] per_dout_dac_x;
+  wire       [15:0] per_dout_dac_y;
+
   //=============================================================================
   // 2)  OPENMSP430 CORE
   //=============================================================================
@@ -365,10 +373,60 @@ module msp430_pu0 (
   );
 
   //
+  // SPI Interface for the 16 bit DACs
+  //----------------------------------------------
+
+  msp430_dac #(
+    .SCLK_DIV  (1), 
+    .BASE_ADDR (16'h0190)
+  )  
+  dac_x (
+
+    // OUTPUTs
+    .cntrl1       (cntrl1_x),       // Control value 1
+    .cntrl2       (cntrl2_x),       // Control value 2
+    .din          (din_x),          // SPI Serial Data
+    .per_dout     (per_dout_dac_x), // Peripheral data output
+    .sclk         (sclk_x),         // SPI Serial Clock
+    .sync_n       (sync_n_x),       // SPI Frame synchronization signal (low active)
+
+    // INPUTs
+    .mclk         (mclk),           // Main system clock
+    .per_addr     (per_addr),       // Peripheral address
+    .per_din      (per_din),        // Peripheral data input
+    .per_en       (per_en),         // Peripheral enable (high active)
+    .per_we       (per_we),         // Peripheral write enable (high active)
+    .puc_rst      (puc_rst)         // Main system reset
+  );
+
+  msp430_dac #(
+    .SCLK_DIV  (1), 
+    .BASE_ADDR (16'h0190)
+  )  
+  dac_y (
+
+    // OUTPUTs
+    .cntrl1       (cntrl1_y),       // Control value 1
+    .cntrl2       (cntrl2_y),       // Control value 2
+    .din          (din_y),          // SPI Serial Data
+    .per_dout     (per_dout_dac_y), // Peripheral data output
+    .sclk         (sclk_y),         // SPI Serial Clock
+    .sync_n       (sync_n_y),       // SPI Frame synchronization signal (low active)
+
+    // INPUTs
+    .mclk         (mclk),           // Main system clock
+    .per_addr     (per_addr),       // Peripheral address
+    .per_din      (per_din),        // Peripheral data input
+    .per_en       (per_en),         // Peripheral enable (high active)
+    .per_we       (per_we),         // Peripheral write enable (high active)
+    .puc_rst      (puc_rst)         // Main system reset
+  );
+
+  //
   // Combine peripheral data buses
   //-------------------------------
 
-  assign per_dout = per_dout_gpio | per_dout_uart | per_dout_tA;
+  assign per_dout = per_dout_gpio | per_dout_uart | per_dout_tA | per_dout_dac_x | per_dout_dac_y;
 
   //
   // Assign interrupts
