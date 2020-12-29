@@ -154,6 +154,22 @@ entity msp430_soc is
     omsp1_pmem_wen  : out std_logic_vector(1 downto 0);
     omsp1_pmem_dout : in  std_logic_vector(15 downto 0);
 
+    -- DACs
+    omsp0_din_x    : out std_logic;  -- SPI Serial Data
+    omsp0_din_y    : out std_logic;  -- SPI Serial Data
+    omsp0_sclk_x   : out std_logic;  -- SPI Serial Clock
+    omsp0_sclk_y   : out std_logic;  -- SPI Serial Clock
+    omsp0_sync_n_x : out std_logic;  -- SPI Frame synchronization signal (low active)
+    omsp0_sync_n_y : out std_logic;  -- SPI Frame synchronization signal (low active)
+
+    -- DACs
+    omsp1_din_x    : out std_logic;  -- SPI Serial Data
+    omsp1_din_y    : out std_logic;  -- SPI Serial Data
+    omsp1_sclk_x   : out std_logic;  -- SPI Serial Clock
+    omsp1_sclk_y   : out std_logic;  -- SPI Serial Clock
+    omsp1_sync_n_x : out std_logic;  -- SPI Frame synchronization signal (low active)
+    omsp1_sync_n_y : out std_logic;  -- SPI Frame synchronization signal (low active)
+
     dco_clk : out std_logic;
 
     ------------------------------------------------
@@ -272,6 +288,14 @@ architecture rtl of msp430_soc is
       uart_rxd : in  std_logic;         -- UART Data Receive (RXD)
       uart_txd : out std_logic;         -- UART Data Transmit (TXD)
 
+      -- DACs
+      din_x    : out std_logic;  -- SPI Serial Data
+      din_y    : out std_logic;  -- SPI Serial Data
+      sclk_x   : out std_logic;  -- SPI Serial Clock
+      sclk_y   : out std_logic;  -- SPI Serial Clock
+      sync_n_x : out std_logic;  -- SPI Frame synchronization signal (low active)
+      sync_n_y : out std_logic;  -- SPI Frame synchronization signal (low active)
+
       -- Switches & LEDs
       switch : in  std_logic_vector(3 downto 0);   -- Input switches
       led    : out std_logic_vector(1 downto 0));  -- LEDs
@@ -341,6 +365,14 @@ architecture rtl of msp430_soc is
       pmem_cen  : out std_logic;                            -- Program Memory chip enable (low active)
       pmem_din  : out std_logic_vector(15 downto 0);        -- Program Memory data input (optional)
       pmem_wen  : out std_logic_vector(1 downto 0);         -- Program Memory write enable (low active) (optional)
+
+      -- DACs
+      din_x    : out std_logic;  -- SPI Serial Data
+      din_y    : out std_logic;  -- SPI Serial Data
+      sclk_x   : out std_logic;  -- SPI Serial Clock
+      sclk_y   : out std_logic;  -- SPI Serial Clock
+      sync_n_x : out std_logic;  -- SPI Frame synchronization signal (low active)
+      sync_n_y : out std_logic;  -- SPI Frame synchronization signal (low active)
 
       -- LEDs
       switch : in  std_logic_vector(3 downto 0);   -- Input switches
@@ -492,6 +524,14 @@ begin
       uart_rxd => omsp0_uart_rxd,       -- UART Data Receive (RXD)
       uart_txd => omsp0_uart_txd,       -- UART Data Transmit (TXD)
 
+      -- DACs
+      din_x    => omsp0_din_x,          -- SPI Serial Data
+      din_y    => omsp0_din_y,          -- SPI Serial Data
+      sclk_x   => omsp0_sclk_x,         -- SPI Serial Clock
+      sclk_y   => omsp0_sclk_y,         -- SPI Serial Clock
+      sync_n_x => omsp0_sync_n_x,       -- SPI Frame synchronization signal (low active)
+      sync_n_y => omsp0_sync_n_y,       -- SPI Frame synchronization signal (low active)
+
       -- Switches & LEDs
       switch => omsp_switch,            -- Input switches
       led    => omsp0_led);             -- LEDs
@@ -563,6 +603,14 @@ begin
       pmem_din  => omsp1_pmem_din,   -- Program Memory data input (optional)
       pmem_wen  => omsp1_pmem_wen,   -- Program Memory write enable (low active) (optional)
       pmem_dout => omsp1_pmem_dout,  -- Program Memory data output
+
+      -- DACs
+      din_x    => omsp1_din_x,          -- SPI Serial Data
+      din_y    => omsp1_din_y,          -- SPI Serial Data
+      sclk_x   => omsp1_sclk_x,         -- SPI Serial Clock
+      sclk_y   => omsp1_sclk_y,         -- SPI Serial Clock
+      sync_n_x => omsp1_sync_n_x,       -- SPI Frame synchronization signal (low active)
+      sync_n_y => omsp0_sync_n_y,       -- SPI Frame synchronization signal (low active)
 
       -- Switches & LEDs
       switch => omsp_switch,            -- Input switches
