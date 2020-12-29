@@ -105,6 +105,14 @@ module msp430_pu1 (
   output        [15:0] pmem_din,             // Program Memory data input (optional)
   output        [ 1:0] pmem_wen,             // Program Memory write enable (low active) (optional)
 
+  // DACs
+  output               din_x,                // SPI Serial Data
+  output               din_y,                // SPI Serial Data
+  output               sclk_x,               // SPI Serial Clock
+  output               sclk_y,               // SPI Serial Clock
+  output               sync_n_x,             // SPI Frame synchronization signal (low active)
+  output               sync_n_y,             // SPI Frame synchronization signal (low active)
+
   // LEDs
   input          [3:0] switch,               // Input switches
   output         [1:0] led                   // LEDs

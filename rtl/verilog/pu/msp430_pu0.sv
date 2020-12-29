@@ -109,6 +109,14 @@ module msp430_pu0 (
   input                uart_rxd,             // UART Data Receive (RXD)
   output               uart_txd,             // UART Data Transmit (TXD)
 
+  // DACs
+  output               din_x,                // SPI Serial Data
+  output               din_y,                // SPI Serial Data
+  output               sclk_x,               // SPI Serial Clock
+  output               sclk_y,               // SPI Serial Clock
+  output               sync_n_x,             // SPI Frame synchronization signal (low active)
+  output               sync_n_y,             // SPI Frame synchronization signal (low active)
+
   // Switches & LEDs
   input          [3:0] switch,               // Input switches
   output         [1:0] led                   // LEDs
