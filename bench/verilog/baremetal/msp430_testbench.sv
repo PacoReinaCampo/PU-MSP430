@@ -374,6 +374,21 @@ module msp430_testbench;
     .omsp1_pmem_wen   (omsp1_pmem_wen),
     .omsp1_pmem_dout  (omsp1_pmem_dout),
 
+    // DACs
+    .omsp0_din_x      (),
+    .omsp0_din_y      (),
+    .omsp0_sclk_x     (),
+    .omsp0_sclk_y     (),
+    .omsp0_sync_n_x   (),
+    .omsp0_sync_n_y   (),
+    
+    .omsp1_din_x      (),
+    .omsp1_din_y      (),
+    .omsp1_sclk_x     (),
+    .omsp1_sclk_y     (),
+    .omsp1_sync_n_x   (),
+    .omsp1_sync_n_y   (),
+
     .dco_clk          (dco_clk),
 
     //----------------------------------------------

@@ -150,6 +150,21 @@ module msp430_soc (
   output        [ 1:0] omsp1_pmem_wen,
   input         [15:0] omsp1_pmem_dout,
 
+  // DACs
+  output               omsp0_din_x,
+  output               omsp0_din_y,
+  output               omsp0_sclk_x,
+  output               omsp0_sclk_y,
+  output               omsp0_sync_n_x,
+  output               omsp0_sync_n_y,
+
+  output               omsp1_din_x,
+  output               omsp1_din_y,
+  output               omsp1_sclk_x,
+  output               omsp1_sclk_y,
+  output               omsp1_sync_n_x,
+  output               omsp1_sync_n_y,
+
   output               dco_clk,
 
   //----------------------------------------------
@@ -332,6 +347,14 @@ module msp430_soc (
     .uart_rxd          (omsp0_uart_rxd),              // UART Data Receive (RXD)
     .uart_txd          (omsp0_uart_txd),              // UART Data Transmit (TXD)
 
+    // DACs
+    .din_x             (omsp0_din_x),                 // SPI Serial Data
+    .din_y             (omsp0_din_y),                 // SPI Serial Data
+    .sclk_x            (omsp0_sclk_x),                // SPI Serial Clock
+    .sclk_y            (omsp0_sclk_y),                // SPI Serial Clock
+    .sync_n_x          (omsp0_sync_n_x),              // SPI Frame synchronization signal (low active)
+    .sync_n_y          (omsp0_sync_n_y),              // SPI Frame synchronization signal (low active)
+
     // Switches & LEDs
     .switch            (omsp_switch),                 // Input switches
     .led               (omsp0_led)                    // LEDs
@@ -405,6 +428,14 @@ module msp430_soc (
     .pmem_din          (omsp1_pmem_din),              // Program Memory data input (optional)
     .pmem_wen          (omsp1_pmem_wen),              // Program Memory write enable (low active) (optional)
     .pmem_dout         (omsp1_pmem_dout),             // Program Memory data output
+
+    // DACs
+    .din_x             (omsp1_din_x),                 // SPI Serial Data
+    .din_y             (omsp1_din_y),                 // SPI Serial Data
+    .sclk_x            (omsp1_sclk_x),                // SPI Serial Clock
+    .sclk_y            (omsp1_sclk_y),                // SPI Serial Clock
+    .sync_n_x          (omsp1_sync_n_x),              // SPI Frame synchronization signal (low active)
+    .sync_n_y          (omsp1_sync_n_y),              // SPI Frame synchronization signal (low active)
 
     // Switches & LEDs
     .switch            (omsp_switch),                 // Input switches
