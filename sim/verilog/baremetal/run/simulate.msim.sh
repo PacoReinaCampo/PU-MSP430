@@ -1,8 +1,5 @@
 #!/bin/bash
-export XILINX=/opt/Xilinx/14.7/ISE_DS/ISE
-export PLATFORM=lin64
-export PATH=$PATH:${XILINX}/bin/${PLATFORM}
-export LD_LIBRARY_PATH=${XILINX}/lib/${PLATFORM}
+export PATH=$PATH:/opt/intelFPGA_pro/20.2/modelsim_ase/linuxaloem/
 
 # Enable/Disable waveform dumping
 OMSP_NODUMP=0
@@ -16,7 +13,7 @@ export OMSP_NODUMP
 #                   - vcs       : VCS
 #                   - msim      : Modelsim
 #                   - isim      : Xilinx simulator
-OMSP_SIMULATOR=isim
+OMSP_SIMULATOR=msim
 export OMSP_SIMULATOR
 
-../bin/msp430sim leds
+../bin/msp430sim.sh leds

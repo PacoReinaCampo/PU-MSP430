@@ -28,14 +28,13 @@ fi
 #                     Check if the required files exist                       #
 ###############################################################################
 asmfile=../../../../software/tests/$1.s43;
-verfile=../../../../bench/verilog/tests/regression/$1.sv;
+verfile=../../../../bench/verilog/tests/cases/$1.sv;
 incfile=../../../../rtl/verilog/pkg/msp430_defines.sv;
 linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
-submit=../src/submit.f;
-if [ $OMSP_SIMULATOR == "isim" ]; then
-    submit=../src/submit.prj;
-fi
+submit_verilog=../src/submit.verilog.f;
+submit_vhdl=../src/submit.vhdl.f;
+submit=../src/submit.prj;
 
 if [ ! -e $asmfile ]; then
     echo "Assembler file $asmfile doesn't exist: $asmfile"
@@ -45,8 +44,12 @@ if [ ! -e $verfile ]; then
     echo "Verilog stimulus file $verfile doesn't exist: $verfile"
     exit 1
 fi
-if [ ! -e $submit ]; then
-    echo "Verilog submit file $submit doesn't exist: $submit"
+if [ ! -e $submit_verilog ]; then
+    echo "Verilog submit file $submit_verilog doesn't exist: $submit_verilog"
+    exit 1
+fi
+if [ ! -e $submit_vhdl ]; then
+    echo "VHDL submit file $submit_vhdl doesn't exist: $submit_vhdl"
     exit 1
 fi
 if [ ! -e $linkfile ]; then
@@ -116,4 +119,4 @@ echo "Convert IHEX file to Verilog MEMH format..."
 
 # Start verilog simulation
 echo "Start Verilog simulation..."
-../bin/rtlsim.sh    stimulus.sv pmem.mem $submit
+../bin/rtlsim.sh    stimulus.sv pmem.mem $submit_verilog $submit_vhdl $submit

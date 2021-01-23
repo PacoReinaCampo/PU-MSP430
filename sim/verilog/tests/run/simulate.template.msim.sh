@@ -26,4 +26,4 @@ mkdir  ./log
 
 
 # Report regression results
-../bin/parse_results
+../bin/parse_results.sh

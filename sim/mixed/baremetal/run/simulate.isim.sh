@@ -19,4 +19,4 @@ export OMSP_NODUMP
 OMSP_SIMULATOR=isim
 export OMSP_SIMULATOR
 
-../bin/msp430sim leds
+../bin/msp430sim.sh leds

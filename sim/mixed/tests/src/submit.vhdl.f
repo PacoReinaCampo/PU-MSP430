@@ -39,27 +39,41 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-+incdir+../../../../rtl/verilog/pkg/
+../../../../rtl/vhdl/pkg/msp430_pkg.vhd
 
 //=============================================================================
 // Testbench related
 //=============================================================================
 
-../../../../bench/verilog/baremetal/ram_d1.sv
-../../../../bench/verilog/baremetal/ram_d2.sv
-../../../../bench/verilog/baremetal/ram_dp.sv
-../../../../bench/verilog/baremetal/ram_p2.sv
-../../../../bench/verilog/baremetal/ram_sp.sv
-../../../../bench/verilog/baremetal/glbl.sv
-../../../../bench/verilog/baremetal/msp430_debug.sv
-../../../../bench/verilog/baremetal/msp430_testbench.sv
+../../../../bench/vhdl/tests/main/msp430_io_cell.vhd
 
 
 //=============================================================================
-// SoC-MSP430
+// CPU
 //=============================================================================
 
+../../../../rtl/vhdl/core/fuse/msp430_and_gate.vhd
+../../../../rtl/vhdl/core/fuse/msp430_clock_gate.vhd
+../../../../rtl/vhdl/core/fuse/msp430_clock_mux.vhd
+../../../../rtl/vhdl/core/fuse/msp430_scan_mux.vhd
+../../../../rtl/vhdl/core/fuse/msp430_sync_cell.vhd
+../../../../rtl/vhdl/core/fuse/msp430_sync_reset.vhd
+../../../../rtl/vhdl/core/fuse/msp430_wakeup_cell.vhd
 
-//=============================================================================
-// PU-MSP430
-//=============================================================================
+../../../../rtl/vhdl/core/omsp/msp430_alu.vhd
+../../../../rtl/vhdl/core/omsp/msp430_dbg_hwbrk.vhd
+../../../../rtl/vhdl/core/omsp/msp430_dbg_i2c.vhd
+../../../../rtl/vhdl/core/omsp/msp430_dbg_uart.vhd
+../../../../rtl/vhdl/core/omsp/msp430_interrupt.vhd
+../../../../rtl/vhdl/core/omsp/msp430_register_file.vhd
+../../../../rtl/vhdl/core/omsp/msp430_state_machine.vhd
+
+../../../../rtl/vhdl/core/main/msp430_bcm.vhd
+../../../../rtl/vhdl/core/main/msp430_dbg.vhd
+../../../../rtl/vhdl/core/main/msp430_execution.vhd
+../../../../rtl/vhdl/core/main/msp430_gpio.vhd
+../../../../rtl/vhdl/core/main/msp430_memory.vhd
+../../../../rtl/vhdl/core/main/msp430_multiplier.vhd
+../../../../rtl/vhdl/core/main/msp430_template08.vhd
+../../../../rtl/vhdl/core/main/msp430_template16.vhd
+../../../../rtl/vhdl/core/main/msp430_uart.vhd

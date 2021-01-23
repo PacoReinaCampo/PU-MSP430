@@ -1,4 +1,8 @@
 #!/bin/bash
+export XILINX=/opt/Xilinx/14.7/ISE_DS/ISE
+export PLATFORM=lin64
+export PATH=$PATH:${XILINX}/bin/${PLATFORM}
+export LD_LIBRARY_PATH=${XILINX}/lib/${PLATFORM}
 
 # Disable waveform dumping
 OMSP_NODUMP=1
@@ -12,7 +16,7 @@ export OMSP_NODUMP
 #                   - vcs       : VCS
 #                   - msim      : Modelsim
 #                   - isim      : Xilinx simulator
-OMSP_SIMULATOR=iverilog
+OMSP_SIMULATOR=isim
 export OMSP_SIMULATOR
 
 rm -rf ./cov_work
@@ -20,9 +24,9 @@ rm -rf ./log/*.log
 mkdir  ./log
 
 # Peripheral templates test patterns
-../bin/msp430sim template_periph_8b       | tee ./log/template_periph_8b.log
-../bin/msp430sim template_periph_16b      | tee ./log/template_periph_16b.log
+../bin/msp430sim.sh template_periph_8b       | tee ./log/template_periph_8b.log
+../bin/msp430sim.sh template_periph_16b      | tee ./log/template_periph_16b.log
 
 
 # Report regression results
-../bin/parse_results
+../bin/parse_results.sh

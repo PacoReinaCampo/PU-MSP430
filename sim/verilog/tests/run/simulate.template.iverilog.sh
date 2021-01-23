@@ -1,5 +1,4 @@
 #!/bin/bash
-export PATH=$PATH:/opt/intelFPGA_pro/20.2/modelsim_ase/linuxaloem/
 
 # Disable waveform dumping
 OMSP_NODUMP=1
@@ -13,7 +12,7 @@ export OMSP_NODUMP
 #                   - vcs       : VCS
 #                   - msim      : Modelsim
 #                   - isim      : Xilinx simulator
-OMSP_SIMULATOR=msim
+OMSP_SIMULATOR=iverilog
 export OMSP_SIMULATOR
 
 rm -rf ./cov_work
@@ -26,4 +25,4 @@ mkdir  ./log
 
 
 # Report regression results
-../bin/parse_results
+../bin/parse_results.sh
