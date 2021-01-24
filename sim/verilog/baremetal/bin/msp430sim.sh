@@ -105,7 +105,7 @@ source pmem.sh
 
 # Create IHEX file from ELF
 echo "Convert ELF file to IHEX format..."
-msp430-objcopy -O ihex  pmem.elf pmem.ihex
+msp430-objcopy -O ihex pmem.elf pmem.ihex
 
 # Generate Program memory file
 echo "Convert IHEX file to Verilog MEMH format..."
@@ -113,4 +113,4 @@ echo "Convert IHEX file to Verilog MEMH format..."
 
 # Start verilog simulation
 echo "Start Verilog simulation..."
-../bin/rtlsim.sh    stimulus.sv pmem.mem $submit
+../bin/rtlsim.sh stimulus.sv pmem.mem $submit

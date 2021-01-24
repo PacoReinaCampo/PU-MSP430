@@ -112,7 +112,7 @@ source pmem.sh
 
 # Compile assembler code
 echo "Compile, link & generate IHEX file (Program Memory: $pmemsize B, Data Memory: $dmemsize B, Peripheral Space: $persize B)..."
-../bin/asm2ihex.sh  pmem pmem.s43 $linkfile $headfile $pmemsize $dmemsize $persize
+../bin/asm2ihex.sh pmem pmem.s43 $linkfile $headfile $pmemsize $dmemsize $persize
 
 # Generate Program memory file
 echo "Convert IHEX file to Verilog MEMH format..."
@@ -120,4 +120,4 @@ echo "Convert IHEX file to Verilog MEMH format..."
 
 # Start verilog simulation
 echo "Start Verilog simulation..."
-../bin/rtlsim.sh    stimulus.sv pmem.mem $submit_verilog $submit_vhdl $submit
+../bin/rtlsim.sh stimulus.sv pmem.mem $submit_verilog $submit_vhdl $submit
