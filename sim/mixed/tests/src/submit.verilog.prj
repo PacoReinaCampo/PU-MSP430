@@ -1,6 +1,5 @@
 verilog work ../../../../bench/verilog/tests/main/msp430_testbench.sv
 verilog work ../../../../bench/verilog/tests/main/msp430_ram.sv
-vhdl work ../../../../bench/vhdl/tests/main/msp430_io_cell.vhd
 verilog work ../../../../bench/verilog/tests/main/msp430_debug.sv
 
 verilog work ../../../../rtl/verilog/core/fuse/msp430_and_gate.sv
