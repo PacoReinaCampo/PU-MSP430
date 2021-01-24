@@ -26,7 +26,12 @@ fi
 softdir=../../../../software/baremetal/$1;
 elffile=../../../../software/baremetal/$1/$1.elf;
 verfile=../../../../bench/verilog/baremetal/cases/$1.sv;
-submit=../src/submit.f;
+if [ $OMSP_SIMULATOR == "iverilog" ]; then
+    submit=../src/submit.f;
+fi
+if [ $OMSP_SIMULATOR == "msim" ]; then
+    submit=../src/submit.f;
+fi
 if [ $OMSP_SIMULATOR == "xsim" ]; then
     submit=../src/submit.prj;
 fi

@@ -28,7 +28,12 @@ verfile=../../../../bench/verilog/tests/cases/$1.sv;
 incfile=../../../../rtl/verilog/pkg/msp430_defines.sv;
 linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
-submit=../src/submit.f;
+if [ $OMSP_SIMULATOR == "iverilog" ]; then
+    submit=../src/submit.f;
+fi
+if [ $OMSP_SIMULATOR == "msim" ]; then
+    submit=../src/submit.f;
+fi
 if [ $OMSP_SIMULATOR == "xsim" ]; then
     submit=../src/submit.prj;
 fi

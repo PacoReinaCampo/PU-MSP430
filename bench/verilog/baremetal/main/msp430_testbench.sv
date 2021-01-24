@@ -39,6 +39,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
+`include "timescale.sv"
 `ifdef OMSP_NO_INCLUDE
 `else
 `include "msp430_defines.sv"
