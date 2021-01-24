@@ -28,9 +28,14 @@ verfile=../../../../bench/verilog/tests/cases/$1.sv;
 incfile=../../../../rtl/verilog/pkg/msp430_defines.sv;
 linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
-submit_verilog=../src/submit.verilog.f;
-submit_vhdl=../src/submit.vhdl.f;
-submit=../src/submit.prj;
+if [ $OMSP_SIMULATOR == "msim" ]; then
+    submit_verilog=../src/submit.verilog.f;
+    submit_vhdl=../src/submit.vhdl.f;
+fi
+if [ $OMSP_SIMULATOR == "xsim" ]; then
+    submit_verilog=../src/submit.verilog.prj;
+    submit_vhdl=../src/submit.vhdl.prj;
+fi
 
 if [ ! -e $asmfile ]; then
     echo "Assembler file $asmfile doesn't exist: $asmfile"

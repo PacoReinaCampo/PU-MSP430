@@ -833,7 +833,7 @@ begin
     end process R_4_1c_2c_e;
 
     --Execution first state
-    e_first_state <= E_IRQ(0)
+    e_first_state <= E_IRQ_0
                      when (not dbg_halt_st_omsp and inst_so_nxt(IRQX)) = '1' else E_IDLE
                      when cpu_halt_cmd = '1' or (i_state_omsp = I_IDLE)      else E_IDLE
                      when cpuoff = '1'                                       else E_SRC_AD
@@ -861,7 +861,7 @@ begin
         when E_JUMP   => e_state_nxt <= e_first_state;
         when E_DST_WR => e_state_nxt <= re_e_dst_wr;
         when E_SRC_WR => e_state_nxt <= e_first_state;
-        when others   => e_state_nxt <= E_IRQ(0);
+        when others   => e_state_nxt <= E_IRQ_0;
       end case;
     end process;
 
@@ -887,7 +887,7 @@ begin
     R_1 : process (mclk, puc_rst)
     begin
       if (puc_rst = '1') then
-        e_state_omsp <= E_IRQ(1);
+        e_state_omsp <= E_IRQ_1;
       elsif (rising_edge(mclk)) then
         e_state_omsp <= e_state_nxt;
       end if;

@@ -26,11 +26,13 @@ fi
 softdir=../../../../software/baremetal/$1;
 elffile=../../../../software/baremetal/$1/$1.elf;
 verfile=../../../../bench/verilog/baremetal/cases/$1.sv;
-submit_verilog=../src/submit.verilog.f;
-submit_vhdl=../src/submit.vhdl.f;
-submit=../src/submit.f;
+if [ $OMSP_SIMULATOR == "msim" ]; then
+    submit_verilog=../src/submit.verilog.f;
+    submit_vhdl=../src/submit.vhdl.f;
+fi
 if [ $OMSP_SIMULATOR == "xsim" ]; then
-    submit=../src/submit.prj;
+    submit_verilog=../src/submit.verilog.prj;
+    submit_vhdl=../src/submit.vhdl.prj;
 fi
 incfile=../../../../rtl/verilog/pkg/msp430_defines.sv;
 
@@ -114,4 +116,4 @@ echo "Convert IHEX file to Verilog MEMH format..."
 
 # Start verilog simulation
 echo "Start Verilog simulation..."
-../bin/rtlsim.sh    stimulus.sv pmem.mem $submit_verilog $submit_vhdl $submit
+../bin/rtlsim.sh    stimulus.sv pmem.mem $submit_verilog $submit_vhdl

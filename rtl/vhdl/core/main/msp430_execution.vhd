@@ -170,12 +170,12 @@ begin
       (inst_type(INST_SOC) and inst_as(DIR) and not (inst_so(PUSH) or inst_so(CALL) or inst_so(RETI))) or
       inst_type(INST_JMPC))) or dbg_reg_wr;
 
-    reg_sp_wr <= ((to_stdlogic(e_state = E_IRQ(1)) or to_stdlogic(e_state = E_IRQ(3))) and not inst_irq_rst) or
+    reg_sp_wr <= ((to_stdlogic(e_state = E_IRQ_1) or to_stdlogic(e_state = E_IRQ_3)) and not inst_irq_rst) or
                  (to_stdlogic(e_state = E_DST_RD) and ((inst_so(PUSH) or inst_so(CALL)) and not inst_as(IDX) and not ((inst_as(INDIR) or inst_as(INDIR_I)) and inst_src(1)))) or
                  (to_stdlogic(e_state = E_SRC_AD) and ((inst_so(PUSH) or inst_so(CALL)) and inst_as(IDX))) or
                  (to_stdlogic(e_state = E_SRC_RD) and ((inst_so(PUSH) or inst_so(CALL)) and ((inst_as(INDIR) or inst_as(INDIR_I)) and inst_src(1))));
     reg_sr_wr   <= to_stdlogic(e_state = E_DST_RD) and inst_so(RETI);
-    reg_sr_clr  <= to_stdlogic(e_state = E_IRQ(2));
+    reg_sr_clr  <= to_stdlogic(e_state = E_IRQ_2);
     reg_pc_call <= (to_stdlogic(e_state = E_EXEC) and inst_so(CALL)) or
                    (to_stdlogic(e_state = E_DST_WR) and inst_so(RETI));
     reg_incr <= (exec_done and inst_as(INDIR_I)) or
@@ -234,13 +234,13 @@ begin
 
   C2_SOURCE_OPERAND_MUXING : block
   begin
-    src_reg_src_sel <= to_stdlogic(e_state = E_IRQ(0)) or
-                       to_stdlogic(e_state = E_IRQ(2)) or
+    src_reg_src_sel <= to_stdlogic(e_state = E_IRQ_0) or
+                       to_stdlogic(e_state = E_IRQ_2) or
                        (to_stdlogic(e_state = E_SRC_RD) and not inst_as(ABSC)) or
                        (to_stdlogic(e_state = E_SRC_WR) and not inst_as(ABSC)) or
                        (to_stdlogic(e_state = E_EXEC) and inst_as(DIR) and not inst_type(INST_JMPC));
-    src_reg_dest_sel <= to_stdlogic(e_state = E_IRQ(1)) or
-                        to_stdlogic(e_state = E_IRQ(3)) or
+    src_reg_dest_sel <= to_stdlogic(e_state = E_IRQ_1) or
+                        to_stdlogic(e_state = E_IRQ_3) or
                         (to_stdlogic(e_state = E_DST_RD) and (inst_so(PUSH) or inst_so(CALL))) or
                         (to_stdlogic(e_state = E_SRC_AD) and (inst_so(PUSH) or inst_so(CALL)) and inst_as(IDX));
 
@@ -270,9 +270,9 @@ begin
     dst_mdb_in_bw_sel <= (to_stdlogic(e_state = E_DST_WR) and inst_so(RETI)) or
                          (to_stdlogic(e_state = E_EXEC) and not (inst_ad(DIR) or inst_type(INST_JMPC) or
                                                                  inst_type(INST_SOC)) and not inst_so(RETI));
-    dst_fffe_sel <= to_stdlogic(e_state = E_IRQ(0)) or
-                    to_stdlogic(e_state = E_IRQ(1)) or
-                    to_stdlogic(e_state = E_IRQ(3)) or
+    dst_fffe_sel <= to_stdlogic(e_state = E_IRQ_0) or
+                    to_stdlogic(e_state = E_IRQ_1) or
+                    to_stdlogic(e_state = E_IRQ_3) or
                     (to_stdlogic(e_state = E_DST_RD) and (inst_so(PUSH) or inst_so(CALL)) and not inst_so(RETI)) or
                     (to_stdlogic(e_state = E_SRC_AD) and (inst_so(PUSH) or inst_so(CALL)) and inst_as(IDX)) or
                     (to_stdlogic(e_state = E_SRC_RD) and (inst_so(PUSH) or inst_so(CALL)) and (inst_as(INDIR) or inst_as(INDIR_I)) and inst_src(1));
@@ -316,8 +316,8 @@ begin
     mb_rd_det <= (to_stdlogic(e_state = E_SRC_RD) and not inst_as(IMM)) or
                  (to_stdlogic(e_state = E_EXEC) and inst_so(RETI)) or
                  (to_stdlogic(e_state = E_DST_RD) and not inst_type(INST_SOC) and not inst_mov);
-    mb_wr_det <= (to_stdlogic(e_state = E_IRQ(1)) and not inst_irq_rst) or
-                 (to_stdlogic(e_state = E_IRQ(3)) and not inst_irq_rst) or
+    mb_wr_det <= (to_stdlogic(e_state = E_IRQ_1) and not inst_irq_rst) or
+                 (to_stdlogic(e_state = E_IRQ_3) and not inst_irq_rst) or
                  (to_stdlogic(e_state = E_DST_WR) and not inst_so(RETI)) or to_stdlogic(e_state = E_SRC_WR);
     mb_wr_msk <= "00"
                  when inst_alu(EXEC_NO_WR) = '1' else "11"
@@ -333,8 +333,8 @@ begin
       --Memory data bus output
       mdb_out_nxt_en <= to_stdlogic(e_state = E_DST_RD) or
                         ((to_stdlogic(e_state = E_EXEC) and not inst_so(CALL)) or
-                         to_stdlogic(e_state = E_IRQ(0)) or
-                         to_stdlogic(e_state = E_IRQ(2)));
+                         to_stdlogic(e_state = E_IRQ_0) or
+                         to_stdlogic(e_state = E_IRQ_2));
 
       clock_gate_mdb_out_nxt : msp430_clock_gate
         port map (
@@ -424,8 +424,8 @@ begin
           if (e_state = E_DST_RD) then
             mdb_out_nxt <= pc_nxt;
           elsif (((to_stdlogic(e_state = E_EXEC) and not inst_so(CALL)) or
-                  to_stdlogic(e_state = E_IRQ(0)) or
-                  to_stdlogic(e_state = E_IRQ(2))) = '1') then
+                  to_stdlogic(e_state = E_IRQ_0) or
+                  to_stdlogic(e_state = E_IRQ_2)) = '1') then
             mdb_out_nxt <= alu_out;
           end if;
         end if;

@@ -65,7 +65,7 @@ else
     case $OMSP_SIMULATOR in
         msim* )
             # ModelSim
-            if [ -d work ]; then  vdel -all; fi
+            if [ -d work ]; then vdel -all; fi
             vlib work
         exec vlog -sv +acc=prn -f $3 $vargs -timescale "1ns / 100ps" -R -c -do "run -all";;
         xsim* )

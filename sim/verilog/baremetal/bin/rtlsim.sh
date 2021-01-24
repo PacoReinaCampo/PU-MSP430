@@ -7,7 +7,7 @@ EXPECTED_ARGS=3
 if [ $# -ne $EXPECTED_ARGS ]; then
     echo "ERROR    : wrong number of arguments"
     echo "USAGE    : rtlsim.sh <verilog stimulus file> <memory file> <submit file>"
-    echo "Example  : rtlsim.sh ./stimulus.v            pmem.mem      ../src/submit.f"
+    echo "Example  : rtlsim.sh ./stimulus.sv           pmem.mem      ../src/submit.f"
     echo "OMSP_SIMULATOR env keeps simulator name iverilog/cver/verilog/ncverilog/msim/vcs"
     exit 1
 fi
@@ -64,7 +64,7 @@ else
     case $OMSP_SIMULATOR in
         msim* )
             # ModelSim
-            if [ -d work ]; then  vdel -all; fi
+            if [ -d work ]; then vdel -all; fi
             vlib work
         exec vlog -sv +acc=prn -f $3 $vargs -timescale "1ns / 100ps" -R -c -do "run -all";;
         xsim* )

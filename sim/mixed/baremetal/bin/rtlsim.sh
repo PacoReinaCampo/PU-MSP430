@@ -3,11 +3,11 @@
 ###############################################################################
 #                            Parameter Check                                  #
 ###############################################################################
-EXPECTED_ARGS=5
+EXPECTED_ARGS=4
 if [ $# -ne $EXPECTED_ARGS ]; then
     echo "ERROR    : wrong number of arguments"
     echo "USAGE    : rtlsim.sh <verilog stimulus file> <memory file> <submit file>"
-    echo "Example  : rtlsim.sh ./stimulus.v            pmem.mem      ../src/submit.f"
+    echo "Example  : rtlsim.sh ./stimulus.sv           pmem.mem      ../src/submit.f"
     echo "OMSP_SIMULATOR env keeps simulator name iverilog/cver/verilog/ncverilog/msim/vcs"
     exit 1
 fi
@@ -68,14 +68,15 @@ else
     case $OMSP_SIMULATOR in
         msim* )
             # ModelSim
-            if [ -d work ]; then  vdel -all; fi
+            if [ -d work ]; then vdel -all; fi
             vlib work
             vcom -2008 -f $4
         exec vlog -sv +acc=prn -f $3 $vargs -timescale "1ns / 100ps" -R -c -do "run -all";;
         xsim* )
             # Xilinx Simulator
             rm -rf xsim.dir
-            xvlog -i ../../../../rtl/verilog/pkg/ -prj $5
+            xvhdl -2008 -prj $4
+            xvlog -i ../../../../rtl/verilog/pkg/ -prj $3
             xelab msp430_testbench
         exec xsim -R msp430_testbench;;
     esac

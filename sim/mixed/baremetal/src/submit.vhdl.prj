@@ -1,0 +1,39 @@
+vhdl work ../../../../rtl/vhdl/pkg/msp430_pkg.vhd
+
+vhdl work ../../../../rtl/vhdl/soc/msp430_soc.vhd
+vhdl work ../../../../rtl/vhdl/soc/msp430_io_cell.vhd
+
+vhdl work ../../../../rtl/vhdl/core/fuse/msp430_and_gate.vhd
+vhdl work ../../../../rtl/vhdl/core/fuse/msp430_clock_gate.vhd
+vhdl work ../../../../rtl/vhdl/core/fuse/msp430_clock_mux.vhd
+vhdl work ../../../../rtl/vhdl/core/fuse/msp430_scan_mux.vhd
+vhdl work ../../../../rtl/vhdl/core/fuse/msp430_sync_cell.vhd
+vhdl work ../../../../rtl/vhdl/core/fuse/msp430_sync_reset.vhd
+vhdl work ../../../../rtl/vhdl/core/fuse/msp430_wakeup_cell.vhd
+
+vhdl work ../../../../rtl/vhdl/core/omsp/msp430_alu.vhd
+vhdl work ../../../../rtl/vhdl/core/omsp/msp430_dbg_hwbrk.vhd
+vhdl work ../../../../rtl/vhdl/core/omsp/msp430_dbg_i2c.vhd
+vhdl work ../../../../rtl/vhdl/core/omsp/msp430_dbg_uart.vhd
+vhdl work ../../../../rtl/vhdl/core/omsp/msp430_register_file.vhd
+
+vhdl work ../../../../rtl/vhdl/core/main/msp430_bcm.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_dac.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_dbg.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_execution.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_gpio.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_memory.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_multiplier.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_template08.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_template16.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_uart.vhd
+
+vhdl work ../../../../rtl/vhdl/core/main/msp430_frontend.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_sfr.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_ta.vhd
+vhdl work ../../../../rtl/vhdl/core/main/msp430_watchdog.vhd
+
+vhdl work ../../../../rtl/vhdl/pu/msp430_core.vhd
+vhdl work ../../../../rtl/vhdl/pu/msp430_pu0.vhd
+vhdl work ../../../../rtl/vhdl/pu/msp430_pu1.vhd
+

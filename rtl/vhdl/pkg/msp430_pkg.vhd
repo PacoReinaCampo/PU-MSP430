@@ -285,8 +285,6 @@ package msp430_pkg is
   constant E_IRQ_3 : std_logic_vector (3 downto 0) := X"3";
   constant E_IRQ_4 : std_logic_vector (3 downto 0) := X"4";
 
-  constant E_IRQ : std_logic_matrix(4 downto 0)(3 downto 0) := (X"4", X"3", X"0", X"1", X"2");
-
   --ALU control signals
   constant ALU_SRC_INV : integer := 0;
   constant ALU_INC     : integer := 1;
