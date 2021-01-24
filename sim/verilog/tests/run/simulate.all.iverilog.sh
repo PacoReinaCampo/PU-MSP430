@@ -6,12 +6,8 @@ export OMSP_NODUMP
 
 # Choose simulator:
 #                   - iverilog  : Icarus Verilog  (default)
-#                   - cver      : CVer
-#                   - verilog   : Verilog-XL
-#                   - ncverilog : NC-Verilog
-#                   - vcs       : VCS
-#                   - msim      : Modelsim
-#                   - isim      : Xilinx simulator
+#                   - msim      : ModelSim
+#                   - isim      : Xilinx Simulator
 OMSP_SIMULATOR=iverilog
 export OMSP_SIMULATOR
 
@@ -146,4 +142,4 @@ mkdir  ./log
 
 
 # Report regression results
-../bin/parse_results.sh
+../bin/parse.results.sh

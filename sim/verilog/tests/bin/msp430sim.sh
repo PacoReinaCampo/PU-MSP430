@@ -13,12 +13,8 @@ if [ $# -ne $EXPECTED_ARGS ]; then
   echo "variable can be set to the following values:"
   echo ""
   echo "                  - iverilog  : Icarus Verilog  (default)"
-  echo "                  - cver      : CVer"
-  echo "                  - verilog   : Verilog-XL"
-  echo "                  - ncverilog : NC-Verilog"
-  echo "                  - vcs       : VCS"
-  echo "                  - msim      : Modelsim"
-  echo "                  - isim      : Xilinx simulator"
+  echo "                  - msim      : ModelSim"
+  echo "                  - xsim      : Xilinx Simulator"
   echo ""
   exit 1
 fi
@@ -33,7 +29,7 @@ incfile=../../../../rtl/verilog/pkg/msp430_defines.sv;
 linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
 submit=../src/submit.f;
-if [ $OMSP_SIMULATOR == "isim" ]; then
+if [ $OMSP_SIMULATOR == "xsim" ]; then
     submit=../src/submit.prj;
 fi
 

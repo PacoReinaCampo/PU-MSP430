@@ -68,29 +68,18 @@ else
     fi
 
    case $OMSP_SIMULATOR in 
-    cver* ) 
-       vargs="$vargs +define+VXL +define+CVER" ;;
-    verilog* )
-       vargs="$vargs +define+VXL" ;;
-    ncverilog* )
-       rm -rf INCA_libs
-       vargs="$vargs +access+r +nclicq +ncinput+../bin/cov_ncverilog.tcl -covdut openMSP430 -covfile ../bin/cov_ncverilog.ccf -coverage all +define+TRN_FILE" ;;
-    vcs* )
-       rm -rf csrc simv*
-       vargs="$vargs -R -debug_pp +vcs+lic+wait +v2k +define+VPD_FILE" ;;
     msim* )
-       # Modelsim
+       # ModelSim
        if [ -d work ]; then  vdel -all; fi
        vlib work
        vcom -2008 -f $4
        exec vlog -sv +acc=prn -f $3 $vargs -R -c -do "run -all" ;;
-    isim )
-       # Xilinx simulator
-       rm -rf fuse* isim*
-       fuse msp430_testbench -prj $5 -o isim.exe -i ../../../../rtl/verilog/pkg/
-       echo "run all" > isim.tcl
-       ./isim.exe -tclbatch isim.tcl
-       exit
+    xsim* )
+       # Xilinx Simulator
+       rm -rf xsim.dir
+       xvlog -i ../../../../rtl/verilog/pkg/ -prj $3
+       xelab msp430_testbench
+       exec xsim -R msp430_testbench ;;
    esac
    
    echo "Running: $OMSP_SIMULATOR -f $3 $vargs"

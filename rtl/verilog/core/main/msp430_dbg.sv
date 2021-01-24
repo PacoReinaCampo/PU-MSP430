@@ -391,8 +391,8 @@ module  msp430_dbg (
   reg  [15:0] mem_cnt;
 
   wire        mem_addr_wr  = reg_wr[MEM_ADDR];
-  assign      dbg_mem_acc  = (|dbg_mem_wr | (dbg_rd_rdy & ~mem_ctl[2]));
-  assign      dbg_reg_acc  = ( dbg_reg_wr | (dbg_rd_rdy &  mem_ctl[2]));
+  wire        dbg_mem_acc  = (|dbg_mem_wr | (dbg_rd_rdy & ~mem_ctl[2]));
+  wire        dbg_reg_acc  = ( dbg_reg_wr | (dbg_rd_rdy &  mem_ctl[2]));
 
   wire [15:0] mem_addr_inc = (mem_cnt==16'h0000)                       ? 16'h0000 : 
                              (mem_burst &  dbg_mem_acc & ~mem_bw)      ? 16'h0002 : 
