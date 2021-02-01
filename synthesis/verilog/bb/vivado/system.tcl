@@ -42,13 +42,44 @@
 ##                                                                               ##
 ###################################################################################
 
-read_verilog -sv ../../../../rtl/verilog/bb/core/msp430_ram.sv
+read_verilog -sv ../../../../rtl/verilog/core/fuse/msp430_and_gate.sv
+read_verilog -sv ../../../../rtl/verilog/core/fuse/msp430_clock_gate.sv
+read_verilog -sv ../../../../rtl/verilog/core/fuse/msp430_clock_mux.sv
+read_verilog -sv ../../../../rtl/verilog/core/fuse/msp430_scan_mux.sv
+read_verilog -sv ../../../../rtl/verilog/core/fuse/msp430_sync_cell.sv
+read_verilog -sv ../../../../rtl/verilog/core/fuse/msp430_sync_reset.sv
+read_verilog -sv ../../../../rtl/verilog/core/fuse/msp430_wakeup_cell.sv
 
-read_verilog -sv mpsoc_spram_synthesis.sv
+read_verilog -sv ../../../../rtl/verilog/core/omsp/msp430_alu.sv
+read_verilog -sv ../../../../rtl/verilog/core/omsp/msp430_dbg_hwbrk.sv
+read_verilog -sv ../../../../rtl/verilog/core/omsp/msp430_dbg_i2c.sv
+read_verilog -sv ../../../../rtl/verilog/core/omsp/msp430_dbg_uart.sv
+read_verilog -sv ../../../../rtl/verilog/core/omsp/msp430_register_file.sv
+
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_bcm.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_dbg.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_execution.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_gpio.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_memory.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_multiplier.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_template08.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_template16.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_uart.sv
+
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_frontend.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_sfr.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_ta.sv
+read_verilog -sv ../../../../rtl/verilog/core/main/msp430_watchdog.sv
+
+read_verilog -sv ../../../../rtl/verilog/pu/msp430_core.sv
+
+read_verilog -sv spram/core/msp430_ram.sv
+
+read_verilog -sv msp430_synthesis.sv
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_spram_synthesis
+synth_design -part xc7z020-clg484-1 -include_dirs ../../../../rtl/verilog/pkg -top msp430_synthesis
 
 opt_design
 place_design
