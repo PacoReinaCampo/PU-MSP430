@@ -352,10 +352,91 @@ architecture RTL of msp430_synthesis is
       per_din  : in std_logic_vector (15 downto 0));
   end component;
 
-  signal mclk     : std_logic;  -- Main system clock
-  signal puc_rst  : std_logic;  -- Main system reset
-  signal smclk    : std_logic;  -- ASIC ONLY: SMCLK
-  signal smclk_en : std_logic;  -- FPGA ONLY: SMCLK enable
+  -- Data Memory interface
+  signal dmem_addr : std_logic_vector(DMEM_MSB downto 0);
+  signal dmem_cen  : std_logic;
+  signal dmem_din  : std_logic_vector(15 downto 0);
+  signal dmem_wen  : std_logic_vector(1 downto 0);
+  signal dmem_dout : std_logic_vector(15 downto 0);
+
+  -- Program Memory interface
+  signal pmem_addr : std_logic_vector(PMEM_MSB downto 0);
+  signal pmem_cen  : std_logic;
+  signal pmem_din  : std_logic_vector(15 downto 0);
+  signal pmem_wen  : std_logic_vector(1 downto 0);
+  signal pmem_dout : std_logic_vector(15 downto 0);
+
+  -- Peripherals interface
+  signal per_addr : std_logic_vector(13 downto 0);
+  signal per_din  : std_logic_vector(15 downto 0);
+  signal per_dout : std_logic_vector(15 downto 0);
+  signal per_we   : std_logic_vector(1 downto 0);
+  signal per_en   : std_logic;
+
+  -- Digital I/O
+  signal irq_port1    : std_logic;
+  signal irq_port2    : std_logic;
+  signal per_dout_dio : std_logic_vector(15 downto 0);
+  signal p1_dout      : std_logic_vector(7 downto 0);
+  signal p1_dout_en   : std_logic_vector(7 downto 0);
+  signal p1_sel       : std_logic_vector(7 downto 0);
+  signal p2_dout      : std_logic_vector(7 downto 0);
+  signal p2_dout_en   : std_logic_vector(7 downto 0);
+  signal p2_sel       : std_logic_vector(7 downto 0);
+  signal p3_dout      : std_logic_vector(7 downto 0);
+  signal p3_dout_en   : std_logic_vector(7 downto 0);
+  signal p3_sel       : std_logic_vector(7 downto 0);
+  signal p4_dout      : std_logic_vector(7 downto 0);
+  signal p4_dout_en   : std_logic_vector(7 downto 0);
+  signal p4_sel       : std_logic_vector(7 downto 0);
+  signal p5_dout      : std_logic_vector(7 downto 0);
+  signal p5_dout_en   : std_logic_vector(7 downto 0);
+  signal p5_sel       : std_logic_vector(7 downto 0);
+  signal p6_dout      : std_logic_vector(7 downto 0);
+  signal p6_dout_en   : std_logic_vector(7 downto 0);
+  signal p6_sel       : std_logic_vector(7 downto 0);
+  signal p1_din       : std_logic_vector(7 downto 0);
+  signal p2_din       : std_logic_vector(7 downto 0);
+  signal p3_din       : std_logic_vector(7 downto 0);
+  signal p4_din       : std_logic_vector(7 downto 0);
+  signal p5_din       : std_logic_vector(7 downto 0);
+  signal p6_din       : std_logic_vector(7 downto 0);
+  signal p1dir        : std_logic_vector(7 downto 0);
+  signal p1ifg        : std_logic_vector(7 downto 0);
+
+  -- Peripheral templates
+  signal per_dout_temp_8b  : std_logic_vector(15 downto 0);
+  signal per_dout_temp_16b : std_logic_vector(15 downto 0);
+  signal cntrl2_16b        : std_logic_vector(15 downto 0);
+  signal cntrl4_16b        : std_logic_vector(15 downto 0);
+
+  -- Simple full duplex UART
+  signal per_dout_uart : std_logic_vector(15 downto 0);
+  signal irq_uart_rx   : std_logic;
+  signal irq_uart_tx   : std_logic;
+  signal uart_txd      : std_logic;
+  signal uart_rxd      : std_logic;
+
+  -- Timer A
+  signal irq_ta0         : std_logic;
+  signal irq_ta1         : std_logic;
+  signal per_dout_timerA : std_logic_vector(15 downto 0);
+  signal inclk           : std_logic;
+  signal taclk           : std_logic;
+  signal ta_cci0a        : std_logic;
+  signal ta_cci0b        : std_logic;
+  signal ta_cci1a        : std_logic;
+  signal ta_cci1b        : std_logic;
+  signal ta_cci2a        : std_logic;
+  signal ta_cci2b        : std_logic;
+  signal ta_out0         : std_logic;
+  signal ta_out0_en      : std_logic;
+  signal ta_out1         : std_logic;
+  signal ta_out1_en      : std_logic;
+  signal ta_out2         : std_logic;
+  signal ta_out2_en      : std_logic;
+  signal tar             : std_logic_vector(15 downto 0);
+  signal taccr0          : std_logic_vector(15 downto 0);
 
 begin
 
@@ -557,7 +638,7 @@ begin
   -- INPUTs
       aclk_en     => aclk_en,  -- ACLK enable (from CPU)
       dbg_freeze  => dbg_freeze,  -- Freeze Timer A counter
-      inclk       => X"00",  -- INCLK external timer clock (SLOW)
+      inclk       => inclk,  -- INCLK external timer clock (SLOW)
       irq_ta0_acc => irq_acc(IRQ_NR-7),  -- Interrupt request TACCR0 accepted
       mclk        => mclk,  -- Main system clock
       per_addr    => per_addr,  -- Peripheral address

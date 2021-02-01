@@ -42,6 +42,8 @@
 ##                                                                               ##
 ###################################################################################
 
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/pkg/msp430_pkg.vhd
+	
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/fuse/msp430_and_gate.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/fuse/msp430_clock_gate.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/fuse/msp430_clock_mux.vhd
