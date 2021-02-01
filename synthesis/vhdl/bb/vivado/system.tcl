@@ -42,15 +42,44 @@
 ##                                                                               ##
 ###################################################################################
 
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/bb/core/msp430_ram.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/fuse/msp430_and_gate.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/fuse/msp430_clock_gate.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/fuse/msp430_clock_mux.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/fuse/msp430_scan_mux.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/fuse/msp430_sync_cell.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/fuse/msp430_sync_reset.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/fuse/msp430_wakeup_cell.vhd
 
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/bb/pkg/msp430_pkg.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_alu.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_dbg_hwbrk.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_dbg_i2c.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_dbg_uart.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_register_file.vhd
 
-read_vhdl -vhdl2008 mpsoc_spram_synthesis.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_bcm.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_dbg.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_execution.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_gpio.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_memory.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_multiplier.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_template08.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_template16.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_uart.vhd
+
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_frontend.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_sfr.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_ta.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_watchdog.vhd
+
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/pu/msp430_core.vhd
+
+read_vhdl -vhdl2008 spram/core/msp430_ram.vhd
+
+read_vhdl -vhdl2008 msp430_synthesis.vhd
 
 read_xdc system.xdc
 
-synth_design -part xc7z020-clg484-1 -top mpsoc_spram_synthesis
+synth_design -part xc7z020-clg484-1 -top msp430_synthesis
 
 opt_design
 place_design

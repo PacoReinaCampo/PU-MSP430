@@ -58,53 +58,53 @@
 # ----------------------------------------------------------------------------
 # Clock Source - Bank 13
 # ---------------------------------------------------------------------------- 
-set_property PACKAGE_PIN Y9 [get_ports {ram_clk}];  # "GCLK"
+set_property PACKAGE_PIN Y9 [get_ports {dco_clk}];  # "GCLK"
 
 # ----------------------------------------------------------------------------
 # JA Pmod - Bank 13 
 # ---------------------------------------------------------------------------- 
-set_property PACKAGE_PIN Y11  [get_ports {ram_addr[0]}];  # "JA1"
-set_property PACKAGE_PIN AA8  [get_ports {ram_addr[1]}];  # "JA10"
-set_property PACKAGE_PIN AA11 [get_ports {ram_addr[2]}];  # "JA2"
-set_property PACKAGE_PIN Y10  [get_ports {ram_addr[3]}];  # "JA3"
-set_property PACKAGE_PIN AA9  [get_ports {ram_addr[4]}];  # "JA4"
-set_property PACKAGE_PIN AB11 [get_ports {ram_addr[5]}];  # "JA7"
-#set_property PACKAGE_PIN AB10 [get_ports {JA8];  # "JA8"
-#set_property PACKAGE_PIN AB9  [get_ports {JA9}];  # "JA9"
+set_property PACKAGE_PIN Y11  [get_ports {i_state[0]}];  # "JA1"
+set_property PACKAGE_PIN AA8  [get_ports {i_state[1]}];  # "JA10"
+set_property PACKAGE_PIN AA11 [get_ports {i_state[2]}];  # "JA2"
+set_property PACKAGE_PIN Y10  [get_ports {e_state[0]}];  # "JA3"
+set_property PACKAGE_PIN AA9  [get_ports {e_state[1]}];  # "JA4"
+set_property PACKAGE_PIN AB11 [get_ports {e_state[2]}];  # "JA7"
+set_property PACKAGE_PIN AB10 [get_ports {e_state[3]];  # "JA8"
+set_property PACKAGE_PIN AB9  [get_ports {decode}];  # "JA9"
 
 # ----------------------------------------------------------------------------
 # JB Pmod - Bank 13
 # ---------------------------------------------------------------------------- 
-set_property PACKAGE_PIN W12 [get_ports {ram_cen}];  # "JB1"
-set_property PACKAGE_PIN W11 [get_ports {ram_wen[0]}];  # "JB2"
-set_property PACKAGE_PIN V10 [get_ports {ram_wen[1]}];  # "JB3"
-#set_property PACKAGE_PIN W8 [get_ports {JB4}];  # "JB4"
-#set_property PACKAGE_PIN V12 [get_ports {JB7}];  # "JB7"
-#set_property PACKAGE_PIN W10 [get_ports {JB8}];  # "JB8"
-#set_property PACKAGE_PIN V9 [get_ports {JB9}];  # "JB9"
-#set_property PACKAGE_PIN V8 [get_ports {JB10}];  # "JB10"
+set_property PACKAGE_PIN W12 [get_ports {nodiv_smclk}];  # "JB1"
+set_property PACKAGE_PIN W11 [get_ports {aclk}];  # "JB2"
+set_property PACKAGE_PIN V10 [get_ports {aclk_en}];  # "JB3"
+set_property PACKAGE_PIN W8  [get_ports {dbg_freeze}];  # "JB4"
+set_property PACKAGE_PIN V12 [get_ports {dbg_i2c_sda_out}];  # "JB7"
+set_property PACKAGE_PIN W10 [get_ports {dbg_uart_txd}];  # "JB8"
+set_property PACKAGE_PIN V9  [get_ports {dco_enable}];  # "JB9"
+set_property PACKAGE_PIN V8  [get_ports {dco_wkup}];  # "JB10"
 
 # ----------------------------------------------------------------------------
 # JC Pmod - Bank 13
 # ---------------------------------------------------------------------------- 
-#set_property PACKAGE_PIN AB6 [get_ports {JC1_N}];  # "JC1_N"
-#set_property PACKAGE_PIN AB7 [get_ports {JC1_P}];  # "JC1_P"
-#set_property PACKAGE_PIN AA4 [get_ports {JC2_N}];  # "JC2_N"
-#set_property PACKAGE_PIN Y4  [get_ports {JC2_P}];  # "JC2_P"
-#set_property PACKAGE_PIN T6  [get_ports {JC3_N}];  # "JC3_N"
-#set_property PACKAGE_PIN R6  [get_ports {JC3_P}];  # "JC3_P"
+#set_property PACKAGE_PIN AB6 [get_ports {lfxt_enable}];  # "JC1_N"
+#set_property PACKAGE_PIN AB7 [get_ports {lfxt_wkup}];  # "JC1_P"
+#set_property PACKAGE_PIN AA4 [get_ports {mclk}];  # "JC2_N"
+#set_property PACKAGE_PIN Y4  [get_ports {puc_rst}];  # "JC2_P"
+#set_property PACKAGE_PIN T6  [get_ports {smclk}];  # "JC3_N"
+#set_property PACKAGE_PIN R6  [get_ports {smclk_en}];  # "JC3_P"
 #set_property PACKAGE_PIN U4  [get_ports {JC4_N}];  # "JC4_N"
 #set_property PACKAGE_PIN T4  [get_ports {JC4_P}];  # "JC4_P"
 
 # ----------------------------------------------------------------------------
 # JD Pmod - Bank 13
 # ---------------------------------------------------------------------------- 
-#set_property PACKAGE_PIN W7 [get_ports {JD1_N}];  # "JD1_N"
-#set_property PACKAGE_PIN V7 [get_ports {JD1_P}];  # "JD1_P"
-#set_property PACKAGE_PIN V4 [get_ports {JD2_N}];  # "JD2_N"
-#set_property PACKAGE_PIN V5 [get_ports {JD2_P}];  # "JD2_P"
-#set_property PACKAGE_PIN W5 [get_ports {JD3_N}];  # "JD3_N"
-#set_property PACKAGE_PIN W6 [get_ports {JD3_P}];  # "JD3_P"
+#set_property PACKAGE_PIN W7 [get_ports {dbg_i2c_scl}];  # "JD1_N"
+#set_property PACKAGE_PIN V7 [get_ports {dbg_i2c_sda_in}];  # "JD1_P"
+#set_property PACKAGE_PIN V4 [get_ports {dbg_uart_rxd}];  # "JD2_N"
+#set_property PACKAGE_PIN V5 [get_ports {lfxt_clk}];  # "JD2_P"
+#set_property PACKAGE_PIN W5 [get_ports {nmi}];  # "JD3_N"
+#set_property PACKAGE_PIN W6 [get_ports {wkup}];  # "JD3_P"
 #set_property PACKAGE_PIN U5 [get_ports {JD4_N}];  # "JD4_N"
 #set_property PACKAGE_PIN U6 [get_ports {JD4_P}];  # "JD4_P"
 
@@ -180,11 +180,11 @@ set_property PACKAGE_PIN V10 [get_ports {ram_wen[1]}];  # "JB3"
 # ----------------------------------------------------------------------------
 # User Push Buttons - Bank 34
 # ---------------------------------------------------------------------------- 
-#set_property PACKAGE_PIN P16 [get_ports {BTNC}];  # "BTNC"
-#set_property PACKAGE_PIN R16 [get_ports {BTND}];  # "BTND"
-#set_property PACKAGE_PIN N15 [get_ports {BTNL}];  # "BTNL"
-#set_property PACKAGE_PIN R18 [get_ports {BTNR}];  # "BTNR"
-#set_property PACKAGE_PIN T18 [get_ports {BTNU}];  # "BTNU"
+set_property PACKAGE_PIN P16 [get_ports {cpu_en}];  # "BTNC"
+set_property PACKAGE_PIN R16 [get_ports {dbg_en}];  # "BTND"
+set_property PACKAGE_PIN N15 [get_ports {reset_n}];  # "BTNL"
+set_property PACKAGE_PIN R18 [get_ports {scan_enable}];  # "BTNR"
+set_property PACKAGE_PIN T18 [get_ports {scan_mode}];  # "BTNU"
 
 # ----------------------------------------------------------------------------
 # USB OTG Reset - Bank 34
@@ -247,38 +247,38 @@ set_property PACKAGE_PIN V10 [get_ports {ram_wen[1]}];  # "JB3"
 #set_property PACKAGE_PIN L18 [get_ports {FMC_CLK0_P}];  # "FMC-CLK0_P"
 #set_property PACKAGE_PIN M20 [get_ports {FMC_LA00_CC_N}];  # "FMC-LA00_CC_N"
 #set_property PACKAGE_PIN M19 [get_ports {FMC_LA00_CC_P}];  # "FMC-LA00_CC_P"
-set_property PACKAGE_PIN N20 [get_ports {ram_din[0]}];  # "FMC-LA01_CC_N"
-set_property PACKAGE_PIN N19 [get_ports {ram_din[1]}];  # "FMC-LA01_CC_P" - corrected 6/6/16 GE
-set_property PACKAGE_PIN P18 [get_ports {ram_din[2]}];  # "FMC-LA02_N"
-set_property PACKAGE_PIN P17 [get_ports {ram_din[3]}];  # "FMC-LA02_P"
-set_property PACKAGE_PIN P22 [get_ports {ram_din[4]}];  # "FMC-LA03_N"
-set_property PACKAGE_PIN N22 [get_ports {ram_din[5]}];  # "FMC-LA03_P"
-set_property PACKAGE_PIN M22 [get_ports {ram_din[6]}];  # "FMC-LA04_N"
-set_property PACKAGE_PIN M21 [get_ports {ram_din[7]}];  # "FMC-LA04_P"
-set_property PACKAGE_PIN K18 [get_ports {ram_din[8]}];  # "FMC-LA05_N"
-set_property PACKAGE_PIN J18 [get_ports {ram_din[9]}];  # "FMC-LA05_P"
-set_property PACKAGE_PIN L22 [get_ports {ram_din[10]}];  # "FMC-LA06_N"
-set_property PACKAGE_PIN L21 [get_ports {ram_din[11]}];  # "FMC-LA06_P"
-set_property PACKAGE_PIN T17 [get_ports {ram_din[12]}];  # "FMC-LA07_N"
-set_property PACKAGE_PIN T16 [get_ports {ram_din[13]}];  # "FMC-LA07_P"
-set_property PACKAGE_PIN J22 [get_ports {ram_din[14]}];  # "FMC-LA08_N"
-set_property PACKAGE_PIN J21 [get_ports {ram_din[15]}];  # "FMC-LA08_P"
-set_property PACKAGE_PIN R21 [get_ports {ram_dout[0]}];  # "FMC-LA09_N"
-set_property PACKAGE_PIN R20 [get_ports {ram_dout[1]}];  # "FMC-LA09_P"
-set_property PACKAGE_PIN T19 [get_ports {ram_dout[2]}];  # "FMC-LA10_N"
-set_property PACKAGE_PIN R19 [get_ports {ram_dout[3]}];  # "FMC-LA10_P"
-set_property PACKAGE_PIN N18 [get_ports {ram_dout[4]}];  # "FMC-LA11_N"
-set_property PACKAGE_PIN N17 [get_ports {ram_dout[5]}];  # "FMC-LA11_P"
-set_property PACKAGE_PIN P21 [get_ports {ram_dout[6]}];  # "FMC-LA12_N"
-set_property PACKAGE_PIN P20 [get_ports {ram_dout[7]}];  # "FMC-LA12_P"
-set_property PACKAGE_PIN M17 [get_ports {ram_dout[8]}];  # "FMC-LA13_N"
-set_property PACKAGE_PIN L17 [get_ports {ram_dout[9]}];  # "FMC-LA13_P"
-set_property PACKAGE_PIN K20 [get_ports {ram_dout[10]}];  # "FMC-LA14_N"
-set_property PACKAGE_PIN K19 [get_ports {ram_dout[11]}];  # "FMC-LA14_P"
-set_property PACKAGE_PIN J17 [get_ports {ram_dout[12]}];  # "FMC-LA15_N"
-set_property PACKAGE_PIN J16 [get_ports {ram_dout[13]}];  # "FMC-LA15_P"
-set_property PACKAGE_PIN K21 [get_ports {ram_dout[14]}];  # "FMC-LA16_N"
-set_property PACKAGE_PIN J20 [get_ports {ram_dout[15]}];  # "FMC-LA16_P"
+set_property PACKAGE_PIN N20 [get_ports {irq_acc[0]}];  # "FMC-LA01_CC_N"
+set_property PACKAGE_PIN N19 [get_ports {irq_acc[1]}];  # "FMC-LA01_CC_P" - corrected 6/6/16 GE
+set_property PACKAGE_PIN P18 [get_ports {irq_acc[2]}];  # "FMC-LA02_N"
+set_property PACKAGE_PIN P17 [get_ports {irq_acc[3]}];  # "FMC-LA02_P"
+set_property PACKAGE_PIN P22 [get_ports {irq_acc[4]}];  # "FMC-LA03_N"
+set_property PACKAGE_PIN N22 [get_ports {irq_acc[5]}];  # "FMC-LA03_P"
+set_property PACKAGE_PIN M22 [get_ports {irq_acc[6]}];  # "FMC-LA04_N"
+set_property PACKAGE_PIN M21 [get_ports {irq_acc[7]}];  # "FMC-LA04_P"
+set_property PACKAGE_PIN K18 [get_ports {irq_acc[8]}];  # "FMC-LA05_N"
+set_property PACKAGE_PIN J18 [get_ports {irq_acc[9]}];  # "FMC-LA05_P"
+set_property PACKAGE_PIN L22 [get_ports {irq_acc[10]}];  # "FMC-LA06_N"
+set_property PACKAGE_PIN L21 [get_ports {irq_acc[11]}];  # "FMC-LA06_P"
+set_property PACKAGE_PIN T17 [get_ports {irq_acc[12]}];  # "FMC-LA07_N"
+set_property PACKAGE_PIN T16 [get_ports {irq_acc[13]}];  # "FMC-LA07_P"
+set_property PACKAGE_PIN J22 [get_ports {irq_acc[14]}];  # "FMC-LA08_N"
+set_property PACKAGE_PIN J21 [get_ports {irq_acc[15]}];  # "FMC-LA08_P"
+set_property PACKAGE_PIN R21 [get_ports {irq[0]}];  # "FMC-LA09_N"
+set_property PACKAGE_PIN R20 [get_ports {irq[1]}];  # "FMC-LA09_P"
+set_property PACKAGE_PIN T19 [get_ports {irq[2]}];  # "FMC-LA10_N"
+set_property PACKAGE_PIN R19 [get_ports {irq[3]}];  # "FMC-LA10_P"
+set_property PACKAGE_PIN N18 [get_ports {irq[4]}];  # "FMC-LA11_N"
+set_property PACKAGE_PIN N17 [get_ports {irq[5]}];  # "FMC-LA11_P"
+set_property PACKAGE_PIN P21 [get_ports {irq[6]}];  # "FMC-LA12_N"
+set_property PACKAGE_PIN P20 [get_ports {irq[7]}];  # "FMC-LA12_P"
+set_property PACKAGE_PIN M17 [get_ports {irq[8]}];  # "FMC-LA13_N"
+set_property PACKAGE_PIN L17 [get_ports {irq[9]}];  # "FMC-LA13_P"
+set_property PACKAGE_PIN K20 [get_ports {irq[10]}];  # "FMC-LA14_N"
+set_property PACKAGE_PIN K19 [get_ports {irq[11]}];  # "FMC-LA14_P"
+set_property PACKAGE_PIN J17 [get_ports {irq[12]}];  # "FMC-LA15_N"
+set_property PACKAGE_PIN J16 [get_ports {irq[13]}];  # "FMC-LA15_P"
+set_property PACKAGE_PIN K21 [get_ports {irq[14]}];  # "FMC-LA16_N"
+set_property PACKAGE_PIN J20 [get_ports {irq[15]}];  # "FMC-LA16_P"
 
 ## ----------------------------------------------------------------------------
 ## FMC Expansion Connector - Bank 35
@@ -319,7 +319,6 @@ set_property PACKAGE_PIN J20 [get_ports {ram_dout[15]}];  # "FMC-LA16_P"
 #set_property PACKAGE_PIN A21 [get_ports {FMC_LA32_P}];  # "FMC-LA32_P"
 #set_property PACKAGE_PIN B22 [get_ports {FMC_LA33_N}];  # "FMC-LA33_N"
 #set_property PACKAGE_PIN B21 [get_ports {FMC_LA33_P}];  # "FMC-LA33_P"
-
 
 # ----------------------------------------------------------------------------
 # IOSTANDARD Constraints
