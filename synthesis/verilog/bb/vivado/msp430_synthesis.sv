@@ -107,6 +107,92 @@ module msp430_synthesis #(
   wire smclk;     // ASIC ONLY: SMCLK
   wire smclk_en;  // FPGA ONLY: SMCLK enable
 
+  // Data Memory interface
+  wire [`DMEM_MSB:0] dmem_addr;
+  wire               dmem_cen;
+  wire        [15:0] dmem_din;
+  wire         [1:0] dmem_wen;
+  wire        [15:0] dmem_dout;
+
+  // Program Memory interface
+  wire [`PMEM_MSB:0] pmem_addr;
+  wire               pmem_cen;
+  wire        [15:0] pmem_din;
+  wire         [1:0] pmem_wen;
+  wire        [15:0] pmem_dout;
+
+  // Peripherals interface
+  wire        [13:0] per_addr;
+  wire        [15:0] per_din;
+  wire        [15:0] per_dout;
+  wire         [1:0] per_we;
+  wire               per_en;
+
+  // Digital I/O
+  wire               irq_port1;
+  wire               irq_port2;
+  wire        [15:0] per_dout_dio;
+  wire         [7:0] p1_dout;
+  wire         [7:0] p1_dout_en;
+  wire         [7:0] p1_sel;
+  wire         [7:0] p2_dout;
+  wire         [7:0] p2_dout_en;
+  wire         [7:0] p2_sel;
+  wire         [7:0] p3_dout;
+  wire         [7:0] p3_dout_en;
+  wire         [7:0] p3_sel;
+  wire         [7:0] p4_dout;
+  wire         [7:0] p4_dout_en;
+  wire         [7:0] p4_sel;
+  wire         [7:0] p5_dout;
+  wire         [7:0] p5_dout_en;
+  wire         [7:0] p5_sel;
+  wire         [7:0] p6_dout;
+  wire         [7:0] p6_dout_en;
+  wire         [7:0] p6_sel;
+  reg          [7:0] p1_din;
+  reg          [7:0] p2_din;
+  reg          [7:0] p3_din;
+  reg          [7:0] p4_din;
+  reg          [7:0] p5_din;
+  reg          [7:0] p6_din;
+  wire         [7:0] p1dir;
+  wire         [7:0] p1ifg;
+
+  // Peripheral templates
+  wire        [15:0] per_dout_temp_8b;
+  wire        [15:0] per_dout_temp_16b;
+  wire        [15:0] cntrl2_16b;
+  wire        [15:0] cntrl4_16b;
+
+  // Simple full duplex UART
+  wire        [15:0] per_dout_uart;
+  wire               irq_uart_rx;
+  wire               irq_uart_tx;
+  wire               uart_txd;
+  reg                uart_rxd;
+
+  // Timer A
+  wire               irq_ta0;
+  wire               irq_ta1;
+  wire        [15:0] per_dout_timerA;
+  reg                inclk;
+  reg                taclk;
+  reg                ta_cci0a;
+  reg                ta_cci0b;
+  reg                ta_cci1a;
+  reg                ta_cci1b;
+  reg                ta_cci2a;
+  reg                ta_cci2b;
+  wire               ta_out0;
+  wire               ta_out0_en;
+  wire               ta_out1;
+  wire               ta_out1_en;
+  wire               ta_out2;
+  wire               ta_out2_en;
+  wire        [15:0] tar;
+  wire        [15:0] taccr0;
+  
   //
   // Program Memory
   //----------------------------------
@@ -151,7 +237,7 @@ module msp430_synthesis #(
     .r3                (),
     .r4                (),
     .r5                (),
-    .r6	               (),
+    .r6                (),
     .r7                (),
     .r8                (),
     .r9                (),
@@ -290,7 +376,7 @@ module msp430_synthesis #(
     // INPUTs
     .aclk_en      (aclk_en),           // ACLK enable (from CPU)
     .dbg_freeze   (dbg_freeze),        // Freeze Timer A counter
-    .inclk        (8'h00),             // INCLK external timer clock (SLOW)
+    .inclk        (inclk),             // INCLK external timer clock (SLOW)
     .irq_ta0_acc  (irq_acc[`IRQ_NR-7]),// Interrupt request TACCR0 accepted
     .mclk         (mclk),              // Main system clock
     .per_addr     (per_addr),          // Peripheral address
