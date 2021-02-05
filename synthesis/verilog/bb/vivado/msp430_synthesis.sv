@@ -59,48 +59,42 @@ module msp430_synthesis #(
   parameter TOTAL_NR = 8'h00   // Total number of oMSP instances-1 (for multicore systems)
 )
   (
-    // OUTPUTs
-    output               dbg_clk,
-    output               dbg_rst,
-    output               irq_detect,
-    output               nmi_detect,
+    output [DW     -1:0] ir,
+    input                cpu_en,            // Enable CPU code execution (asynchronous and non-glitchy)
+    input  [`IRQ_NR-3:0] irq,               // Maskable interrupts (14, 30 or 62)
+    input                nmi,               // Non-maskable interrupt (asynchronous and non-glitchy)
+    input                reset_n,           // Reset Pin (active low, asynchronous and non-glitchy)
 
-    output         [2:0] i_state,
-    output         [3:0] e_state,
-    output               decode,
-
-    output               nodiv_smclk,
+    output               aclk_en,           // FPGA ONLY: ACLK enable
+    output               smclk_en,          // FPGA ONLY: SMCLK enable
 
     output               aclk,              // ASIC ONLY: ACLK
-    output               aclk_en,           // FPGA ONLY: ACLK enable
+    output               lfxt_enable,       // ASIC ONLY: Low frequency oscillator enable
+    output               lfxt_wkup,         // ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
+    output               smclk,             // ASIC ONLY: SMCLK
+    input                scan_enable,       // ASIC ONLY: Scan enable (active during scan shifting)
+    input                scan_mode,         // ASIC ONLY: Scan mode
+    input                wkup,              // ASIC ONLY: System Wake-up (asynchronous and non-glitchy)
+    
+    output               dco_enable,        // ASIC ONLY: Fast oscillator enable
+    output               dco_wkup,          // ASIC ONLY: Fast oscillator wake-up (asynchronous)
+    input                dco_clk,           // Fast oscillator (fast clock)
+
+    output               dbg_clk,
+    output               dbg_rst,
     output               dbg_freeze,        // Freeze peripherals
     output               dbg_i2c_sda_out,   // Debug interface: I2C SDA OUT
     output               dbg_uart_txd,      // Debug interface: UART TXD
-    output               dco_enable,        // ASIC ONLY: Fast oscillator enable
-    output               dco_wkup,          // ASIC ONLY: Fast oscillator wake-up (asynchronous)
-    output [`IRQ_NR-3:0] irq_acc,           // Interrupt request accepted (one-hot signal)
-    output               lfxt_enable,       // ASIC ONLY: Low frequency oscillator enable
-    output               lfxt_wkup,         // ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
-    output               mclk,              // Main system clock
-    output               puc_rst,           // Main system reset
-    output               smclk,             // ASIC ONLY: SMCLK
-    output               smclk_en,          // FPGA ONLY: SMCLK enable
-
-    // INPUTs
-    input                cpu_en,            // Enable CPU code execution (asynchronous and non-glitchy)
     input                dbg_en,            // Debug interface enable (asynchronous and non-glitchy)
+    input  [        6:0] dbg_i2c_addr,      // Debug interface: I2C Address
+    input  [        6:0] dbg_i2c_broadcast, // Debug interface: I2C Broadcast Address (for multicore systems)
     input                dbg_i2c_scl,       // Debug interface: I2C SCL
     input                dbg_i2c_sda_in,    // Debug interface: I2C SDA IN
-    input                dbg_uart_rxd,      // Debug interface: UART RXD (asynchronous)
-    input                dco_clk,           // Fast oscillator (fast clock)
-    input  [`IRQ_NR-3:0] irq,               // Maskable interrupts (14, 30 or 62)
-    input                lfxt_clk,          // Low frequency oscillator (typ 32kHz)
-    input                nmi,               // Non-maskable interrupt (asynchronous and non-glitchy)
-    input                reset_n,           // Reset Pin (active low, asynchronous and non-glitchy)
-    input                scan_enable,       // ASIC ONLY: Scan enable (active during scan shifting)
-    input                scan_mode,         // ASIC ONLY: Scan mode
-    input                wkup               // ASIC ONLY: System Wake-up (asynchronous and non-glitchy)
+    input                dbg_uart_rxd       // Debug interface: UART RXD (asynchronous)
   );
+
+  wire [`IRQ_NR-3:0] irq_in;
+  wire        [13:0] wkup_in;
 
   // Data Memory interface
   wire [`DMEM_MSB:0] dmem_addr;
@@ -225,7 +219,69 @@ module msp430_synthesis #(
   //----------------------------------
 
   msp430_core dut (
-    // OUTPUTs
+    .irq_detect        (),
+    .nmi_detect        (),
+    .i_state           (),
+    .e_state           (),
+    .decode            (),
+    .ir                (ir),
+    .irq_num           (),
+    .pc                (),
+    .nodiv_smclk       (),
+    .irq_acc           (),                  // Interrupt request accepted (one-hot signal)
+    .mclk              (),                  // Main system clock
+    .puc_rst           (),                  // Main system reset
+    .cpu_en            (cpu_en),            // Enable CPU code execution (asynchronous)
+    .irq               (irq),               // Maskable interrupts
+    .lfxt_clk          (1'b0),              // Low frequency oscillator (typ 32kHz)
+    .nmi               (nmi),               // Non-maskable interrupt (asynchronous)
+    .reset_n           (reset_n),           // Reset Pin (low active, asynchronous)
+
+    .aclk_en           (aclk_en),           // FPGA ONLY: ACLK enable
+    .smclk_en          (smclk_en),          // FPGA ONLY: SMCLK enable
+
+    .aclk              (aclk),              // ASIC ONLY: ACLK
+    .lfxt_enable       (lfxt_enable),       // ASIC ONLY: Low frequency oscillator enable
+    .lfxt_wkup         (lfxt_wkup),         // ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
+    .smclk             (smclk),             // ASIC ONLY: SMCLK
+    .scan_enable       (scan_enable),       // ASIC ONLY: Scan enable (active during scan shifting)
+    .scan_mode         (scan_mode),         // ASIC ONLY: Scan mode
+    .wkup              (|wkup_in),          // ASIC ONLY: System Wake-up (asynchronous)
+
+    .dco_enable        (dco_enable),        // ASIC ONLY: Fast oscillator enable
+    .dco_wkup          (dco_wkup),          // ASIC ONLY: Fast oscillator wake-up (asynchronous)
+    .dco_clk           (dco_clk),           // Fast oscillator (fast clock)
+
+    .dbg_clk           (dbg_clk),
+    .dbg_rst           (dbg_rst),
+    .dbg_freeze        (dbg_freeze),        // Freeze peripherals
+    .dbg_i2c_sda_out   (dbg_i2c_sda_out),   // Debug interface: I2C SDA OUT
+    .dbg_uart_txd      (dbg_uart_txd),      // Debug interface: UART TXD
+    .dbg_en            (dbg_en),            // Debug interface enable (asynchronous)
+    .dbg_i2c_addr      (dbg_i2c_addr),      // Debug interface: I2C Address
+    .dbg_i2c_broadcast (dbg_i2c_broadcast), // Debug interface: I2C Broadcast Address (for multicore systems)
+    .dbg_i2c_scl       (dbg_i2c_scl),       // Debug interface: I2C SCL
+    .dbg_i2c_sda_in    (dbg_i2c_sda_in),    // Debug interface: I2C SDA IN
+    .dbg_uart_rxd      (dbg_uart_rxd),      // Debug interface: UART RXD (asynchronous)
+
+    .pmem_addr         (pmem_addr),         // Program Memory address
+    .pmem_cen          (pmem_cen),          // Program Memory chip enable (low active)
+    .pmem_din          (pmem_din),          // Program Memory data input (optional)
+    .pmem_wen          (pmem_wen),          // Program Memory write enable (low active) (optional)
+    .pmem_dout         (pmem_dout),         // Program Memory data output
+
+    .dmem_addr         (dmem_addr),         // Data Memory address
+    .dmem_cen          (dmem_cen),          // Data Memory chip enable (low active)
+    .dmem_din          (dmem_din),          // Data Memory data input
+    .dmem_wen          (dmem_wen),          // Data Memory write enable (low active)
+    .dmem_dout         (dmem_dout),         // Data Memory data output
+
+    .per_addr          (per_addr),          // Peripheral address
+    .per_din           (per_din),           // Peripheral data input
+    .per_we            (per_we),            // Peripheral write enable (high active)
+    .per_en            (per_en),            // Peripheral enable (high active)
+    .per_dout          (per_dout),          // Peripheral data output
+
     .r0                (),
     .r1                (),
     .r2                (),
@@ -241,68 +297,7 @@ module msp430_synthesis #(
     .r12               (),
     .r13               (),
     .r14               (),
-    .r15               (),
-
-    .dbg_clk           (dbg_clk),
-    .dbg_rst           (dbg_rst),
-    .irq_detect        (irq_detect),
-    .nmi_detect        (nmi_detect),
-
-    .i_state           (i_state),
-    .e_state           (e_state),
-    .decode            (decode),
-    .ir                (),
-    .irq_num           (),
-    .pc                (),
-
-    .nodiv_smclk       (nodiv_smclk),
-
-    .aclk              (aclk),              // ASIC ONLY: ACLK
-    .aclk_en           (aclk_en),           // FPGA ONLY: ACLK enable
-    .dbg_freeze        (dbg_freeze),        // Freeze peripherals
-    .dbg_i2c_sda_out   (dbg_i2c_sda_out),   // Debug interface: I2C SDA OUT
-    .dbg_uart_txd      (dbg_uart_txd),      // Debug interface: UART TXD
-    .dco_enable        (dco_enable),        // ASIC ONLY: Fast oscillator enable
-    .dco_wkup          (dco_wkup),          // ASIC ONLY: Fast oscillator wake-up (asynchronous)
-    .dmem_addr         (dmem_addr),         // Data Memory address
-    .dmem_cen          (dmem_cen),          // Data Memory chip enable (low active)
-    .dmem_din          (dmem_din),          // Data Memory data input
-    .dmem_wen          (dmem_wen),          // Data Memory write enable (low active)
-    .irq_acc           (irq_acc),           // Interrupt request accepted (one-hot signal)
-    .lfxt_enable       (lfxt_enable),       // ASIC ONLY: Low frequency oscillator enable
-    .lfxt_wkup         (lfxt_wkup),         // ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
-    .mclk              (mclk),              // Main system clock
-    .per_addr          (per_addr),          // Peripheral address
-    .per_din           (per_din),           // Peripheral data input
-    .per_we            (per_we),            // Peripheral write enable (high active)
-    .per_en            (per_en),            // Peripheral enable (high active)
-    .pmem_addr         (pmem_addr),         // Program Memory address
-    .pmem_cen          (pmem_cen),          // Program Memory chip enable (low active)
-    .pmem_din          (pmem_din),          // Program Memory data input (optional)
-    .pmem_wen          (pmem_wen),          // Program Memory write enable (low active) (optional)
-    .puc_rst           (puc_rst),           // Main system reset
-    .smclk             (smclk),             // ASIC ONLY: SMCLK
-    .smclk_en          (smclk_en),          // FPGA ONLY: SMCLK enable
-
-    // INPUTs
-    .cpu_en            (cpu_en),            // Enable CPU code execution (asynchronous)
-    .dbg_en            (dbg_en),            // Debug interface enable (asynchronous)
-    .dbg_i2c_addr      (7'b0),              // Debug interface: I2C Address
-    .dbg_i2c_broadcast (7'b0),              // Debug interface: I2C Broadcast Address (for multicore systems)
-    .dbg_i2c_scl       (dbg_i2c_scl),       // Debug interface: I2C SCL
-    .dbg_i2c_sda_in    (dbg_i2c_sda_in),    // Debug interface: I2C SDA IN
-    .dbg_uart_rxd      (dbg_uart_rxd),      // Debug interface: UART RXD (asynchronous)
-    .dco_clk           (dco_clk),           // Fast oscillator (fast clock)
-    .dmem_dout         (dmem_dout),         // Data Memory data output
-    .irq               (irq),               // Maskable interrupts
-    .lfxt_clk          (lfxt_clk),          // Low frequency oscillator (typ 32kHz)
-    .nmi               (nmi),               // Non-maskable interrupt (asynchronous)
-    .per_dout          (per_dout),          // Peripheral data output
-    .pmem_dout         (pmem_dout),         // Program Memory data output
-    .reset_n           (reset_n),           // Reset Pin (low active, asynchronous)
-    .scan_enable       (scan_enable),       // ASIC ONLY: Scan enable (active during scan shifting)
-    .scan_mode         (scan_mode),         // ASIC ONLY: Scan mode
-    .wkup              (|wkup_in)           // ASIC ONLY: System Wake-up (asynchronous)
+    .r15               ()
   );
 
   //
@@ -372,7 +367,7 @@ module msp430_synthesis #(
     .aclk_en      (aclk_en),           // ACLK enable (from CPU)
     .dbg_freeze   (dbg_freeze),        // Freeze Timer A counter
     .inclk        (inclk),             // INCLK external timer clock (SLOW)
-    .irq_ta0_acc  (irq_acc[`IRQ_NR-7]),// Interrupt request TACCR0 accepted
+    .irq_ta0_acc  (1'b0),              // Interrupt request TACCR0 accepted
     .mclk         (mclk),              // Main system clock
     .per_addr     (per_addr),          // Peripheral address
     .per_din      (per_din),           // Peripheral data input

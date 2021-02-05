@@ -59,88 +59,85 @@ module msp430_core #(
   parameter TOTAL_NR = 8'h00   // Total number of oMSP instances-1 (for multicore systems)
 )
   (
-    // OUTPUTs
-    output               dbg_clk,
-    output               dbg_rst,
     output               irq_detect,
     output               nmi_detect,
-
-    output         [2:0] i_state,
-    output         [3:0] e_state,
+    output [        2:0] i_state,
+    output [        3:0] e_state,
     output               decode,
-    output      [DW-1:0] ir,
-    output         [5:0] irq_num,
-    output      [DW-1:0] pc,
-
+    output [DW     -1:0] ir,
+    output [        5:0] irq_num,
+    output [DW     -1:0] pc,
     output               nodiv_smclk,
-
-    output               aclk,              // ASIC ONLY: ACLK
-    output               aclk_en,           // FPGA ONLY: ACLK enable
-    output               dbg_freeze,        // Freeze peripherals
-    output               dbg_i2c_sda_out,   // Debug interface: I2C SDA OUT
-    output               dbg_uart_txd,      // Debug interface: UART TXD
-    output               dco_enable,        // ASIC ONLY: Fast oscillator enable
-    output               dco_wkup,          // ASIC ONLY: Fast oscillator wake-up (asynchronous)
     output [`IRQ_NR-3:0] irq_acc,           // Interrupt request accepted (one-hot signal)
-    output               lfxt_enable,       // ASIC ONLY: Low frequency oscillator enable
-    output               lfxt_wkup,         // ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
     output               mclk,              // Main system clock
     output               puc_rst,           // Main system reset
-    output               smclk,             // ASIC ONLY: SMCLK
-    output               smclk_en,          // FPGA ONLY: SMCLK enable
-
-    // INPUTs
     input                cpu_en,            // Enable CPU code execution (asynchronous and non-glitchy)
-    input                dbg_en,            // Debug interface enable (asynchronous and non-glitchy)
-    input          [6:0] dbg_i2c_addr,      // Debug interface: I2C Address
-    input          [6:0] dbg_i2c_broadcast, // Debug interface: I2C Broadcast Address (for multicore systems)
-    input                dbg_i2c_scl,       // Debug interface: I2C SCL
-    input                dbg_i2c_sda_in,    // Debug interface: I2C SDA IN
-    input                dbg_uart_rxd,      // Debug interface: UART RXD (asynchronous)
-    input                dco_clk,           // Fast oscillator (fast clock)
     input  [`IRQ_NR-3:0] irq,               // Maskable interrupts (14, 30 or 62)
     input                lfxt_clk,          // Low frequency oscillator (typ 32kHz)
     input                nmi,               // Non-maskable interrupt (asynchronous and non-glitchy)
     input                reset_n,           // Reset Pin (active low, asynchronous and non-glitchy)
+
+    output               aclk_en,           // FPGA ONLY: ACLK enable
+    output               smclk_en,          // FPGA ONLY: SMCLK enable
+
+    output               aclk,              // ASIC ONLY: ACLK
+    output               lfxt_enable,       // ASIC ONLY: Low frequency oscillator enable
+    output               lfxt_wkup,         // ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
+    output               smclk,             // ASIC ONLY: SMCLK
     input                scan_enable,       // ASIC ONLY: Scan enable (active during scan shifting)
     input                scan_mode,         // ASIC ONLY: Scan mode
     input                wkup,              // ASIC ONLY: System Wake-up (asynchronous and non-glitchy)
+    
+    output               dco_enable,        // ASIC ONLY: Fast oscillator enable
+    output               dco_wkup,          // ASIC ONLY: Fast oscillator wake-up (asynchronous)
+    input                dco_clk,           // Fast oscillator (fast clock)
+
+    output               dbg_clk,
+    output               dbg_rst,
+    output               dbg_freeze,        // Freeze peripherals
+    output               dbg_i2c_sda_out,   // Debug interface: I2C SDA OUT
+    output               dbg_uart_txd,      // Debug interface: UART TXD
+    input                dbg_en,            // Debug interface enable (asynchronous and non-glitchy)
+    input  [        6:0] dbg_i2c_addr,      // Debug interface: I2C Address
+    input  [        6:0] dbg_i2c_broadcast, // Debug interface: I2C Broadcast Address (for multicore systems)
+    input                dbg_i2c_scl,       // Debug interface: I2C SCL
+    input                dbg_i2c_sda_in,    // Debug interface: I2C SDA IN
+    input                dbg_uart_rxd,      // Debug interface: UART RXD (asynchronous)
 
     output [`PMEM_MSB:0] pmem_addr,         // Program Memory address
     output               pmem_cen,          // Program Memory chip enable (low active)
-    output      [DW-1:0] pmem_din,          // Program Memory data input (optional)
-    output         [1:0] pmem_wen,          // Program Memory write enable (low active) (optional)
-    input       [DW-1:0] pmem_dout,         // Program Memory data output
-
+    output [DW     -1:0] pmem_din,          // Program Memory data input (optional)
+    output [        1:0] pmem_wen,          // Program Memory write enable (low active) (optional)
+    input  [DW     -1:0] pmem_dout,         // Program Memory data output
 
     output [`DMEM_MSB:0] dmem_addr,         // Data Memory address
     output               dmem_cen,          // Data Memory chip enable (low active)
-    output      [DW-1:0] dmem_din,          // Data Memory data input
-    output         [1:0] dmem_wen,          // Data Memory write enable (low active)
-    input       [DW-1:0] dmem_dout,         // Data Memory data output
+    output [DW     -1:0] dmem_din,          // Data Memory data input
+    output [        1:0] dmem_wen,          // Data Memory write enable (low active)
+    input  [DW     -1:0] dmem_dout,         // Data Memory data output
 
-    output        [13:0] per_addr,          // Peripheral address
-    output      [DW-1:0] per_din,           // Peripheral data input
-    output         [1:0] per_we,            // Peripheral write enable (high active)
+    output [       13:0] per_addr,          // Peripheral address
+    output [DW     -1:0] per_din,           // Peripheral data input
+    output [        1:0] per_we,            // Peripheral write enable (high active)
     output               per_en,            // Peripheral enable (high active)
-    input       [DW-1:0] per_dout,          // Peripheral data output
+    input  [DW     -1:0] per_dout,          // Peripheral data output
 
-    output      [DW-1:0] r0,
-    output      [DW-1:0] r1,
-    output      [DW-1:0] r2,
-    output      [DW-1:0] r3,
-    output      [DW-1:0] r4,
-    output      [DW-1:0] r5,
-    output      [DW-1:0] r6,
-    output      [DW-1:0] r7,
-    output      [DW-1:0] r8,
-    output      [DW-1:0] r9,
-    output      [DW-1:0] r10,
-    output      [DW-1:0] r11,
-    output      [DW-1:0] r12,
-    output      [DW-1:0] r13,
-    output      [DW-1:0] r14,
-    output      [DW-1:0] r15
+    output [DW     -1:0] r0,
+    output [DW     -1:0] r1,
+    output [DW     -1:0] r2,
+    output [DW     -1:0] r3,
+    output [DW     -1:0] r4,
+    output [DW     -1:0] r5,
+    output [DW     -1:0] r6,
+    output [DW     -1:0] r7,
+    output [DW     -1:0] r8,
+    output [DW     -1:0] r9,
+    output [DW     -1:0] r10,
+    output [DW     -1:0] r11,
+    output [DW     -1:0] r12,
+    output [DW     -1:0] r13,
+    output [DW     -1:0] r14,
+    output [DW     -1:0] r15
   );
 
   //=============================================================================
