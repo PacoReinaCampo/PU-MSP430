@@ -1,5 +1,5 @@
 #!/bin/bash
-export PATH=$PATH:/opt/intelFPGA_pro/20.2/modelsim_ase/linuxaloem/
+source ../../../../settings64_msim.sh
 
 # Disable waveform dumping
 OMSP_NODUMP=1
