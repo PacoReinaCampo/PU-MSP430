@@ -1,4 +1,4 @@
-# MPSoC-MSP430
+# PU-MSP430
 ## QueenField
 
 ![QueenField](../master/icon.jpg)
