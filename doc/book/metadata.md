@@ -1,6 +1,6 @@
 ---
 title: 'PU-MSP430'
-subtitle: 'QueenField ![](../../pu-msp430.svg){width=17cm}'
+subtitle: 'QueenField ![](../../icon.jpg)'
 
 author: Paco Reina Campo
 
