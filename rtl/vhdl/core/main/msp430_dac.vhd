@@ -1,7 +1,7 @@
 -- Converted from msp430_dac.sv
 -- by verilog2vhdl - QueenField
 
---//////////////////////////////////////////////////////////////////////////////
+--------------------------------------------------------------------------------
 --                                            __ _      _     _               //
 --                                           / _(_)    | |   | |              //
 --                __ _ _   _  ___  ___ _ __ | |_ _  ___| | __| |              //
@@ -15,39 +15,39 @@
 --              MSP430 CPU                                                    //
 --              Processing Unit                                               //
 --                                                                            //
---//////////////////////////////////////////////////////////////////////////////
+--------------------------------------------------------------------------------
 
 -- Copyright (c) 2015-2016 by the author(s)
--- *
--- * Redistribution and use in source and binary forms, with or without
--- * modification, are permitted provided that the following conditions
--- * are met:
--- *     * Redistributions of source code must retain the above copyright
--- *       notice, this list of conditions and the following disclaimer.
--- *     * Redistributions in binary form must reproduce the above copyright
--- *       notice, this list of conditions and the following disclaimer in the
--- *       documentation and/or other materials provided with the distribution.
--- *     * Neither the name of the authors nor the names of its contributors
--- *       may be used to endorse or promote products derived from this software
--- *       without specific prior written permission.
--- *
--- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
--- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
--- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
--- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
--- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
--- * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
--- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
--- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
--- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
--- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
--- * THE POSSIBILITY OF SUCH DAMAGE
--- *
--- * =============================================================================
--- * Author(s):
--- *   Olivier Girard <olgirard@gmail.com>
--- *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
--- */
+--
+-- Redistribution and use in source and binary forms, with or without
+-- modification, are permitted provided that the following conditions
+-- are met:
+--     * Redistributions of source code must retain the above copyright
+--       notice, this list of conditions and the following disclaimer.
+--     * Redistributions in binary form must reproduce the above copyright
+--       notice, this list of conditions and the following disclaimer in the
+--       documentation and/or other materials provided with the distribution.
+--     * Neither the name of the authors nor the names of its contributors
+--       may be used to endorse or promote products derived from this software
+--       without specific prior written permission.
+--
+-- THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+-- AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+-- IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+-- ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+-- LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+-- OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+-- SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+-- INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+-- CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+-- ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+-- THE POSSIBILITY OF SUCH DAMAGE
+--
+--------------------------------------------------------------------------------
+-- Author(s):
+--   Olivier Girard <olgirard@gmail.com>
+--   Paco Reina Campo <pacoreinacampo@queenfield.tech>
+--
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -81,11 +81,11 @@ entity msp430_dac is
     );
 end msp430_dac;
 
-architecture RTL of msp430_dac is
+architecture rtl of msp430_dac is
 
-  --=============================================================================
+  ------------------------------------------------------------------------------
   -- 1)  PARAMETER DECLARATION
-  --=============================================================================
+  ------------------------------------------------------------------------------
 
   -- Decoder bit width (defines how many bits are considered for address decoding)
   constant DEC_WD : integer := 3;
@@ -111,9 +111,9 @@ architecture RTL of msp430_dac is
   constant CNTRL1_X   : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(to_unsigned(CNTRLX1, DEC_SZ));
   constant CNTRL2_X   : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(to_unsigned(CNTRLX2, DEC_SZ));
 
-  --============================================================================
+  ------------------------------------------------------------------------------
   -- 2)  REGISTER DECODER
-  --============================================================================
+  ------------------------------------------------------------------------------
 
   -- Local register selection
   signal reg_sel : std_logic;
@@ -131,9 +131,9 @@ architecture RTL of msp430_dac is
   signal reg_wr : std_logic_vector(DEC_SZ-1 downto 0);
   signal reg_rd : std_logic_vector(DEC_SZ-1 downto 0);
 
-  --============================================================================
+  ------------------------------------------------------------------------------
   -- 3) REGISTERS
-  --============================================================================
+  ------------------------------------------------------------------------------
 
   -- DAC_VAL Register
   signal dac_val : std_logic_vector(11 downto 0);
@@ -148,9 +148,9 @@ architecture RTL of msp430_dac is
   -- CNTRL2 Register
   signal cntrl2_wr : std_logic;
 
-  --============================================================================
+  ------------------------------------------------------------------------------
   -- 4) DATA OUTPUT GENERATION
-  --============================================================================
+  ------------------------------------------------------------------------------
 
   -- Data output mux
   signal dac_val_rd  : std_logic_vector(15 downto 0);
@@ -158,9 +158,9 @@ architecture RTL of msp430_dac is
   signal cntrl1_rd   : std_logic_vector(15 downto 0);
   signal cntrl2_rd   : std_logic_vector(15 downto 0);
 
-  --============================================================================
+  ------------------------------------------------------------------------------
   -- 5) SPI INTERFACE
-  --============================================================================
+  ------------------------------------------------------------------------------
 
   -- SPI Clock divider
   signal spi_clk_div : std_logic_vector(3 downto 0);
@@ -343,4 +343,4 @@ begin
 
   sclk   <= sclk_s;
   sync_n <= sync_n_s;
-end RTL;
+end rtl;
