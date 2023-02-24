@@ -16,8 +16,8 @@ rm -rf ./log/*.log
 mkdir  ./log
 
 # Peripheral templates test patterns
-../bin/msp430sim template_periph_8b       | tee ./log/template_periph_8b.log
-../bin/msp430sim template_periph_16b      | tee ./log/template_periph_16b.log
+../bin/msp430sim.sh template_periph_8b       | tee ./log/template_periph_8b.log
+../bin/msp430sim.sh template_periph_16b      | tee ./log/template_periph_16b.log
 
 
 # Report regression results
