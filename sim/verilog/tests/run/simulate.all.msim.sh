@@ -187,4 +187,4 @@ mkdir  ./log
 
 
 # Report regression results
-../bin/parse.results.sh
+../bin/parse_results.sh
