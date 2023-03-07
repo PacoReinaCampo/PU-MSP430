@@ -54,4 +54,3 @@ rm -rf stimulus.sv
 rm -rf transcript
 rm -rf work
 rm -rf xsim.dir
-
