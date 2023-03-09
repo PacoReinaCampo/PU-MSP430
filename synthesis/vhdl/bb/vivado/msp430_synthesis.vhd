@@ -103,6 +103,11 @@ entity msp430_synthesis is
 end msp430_synthesis;
 
 architecture rtl of msp430_synthesis is
+
+  ------------------------------------------------------------------------------
+  -- Components
+  ------------------------------------------------------------------------------
+
   component msp430_ram
     generic (
       ADDR_MSB : integer := 6;                       -- MSB of the address bus
