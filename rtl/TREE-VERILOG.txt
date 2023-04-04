@@ -1,44 +1,44 @@
 verilog
 ├── core
 │   ├── fuse
-│   │   ├── msp430_and_gate.sv
-│   │   ├── msp430_clock_gate.sv
-│   │   ├── msp430_clock_mux.sv
-│   │   ├── msp430_scan_mux.sv
-│   │   ├── msp430_sync_cell.sv
-│   │   ├── msp430_sync_reset.sv
-│   │   └── msp430_wakeup_cell.sv
+│   │   ├── pu_msp430_and_gate.sv
+│   │   ├── pu_msp430_clock_gate.sv
+│   │   ├── pu_msp430_clock_mux.sv
+│   │   ├── pu_msp430_scan_mux.sv
+│   │   ├── pu_msp430_sync_cell.sv
+│   │   ├── pu_msp430_sync_reset.sv
+│   │   └── pu_msp430_wakeup_cell.sv
 │   ├── main
-│   │   ├── msp430_bcm.sv
-│   │   ├── msp430_dac.sv
-│   │   ├── msp430_dbg.sv
-│   │   ├── msp430_execution.sv
-│   │   ├── msp430_frontend.sv
-│   │   ├── msp430_gpio.sv
-│   │   ├── msp430_memory.sv
-│   │   ├── msp430_multiplier.sv
-│   │   ├── msp430_sfr.sv
-│   │   ├── msp430_ta.sv
-│   │   ├── msp430_template08.sv
-│   │   ├── msp430_template16.sv
-│   │   ├── msp430_uart.sv
-│   │   └── msp430_watchdog.sv
+│   │   ├── pu_msp430_bcm.sv
+│   │   ├── pu_msp430_dac.sv
+│   │   ├── pu_msp430_dbg.sv
+│   │   ├── pu_msp430_execution.sv
+│   │   ├── pu_msp430_frontend.sv
+│   │   ├── pu_msp430_gpio.sv
+│   │   ├── pu_msp430_memory.sv
+│   │   ├── pu_msp430_multiplier.sv
+│   │   ├── pu_msp430_sfr.sv
+│   │   ├── pu_msp430_ta.sv
+│   │   ├── pu_msp430_template08.sv
+│   │   ├── pu_msp430_template16.sv
+│   │   ├── pu_msp430_uart.sv
+│   │   └── pu_msp430_watchdog.sv
 │   └── omsp
-│       ├── msp430_alu.sv
-│       ├── msp430_dbg_hwbrk.sv
-│       ├── msp430_dbg_i2c.sv
-│       ├── msp430_dbg_uart.sv
-│       └── msp430_register_file.sv
+│       ├── pu_msp430_alu.sv
+│       ├── pu_msp430_dbg_hwbrk.sv
+│       ├── pu_msp430_dbg_i2c.sv
+│       ├── pu_msp430_dbg_uart.sv
+│       └── pu_msp430_register_file.sv
 ├── pkg
-│   ├── msp430_defines.sv
-│   ├── msp430_undefines.sv
-│   └── timescale.sv
+│   ├── pu_msp430_defines.sv
+│   ├── pu_msp430_undefines.sv
+│   └── pu_msp430_timescale.sv
 ├── pu
-│   ├── msp430_core.sv
-│   ├── msp430_pu0.sv
-│   └── msp430_pu1.sv
+│   ├── pu_msp430_core.sv
+│   ├── pu_msp430_pu0.sv
+│   └── pu_msp430_pu1.sv
 └── soc
-    ├── msp430_io_cell.sv
-    └── msp430_soc.sv
+    ├── pu_msp430_io_cell.sv
+    └── pu_msp430_soc.sv
 
 7 directories, 34 files

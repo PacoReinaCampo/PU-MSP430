@@ -42,4 +42,4 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-vhdl work ../../../../../../../bench/vhdl/tests/main/msp430_io_cell.vhd
+vhdl work ../../../../../../../bench/vhdl/tests/main/pu_msp430_io_cell.vhd

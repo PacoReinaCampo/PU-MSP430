@@ -1,20 +1,20 @@
 verilog
 ├── baremetal
 │   ├── cases
-│   │   ├── dac.sv
-│   │   └── leds.sv
+│   │   ├── pu_msp430_dac.sv
+│   │   └── pu_msp430_leds.sv
 │   └── main
-│       ├── DAC121S101.sv
-│       ├── glbl.sv
-│       ├── msp430_debug.sv
-│       ├── msp430_testbench.sv
-│       ├── ram_d1.sv
-│       ├── ram_d2.sv
-│       ├── ram_dp.sv
-│       ├── ram_p2.sv
-│       ├── ram_sp.sv
-│       ├── registers_omsp0.sv
-│       └── registers_omsp1.sv
+│       ├── pu_msp430_dac.sv
+│       ├── pu_msp430_glbl.sv
+│       ├── pu_msp430_debug.sv
+│       ├── pu_msp430_testbench.sv
+│       ├── pu_msp430_ram_d1.sv
+│       ├── pu_msp430_ram_d2.sv
+│       ├── pu_msp430_ram_dp.sv
+│       ├── pu_msp430_ram_p2.sv
+│       ├── pu_msp430_ram_sp.sv
+│       ├── pu_msp430_registers_omsp0.sv
+│       └── pu_msp430_registers_omsp1.sv
 └── tests
     ├── cases
     │   ├── c-jump_jc.sv
@@ -110,12 +110,12 @@ verilog
     │   ├── wdt_watchdog.sv
     │   └── wdt_wkup.sv
     └── main
-        ├── msp430_dbg_i2c_tasks.sv
-        ├── msp430_dbg_uart_tasks.sv
-        ├── msp430_debug.sv
-        ├── msp430_io_cell.sv
-        ├── msp430_ram.sv
-        ├── msp430_registers.sv
-        └── msp430_testbench.sv
+        ├── pu_msp430_dbg_i2c_tasks.sv
+        ├── pu_msp430_dbg_uart_tasks.sv
+        ├── pu_msp430_debug.sv
+        ├── pu_msp430_io_cell.sv
+        ├── pu_msp430_ram.sv
+        ├── pu_msp430_registers.sv
+        └── pu_msp430_testbench.sv
 
 6 directories, 112 files

@@ -53,7 +53,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-use work.msp430_pkg.all;
+use work.pu_msp430_pkg.all;
 
 entity msp430_synthesis is
   generic (
@@ -108,7 +108,7 @@ architecture rtl of msp430_synthesis is
   -- Components
   ------------------------------------------------------------------------------
 
-  component msp430_ram
+  component pu_msp430_ram
     generic (
       ADDR_MSB : integer := 6;                       -- MSB of the address bus
       MEM_SIZE : integer := 256);                    -- Memory size in bytes
@@ -124,7 +124,7 @@ architecture rtl of msp430_synthesis is
       ram_wen  : in std_logic_vector(1 downto 0));  -- RAM write enable (low active)
   end component;
 
-  component msp430_core
+  component pu_msp430_core
     port (
       --FRONTEND - SCAN
       scan_enable : in std_logic;
@@ -223,7 +223,7 @@ architecture rtl of msp430_synthesis is
       wkup        : in  std_logic);
   end component;
 
-  component msp430_gpio
+  component pu_msp430_gpio
     port (
       p1_dout : out std_logic_vector (7 downto 0);
       p2_dout : out std_logic_vector (7 downto 0);
@@ -268,7 +268,7 @@ architecture rtl of msp430_synthesis is
       per_din  : in  std_logic_vector (15 downto 0));
   end component;
 
-  component msp430_ta
+  component pu_msp430_ta
     port (
       -- OUTPUTs
       irq_ta0    : out std_logic;       -- Timer A interrupt: TACCR0
@@ -304,7 +304,7 @@ architecture rtl of msp430_synthesis is
       taclk       : in std_logic);      -- TACLK external timer clock (SLOW)
   end component;
 
-  component msp430_uart
+  component pu_msp430_uart
     port (
       uart_txd : out std_logic;
       uart_rxd : in  std_logic;
@@ -322,7 +322,7 @@ architecture rtl of msp430_synthesis is
       per_din  : in  std_logic_vector (15 downto 0));
   end component;
 
-  component msp430_template08
+  component pu_msp430_template08
     port (
       per_dout : out std_logic_vector (15 downto 0);
 
@@ -334,7 +334,7 @@ architecture rtl of msp430_synthesis is
       per_din  : in std_logic_vector (15 downto 0));
   end component;
 
-  component msp430_template16
+  component pu_msp430_template16
     port (
       per_dout   : out std_logic_vector (15 downto 0);
       cntrl2_16b : out std_logic_vector (15 downto 0);
@@ -446,7 +446,7 @@ begin
   -- Program Memory
   ------------------------------------
 
-  pmem_0 : msp430_ram
+  pmem_0 : pu_msp430_ram
     generic map (
       ADDR_MSB => PMEM_MSB,
       MEM_SIZE => PMEM_SIZE
@@ -467,7 +467,7 @@ begin
   -- Data Memory
   ------------------------------------
 
-  dmem_0 : msp430_ram
+  dmem_0 : pu_msp430_ram
     generic map (
       ADDR_MSB => DMEM_MSB,
       MEM_SIZE => DMEM_SIZE
@@ -488,7 +488,7 @@ begin
   -- openMSP430 Instance
   ------------------------------------
 
-  dut : msp430_core
+  dut : pu_msp430_core
     port map (
       irq_detect  => open,
       nmi_detect  => open,
@@ -575,7 +575,7 @@ begin
   -- Digital I/O
   ------------------------------------
 
-  gpio : msp430_gpio
+  gpio : pu_msp430_gpio
     port map (
       -- OUTPUTs
       irq_port1  => irq_port1,          -- Port 1 interrupt
@@ -621,7 +621,7 @@ begin
   -- Timers
   ------------------------------------
 
-  ta : msp430_ta
+  ta : pu_msp430_ta
     port map (
       -- OUTPUTs
       irq_ta0    => irq_ta0,            -- Timer A interrupt: TACCR0
@@ -660,7 +660,7 @@ begin
   --
   -- Simple full duplex UART (8N1 protocol)
   ------------------------------------------
-  uart : msp430_uart
+  uart : pu_msp430_uart
     port map (
       -- OUTPUTs
       irq_uart_rx => irq_uart_rx,       -- UART receive interrupt
@@ -683,7 +683,7 @@ begin
   -- Peripheral templates
   ------------------------------------
 
-  template08 : msp430_template08
+  template08 : pu_msp430_template08
     port map (
       -- OUTPUTs
       per_dout => per_dout_temp_8b,     -- Peripheral data output
@@ -697,7 +697,7 @@ begin
       puc_rst  => puc_rst               -- Main system reset
       );
 
-  template16 : msp430_template16
+  template16 : pu_msp430_template16
     port map (
       -- OUTPUTs
       per_dout   => per_dout_temp_16b,  -- Peripheral data output

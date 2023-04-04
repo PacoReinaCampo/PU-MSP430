@@ -69,7 +69,7 @@ fi
 ###############################################################################
 asmfile=../../../../../../../software/tests/$1.s43;
 verfile=../../../../../../../bench/verilog/tests/cases/$1.sv;
-incfile=../../../../../../../rtl/verilog/pkg/msp430_defines.sv;
+incfile=../../../../../../../rtl/verilog/pkg/pu_msp430_defines.sv;
 linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
 if [ $OMSP_SIMULATOR == "iverilog" ]; then

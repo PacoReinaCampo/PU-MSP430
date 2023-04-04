@@ -43,7 +43,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use work.msp430_pkg.all;
+use work.pu_msp430_pkg.all;
 
 entity msp430_state_machine is
   port (

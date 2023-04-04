@@ -1,44 +1,44 @@
 vhdl
 ├── core
 │   ├── fuse
-│   │   ├── msp430_and_gate.vhd
-│   │   ├── msp430_clock_gate.vhd
-│   │   ├── msp430_clock_mux.vhd
-│   │   ├── msp430_scan_mux.vhd
-│   │   ├── msp430_sync_cell.vhd
-│   │   ├── msp430_sync_reset.vhd
-│   │   └── msp430_wakeup_cell.vhd
+│   │   ├── pu_msp430_and_gate.vhd
+│   │   ├── pu_msp430_clock_gate.vhd
+│   │   ├── pu_msp430_clock_mux.vhd
+│   │   ├── pu_msp430_scan_mux.vhd
+│   │   ├── pu_msp430_sync_cell.vhd
+│   │   ├── pu_msp430_sync_reset.vhd
+│   │   └── pu_msp430_wakeup_cell.vhd
 │   ├── main
-│   │   ├── msp430_bcm.vhd
-│   │   ├── msp430_dac.vhd
-│   │   ├── msp430_dbg.vhd
-│   │   ├── msp430_execution.vhd
-│   │   ├── msp430_frontend.vhd
-│   │   ├── msp430_gpio.vhd
-│   │   ├── msp430_memory.vhd
-│   │   ├── msp430_multiplier.vhd
-│   │   ├── msp430_sfr.vhd
-│   │   ├── msp430_ta.vhd
-│   │   ├── msp430_template08.vhd
-│   │   ├── msp430_template16.vhd
-│   │   ├── msp430_uart.vhd
-│   │   └── msp430_watchdog.vhd
+│   │   ├── pu_msp430_bcm.vhd
+│   │   ├── pu_msp430_dac.vhd
+│   │   ├── pu_msp430_dbg.vhd
+│   │   ├── pu_msp430_execution.vhd
+│   │   ├── pu_msp430_frontend.vhd
+│   │   ├── pu_msp430_gpio.vhd
+│   │   ├── pu_msp430_memory.vhd
+│   │   ├── pu_msp430_multiplier.vhd
+│   │   ├── pu_msp430_sfr.vhd
+│   │   ├── pu_msp430_ta.vhd
+│   │   ├── pu_msp430_template08.vhd
+│   │   ├── pu_msp430_template16.vhd
+│   │   ├── pu_msp430_uart.vhd
+│   │   └── pu_msp430_watchdog.vhd
 │   └── omsp
-│       ├── msp430_alu.vhd
-│       ├── msp430_dbg_hwbrk.vhd
-│       ├── msp430_dbg_i2c.vhd
-│       ├── msp430_dbg_uart.vhd
+│       ├── pu_msp430_alu.vhd
+│       ├── pu_msp430_dbg_hwbrk.vhd
+│       ├── pu_msp430_dbg_i2c.vhd
+│       ├── pu_msp430_dbg_uart.vhd
 │       ├── msp430_interrupt.vhd
-│       ├── msp430_register_file.vhd
+│       ├── pu_msp430_register_file.vhd
 │       └── msp430_state_machine.vhd
 ├── pkg
-│   └── msp430_pkg.vhd
+│   └── pu_msp430_pkg.vhd
 ├── pu
-│   ├── msp430_core.vhd
-│   ├── msp430_pu0.vhd
-│   └── msp430_pu1.vhd
+│   ├── pu_msp430_core.vhd
+│   ├── pu_msp430_pu0.vhd
+│   └── pu_msp430_pu1.vhd
 └── soc
-    ├── msp430_io_cell.vhd
-    └── msp430_soc.vhd
+    ├── pu_msp430_io_cell.vhd
+    └── pu_msp430_soc.vhd
 
 7 directories, 34 files

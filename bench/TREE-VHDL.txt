@@ -1,8 +1,8 @@
 vhdl
 └── tests
     └── main
-        ├── msp430_debug.vhd
-        ├── msp430_io_cell.vhd
-        └── msp430_ram.vhd
+        ├── pu_msp430_debug.vhd
+        ├── pu_msp430_io_cell.vhd
+        └── pu_msp430_ram.vhd
 
 2 directories, 3 files

@@ -45,18 +45,18 @@
 // Testbench related
 //=============================================================================
 
-../../../../../../../bench/verilog/tests/main/msp430_testbench.sv
-../../../../../../../bench/verilog/tests/main/msp430_ram.sv
-../../../../../../../bench/verilog/tests/main/msp430_debug.sv
+../../../../../../../bench/verilog/tests/main/pu_msp430_testbench.sv
+../../../../../../../bench/verilog/tests/main/pu_msp430_ram.sv
+../../../../../../../bench/verilog/tests/main/pu_msp430_debug.sv
 
 
 //=============================================================================
 // CPU
 //=============================================================================
 
-../../../../../../../rtl/verilog/core/main/msp430_frontend.sv
-../../../../../../../rtl/verilog/core/main/msp430_sfr.sv
-../../../../../../../rtl/verilog/core/main/msp430_ta.sv
-../../../../../../../rtl/verilog/core/main/msp430_watchdog.sv
+../../../../../../../rtl/verilog/core/main/pu_msp430_frontend.sv
+../../../../../../../rtl/verilog/core/main/pu_msp430_sfr.sv
+../../../../../../../rtl/verilog/core/main/pu_msp430_ta.sv
+../../../../../../../rtl/verilog/core/main/pu_msp430_watchdog.sv
 
-../../../../../../../rtl/verilog/pu/msp430_core.sv
+../../../../../../../rtl/verilog/pu/pu_msp430_core.sv

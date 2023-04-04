@@ -48,7 +48,7 @@
 
 `ifdef OMSP_NO_INCLUDE
 `else
-`include "msp430_defines.sv"
+`include "pu_msp430_defines.sv"
 `endif
 
 module msp430_synthesis #(
@@ -186,7 +186,7 @@ module msp430_synthesis #(
   // Program Memory
   //----------------------------------
 
-  msp430_ram #(`PMEM_MSB, `PMEM_SIZE) pmem_0 (
+  pu_msp430_ram #(`PMEM_MSB, `PMEM_SIZE) pmem_0 (
     // OUTPUTs
     .ram_dout    (pmem_dout),          // Program Memory data output
 
@@ -202,7 +202,7 @@ module msp430_synthesis #(
   // Data Memory
   //----------------------------------
 
-  msp430_ram #(`DMEM_MSB, `DMEM_SIZE) dmem_0 (
+  pu_msp430_ram #(`DMEM_MSB, `DMEM_SIZE) dmem_0 (
     // OUTPUTs
     .ram_dout    (dmem_dout),          // Data Memory data output
 
@@ -218,7 +218,7 @@ module msp430_synthesis #(
   // openMSP430 Instance
   //----------------------------------
 
-  msp430_core dut (
+  pu_msp430_core dut (
     .irq_detect        (),
     .nmi_detect        (),
     .i_state           (),
@@ -304,7 +304,7 @@ module msp430_synthesis #(
   // Digital I/O
   //----------------------------------
 
-  msp430_gpio gpio (
+  pu_msp430_gpio gpio (
     // OUTPUTs
     .irq_port1    (irq_port1),         // Port 1 interrupt
     .irq_port2    (irq_port2),         // Port 2 interrupt
@@ -349,7 +349,7 @@ module msp430_synthesis #(
   // Timers
   //----------------------------------
 
-  msp430_ta ta (
+  pu_msp430_ta ta (
     // OUTPUTs
     .irq_ta0      (irq_ta0),           // Timer A interrupt: TACCR0
     .irq_ta1      (irq_ta1),           // Timer A interrupt: TAIV, TACCR1, TACCR2
@@ -387,7 +387,7 @@ module msp430_synthesis #(
   //
   // Simple full duplex UART (8N1 protocol)
   //----------------------------------------
-  msp430_uart uart (
+  pu_msp430_uart uart (
     // OUTPUTs
     .irq_uart_rx  (irq_uart_rx),   // UART receive interrupt
     .irq_uart_tx  (irq_uart_tx),   // UART transmit interrupt
@@ -409,7 +409,7 @@ module msp430_synthesis #(
   // Peripheral templates
   //----------------------------------
 
-  msp430_template08 template08 (
+  pu_msp430_template08 template08 (
     // OUTPUTs
     .per_dout     (per_dout_temp_8b),  // Peripheral data output
 
@@ -422,7 +422,7 @@ module msp430_synthesis #(
     .puc_rst      (puc_rst)            // Main system reset
   );
 
-  msp430_template16 template16 (
+  pu_msp430_template16 template16 (
     // OUTPUTs
     .per_dout     (per_dout_temp_16b), // Peripheral data output
     .cntrl2_16b   (cntrl2_16b),

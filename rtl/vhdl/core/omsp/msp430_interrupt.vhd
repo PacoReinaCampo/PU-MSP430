@@ -43,7 +43,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
-use work.msp430_pkg.all;
+use work.pu_msp430_pkg.all;
 
 entity msp430_interrupt is
   port (
@@ -162,7 +162,7 @@ begin
     irq_detect <= irq_detect_omsp;
 
     clock_gating_on : if (CLOCK_GATING = '1') generate
-      clock_gate_irq_num : msp430_clock_gate
+      clock_gate_irq_num : pu_msp430_clock_gate
         port map (
           gclk        => mclk_irq_num,
           clk         => mclk,
