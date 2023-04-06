@@ -36,183 +36,182 @@
 /*===========================================================================*/
 
 
-   integer test_nr;
-   integer test_var;
+integer test_nr;
+integer test_var;
 
-   
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
+
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
 `ifdef DBG_EN
 `ifdef DBG_I2C
-  `ifdef ASIC_CLOCKING
-      $display(" ===============================================");
-      $display("|               SIMULATION SKIPPED              |");
-      $display("|   (this test is not supported in ASIC mode)   |");
-      $display(" ===============================================");
-      $finish;
-  `else
-      test_nr = 0;
-      #1 dbg_en = 0;
-      repeat(30) @(posedge mclk);
-      stimulus_done = 0;
+`ifdef ASIC_CLOCKING
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (this test is not supported in ASIC mode)   |");
+  $display(" ===============================================");
+  $finish;
+`else
+  test_nr = 0;
+  #1 dbg_en = 0;
+  repeat (30) @(posedge mclk);
+  stimulus_done = 0;
 
-      // Make sure the CPU always starts executing when the
-      // debug interface is disabled during POR.
-      //--------------------------------------------------------
-      dbg_en  = 0;
-      test_nr = 1;
+  // Make sure the CPU always starts executing when the
+  // debug interface is disabled during POR.
+  //--------------------------------------------------------
+  dbg_en        = 0;
+  test_nr       = 1;
 
-      repeat(300) @(posedge mclk);
-      if (r14 === 16'h0000)       tb_error("====== CPU is stopped event though the debug interface is disabled - test 1 =====");
-      test_var = r14;
-      
-      
-      // Make sure that enabling the debug interface after the POR
-      // don't stop the cpu
-      //--------------------------------------------------------
-      dbg_en  = 1;
-      test_nr = 2;
-     
-      repeat(300) @(posedge mclk);
-      if (r14 === test_var[15:0]) tb_error("====== CPU is stopped when the debug interface is disabled after POR - test 2 =====");
+  repeat (300) @(posedge mclk);
+  if (r14 === 16'h0000) tb_error("====== CPU is stopped event though the debug interface is disabled - test 1 =====");
+  test_var = r14;
 
-      
-      // Create POR with debug enable and observe the
-      // behavior depending on the DBG_RST_BRK_EN define
-      //--------------------------------------------------------
-      dbg_en  = 1;
-      test_nr = 3;
-      
-      @(posedge mclk); // Generate POR
-      reset_n = 1'b0;
-      @(posedge mclk);
-      reset_n = 1'b1;
-     
-      repeat(300) @(posedge mclk);
+
+  // Make sure that enabling the debug interface after the POR
+  // don't stop the cpu
+  //--------------------------------------------------------
+  dbg_en   = 1;
+  test_nr  = 2;
+
+  repeat (300) @(posedge mclk);
+  if (r14 === test_var[15:0]) tb_error("====== CPU is stopped when the debug interface is disabled after POR - test 2 =====");
+
+
+  // Create POR with debug enable and observe the
+  // behavior depending on the DBG_RST_BRK_EN define
+  //--------------------------------------------------------
+  dbg_en  = 1;
+  test_nr = 3;
+
+  @(posedge mclk);  // Generate POR
+  reset_n = 1'b0;
+  @(posedge mclk);
+  reset_n = 1'b1;
+
+  repeat (300) @(posedge mclk);
 `ifdef DBG_RST_BRK_EN
-      if (r14 !== 16'h0000)       tb_error("====== CPU is not stopped with the debug interface enabled and DBG_RST_BRK_EN=1 - test 3 =====");
+  if (r14 !== 16'h0000) tb_error("====== CPU is not stopped with the debug interface enabled and DBG_RST_BRK_EN=1 - test 3 =====");
 `else
-      if (r14 === 16'h0000)       tb_error("====== CPU is stopped with the debug interface enabled and DBG_RST_BRK_EN=0 - test 3 =====");
+  if (r14 === 16'h0000) tb_error("====== CPU is stopped with the debug interface enabled and DBG_RST_BRK_EN=0 - test 3 =====");
 `endif
 
-      // Check CPU_CTL reset value
-      dbg_i2c_rd(CPU_CTL);
+  // Check CPU_CTL reset value
+  dbg_i2c_rd(CPU_CTL);
 `ifdef DBG_RST_BRK_EN
-      if (dbg_i2c_buf !== 16'h0030) tb_error("====== CPU_CTL wrong reset value -  test 4 =====");
+  if (dbg_i2c_buf !== 16'h0030) tb_error("====== CPU_CTL wrong reset value -  test 4 =====");
 `else
-      if (dbg_i2c_buf !== 16'h0010) tb_error("====== CPU_CTL wrong reset value -  test 4 =====");     
+  if (dbg_i2c_buf !== 16'h0010) tb_error("====== CPU_CTL wrong reset value -  test 4 =====");
 `endif
 
 
-      // Make sure that DBG_EN resets the debug interface
-      //--------------------------------------------------------
-      test_nr = 4;
+  // Make sure that DBG_EN resets the debug interface
+  //--------------------------------------------------------
+  test_nr = 4;
 
-      // Let the CPU run
-      dbg_i2c_wr(CPU_CTL,  16'h0002);
+  // Let the CPU run
+  dbg_i2c_wr(CPU_CTL, 16'h0002);
 
-      repeat(300) @(posedge mclk);
-      dbg_i2c_wr(CPU_CTL,   16'h0000);
-      dbg_i2c_wr(MEM_DATA,  16'haa55);
-      dbg_i2c_rd(CPU_CTL);
-      if (dbg_i2c_buf !== 16'h0000)  tb_error("====== CPU_CTL write access failed  - test 5 =====");
-      dbg_i2c_rd(MEM_DATA);
-      if (dbg_i2c_buf !== 16'haa55)  tb_error("====== MEM_DATA write access failed - test 6 =====");
+  repeat (300) @(posedge mclk);
+  dbg_i2c_wr(CPU_CTL, 16'h0000);
+  dbg_i2c_wr(MEM_DATA, 16'haa55);
+  dbg_i2c_rd(CPU_CTL);
+  if (dbg_i2c_buf !== 16'h0000) tb_error("====== CPU_CTL write access failed  - test 5 =====");
+  dbg_i2c_rd(MEM_DATA);
+  if (dbg_i2c_buf !== 16'haa55) tb_error("====== MEM_DATA write access failed - test 6 =====");
 
-      
-      test_var = r14;  // Backup the current register value
 
-      
-      @(posedge mclk); // Resets the debug interface
-      dbg_en = 1'b0;
-      repeat(2) @(posedge mclk);
-      dbg_en = 1'b1;
+  test_var = r14;  // Backup the current register value
 
-      // Make sure that the register was not reseted
-      if (r14 < test_var) tb_error("====== CPU was reseted with DBG_EN -  test 7 =====");
-      repeat(2) @(posedge mclk);   
-      
-      // Check CPU_CTL reset value
-      dbg_i2c_rd(CPU_CTL);
+
+  @(posedge mclk);  // Resets the debug interface
+  dbg_en = 1'b0;
+  repeat (2) @(posedge mclk);
+  dbg_en = 1'b1;
+
+  // Make sure that the register was not reseted
+  if (r14 < test_var) tb_error("====== CPU was reseted with DBG_EN -  test 7 =====");
+  repeat (2) @(posedge mclk);
+
+  // Check CPU_CTL reset value
+  dbg_i2c_rd(CPU_CTL);
 `ifdef DBG_RST_BRK_EN
-      if (dbg_i2c_buf !== 16'h0030) tb_error("====== CPU_CTL wrong reset value -  test 8 =====");
+  if (dbg_i2c_buf !== 16'h0030) tb_error("====== CPU_CTL wrong reset value -  test 8 =====");
 `else
-      if (dbg_i2c_buf !== 16'h0010) tb_error("====== CPU_CTL wrong reset value -  test 8 =====");     
+  if (dbg_i2c_buf !== 16'h0010) tb_error("====== CPU_CTL wrong reset value -  test 8 =====");
 `endif
-      dbg_i2c_rd(MEM_DATA);
-      if (dbg_i2c_buf !== 16'h0000) tb_error("====== MEM_DATA read access failed - test 9 =====");
+  dbg_i2c_rd(MEM_DATA);
+  if (dbg_i2c_buf !== 16'h0000) tb_error("====== MEM_DATA read access failed - test 9 =====");
 
 
-      // Make sure that RESET_N resets the debug interface
-      //--------------------------------------------------------
-      test_nr = 5;
+  // Make sure that RESET_N resets the debug interface
+  //--------------------------------------------------------
+  test_nr = 5;
 
-      // Let the CPU run
-      dbg_i2c_wr(CPU_CTL,  16'h0002);
+  // Let the CPU run
+  dbg_i2c_wr(CPU_CTL, 16'h0002);
 
-      repeat(300) @(posedge mclk);
-      dbg_i2c_wr(CPU_CTL,   16'h0000);
-      dbg_i2c_wr(MEM_DATA,  16'haa55);
-      dbg_i2c_rd(CPU_CTL);
-      if (dbg_i2c_buf !== 16'h0000)  tb_error("====== CPU_CTL write access failed  - test 10 =====");
-      dbg_i2c_rd(MEM_DATA);
-      if (dbg_i2c_buf !== 16'haa55)  tb_error("====== MEM_DATA write access failed - test 11 =====");
+  repeat (300) @(posedge mclk);
+  dbg_i2c_wr(CPU_CTL, 16'h0000);
+  dbg_i2c_wr(MEM_DATA, 16'haa55);
+  dbg_i2c_rd(CPU_CTL);
+  if (dbg_i2c_buf !== 16'h0000) tb_error("====== CPU_CTL write access failed  - test 10 =====");
+  dbg_i2c_rd(MEM_DATA);
+  if (dbg_i2c_buf !== 16'haa55) tb_error("====== MEM_DATA write access failed - test 11 =====");
 
-      test_nr = 6;
+  test_nr = 6;
 
-      @(posedge mclk); // Generates POR
-      reset_n = 1'b0;
-      repeat(2) @(posedge mclk);
-      reset_n = 1'b1;
+  @(posedge mclk);  // Generates POR
+  reset_n = 1'b0;
+  repeat (2) @(posedge mclk);
+  reset_n = 1'b1;
 
-      // Make sure that the register was reseted
-      if (r14 !== 16'h0000) tb_error("====== CPU was not reseted with RESET_N -  test 12 =====");
-      repeat(2) @(posedge mclk);
-     
-      test_nr = 7;
+  // Make sure that the register was reseted
+  if (r14 !== 16'h0000) tb_error("====== CPU was not reseted with RESET_N -  test 12 =====");
+  repeat (2) @(posedge mclk);
 
-      // Check CPU_CTL reset value
-      dbg_i2c_rd(CPU_CTL);
+  test_nr = 7;
+
+  // Check CPU_CTL reset value
+  dbg_i2c_rd(CPU_CTL);
 `ifdef DBG_RST_BRK_EN
-      if (dbg_i2c_buf !== 16'h0030) tb_error("====== CPU_CTL wrong reset value -  test 8 =====");
+  if (dbg_i2c_buf !== 16'h0030) tb_error("====== CPU_CTL wrong reset value -  test 8 =====");
 `else
-      if (dbg_i2c_buf !== 16'h0010) tb_error("====== CPU_CTL wrong reset value -  test 8 =====");     
+  if (dbg_i2c_buf !== 16'h0010) tb_error("====== CPU_CTL wrong reset value -  test 8 =====");
 `endif
-      dbg_i2c_rd(MEM_DATA);
-      if (dbg_i2c_buf !== 16'h0000) tb_error("====== MEM_DATA read access failed - test 9 =====");
+  dbg_i2c_rd(MEM_DATA);
+  if (dbg_i2c_buf !== 16'h0000) tb_error("====== MEM_DATA read access failed - test 9 =====");
 
-      
-      // Let the CPU run
-      dbg_i2c_wr(CPU_CTL,  16'h0002);
 
-      test_nr = 8;
+  // Let the CPU run
+  dbg_i2c_wr(CPU_CTL, 16'h0002);
 
-      // Generate IRQ to terminate the test pattern
-      irq[1] = 1'b1;
-      @(r13);
-      irq[1] = 1'b0;
-      
-      stimulus_done = 1;
+  test_nr = 8;
 
-  `endif
-`else
+  // Generate IRQ to terminate the test pattern
+  irq[1]  = 1'b1;
+  @(r13);
+  irq[1]        = 1'b0;
 
-       $display(" ===============================================");
-       $display("|               SIMULATION SKIPPED              |");
-       $display("|   (serial debug interface I2C not included)   |");
-       $display(" ===============================================");
-       $finish;
+  stimulus_done = 1;
+
 `endif
 `else
 
-       $display(" ===============================================");
-       $display("|               SIMULATION SKIPPED              |");
-       $display("|      (serial debug interface not included)    |");
-       $display(" ===============================================");
-       $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (serial debug interface I2C not included)   |");
+  $display(" ===============================================");
+  $finish;
 `endif
-   end
+`else
+
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|      (serial debug interface not included)    |");
+  $display(" ===============================================");
+  $finish;
+`endif
+end
 

@@ -48,11 +48,11 @@
 
 module pu_msp430_and_gate (
   // OUTPUTs
-  output         y,              // AND gate output
+  output y,  // AND gate output
 
   // INPUTs
-  input          a,              // AND gate input A
-  input          b               // AND gate input B
+  input a,  // AND gate input A
+  input b   // AND gate input B
 );
 
   //=============================================================================
@@ -74,5 +74,5 @@ module pu_msp430_and_gate (
   // 2)  AND GATE
   //=============================================================================
 
-  assign  y  =  a & b;
-endmodule // pu_msp430_and_gate
+  assign y = a & b;
+endmodule  // pu_msp430_and_gate

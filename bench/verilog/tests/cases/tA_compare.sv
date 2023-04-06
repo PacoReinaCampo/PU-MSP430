@@ -36,225 +36,223 @@
 /*===========================================================================*/
 
 integer my_counter;
-always @ (posedge mclk)
-  my_counter <=  my_counter+1;
+always @(posedge mclk) my_counter <= my_counter + 1;
 
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
 
 `ifdef ASIC_CLOCKING
-      $display(" ===============================================");
-      $display("|               SIMULATION SKIPPED              |");
-      $display("|   (this test is not supported in ASIC mode)   |");
-      $display(" ===============================================");
-      $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (this test is not supported in ASIC mode)   |");
+  $display(" ===============================================");
+  $finish;
 `else
 
-      // TIMER A TEST:  UP MODE
-      //--------------------------------------------------------
+  // TIMER A TEST:  UP MODE
+  //--------------------------------------------------------
 
-      @(mem200 === 16'h0001);  // Check Comparator 0
-      @(posedge ta_out0);
-      @(negedge mclk);
-      my_counter = 0;
-      @(posedge irq_ta1);
-      if (my_counter !== 32'h2) tb_error("====== TIMER_A COMPARE 0: UP MODE =====");
+  @(mem200 === 16'h0001);  // Check Comparator 0
+  @(posedge ta_out0);
+  @(negedge mclk);
+  my_counter = 0;
+  @(posedge irq_ta1);
+  if (my_counter !== 32'h2) tb_error("====== TIMER_A COMPARE 0: UP MODE =====");
 
-      @(negedge ta_out0);
-      @(negedge mclk);
-      my_counter = 0;
-      @(posedge irq_ta1);
-      if (my_counter !== 32'h2) tb_error("====== TIMER_A COMPARE 0: UP MODE =====");
-      @(posedge ta_out0);
-      if (my_counter !== 32'h2C) tb_error("====== TIMER_A COMPARE 0: UP MODE =====");
+  @(negedge ta_out0);
+  @(negedge mclk);
+  my_counter = 0;
+  @(posedge irq_ta1);
+  if (my_counter !== 32'h2) tb_error("====== TIMER_A COMPARE 0: UP MODE =====");
+  @(posedge ta_out0);
+  if (my_counter !== 32'h2C) tb_error("====== TIMER_A COMPARE 0: UP MODE =====");
 
-      @(posedge irq_ta0);
-      @(negedge mclk);
-      my_counter = 0;
-      @(posedge irq_ta1);
-      if (my_counter !== 32'h2) tb_error("====== TIMER_A COMPARE 0: UP MODE =====");
-
-      
-      @(mem200 === 16'h0002);  // Check Comparator 1
-      @(posedge ta_out1);
-      @(negedge mclk);
-      my_counter = 0;
-      @(posedge ta_out0);
-      if (my_counter !== 32'h20) tb_error("====== TIMER_A COMPARE 1: UP MODE =====");
-
-      @(negedge ta_out1);
-      @(negedge mclk);
-      my_counter = 0;
-      @(negedge ta_out0);
-      if (my_counter !== 32'h20) tb_error("====== TIMER_A COMPARE 1: UP MODE =====");
-
-      @(posedge irq_ta1);
-      @(negedge mclk);
-      my_counter = 0;
-      @(posedge ta_out0);
-      if (my_counter !== 32'h20) tb_error("====== TIMER_A COMPARE 1: UP MODE =====");
-
-      
-      @(mem200 === 16'h0003);  // Check Comparator 2
-      @(posedge ta_out2);
-      @(negedge mclk);
-      my_counter = 0;
-      @(posedge ta_out0);
-      if (my_counter !== 32'h12) tb_error("====== TIMER_A COMPARE 2: UP MODE =====");
-
-      @(negedge ta_out2);
-      @(negedge mclk);
-      my_counter = 0;
-      @(negedge ta_out0);
-      if (my_counter !== 32'h12) tb_error("====== TIMER_A COMPARE 2: UP MODE =====");
-
-      @(posedge irq_ta1);
-      @(negedge mclk);
-      my_counter = 0;
-      @(posedge ta_out0);
-      if (my_counter !== 32'h12) tb_error("====== TIMER_A COMPARE 2: UP MODE =====");
-      
-
-      // TIMER A TEST:  CONTINUOUS MODE
-      //--------------------------------------------------------
-      
-      @(mem200 === 16'h0001);
-      @(posedge irq_ta1);
-      @(negedge mclk);
-      my_counter = 0;
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h000A) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 1 =====");
-
-      @(posedge ta_out0);
-      if (my_counter !== 32'h60) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 1 =====");
-
-      @(posedge ta_out1);
-      if (my_counter !== 32'hC0) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 1 =====");
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h0002) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 1 =====");
-
-      @(posedge ta_out2);
-      if (my_counter !== 32'h120) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 1 =====");
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h0004) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 1 =====");
-
-      
-      @(mem200 === 16'h0002);
-      @(posedge irq_ta1);
-      @(negedge mclk);
-      my_counter = 0;
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h000A) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 2 =====");
-
-      @(posedge irq_ta0);
-      if (my_counter !== 32'h60) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 2 =====");
-
-      @(posedge irq_ta1);
-      if (my_counter !== 32'hC0) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 2 =====");
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h0002) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 2 =====");
-
-      @(posedge irq_ta1);
-      if (my_counter !== 32'h120) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 2 =====");
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h0004) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 2 =====");
-
-      
-      
-      // TIMER A TEST:  UP-DOWN MODE
-      //--------------------------------------------------------
-
-      @(mem200 === 16'h0001);
-      @(posedge irq_ta1);
-      @(negedge mclk);
-      my_counter = 0;
-      @(posedge ta_out2);
-      if (my_counter !== 32'h60)  tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 1 =====");
-      @(posedge ta_out1);
-      if (my_counter !== 32'hC0)  tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 1 =====");
-      @(posedge ta_out0);
-      if (my_counter !== 32'h120) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 1 =====");
-
-      @(negedge ta_out1);
-      if (my_counter !== 32'h180) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 2 =====");
-      @(negedge ta_out2);
-      if (my_counter !== 32'h1E0) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 2 =====");
-      @(negedge ta_out0);
-      if (my_counter !== 32'h360) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 2 =====");
-
-      
-      @(mem200 === 16'h0002);
-      @(posedge irq_ta1);
-      @(negedge mclk);
-      my_counter = 0;
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h000A)    tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 3 =====");
-      @(posedge irq_ta1);
-      if (my_counter !== 32'h60)  tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 3 =====");
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h0004)    tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 3 =====");
-      @(posedge irq_ta1);
-      if (my_counter !== 32'hC0)  tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 3 =====");
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h0002)    tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 3 =====");
-      @(posedge irq_ta0);
-      if (my_counter !== 32'h120) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 3 =====");
-
-      @(posedge irq_ta1);
-      if (my_counter !== 32'h180) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 4 =====");
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h0002)    tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 4 =====");
-      @(posedge irq_ta1);
-      if (my_counter !== 32'h1E0) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 4 =====");
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h0004)    tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 4 =====");
-      @(posedge irq_ta1);
-      if (my_counter !== 32'h240) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 4 =====");
-      @(negedge irq_ta1);
-      repeat(10) @(negedge mclk);
-      if (mem206 !== 16'h000A)    tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 4 =====");
-      @(posedge irq_ta0);
-      if (my_counter !== 32'h360) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 4 =====");
+  @(posedge irq_ta0);
+  @(negedge mclk);
+  my_counter = 0;
+  @(posedge irq_ta1);
+  if (my_counter !== 32'h2) tb_error("====== TIMER_A COMPARE 0: UP MODE =====");
 
 
-      // TIMER A TEST:  CCI INPUT LATCHING (SCCI)
-      //--------------------------------------------------------
+  @(mem200 === 16'h0002);  // Check Comparator 1
+  @(posedge ta_out1);
+  @(negedge mclk);
+  my_counter = 0;
+  @(posedge ta_out0);
+  if (my_counter !== 32'h20) tb_error("====== TIMER_A COMPARE 1: UP MODE =====");
 
-      @(r15 === 16'h4000);
-      if (mem202 !== 16'h3088) tb_error("====== TIMER_A COMPARE 0: CCI INPUT LATCHING (SCCI) =====");
-      if (mem204 !== 16'h3489) tb_error("====== TIMER_A COMPARE 0: CCI INPUT LATCHING (SCCI) =====");
-      if (mem206 !== 16'h2480) tb_error("====== TIMER_A COMPARE 0: CCI INPUT LATCHING (SCCI) =====");
-      if (mem208 !== 16'h2081) tb_error("====== TIMER_A COMPARE 0: CCI INPUT LATCHING (SCCI) =====");
+  @(negedge ta_out1);
+  @(negedge mclk);
+  my_counter = 0;
+  @(negedge ta_out0);
+  if (my_counter !== 32'h20) tb_error("====== TIMER_A COMPARE 1: UP MODE =====");
 
-      if (mem212 !== 16'h3088) tb_error("====== TIMER_A COMPARE 1: CCI INPUT LATCHING (SCCI) =====");
-      if (mem214 !== 16'h3489) tb_error("====== TIMER_A COMPARE 1: CCI INPUT LATCHING (SCCI) =====");
-      if (mem216 !== 16'h2480) tb_error("====== TIMER_A COMPARE 1: CCI INPUT LATCHING (SCCI) =====");
-      if (mem218 !== 16'h2081) tb_error("====== TIMER_A COMPARE 1: CCI INPUT LATCHING (SCCI) =====");
+  @(posedge irq_ta1);
+  @(negedge mclk);
+  my_counter = 0;
+  @(posedge ta_out0);
+  if (my_counter !== 32'h20) tb_error("====== TIMER_A COMPARE 1: UP MODE =====");
 
-      if (mem222 !== 16'h3088) tb_error("====== TIMER_A COMPARE 2: CCI INPUT LATCHING (SCCI) =====");
-      if (mem224 !== 16'h3489) tb_error("====== TIMER_A COMPARE 2: CCI INPUT LATCHING (SCCI) =====");
-      if (mem226 !== 16'h2480) tb_error("====== TIMER_A COMPARE 2: CCI INPUT LATCHING (SCCI) =====");
-      if (mem228 !== 16'h2081) tb_error("====== TIMER_A COMPARE 2: CCI INPUT LATCHING (SCCI) =====");
+
+  @(mem200 === 16'h0003);  // Check Comparator 2
+  @(posedge ta_out2);
+  @(negedge mclk);
+  my_counter = 0;
+  @(posedge ta_out0);
+  if (my_counter !== 32'h12) tb_error("====== TIMER_A COMPARE 2: UP MODE =====");
+
+  @(negedge ta_out2);
+  @(negedge mclk);
+  my_counter = 0;
+  @(negedge ta_out0);
+  if (my_counter !== 32'h12) tb_error("====== TIMER_A COMPARE 2: UP MODE =====");
+
+  @(posedge irq_ta1);
+  @(negedge mclk);
+  my_counter = 0;
+  @(posedge ta_out0);
+  if (my_counter !== 32'h12) tb_error("====== TIMER_A COMPARE 2: UP MODE =====");
+
+
+  // TIMER A TEST:  CONTINUOUS MODE
+  //--------------------------------------------------------
+
+  @(mem200 === 16'h0001);
+  @(posedge irq_ta1);
+  @(negedge mclk);
+  my_counter = 0;
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h000A) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 1 =====");
+
+  @(posedge ta_out0);
+  if (my_counter !== 32'h60) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 1 =====");
+
+  @(posedge ta_out1);
+  if (my_counter !== 32'hC0) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 1 =====");
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h0002) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 1 =====");
+
+  @(posedge ta_out2);
+  if (my_counter !== 32'h120) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 1 =====");
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h0004) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 1 =====");
+
+
+  @(mem200 === 16'h0002);
+  @(posedge irq_ta1);
+  @(negedge mclk);
+  my_counter = 0;
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h000A) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 2 =====");
+
+  @(posedge irq_ta0);
+  if (my_counter !== 32'h60) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 2 =====");
+
+  @(posedge irq_ta1);
+  if (my_counter !== 32'hC0) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 2 =====");
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h0002) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 2 =====");
+
+  @(posedge irq_ta1);
+  if (my_counter !== 32'h120) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 2 =====");
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h0004) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 2 =====");
+
+
+
+  // TIMER A TEST:  UP-DOWN MODE
+  //--------------------------------------------------------
+
+  @(mem200 === 16'h0001);
+  @(posedge irq_ta1);
+  @(negedge mclk);
+  my_counter = 0;
+  @(posedge ta_out2);
+  if (my_counter !== 32'h60) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 1 =====");
+  @(posedge ta_out1);
+  if (my_counter !== 32'hC0) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 1 =====");
+  @(posedge ta_out0);
+  if (my_counter !== 32'h120) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 1 =====");
+
+  @(negedge ta_out1);
+  if (my_counter !== 32'h180) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 2 =====");
+  @(negedge ta_out2);
+  if (my_counter !== 32'h1E0) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 2 =====");
+  @(negedge ta_out0);
+  if (my_counter !== 32'h360) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 2 =====");
+
+
+  @(mem200 === 16'h0002);
+  @(posedge irq_ta1);
+  @(negedge mclk);
+  my_counter = 0;
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h000A) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 3 =====");
+  @(posedge irq_ta1);
+  if (my_counter !== 32'h60) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 3 =====");
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h0004) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 3 =====");
+  @(posedge irq_ta1);
+  if (my_counter !== 32'hC0) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 3 =====");
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h0002) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 3 =====");
+  @(posedge irq_ta0);
+  if (my_counter !== 32'h120) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 3 =====");
+
+  @(posedge irq_ta1);
+  if (my_counter !== 32'h180) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 4 =====");
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h0002) tb_error("====== TIMER_A COMPARE 1: CONTINUOUS MODE - TEST 4 =====");
+  @(posedge irq_ta1);
+  if (my_counter !== 32'h1E0) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 4 =====");
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h0004) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 4 =====");
+  @(posedge irq_ta1);
+  if (my_counter !== 32'h240) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 4 =====");
+  @(negedge irq_ta1);
+  repeat (10) @(negedge mclk);
+  if (mem206 !== 16'h000A) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 4 =====");
+  @(posedge irq_ta0);
+  if (my_counter !== 32'h360) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 4 =====");
+
+
+  // TIMER A TEST:  CCI INPUT LATCHING (SCCI)
+  //--------------------------------------------------------
+
+  @(r15 === 16'h4000);
+  if (mem202 !== 16'h3088) tb_error("====== TIMER_A COMPARE 0: CCI INPUT LATCHING (SCCI) =====");
+  if (mem204 !== 16'h3489) tb_error("====== TIMER_A COMPARE 0: CCI INPUT LATCHING (SCCI) =====");
+  if (mem206 !== 16'h2480) tb_error("====== TIMER_A COMPARE 0: CCI INPUT LATCHING (SCCI) =====");
+  if (mem208 !== 16'h2081) tb_error("====== TIMER_A COMPARE 0: CCI INPUT LATCHING (SCCI) =====");
+
+  if (mem212 !== 16'h3088) tb_error("====== TIMER_A COMPARE 1: CCI INPUT LATCHING (SCCI) =====");
+  if (mem214 !== 16'h3489) tb_error("====== TIMER_A COMPARE 1: CCI INPUT LATCHING (SCCI) =====");
+  if (mem216 !== 16'h2480) tb_error("====== TIMER_A COMPARE 1: CCI INPUT LATCHING (SCCI) =====");
+  if (mem218 !== 16'h2081) tb_error("====== TIMER_A COMPARE 1: CCI INPUT LATCHING (SCCI) =====");
+
+  if (mem222 !== 16'h3088) tb_error("====== TIMER_A COMPARE 2: CCI INPUT LATCHING (SCCI) =====");
+  if (mem224 !== 16'h3489) tb_error("====== TIMER_A COMPARE 2: CCI INPUT LATCHING (SCCI) =====");
+  if (mem226 !== 16'h2480) tb_error("====== TIMER_A COMPARE 2: CCI INPUT LATCHING (SCCI) =====");
+  if (mem228 !== 16'h2081) tb_error("====== TIMER_A COMPARE 2: CCI INPUT LATCHING (SCCI) =====");
 
 `endif
 
-      stimulus_done = 1;
-   end
+  stimulus_done = 1;
+end
 

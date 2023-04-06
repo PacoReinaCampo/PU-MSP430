@@ -38,323 +38,319 @@
 `define LONG_TIMEOUT
 
 integer mclk_counter;
-always @ (negedge mclk)
-  mclk_counter     <=  mclk_counter+1;
+always @(negedge mclk) mclk_counter <= mclk_counter + 1;
 
 integer dco_clk_counter;
-always @ (negedge dco_clk)
-  dco_clk_counter  <=  dco_clk_counter+1;
+always @(negedge dco_clk) dco_clk_counter <= dco_clk_counter + 1;
 
 integer lfxt_clk_counter;
-always @ (negedge lfxt_clk)
-  lfxt_clk_counter <=  lfxt_clk_counter+1;
+always @(negedge lfxt_clk) lfxt_clk_counter <= lfxt_clk_counter + 1;
 
 reg [15:0] reg_val;
-   
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
 
-      force pu_msp430_testbench.dut.wdt_reset = 1'b0;
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
+
+  force pu_msp430_testbench.dut.wdt_reset = 1'b0;
 
 `ifdef ASIC_CLOCKING
-     
-      //--------------------------------------------------------
-      // MCLK GENERATION - LFXT_CLK INPUT
-      //--------------------------------------------------------
 
-	                        // ------- Divider /1 ----------
-      @(r15 === 16'h0001);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter     !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 1 =====");
-  `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 2 =====");
-  `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 3 =====");
-  `endif
+  //--------------------------------------------------------
+  // MCLK GENERATION - LFXT_CLK INPUT
+  //--------------------------------------------------------
 
-	                        // ------- Divider /2 ----------
-      @(r15 === 16'h0002);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter     !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  30) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !==  30) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 5 =====");
-    `endif
-  `endif
-      
-	                        // ------- Divider /4 ----------
-      @(r15 === 16'h0003);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter     !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  60) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !==  60) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 5 =====");
-    `endif
-  `endif
-      
-	                        // ------- Divider /8 ----------
-      @(r15 === 16'h0004);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter     !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !== 120) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 5 =====");
-    `endif
-  `endif
+  // ------- Divider /1 ----------
+  @(r15 === 16'h0001);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 1 =====");
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 3 =====");
+`endif
 
-      
-      //--------------------------------------------------------
-      // SMCLK GENERATION - DCO_CLK INPUT
-      //--------------------------------------------------------
+  // ------- Divider /2 ----------
+  @(r15 === 16'h0002);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 3 =====");
+`endif
+`else
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 5 =====");
+`endif
+`endif
 
-	                        // ------- Divider /1 ----------
-      @(r15 === 16'h1001);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /1) - TEST 1 =====");
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /1) - TEST 2 =====");
+  // ------- Divider /4 ----------
+  @(r15 === 16'h0003);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 3 =====");
+`endif
+`else
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 5 =====");
+`endif
+`endif
 
-	                        // ------- Divider /2 ----------
-      @(r15 === 16'h1002);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /2) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-      if (dco_clk_counter !==  30) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /2) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /2) - TEST 3 =====");
-  `endif
-      
-	                        // ------- Divider /4 ----------
-      @(r15 === 16'h1003);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /4) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-      if (dco_clk_counter !==  60) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /4) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /4) - TEST 3 =====");
-  `endif
-      
-	                        // ------- Divider /8 ----------
-      @(r15 === 16'h1004);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /8) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-      if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /8) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /8) - TEST 3 =====");
-  `endif
+  // ------- Divider /8 ----------
+  @(r15 === 16'h0004);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 3 =====");
+`endif
+`else
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 5 =====");
+`endif
+`endif
 
 
-      //--------------------------------------------------------
-      // MCLK GENERATION - LFXT_CLK INPUT
-      //--------------------------------------------------------
+  //--------------------------------------------------------
+  // SMCLK GENERATION - DCO_CLK INPUT
+  //--------------------------------------------------------
 
-	                        // ------- Divider /1 ----------
-      @(r15 === 16'h2001);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter     !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 1 =====");
-  `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 2 =====");
-  `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 3 =====");
-  `endif
+  // ------- Divider /1 ----------
+  @(r15 === 16'h1001);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /1) - TEST 1 =====");
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /1) - TEST 2 =====");
 
-	                        // ------- Divider /2 ----------
-      @(r15 === 16'h2002);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter     !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  30) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !==  30) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 5 =====");
-    `endif
-  `endif
-      
-	                        // ------- Divider /4 ----------
-      @(r15 === 16'h2003);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter     !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  60) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !==  60) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 5 =====");
-    `endif
-  `endif
-      
-	                        // ------- Divider /8 ----------
-      @(r15 === 16'h2004);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter     !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !== 120) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef MCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 5 =====");
-    `endif
-  `endif
+  // ------- Divider /2 ----------
+  @(r15 === 16'h1002);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /2) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+  if (dco_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /2) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /2) - TEST 3 =====");
+`endif
 
-      
-      //--------------------------------------------------------
-      // SMCLK GENERATION - DCO_CLK INPUT
-      //--------------------------------------------------------
+  // ------- Divider /4 ----------
+  @(r15 === 16'h1003);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /4) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+  if (dco_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /4) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /4) - TEST 3 =====");
+`endif
 
-	                        // ------- Divider /1 ----------
-      @(r15 === 16'h3001);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /1) - TEST 1 =====");
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /1) - TEST 2 =====");
+  // ------- Divider /8 ----------
+  @(r15 === 16'h1004);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /8) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+  if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /8) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /8) - TEST 3 =====");
+`endif
 
-	                        // ------- Divider /2 ----------
-      @(r15 === 16'h3002);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /2) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-      if (dco_clk_counter !==  30) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /2) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /2) - TEST 3 =====");
-  `endif
-      
-	                        // ------- Divider /4 ----------
-      @(r15 === 16'h3003);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /4) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-      if (dco_clk_counter !==  60) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /4) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /4) - TEST 3 =====");
-  `endif
-      
-	                        // ------- Divider /8 ----------
-      @(r15 === 16'h3004);
-      repeat(2) @(posedge mclk);
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge mclk);
-      if (mclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /8) - TEST 1 =====");
-  `ifdef MCLK_DIVIDER
-      if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /8) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /8) - TEST 3 =====");
-  `endif
+
+  //--------------------------------------------------------
+  // MCLK GENERATION - LFXT_CLK INPUT
+  //--------------------------------------------------------
+
+  // ------- Divider /1 ----------
+  @(r15 === 16'h2001);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 1 =====");
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /1) - TEST 3 =====");
+`endif
+
+  // ------- Divider /2 ----------
+  @(r15 === 16'h2002);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 3 =====");
+`endif
+`else
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /2) - TEST 5 =====");
+`endif
+`endif
+
+  // ------- Divider /4 ----------
+  @(r15 === 16'h2003);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 3 =====");
+`endif
+`else
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /4) - TEST 5 =====");
+`endif
+`endif
+
+  // ------- Divider /8 ----------
+  @(r15 === 16'h2004);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 3 =====");
+`endif
+`else
+`ifdef MCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: MCLK - LFXT_CLK INPUT (DIV /8) - TEST 5 =====");
+`endif
+`endif
+
+
+  //--------------------------------------------------------
+  // SMCLK GENERATION - DCO_CLK INPUT
+  //--------------------------------------------------------
+
+  // ------- Divider /1 ----------
+  @(r15 === 16'h3001);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /1) - TEST 1 =====");
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /1) - TEST 2 =====");
+
+  // ------- Divider /2 ----------
+  @(r15 === 16'h3002);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /2) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+  if (dco_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /2) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /2) - TEST 3 =====");
+`endif
+
+  // ------- Divider /4 ----------
+  @(r15 === 16'h3003);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /4) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+  if (dco_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /4) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /4) - TEST 3 =====");
+`endif
+
+  // ------- Divider /8 ----------
+  @(r15 === 16'h3004);
+  repeat (2) @(posedge mclk);
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge mclk);
+  if (mclk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /8) - TEST 1 =====");
+`ifdef MCLK_DIVIDER
+  if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /8) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /8) - TEST 3 =====");
+`endif
 
 
 `else
-      $display(" ===============================================");
-      $display("|               SIMULATION SKIPPED              |");
-      $display("|   (this test is not supported in FPGA mode)   |");
-      $display(" ===============================================");
-      $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (this test is not supported in FPGA mode)   |");
+  $display(" ===============================================");
+  $finish;
 `endif
 
-      stimulus_done = 1;
-   end
+  stimulus_done = 1;
+end
 

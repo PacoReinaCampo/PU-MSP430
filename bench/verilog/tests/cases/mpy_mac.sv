@@ -34,63 +34,57 @@
 /* $LastChangedBy: olivier.girard $                                          */
 /* $LastChangedDate: 2009-08-04 23:44:12 +0200 (Tue, 04 Aug 2009) $          */
 /*===========================================================================*/
-    
+
 `define NO_TIMEOUT
 
-integer     i;
-reg  [32:0] result;
+integer i;
+reg [32:0] result;
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
 `ifdef MULTIPLYING
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
-      i = 0;
-     
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
+  i             = 0;
 
-      for ( i=0; i < 'h10000; i=i+1)
-	begin
-	   @(r15);
-	   result = 32'hC000_0000 + (r8*r9);
-	   if (r10 !== result[15:0])
-	     begin
-		$display("ERROR: OP1 = 0x%h / OP2 = 0x%h", r8, r9);
-		$display("ERROR: Result is: SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", r12, r11, r10);
-		$display("ERROR: Expected : SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", {15'h0000, result[32]}, result[31:16], result[15:0]);
-		tb_error("====== UNSIGNED MULTIPLY ACCUMULATE: RESLO =====");
-	     end
-	   if (r11 !== result[31:16])
-	     begin
-		$display("ERROR: OP1 = 0x%h / OP2 = 0x%h", r8, r9);
-		$display("ERROR: Result is: SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", r12, r11, r10);
-		$display("ERROR: Expected : SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", {15'h0000, result[32]}, result[31:16], result[15:0]);
-		tb_error("====== UNSIGNED MULTIPLY ACCUMULATE: RESHI =====");
-	     end
-	   if (r12 !== {15'h0000, result[32]})
-	     begin
-		$display("ERROR: OP1 = 0x%h / OP2 = 0x%h", r8, r9);
-		$display("ERROR: Result is: SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", r12, r11, r10);
-		$display("ERROR: Expected : SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", {15'h0000, result[32]}, result[31:16], result[15:0]);
-		tb_error("====== UNSIGNED MULTIPLY ACCUMULATE: SUMEXT =====");
-	     end
 
-	   if (r15[7:0]==8'h00)
-	     $display("OP2 = 0x%h done", r9);
-	end
+  for (i = 0; i < 'h10000; i = i + 1) begin
+    @(r15);
+    result = 32'hC000_0000 + (r8 * r9);
+    if (r10 !== result[15:0]) begin
+      $display("ERROR: OP1 = 0x%h / OP2 = 0x%h", r8, r9);
+      $display("ERROR: Result is: SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", r12, r11, r10);
+      $display("ERROR: Expected : SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", {15'h0000, result[32]}, result[31:16], result[15:0]);
+      tb_error("====== UNSIGNED MULTIPLY ACCUMULATE: RESLO =====");
+    end
+    if (r11 !== result[31:16]) begin
+      $display("ERROR: OP1 = 0x%h / OP2 = 0x%h", r8, r9);
+      $display("ERROR: Result is: SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", r12, r11, r10);
+      $display("ERROR: Expected : SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", {15'h0000, result[32]}, result[31:16], result[15:0]);
+      tb_error("====== UNSIGNED MULTIPLY ACCUMULATE: RESHI =====");
+    end
+    if (r12 !== {15'h0000, result[32]}) begin
+      $display("ERROR: OP1 = 0x%h / OP2 = 0x%h", r8, r9);
+      $display("ERROR: Result is: SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", r12, r11, r10);
+      $display("ERROR: Expected : SUMEXT = 0x%h / RESHI = 0x%h / RESLO = 0x%h", {15'h0000, result[32]}, result[31:16], result[15:0]);
+      tb_error("====== UNSIGNED MULTIPLY ACCUMULATE: SUMEXT =====");
+    end
+
+    if (r15[7:0] == 8'h00) $display("OP2 = 0x%h done", r9);
+  end
 
 
 
-      stimulus_done = 1;
+  stimulus_done = 1;
 `else
 
-       $display(" ===============================================");
-       $display("|               SIMULATION SKIPPED              |");
-       $display("|      (hardware multiplier not included)       |");
-       $display(" ===============================================");
-       $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|      (hardware multiplier not included)       |");
+  $display(" ===============================================");
+  $finish;
 `endif
-   end
+end
 

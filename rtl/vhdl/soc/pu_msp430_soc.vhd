@@ -155,18 +155,18 @@ entity pu_msp430_soc is
     omsp1_pmem_dout : in  std_logic_vector(15 downto 0);
 
     -- DACs
-    omsp0_din_x    : out std_logic;  -- SPI Serial Data
-    omsp0_din_y    : out std_logic;  -- SPI Serial Data
-    omsp0_sclk_x   : out std_logic;  -- SPI Serial Clock
-    omsp0_sclk_y   : out std_logic;  -- SPI Serial Clock
+    omsp0_din_x    : out std_logic;     -- SPI Serial Data
+    omsp0_din_y    : out std_logic;     -- SPI Serial Data
+    omsp0_sclk_x   : out std_logic;     -- SPI Serial Clock
+    omsp0_sclk_y   : out std_logic;     -- SPI Serial Clock
     omsp0_sync_n_x : out std_logic;  -- SPI Frame synchronization signal (low active)
     omsp0_sync_n_y : out std_logic;  -- SPI Frame synchronization signal (low active)
 
     -- DACs
-    omsp1_din_x    : out std_logic;  -- SPI Serial Data
-    omsp1_din_y    : out std_logic;  -- SPI Serial Data
-    omsp1_sclk_x   : out std_logic;  -- SPI Serial Clock
-    omsp1_sclk_y   : out std_logic;  -- SPI Serial Clock
+    omsp1_din_x    : out std_logic;     -- SPI Serial Data
+    omsp1_din_y    : out std_logic;     -- SPI Serial Data
+    omsp1_sclk_x   : out std_logic;     -- SPI Serial Clock
+    omsp1_sclk_y   : out std_logic;     -- SPI Serial Clock
     omsp1_sync_n_x : out std_logic;  -- SPI Frame synchronization signal (low active)
     omsp1_sync_n_y : out std_logic;  -- SPI Frame synchronization signal (low active)
 
@@ -260,7 +260,7 @@ architecture rtl of pu_msp430_soc is
       puc_rst : out std_logic;
 
       -- Clock & Reset
-      dco_clk : in std_logic;  -- Fast oscillator (fast clock)
+      dco_clk : in std_logic;           -- Fast oscillator (fast clock)
       reset_n : in std_logic;  -- Reset Pin (low active, asynchronous and non-glitchy)
 
       -- Serial Debug Interface (I2C)
@@ -271,28 +271,28 @@ architecture rtl of pu_msp430_soc is
       dbg_i2c_sda_out   : out std_logic;  -- Debug interface: I2C SDA OUT
 
       -- Data Memory
-      dmem_dout : in  std_logic_vector(15 downto 0);        -- Data Memory data output
+      dmem_dout : in  std_logic_vector(15 downto 0);  -- Data Memory data output
       dmem_addr : out std_logic_vector(DMEM_MSB downto 0);  -- Data Memory address
-      dmem_cen  : out std_logic;                            -- Data Memory chip enable (low active)
-      dmem_din  : out std_logic_vector(15 downto 0);        -- Data Memory data input
-      dmem_wen  : out std_logic_vector(1 downto 0);         -- Data Memory write enable (low active)
+      dmem_cen  : out std_logic;        -- Data Memory chip enable (low active)
+      dmem_din  : out std_logic_vector(15 downto 0);  -- Data Memory data input
+      dmem_wen  : out std_logic_vector(1 downto 0);  -- Data Memory write enable (low active)
 
       -- Program Memory
-      pmem_dout : in  std_logic_vector(15 downto 0);        -- Program Memory data output
+      pmem_dout : in  std_logic_vector(15 downto 0);  -- Program Memory data output
       pmem_addr : out std_logic_vector(PMEM_MSB downto 0);  -- Program Memory address
-      pmem_cen  : out std_logic;                            -- Program Memory chip enable (low active)
-      pmem_din  : out std_logic_vector(15 downto 0);        -- Program Memory data input (optional)
-      pmem_wen  : out std_logic_vector(1 downto 0);         -- Program Memory write enable (low active) (optional)
+      pmem_cen  : out std_logic;  -- Program Memory chip enable (low active)
+      pmem_din  : out std_logic_vector(15 downto 0);  -- Program Memory data input (optional)
+      pmem_wen  : out std_logic_vector(1 downto 0);  -- Program Memory write enable (low active) (optional)
 
       -- UART
       uart_rxd : in  std_logic;         -- UART Data Receive (RXD)
       uart_txd : out std_logic;         -- UART Data Transmit (TXD)
 
       -- DACs
-      din_x    : out std_logic;  -- SPI Serial Data
-      din_y    : out std_logic;  -- SPI Serial Data
-      sclk_x   : out std_logic;  -- SPI Serial Clock
-      sclk_y   : out std_logic;  -- SPI Serial Clock
+      din_x    : out std_logic;         -- SPI Serial Data
+      din_y    : out std_logic;         -- SPI Serial Data
+      sclk_x   : out std_logic;         -- SPI Serial Clock
+      sclk_y   : out std_logic;         -- SPI Serial Clock
       sync_n_x : out std_logic;  -- SPI Frame synchronization signal (low active)
       sync_n_y : out std_logic;  -- SPI Frame synchronization signal (low active)
 
@@ -342,35 +342,35 @@ architecture rtl of pu_msp430_soc is
       puc_rst : out std_logic;
 
       -- Clock & Reset
-      dco_clk : in std_logic;  -- Fast oscillator (fast clock)
+      dco_clk : in std_logic;           -- Fast oscillator (fast clock)
       reset_n : in std_logic;  -- Reset Pin (low active, asynchronous and non-glitchy)
 
       -- Serial Debug Interface (I2C)
       dbg_i2c_addr      : in  std_logic_vector(6 downto 0);  -- Debug interface: I2C Address
       dbg_i2c_broadcast : in  std_logic_vector(6 downto 0);  -- Debug interface: I2C Broadcast Address (for multicore systems)
-      dbg_i2c_scl       : in  std_logic;                     -- Debug interface: I2C SCL
-      dbg_i2c_sda_in    : in  std_logic;                     -- Debug interface: I2C SDA IN
-      dbg_i2c_sda_out   : out std_logic;                     -- Debug interface: I2C SDA OUT
+      dbg_i2c_scl       : in  std_logic;  -- Debug interface: I2C SCL
+      dbg_i2c_sda_in    : in  std_logic;  -- Debug interface: I2C SDA IN
+      dbg_i2c_sda_out   : out std_logic;  -- Debug interface: I2C SDA OUT
 
       -- Data Memory
-      dmem_dout : in  std_logic_vector(15 downto 0);        -- Data Memory data output
+      dmem_dout : in  std_logic_vector(15 downto 0);  -- Data Memory data output
       dmem_addr : out std_logic_vector(DMEM_MSB downto 0);  -- Data Memory address
-      dmem_cen  : out std_logic;                            -- Data Memory chip enable (low active)
-      dmem_din  : out std_logic_vector(15 downto 0);        -- Data Memory data input
-      dmem_wen  : out std_logic_vector(1 downto 0);         -- Data Memory write enable (low active)
+      dmem_cen  : out std_logic;        -- Data Memory chip enable (low active)
+      dmem_din  : out std_logic_vector(15 downto 0);  -- Data Memory data input
+      dmem_wen  : out std_logic_vector(1 downto 0);  -- Data Memory write enable (low active)
 
       -- Program Memory
-      pmem_dout : in  std_logic_vector(15 downto 0);        -- Program Memory data output
+      pmem_dout : in  std_logic_vector(15 downto 0);  -- Program Memory data output
       pmem_addr : out std_logic_vector(PMEM_MSB downto 0);  -- Program Memory address
-      pmem_cen  : out std_logic;                            -- Program Memory chip enable (low active)
-      pmem_din  : out std_logic_vector(15 downto 0);        -- Program Memory data input (optional)
-      pmem_wen  : out std_logic_vector(1 downto 0);         -- Program Memory write enable (low active) (optional)
+      pmem_cen  : out std_logic;  -- Program Memory chip enable (low active)
+      pmem_din  : out std_logic_vector(15 downto 0);  -- Program Memory data input (optional)
+      pmem_wen  : out std_logic_vector(1 downto 0);  -- Program Memory write enable (low active) (optional)
 
       -- DACs
-      din_x    : out std_logic;  -- SPI Serial Data
-      din_y    : out std_logic;  -- SPI Serial Data
-      sclk_x   : out std_logic;  -- SPI Serial Clock
-      sclk_y   : out std_logic;  -- SPI Serial Clock
+      din_x    : out std_logic;         -- SPI Serial Data
+      din_y    : out std_logic;         -- SPI Serial Data
+      sclk_x   : out std_logic;         -- SPI Serial Clock
+      sclk_y   : out std_logic;         -- SPI Serial Clock
       sync_n_x : out std_logic;  -- SPI Frame synchronization signal (low active)
       sync_n_y : out std_logic;  -- SPI Frame synchronization signal (low active)
 
@@ -496,28 +496,28 @@ begin
       puc_rst => omsp0_puc_rst,
 
       -- Clock & Reset
-      dco_clk => dco_clk_omsp,  -- Fast oscillator (fast clock)
-      reset_n => reset_n,       -- Reset Pin (low active, asynchronous and non-glitchy)
+      dco_clk => dco_clk_omsp,          -- Fast oscillator (fast clock)
+      reset_n => reset_n,  -- Reset Pin (low active, asynchronous and non-glitchy)
 
       -- Serial Debug Interface (I2C)
       dbg_i2c_addr      => std_logic_vector(to_unsigned(50, 7)),  -- Debug interface: I2C Address
       dbg_i2c_broadcast => std_logic_vector(to_unsigned(49, 7)),  -- Debug interface: I2C Broadcast Address (for multicore systems)
-      dbg_i2c_scl       => omsp_dbg_i2c_scl,                      -- Debug interface: I2C SCL
-      dbg_i2c_sda_in    => omsp_dbg_i2c_sda_in,                   -- Debug interface: I2C SDA IN
-      dbg_i2c_sda_out   => omsp0_dbg_i2c_sda_out,                 -- Debug interface: I2C SDA OUT
+      dbg_i2c_scl       => omsp_dbg_i2c_scl,     -- Debug interface: I2C SCL
+      dbg_i2c_sda_in    => omsp_dbg_i2c_sda_in,  -- Debug interface: I2C SDA IN
+      dbg_i2c_sda_out   => omsp0_dbg_i2c_sda_out,  -- Debug interface: I2C SDA OUT
 
       -- Data Memory
       dmem_addr => omsp0_dmem_addr,     -- Data Memory address
       dmem_cen  => omsp0_dmem_cen,      -- Data Memory chip enable (low active)
       dmem_din  => omsp0_dmem_din,      -- Data Memory data input
-      dmem_wen  => omsp0_dmem_wen,      -- Data Memory write enable (low active)
+      dmem_wen  => omsp0_dmem_wen,   -- Data Memory write enable (low active)
       dmem_dout => omsp0_dmem_dout,     -- Data Memory data output
 
       -- Program Memory
       pmem_addr => omsp0_pmem_addr,     -- Program Memory address
-      pmem_cen  => omsp0_pmem_cen,      -- Program Memory chip enable (low active)
+      pmem_cen  => omsp0_pmem_cen,  -- Program Memory chip enable (low active)
       pmem_din  => omsp0_pmem_din,      -- Program Memory data input (optional)
-      pmem_wen  => omsp0_pmem_wen,      -- Program Memory write enable (low active) (optional)
+      pmem_wen  => omsp0_pmem_wen,  -- Program Memory write enable (low active) (optional)
       pmem_dout => omsp0_pmem_dout,     -- Program Memory data output
 
       -- UART
@@ -529,8 +529,8 @@ begin
       din_y    => omsp0_din_y,          -- SPI Serial Data
       sclk_x   => omsp0_sclk_x,         -- SPI Serial Clock
       sclk_y   => omsp0_sclk_y,         -- SPI Serial Clock
-      sync_n_x => omsp0_sync_n_x,       -- SPI Frame synchronization signal (low active)
-      sync_n_y => omsp0_sync_n_y,       -- SPI Frame synchronization signal (low active)
+      sync_n_x => omsp0_sync_n_x,  -- SPI Frame synchronization signal (low active)
+      sync_n_y => omsp0_sync_n_y,  -- SPI Frame synchronization signal (low active)
 
       -- Switches & LEDs
       switch => omsp_switch,            -- Input switches
@@ -580,37 +580,37 @@ begin
       puc_rst => omsp1_puc_rst,
 
       -- Clock & Reset
-      dco_clk => dco_clk_omsp,  -- Fast oscillator (fast clock)
-      reset_n => reset_n,       -- Reset Pin (low active, asynchronous and non-glitchy)
+      dco_clk => dco_clk_omsp,          -- Fast oscillator (fast clock)
+      reset_n => reset_n,  -- Reset Pin (low active, asynchronous and non-glitchy)
 
       -- Serial Debug Interface (I2C)
       dbg_i2c_addr      => std_logic_vector(to_unsigned(51, 7)),  -- Debug interface: I2C Address
       dbg_i2c_broadcast => std_logic_vector(to_unsigned(49, 7)),  -- Debug interface: I2C Broadcast Address (for multicore systems)
-      dbg_i2c_scl       => omsp_dbg_i2c_scl,                      -- Debug interface: I2C SCL
-      dbg_i2c_sda_in    => omsp_dbg_i2c_sda_in,                   -- Debug interface: I2C SDA IN
-      dbg_i2c_sda_out   => omsp1_dbg_i2c_sda_out,                 -- Debug interface: I2C SDA OUT
+      dbg_i2c_scl       => omsp_dbg_i2c_scl,     -- Debug interface: I2C SCL
+      dbg_i2c_sda_in    => omsp_dbg_i2c_sda_in,  -- Debug interface: I2C SDA IN
+      dbg_i2c_sda_out   => omsp1_dbg_i2c_sda_out,  -- Debug interface: I2C SDA OUT
 
       -- Data Memory
       dmem_addr => omsp1_dmem_addr,     -- Data Memory address
       dmem_cen  => omsp1_dmem_cen,      -- Data Memory chip enable (low active)
       dmem_din  => omsp1_dmem_din,      -- Data Memory data input
-      dmem_wen  => omsp1_dmem_wen,      -- Data Memory write enable (low active)
+      dmem_wen  => omsp1_dmem_wen,   -- Data Memory write enable (low active)
       dmem_dout => omsp1_dmem_dout,     -- Data Memory data output
 
       -- Program Memory
-      pmem_addr => omsp1_pmem_addr,  -- Program Memory address
-      pmem_cen  => omsp1_pmem_cen,   -- Program Memory chip enable (low active)
-      pmem_din  => omsp1_pmem_din,   -- Program Memory data input (optional)
-      pmem_wen  => omsp1_pmem_wen,   -- Program Memory write enable (low active) (optional)
-      pmem_dout => omsp1_pmem_dout,  -- Program Memory data output
+      pmem_addr => omsp1_pmem_addr,     -- Program Memory address
+      pmem_cen  => omsp1_pmem_cen,  -- Program Memory chip enable (low active)
+      pmem_din  => omsp1_pmem_din,      -- Program Memory data input (optional)
+      pmem_wen  => omsp1_pmem_wen,  -- Program Memory write enable (low active) (optional)
+      pmem_dout => omsp1_pmem_dout,     -- Program Memory data output
 
       -- DACs
       din_x    => omsp1_din_x,          -- SPI Serial Data
       din_y    => omsp1_din_y,          -- SPI Serial Data
       sclk_x   => omsp1_sclk_x,         -- SPI Serial Clock
       sclk_y   => omsp1_sclk_y,         -- SPI Serial Clock
-      sync_n_x => omsp1_sync_n_x,       -- SPI Frame synchronization signal (low active)
-      sync_n_y => omsp0_sync_n_y,       -- SPI Frame synchronization signal (low active)
+      sync_n_x => omsp1_sync_n_x,  -- SPI Frame synchronization signal (low active)
+      sync_n_y => omsp0_sync_n_y,  -- SPI Frame synchronization signal (low active)
 
       -- Switches & LEDs
       switch => omsp_switch,            -- Input switches

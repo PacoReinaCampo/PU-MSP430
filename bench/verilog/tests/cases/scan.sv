@@ -35,98 +35,93 @@
 /* $LastChangedBy: olivier.girard $                                          */
 /* $LastChangedDate: 2011-01-28 22:05:37 +0100 (Fri, 28 Jan 2011) $          */
 /*===========================================================================*/
-    
+
 integer ii;
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
 
-      // Disable detection of the end of test
-      force inst_pc = 16'h0000;
+  // Disable detection of the end of test
+  force inst_pc = 16'h0000;
 
 
-      //  SCAN MODE
-      //------------------------------
+  //  SCAN MODE
+  //------------------------------
 
-      for ( ii=0; ii < 8; ii=ii+1)
-	begin
-	   scan_mode = ~scan_mode;
-	   repeat(5) @(posedge mclk);
-	end
-      scan_mode = 1'b0;
-    
-      reset_n       = 1'b1;
-      #93;
-      reset_n       = 1'b0;
-      #593;
-      reset_n       = 1'b1;
-      repeat(20) @(posedge mclk);
+  for (ii = 0; ii < 8; ii = ii + 1) begin
+    scan_mode = ~scan_mode;
+    repeat (5) @(posedge mclk);
+  end
+  scan_mode = 1'b0;
 
-      //  SCAN ENABLE
-      //------------------------------
+  reset_n   = 1'b1;
+  #93;
+  reset_n = 1'b0;
+  #593;
+  reset_n = 1'b1;
+  repeat (20) @(posedge mclk);
 
-      for ( ii=0; ii < 8; ii=ii+1)
-	begin
-	   scan_enable = ~scan_enable;
-	   repeat(5) @(posedge mclk);
-	end
-      scan_enable = 1'b0;
-    
-      reset_n       = 1'b1;
-      #93;
-      reset_n       = 1'b0;
-      #593;
-      reset_n       = 1'b1;
-      repeat(20) @(posedge mclk);
+  //  SCAN ENABLE
+  //------------------------------
 
-      //  SCAN MODE & SCAN ENABLE
-      //------------------------------
+  for (ii = 0; ii < 8; ii = ii + 1) begin
+    scan_enable = ~scan_enable;
+    repeat (5) @(posedge mclk);
+  end
+  scan_enable = 1'b0;
 
-      for ( ii=0; ii < 8; ii=ii+1)
-	begin
-	   scan_mode = ~scan_mode;
-	   repeat(5) @(posedge mclk);
-	   scan_enable = ~scan_enable;
-	   repeat(5) @(posedge mclk);
-	   scan_enable = ~scan_enable;
-	   repeat(5) @(posedge mclk);
-	   scan_mode = ~scan_mode;
-	   repeat(5) @(posedge mclk);
-	end
-      scan_mode   = 1'b0;
-      scan_enable = 1'b0;
-      repeat(5) @(posedge mclk);
- 
-      for ( ii=0; ii < 8; ii=ii+1)
-	begin
-	   scan_enable = ~scan_enable;
-	   repeat(5) @(posedge mclk);
-	   scan_mode = ~scan_mode;
-	   repeat(5) @(posedge mclk);
-	   scan_mode = ~scan_mode;
-	   repeat(5) @(posedge mclk);
-	   scan_enable = ~scan_enable;
-	   repeat(5) @(posedge mclk);
-	end
-      scan_mode   = 1'b0;
-      scan_enable = 1'b0;
-    
-      reset_n       = 1'b1;
-      #93;
-      reset_n       = 1'b0;
-      #593;
-      reset_n       = 1'b1;
-      repeat(20) @(posedge mclk);
+  reset_n     = 1'b1;
+  #93;
+  reset_n = 1'b0;
+  #593;
+  reset_n = 1'b1;
+  repeat (20) @(posedge mclk);
 
-      release inst_pc;
+  //  SCAN MODE & SCAN ENABLE
+  //------------------------------
+
+  for (ii = 0; ii < 8; ii = ii + 1) begin
+    scan_mode = ~scan_mode;
+    repeat (5) @(posedge mclk);
+    scan_enable = ~scan_enable;
+    repeat (5) @(posedge mclk);
+    scan_enable = ~scan_enable;
+    repeat (5) @(posedge mclk);
+    scan_mode = ~scan_mode;
+    repeat (5) @(posedge mclk);
+  end
+  scan_mode   = 1'b0;
+  scan_enable = 1'b0;
+  repeat (5) @(posedge mclk);
+
+  for (ii = 0; ii < 8; ii = ii + 1) begin
+    scan_enable = ~scan_enable;
+    repeat (5) @(posedge mclk);
+    scan_mode = ~scan_mode;
+    repeat (5) @(posedge mclk);
+    scan_mode = ~scan_mode;
+    repeat (5) @(posedge mclk);
+    scan_enable = ~scan_enable;
+    repeat (5) @(posedge mclk);
+  end
+  scan_mode   = 1'b0;
+  scan_enable = 1'b0;
+
+  reset_n     = 1'b1;
+  #93;
+  reset_n = 1'b0;
+  #593;
+  reset_n = 1'b1;
+  repeat (20) @(posedge mclk);
+
+  release inst_pc;
 
 
 
-      stimulus_done = 1;
-   end
+  stimulus_done = 1;
+end
 

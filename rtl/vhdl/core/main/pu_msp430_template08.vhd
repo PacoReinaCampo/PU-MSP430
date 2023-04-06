@@ -207,7 +207,7 @@ begin
   begin
     data_output_mux : for i in SIZE_P08 - 1 downto 0 generate
       cntrl_rd08 (i) <= std_logic_vector((X"00" & (unsigned(cntrl_p08(i)) and (0 to 7 => reg_rd_p08(CNTRLI08(i)))))
-                        sll to_integer((0 to 3 => CNTRLB08(i)(0)) and to_unsigned(8, 4)));
+                                         sll to_integer((0 to 3                       => CNTRLB08(i)(0)) and to_unsigned(8, 4)));
     end generate data_output_mux;
 
     per_dout <= matrixAP_or(cntrl_rd08);

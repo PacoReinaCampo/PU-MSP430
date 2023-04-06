@@ -46,19 +46,19 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-module  pu_msp430_template16 (
+module pu_msp430_template16 (
   // OUTPUTs
-  output       [15:0] per_dout,       // Peripheral data output
-  output       [15:0] cntrl2_16b,
-  output       [15:0] cntrl4_16b,
+  output [15:0] per_dout,    // Peripheral data output
+  output [15:0] cntrl2_16b,
+  output [15:0] cntrl4_16b,
 
   // INPUTs
-  input               mclk,           // Main system clock
-  input        [13:0] per_addr,       // Peripheral address
-  input        [15:0] per_din,        // Peripheral data input
-  input               per_en,         // Peripheral enable (high active)
-  input         [1:0] per_we,         // Peripheral write enable (high active)
-  input               puc_rst         // Main system reset
+  input        mclk,      // Main system clock
+  input [13:0] per_addr,  // Peripheral address
+  input [15:0] per_din,   // Peripheral data input
+  input        per_en,    // Peripheral enable (high active)
+  input [ 1:0] per_we,    // Peripheral write enable (high active)
+  input        puc_rst    // Main system reset
 );
 
   //=============================================================================
@@ -66,50 +66,41 @@ module  pu_msp430_template16 (
   //=============================================================================
 
   // Register base address (must be aligned to decoder bit width)
-  parameter       [14:0] BASE_ADDR   = 15'h0190;
+  parameter [14:0] BASE_ADDR = 15'h0190;
 
   // Decoder bit width (defines how many bits are considered for address decoding)
-  parameter              DEC_WD      =  3;
+  parameter DEC_WD = 3;
 
   // Register addresses offset
-  parameter [DEC_WD-1:0] CNTRL1      = 'h0,
-  CNTRL2      = 'h2,
-  CNTRL3      = 'h4,
-  CNTRL4      = 'h6;
+  parameter [DEC_WD-1:0] CNTRL1 = 'h0, CNTRL2 = 'h2, CNTRL3 = 'h4, CNTRL4 = 'h6;
 
   // Register one-hot decoder utilities
-  parameter              DEC_SZ      =  (1 << DEC_WD);
-  parameter [DEC_SZ-1:0] BASE_REG    =  {{DEC_SZ-1{1'b0}}, 1'b1};
+  parameter DEC_SZ = (1 << DEC_WD);
+  parameter [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
-  parameter [DEC_SZ-1:0] CNTRL1_D    = (BASE_REG << CNTRL1),
-  CNTRL2_D    = (BASE_REG << CNTRL2),
-  CNTRL3_D    = (BASE_REG << CNTRL3),
-  CNTRL4_D    = (BASE_REG << CNTRL4);
+  parameter [DEC_SZ-1:0] CNTRL1_D = (BASE_REG << CNTRL1), CNTRL2_D = (BASE_REG << CNTRL2), CNTRL3_D = (BASE_REG << CNTRL3), CNTRL4_D = (BASE_REG << CNTRL4);
 
   //============================================================================
   // 2)  REGISTER DECODER
   //============================================================================
 
   // Local register selection
-  wire              reg_sel   =  per_en & (per_addr[13:DEC_WD-1]==BASE_ADDR[14:DEC_WD]);
+  wire              reg_sel = per_en & (per_addr[13:DEC_WD-1] == BASE_ADDR[14:DEC_WD]);
 
   // Register local address
-  wire [DEC_WD-1:0] reg_addr  =  {per_addr[DEC_WD-2:0], 1'b0};
+  wire [DEC_WD-1:0] reg_addr = {per_addr[DEC_WD-2:0], 1'b0};
 
   // Register address decode
-  wire [DEC_SZ-1:0] reg_dec   =  (CNTRL1_D  &  {DEC_SZ{(reg_addr == CNTRL1 )}})  |
-                                 (CNTRL2_D  &  {DEC_SZ{(reg_addr == CNTRL2 )}})  |
-                                 (CNTRL3_D  &  {DEC_SZ{(reg_addr == CNTRL3 )}})  |
-                                 (CNTRL4_D  &  {DEC_SZ{(reg_addr == CNTRL4 )}});
+  wire [DEC_SZ-1:0] reg_dec = (CNTRL1_D & {DEC_SZ{(reg_addr == CNTRL1)}}) | (CNTRL2_D & {DEC_SZ{(reg_addr == CNTRL2)}}) | (CNTRL3_D & {DEC_SZ{(reg_addr == CNTRL3)}}) | (CNTRL4_D & {DEC_SZ{(reg_addr == CNTRL4)}});
 
   // Read/Write probes
-  wire              reg_write =  |per_we & reg_sel;
-  wire              reg_read  = ~|per_we & reg_sel;
+  wire              reg_write = |per_we & reg_sel;
+  wire              reg_read = ~|per_we & reg_sel;
 
   // Read/Write vectors
-  wire [DEC_SZ-1:0] reg_wr    = reg_dec & {DEC_SZ{reg_write}};
-  wire [DEC_SZ-1:0] reg_rd    = reg_dec & {DEC_SZ{reg_read}};
+  wire [DEC_SZ-1:0] reg_wr = reg_dec & {DEC_SZ{reg_write}};
+  wire [DEC_SZ-1:0] reg_rd = reg_dec & {DEC_SZ{reg_read}};
 
   //============================================================================
   // 3) REGISTERS
@@ -117,13 +108,13 @@ module  pu_msp430_template16 (
 
   // CNTRL1 Register
   //-----------------   
-  reg  [15:0] cntrl1;
+  reg  [      15:0] cntrl1;
 
-  wire        cntrl1_wr = reg_wr[CNTRL1];
+  wire              cntrl1_wr = reg_wr[CNTRL1];
 
-  always @ (posedge mclk or posedge puc_rst) begin
-    if (puc_rst)        cntrl1 <=  16'h0000;
-    else if (cntrl1_wr) cntrl1 <=  per_din;
+  always @(posedge mclk or posedge puc_rst) begin
+    if (puc_rst) cntrl1 <= 16'h0000;
+    else if (cntrl1_wr) cntrl1 <= per_din;
   end
 
   // CNTRL2 Register
@@ -132,9 +123,9 @@ module  pu_msp430_template16 (
 
   wire        cntrl2_wr = reg_wr[CNTRL2];
 
-  always @ (posedge mclk or posedge puc_rst) begin
-    if (puc_rst)        cntrl2 <=  16'h0000;
-    else if (cntrl2_wr) cntrl2 <=  per_din;
+  always @(posedge mclk or posedge puc_rst) begin
+    if (puc_rst) cntrl2 <= 16'h0000;
+    else if (cntrl2_wr) cntrl2 <= per_din;
   end
 
   // CNTRL3 Register
@@ -143,9 +134,9 @@ module  pu_msp430_template16 (
 
   wire        cntrl3_wr = reg_wr[CNTRL3];
 
-  always @ (posedge mclk or posedge puc_rst) begin
-    if (puc_rst)        cntrl3 <=  16'h0000;
-    else if (cntrl3_wr) cntrl3 <=  per_din;
+  always @(posedge mclk or posedge puc_rst) begin
+    if (puc_rst) cntrl3 <= 16'h0000;
+    else if (cntrl3_wr) cntrl3 <= per_din;
   end
 
   // CNTRL4 Register
@@ -154,9 +145,9 @@ module  pu_msp430_template16 (
 
   wire        cntrl4_wr = reg_wr[CNTRL4];
 
-  always @ (posedge mclk or posedge puc_rst) begin
-    if (puc_rst)        cntrl4 <=  16'h0000;
-    else if (cntrl4_wr) cntrl4 <=  per_din;
+  always @(posedge mclk or posedge puc_rst) begin
+    if (puc_rst) cntrl4 <= 16'h0000;
+    else if (cntrl4_wr) cntrl4 <= per_din;
   end
 
   //============================================================================
@@ -164,16 +155,13 @@ module  pu_msp430_template16 (
   //============================================================================
 
   // Data output mux
-  wire [15:0] cntrl1_rd  = cntrl1  & {16{reg_rd[CNTRL1]}};
-  wire [15:0] cntrl2_rd  = cntrl2  & {16{reg_rd[CNTRL2]}};
-  wire [15:0] cntrl3_rd  = cntrl3  & {16{reg_rd[CNTRL3]}};
-  wire [15:0] cntrl4_rd  = cntrl4  & {16{reg_rd[CNTRL4]}};
+  wire [15:0] cntrl1_rd = cntrl1 & {16{reg_rd[CNTRL1]}};
+  wire [15:0] cntrl2_rd = cntrl2 & {16{reg_rd[CNTRL2]}};
+  wire [15:0] cntrl3_rd = cntrl3 & {16{reg_rd[CNTRL3]}};
+  wire [15:0] cntrl4_rd = cntrl4 & {16{reg_rd[CNTRL4]}};
 
-  assign      per_dout   =  cntrl1_rd  |
-                            cntrl2_rd  |
-                            cntrl3_rd  |
-                            cntrl4_rd;
+  assign per_dout   = cntrl1_rd | cntrl2_rd | cntrl3_rd | cntrl4_rd;
 
   assign cntrl2_16b = cntrl2;
   assign cntrl4_16b = cntrl4;
-endmodule // pu_msp430_template16
+endmodule  // pu_msp430_template16

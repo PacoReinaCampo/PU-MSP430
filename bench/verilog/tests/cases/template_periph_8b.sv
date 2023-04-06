@@ -35,24 +35,23 @@
 /* $LastChangedDate: 2009-08-04 23:47:15 +0200 (Tue, 04 Aug 2009) $          */
 /*===========================================================================*/
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
 
-      // TEST RD/WR REGISTER ACCESS
-      //--------------------------------------------------------
-      @(r15==16'h0001);
+  // TEST RD/WR REGISTER ACCESS
+  //--------------------------------------------------------
+  @(r15 == 16'h0001);
 
-      if (mem200 !== 16'hee11) tb_error("====== CNTRL1: @0x200 != 0xee11 =====");
-      if (mem202 !== 16'h55aa) tb_error("====== CNTRL2: @0x202 != 0x55aa =====");
-      if (mem204 !== 16'ha55a) tb_error("====== CNTRL3: @0x204 != 0xa55a =====");
-      if (mem206 !== 16'haa55) tb_error("====== CNTRL4: @0x206 != 0xaa55 =====");
+  if (mem200 !== 16'hee11) tb_error("====== CNTRL1: @0x200 != 0xee11 =====");
+  if (mem202 !== 16'h55aa) tb_error("====== CNTRL2: @0x202 != 0x55aa =====");
+  if (mem204 !== 16'ha55a) tb_error("====== CNTRL3: @0x204 != 0xa55a =====");
+  if (mem206 !== 16'haa55) tb_error("====== CNTRL4: @0x206 != 0xaa55 =====");
 
-      
-      stimulus_done = 1;
-   end
+
+  stimulus_done = 1;
+end
 

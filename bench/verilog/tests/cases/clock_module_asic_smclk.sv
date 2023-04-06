@@ -38,337 +38,333 @@
 `define LONG_TIMEOUT
 
 integer smclk_counter;
-always @ (negedge smclk)
-  smclk_counter     <=  smclk_counter+1;
+always @(negedge smclk) smclk_counter <= smclk_counter + 1;
 
 integer dco_clk_counter;
-always @ (negedge dco_clk)
-  dco_clk_counter  <=  dco_clk_counter+1;
+always @(negedge dco_clk) dco_clk_counter <= dco_clk_counter + 1;
 
 integer lfxt_clk_counter;
-always @ (negedge lfxt_clk)
-  lfxt_clk_counter <=  lfxt_clk_counter+1;
+always @(negedge lfxt_clk) lfxt_clk_counter <= lfxt_clk_counter + 1;
 
 reg [15:0] reg_val;
-   
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge smclk);
-      stimulus_done = 0;
+
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge smclk);
+  stimulus_done = 0;
 
 `ifdef ASIC_CLOCKING
-     
-      //--------------------------------------------------------
-      // SMCLK GENERATION - LFXT_CLK INPUT
-      //--------------------------------------------------------
 
-	                        // ------- Divider /1 ----------
-      @(r15 === 16'h0001);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 1 =====");
-  `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 2 =====");
-  `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 3 =====");
-  `endif
-      $display("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /1) - DONE =====");
+  //--------------------------------------------------------
+  // SMCLK GENERATION - LFXT_CLK INPUT
+  //--------------------------------------------------------
 
-	                        // ------- Divider /2 ----------
-      @(r15 === 16'h0002);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  30) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !==  30) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 5 =====");
-    `endif
-  `endif
-      $display("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - DONE =====");
-      
-	                        // ------- Divider /4 ----------
-      @(r15 === 16'h0003);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  60) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !==  60) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 5 =====");
-    `endif
-  `endif
-      $display("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - DONE =====");
-      
-	                        // ------- Divider /8 ----------
-      @(r15 === 16'h0004);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !== 120) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 5 =====");
-    `endif
-  `endif
-      $display("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - DONE =====");
+  // ------- Divider /1 ----------
+  @(r15 === 16'h0001);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 1 =====");
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 3 =====");
+`endif
+  $display("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /1) - DONE =====");
 
-      
-      //--------------------------------------------------------
-      // SSMCLK GENERATION - DCO_CLK INPUT
-      //--------------------------------------------------------
+  // ------- Divider /2 ----------
+  @(r15 === 16'h0002);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 3 =====");
+`endif
+`else
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 5 =====");
+`endif
+`endif
+  $display("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /2) - DONE =====");
 
-	                        // ------- Divider /1 ----------
-      @(r15 === 16'h1001);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter   !==  15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /1) - TEST 1 =====");
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /1) - TEST 2 =====");
-      $display("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /1) - DONE =====");
+  // ------- Divider /4 ----------
+  @(r15 === 16'h0003);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 3 =====");
+`endif
+`else
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 5 =====");
+`endif
+`endif
+  $display("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /4) - DONE =====");
 
-	                        // ------- Divider /2 ----------
-      @(r15 === 16'h1002);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter   !==  15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-      if (dco_clk_counter !==  30) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 3 =====");
-  `endif
-      $display("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /2) - DONE =====");
-      
-	                        // ------- Divider /4 ----------
-      @(r15 === 16'h1003);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter   !==  15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-      if (dco_clk_counter !==  60) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 3 =====");
-  `endif
-      $display("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /4) - DONE =====");
-      
-	                        // ------- Divider /8 ----------
-      @(r15 === 16'h1004);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter   !==  15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-      if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 3 =====");
-  `endif
-      $display("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /8) - DONE =====");
+  // ------- Divider /8 ----------
+  @(r15 === 16'h0004);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 3 =====");
+`endif
+`else
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 5 =====");
+`endif
+`endif
+  $display("====== CLOCK GENERATOR 1: SMCLK - LFXT_CLK INPUT (DIV /8) - DONE =====");
 
 
-      //--------------------------------------------------------
-      // SMCLK GENERATION - LFXT_CLK INPUT
-      //--------------------------------------------------------
+  //--------------------------------------------------------
+  // SSMCLK GENERATION - DCO_CLK INPUT
+  //--------------------------------------------------------
 
-	                        // ------- Divider /1 ----------
-      @(r15 === 16'h2001);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 1 =====");
-  `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 2 =====");
-  `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 3 =====");
-  `endif
-      $display("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /1) - DONE =====");
+  // ------- Divider /1 ----------
+  @(r15 === 16'h1001);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /1) - TEST 1 =====");
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /1) - TEST 2 =====");
+  $display("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /1) - DONE =====");
 
-	                        // ------- Divider /2 ----------
-      @(r15 === 16'h2002);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  30) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !==  30) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 5 =====");
-    `endif
-  `endif
-      $display("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - DONE =====");
-      
-	                        // ------- Divider /4 ----------
-      @(r15 === 16'h2003);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  60) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !==  60) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 5 =====");
-    `endif
-  `endif
-      $display("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - DONE =====");
-      
-	                        // ------- Divider /8 ----------
-      @(r15 === 16'h2004);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter    !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 2 =====");
-    `else
-      if (dco_clk_counter  !== 120) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 3 =====");
-    `endif
-  `else
-    `ifdef SMCLK_MUX
-      if (lfxt_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 4 =====");
-    `else
-      if (dco_clk_counter  !==  15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 5 =====");
-    `endif
-  `endif
-      $display("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - DONE =====");
+  // ------- Divider /2 ----------
+  @(r15 === 16'h1002);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+  if (dco_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 3 =====");
+`endif
+  $display("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /2) - DONE =====");
 
-      
-      //--------------------------------------------------------
-      // SSMCLK GENERATION - DCO_CLK INPUT
-      //--------------------------------------------------------
+  // ------- Divider /4 ----------
+  @(r15 === 16'h1003);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+  if (dco_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 3 =====");
+`endif
+  $display("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /4) - DONE =====");
 
-	                        // ------- Divider /1 ----------
-      @(r15 === 16'h3001);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter   !==  15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /1) - TEST 1 =====");
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /1) - TEST 2 =====");
-      $display("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /1) - DONE =====");
+  // ------- Divider /8 ----------
+  @(r15 === 16'h1004);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+  if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 3 =====");
+`endif
+  $display("====== CLOCK GENERATOR 2: SMCLK - DCO_CLK INPUT (DIV /8) - DONE =====");
 
-	                        // ------- Divider /2 ----------
-      @(r15 === 16'h3002);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter   !==  15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-      if (dco_clk_counter !==  30) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 3 =====");
-  `endif
-      $display("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /2) - DONE =====");
-      
-	                        // ------- Divider /4 ----------
-      @(r15 === 16'h3003);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter   !==  15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-      if (dco_clk_counter !==  60) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 3 =====");
-  `endif
-      $display("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /4) - DONE =====");
-      
-	                        // ------- Divider /8 ----------
-      @(r15 === 16'h3004);
-      repeat(2) @(posedge smclk);
-      smclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      dco_clk_counter  = 0;
-      repeat(15) @(posedge smclk);
-      if (smclk_counter   !==  15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 1 =====");
-  `ifdef SMCLK_DIVIDER
-      if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 2 =====");
-  `else
-      if (dco_clk_counter !==  15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 3 =====");
-  `endif
-      $display("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /8) - DONE =====");
+
+  //--------------------------------------------------------
+  // SMCLK GENERATION - LFXT_CLK INPUT
+  //--------------------------------------------------------
+
+  // ------- Divider /1 ----------
+  @(r15 === 16'h2001);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 1 =====");
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /1) - TEST 3 =====");
+`endif
+  $display("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /1) - DONE =====");
+
+  // ------- Divider /2 ----------
+  @(r15 === 16'h2002);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 3 =====");
+`endif
+`else
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - TEST 5 =====");
+`endif
+`endif
+  $display("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /2) - DONE =====");
+
+  // ------- Divider /4 ----------
+  @(r15 === 16'h2003);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 3 =====");
+`endif
+`else
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - TEST 5 =====");
+`endif
+`endif
+  $display("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /4) - DONE =====");
+
+  // ------- Divider /8 ----------
+  @(r15 === 16'h2004);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 3 =====");
+`endif
+`else
+`ifdef SMCLK_MUX
+  if (lfxt_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 4 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - TEST 5 =====");
+`endif
+`endif
+  $display("====== CLOCK GENERATOR 3: SMCLK - LFXT_CLK INPUT (DIV /8) - DONE =====");
+
+
+  //--------------------------------------------------------
+  // SSMCLK GENERATION - DCO_CLK INPUT
+  //--------------------------------------------------------
+
+  // ------- Divider /1 ----------
+  @(r15 === 16'h3001);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /1) - TEST 1 =====");
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /1) - TEST 2 =====");
+  $display("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /1) - DONE =====");
+
+  // ------- Divider /2 ----------
+  @(r15 === 16'h3002);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+  if (dco_clk_counter !== 30) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 3 =====");
+`endif
+  $display("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /2) - DONE =====");
+
+  // ------- Divider /4 ----------
+  @(r15 === 16'h3003);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+  if (dco_clk_counter !== 60) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 3 =====");
+`endif
+  $display("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /4) - DONE =====");
+
+  // ------- Divider /8 ----------
+  @(r15 === 16'h3004);
+  repeat (2) @(posedge smclk);
+  smclk_counter    = 0;
+  lfxt_clk_counter = 0;
+  dco_clk_counter  = 0;
+  repeat (15) @(posedge smclk);
+  if (smclk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 1 =====");
+`ifdef SMCLK_DIVIDER
+  if (dco_clk_counter !== 120) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 2 =====");
+`else
+  if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /8) - TEST 3 =====");
+`endif
+  $display("====== CLOCK GENERATOR 4: SMCLK - DCO_CLK INPUT (DIV /8) - DONE =====");
 
 
 `else
-      $display(" ===============================================");
-      $display("|               SIMULATION SKIPPED              |");
-      $display("|   (this test is not supported in FPGA mode)   |");
-      $display(" ===============================================");
-      $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (this test is not supported in FPGA mode)   |");
+  $display(" ===============================================");
+  $finish;
 `endif
 
-      stimulus_done = 1;
-   end
+  stimulus_done = 1;
+end
 

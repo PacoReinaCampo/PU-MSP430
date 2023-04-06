@@ -154,7 +154,7 @@ begin
   --Mask the bit 8 for the Byte instructions for correct flags generation
   op_bit8_msk <= not exec_cycle or not inst_bw;
   op_src_in   <= '0' & (op_src_inv (15 downto 8) and (8 to 15 => op_bit8_msk)) & op_src_inv (7 downto 0);
-  op_dst_in   <= '0' & (op_dst     (15 downto 8) and (8 to 15 => op_bit8_msk)) & op_dst (7 downto 0);
+  op_dst_in   <= '0' & (op_dst (15 downto 8) and (8 to 15     => op_bit8_msk)) & op_dst (7 downto 0);
 
   --Clear the source operand (= jump offset) for conditional jumps
   jmp_not_taken <= (inst_jmp(JL) and not (status(3) xor status(2))) or
@@ -236,9 +236,9 @@ begin
   C <= alu_out_omsp(8)
        when inst_bw = '1' else alu_out_nxt(16);
 
-  alu_stat <= ('0' & N & Z & op_src_in(0)) when inst_alu(ALU_SHIFT) = '1'  else
-              ('0' & N & Z & not Z)        when inst_alu(ALU_STAT_7) = '1' else
-              (V_xor & N & Z & not Z)      when inst_alu(ALU_XOR) = '1'    else (V & N & Z & C);
+  alu_stat <= ('0' & N & Z & op_src_in(0)) when inst_alu(ALU_SHIFT) = '1' else
+              ('0' & N & Z & not Z)   when inst_alu(ALU_STAT_7) = '1' else
+              (V_xor & N & Z & not Z) when inst_alu(ALU_XOR) = '1' else (V & N & Z & C);
 
   alu_stat_wr <= "1111" when (inst_alu(ALU_STAT_F) and exec_cycle) = '1' else "0000";
 end rtl;

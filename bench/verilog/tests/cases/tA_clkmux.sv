@@ -36,95 +36,93 @@
 /*===========================================================================*/
 
 integer my_counter;
-always @ (negedge mclk)
-  my_counter <=  my_counter+1;
+always @(negedge mclk) my_counter <= my_counter + 1;
 
 
 // Generate TACLK as MCLK/3
 integer taclk_cnt;
-always @ (posedge mclk or posedge puc_rst)
-  if (puc_rst)           taclk_cnt <=  0;
-  else if (taclk_cnt==2) taclk_cnt <=  0;
-  else                   taclk_cnt <=  taclk_cnt+1;
+always @(posedge mclk or posedge puc_rst)
+  if (puc_rst) taclk_cnt <= 0;
+  else if (taclk_cnt == 2) taclk_cnt <= 0;
+  else taclk_cnt <= taclk_cnt + 1;
 
-always @ (taclk_cnt)
-  if (taclk_cnt==2) taclk = 1'b1;
-  else              taclk = 1'b0;
+always @(taclk_cnt)
+  if (taclk_cnt == 2) taclk = 1'b1;
+  else taclk = 1'b0;
 
 // Generate INCLK as MCLK/5
 integer inclk_cnt;
-always @ (posedge mclk or posedge puc_rst)
-  if (puc_rst)           inclk_cnt <=  0;
-  else if (inclk_cnt==4) inclk_cnt <=  0;
-  else                   inclk_cnt <=  inclk_cnt+1;
+always @(posedge mclk or posedge puc_rst)
+  if (puc_rst) inclk_cnt <= 0;
+  else if (inclk_cnt == 4) inclk_cnt <= 0;
+  else inclk_cnt <= inclk_cnt + 1;
 
-always @ (inclk_cnt)
-  if (inclk_cnt==4) inclk = 1'b1;
-  else              inclk = 1'b0;
+always @(inclk_cnt)
+  if (inclk_cnt == 4) inclk = 1'b1;
+  else inclk = 1'b0;
 
-   
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
+
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
 
 
 `ifdef ASIC_CLOCKING
-      $display(" ===============================================");
-      $display("|               SIMULATION SKIPPED              |");
-      $display("|   (this test is not supported in ASIC mode)   |");
-      $display(" ===============================================");
-      $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (this test is not supported in ASIC mode)   |");
+  $display(" ===============================================");
+  $finish;
 `else
 
-      // TIMER A TEST:  INPUT MUX - TACLK
-      //--------------------------------------------------------
-//      @(r15 === 16'h0000);
+  // TIMER A TEST:  INPUT MUX - TACLK
+  //--------------------------------------------------------
+  //      @(r15 === 16'h0000);
 
-      @(r15 === 16'h0001);
-      @(tar === 1);
-      my_counter = 0;
-      repeat(300) @(posedge mclk);
-      if (tar !== 16'h0032) tb_error("====== TIMER A TEST:  INPUT MUX - TACLK =====");
+  @(r15 === 16'h0001);
+  @(tar === 1);
+  my_counter = 0;
+  repeat (300) @(posedge mclk);
+  if (tar !== 16'h0032) tb_error("====== TIMER A TEST:  INPUT MUX - TACLK =====");
 
-      
-      // TIMER A TEST:  INPUT MUX - ACLK
-      //--------------------------------------------------------
-      @(r15 === 16'h1000);
 
-      @(r15 === 16'h1001);
-      @(tar === 1);
-      my_counter = 0;
-      repeat(300) @(posedge mclk);
-      if (tar !== 16'h0005) tb_error("====== TIMER A TEST:  INPUT MUX - ACLK =====");
+  // TIMER A TEST:  INPUT MUX - ACLK
+  //--------------------------------------------------------
+  @(r15 === 16'h1000);
 
-      
-      // TIMER A TEST:  INPUT MUX - SMCLK
-      //--------------------------------------------------------
-      @(r15 === 16'h2000);
+  @(r15 === 16'h1001);
+  @(tar === 1);
+  my_counter = 0;
+  repeat (300) @(posedge mclk);
+  if (tar !== 16'h0005) tb_error("====== TIMER A TEST:  INPUT MUX - ACLK =====");
 
-      @(r15 === 16'h2001);
-      @(tar === 1);
-      my_counter = 0;
-      repeat(300) @(posedge mclk);
-      if (tar !== 16'h0013) tb_error("====== TIMER A TEST:  INPUT MUX - SMCLK =====");
 
-      
-      // TIMER A TEST:  INPUT MUX - INCLK
-      //--------------------------------------------------------
-      @(r15 === 16'h3000);
+  // TIMER A TEST:  INPUT MUX - SMCLK
+  //--------------------------------------------------------
+  @(r15 === 16'h2000);
 
-      @(r15 === 16'h3001);
-      @(tar === 1);
-      my_counter = 0;
-      repeat(300) @(posedge mclk);
-      if (tar !== 16'h001E) tb_error("====== TIMER A TEST:  INPUT MUX - INCLK =====");
+  @(r15 === 16'h2001);
+  @(tar === 1);
+  my_counter = 0;
+  repeat (300) @(posedge mclk);
+  if (tar !== 16'h0013) tb_error("====== TIMER A TEST:  INPUT MUX - SMCLK =====");
 
-`endif    
 
-      stimulus_done = 1;
-   end
+  // TIMER A TEST:  INPUT MUX - INCLK
+  //--------------------------------------------------------
+  @(r15 === 16'h3000);
+
+  @(r15 === 16'h3001);
+  @(tar === 1);
+  my_counter = 0;
+  repeat (300) @(posedge mclk);
+  if (tar !== 16'h001E) tb_error("====== TIMER A TEST:  INPUT MUX - INCLK =====");
+
+`endif
+
+  stimulus_done = 1;
+end
 

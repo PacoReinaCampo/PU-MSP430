@@ -34,63 +34,62 @@
 /* $LastChangedDate: 2009-08-04 23:47:15 +0200 (Tue, 04 Aug 2009) $          */
 /*===========================================================================*/
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
 
 
-      // BIT (WORD MODE)
-      //--------------------------------------------------------
-      @(r15==16'h1000);
+  // BIT (WORD MODE)
+  //--------------------------------------------------------
+  @(r15 == 16'h1000);
 
-      if (r5    !==16'h8888) tb_error("====== BIT Test =====");
-      if (r6    !==16'h9999) tb_error("====== BIT Test =====");
-
-
-      // BIT.B (BYTE MODE)
-      //--------------------------------------------------------
-      @(r15==16'h2000);
-
-      if (r5    !==16'h8888) tb_error("====== BIT.B Test =====");
-      if (r6    !==16'h9999) tb_error("====== BIT.B Test =====");
+  if (r5 !== 16'h8888) tb_error("====== BIT Test =====");
+  if (r6 !== 16'h9999) tb_error("====== BIT Test =====");
 
 
-      // BIT (WORD MODE): Check Flags
-      //--------------------------------------------------------
+  // BIT.B (BYTE MODE)
+  //--------------------------------------------------------
+  @(r15 == 16'h2000);
 
-      @(r15==16'h3000);
-      if (r2    !==16'h0001) tb_error("====== BIT FLAG: Flag   check error: V=0, N=0, Z=0, C=1 =====");
-      if (r5    !==16'h0666) tb_error("====== BIT FLAG: Result check error: V=0, N=0, Z=0, C=1 =====");
-
-      @(r15==16'h3001);
-      if (r2    !==16'h0005) tb_error("====== BIT FLAG: Flag   check error: V=0, N=1, Z=0, C=1 =====");
-      if (r5    !==16'h8555) tb_error("====== BIT FLAG: Result check error: V=0, N=1, Z=0, C=1 =====");
-
-      @(r15==16'h3002);
-      if (r2    !==16'h0002) tb_error("====== BIT FLAG: Flag   check error: V=0, N=0, Z=1, C=0 =====");
-      if (r5    !==16'h0555) tb_error("====== BIT FLAG: Result check error: V=0, N=0, Z=1, C=0 =====");
+  if (r5 !== 16'h8888) tb_error("====== BIT.B Test =====");
+  if (r6 !== 16'h9999) tb_error("====== BIT.B Test =====");
 
 
-      // BIT.B (BYTE MODE): Check Flags
-      //--------------------------------------------------------
+  // BIT (WORD MODE): Check Flags
+  //--------------------------------------------------------
 
-      @(r15==16'h4000);
-      if (r2    !==16'h0001) tb_error("====== BIT.B FLAG: Flag   check error: V=0, N=0, Z=0, C=1 =====");
-      if (r5    !==16'h8006) tb_error("====== BIT.B FLAG: Result check error: V=0, N=0, Z=0, C=1 =====");
+  @(r15 == 16'h3000);
+  if (r2 !== 16'h0001) tb_error("====== BIT FLAG: Flag   check error: V=0, N=0, Z=0, C=1 =====");
+  if (r5 !== 16'h0666) tb_error("====== BIT FLAG: Result check error: V=0, N=0, Z=0, C=1 =====");
 
-      @(r15==16'h4001);
-      if (r2    !==16'h0005) tb_error("====== BIT.B FLAG: Flag   check error: V=0, N=1, Z=0, C=1 =====");
-      if (r5    !==16'h0085) tb_error("====== BIT.B FLAG: Result check error: V=0, N=1, Z=0, C=1 =====");
+  @(r15 == 16'h3001);
+  if (r2 !== 16'h0005) tb_error("====== BIT FLAG: Flag   check error: V=0, N=1, Z=0, C=1 =====");
+  if (r5 !== 16'h8555) tb_error("====== BIT FLAG: Result check error: V=0, N=1, Z=0, C=1 =====");
 
-      @(r15==16'h4002);
-      if (r2    !==16'h0002) tb_error("====== BIT.B FLAG: Flag   check error: V=0, N=0, Z=1, C=0 =====");
-      if (r5    !==16'h77aa) tb_error("====== BIT.B FLAG: Result check error: V=0, N=0, Z=1, C=0 =====");
+  @(r15 == 16'h3002);
+  if (r2 !== 16'h0002) tb_error("====== BIT FLAG: Flag   check error: V=0, N=0, Z=1, C=0 =====");
+  if (r5 !== 16'h0555) tb_error("====== BIT FLAG: Result check error: V=0, N=0, Z=1, C=0 =====");
 
 
-      stimulus_done = 1;
-   end
+  // BIT.B (BYTE MODE): Check Flags
+  //--------------------------------------------------------
+
+  @(r15 == 16'h4000);
+  if (r2 !== 16'h0001) tb_error("====== BIT.B FLAG: Flag   check error: V=0, N=0, Z=0, C=1 =====");
+  if (r5 !== 16'h8006) tb_error("====== BIT.B FLAG: Result check error: V=0, N=0, Z=0, C=1 =====");
+
+  @(r15 == 16'h4001);
+  if (r2 !== 16'h0005) tb_error("====== BIT.B FLAG: Flag   check error: V=0, N=1, Z=0, C=1 =====");
+  if (r5 !== 16'h0085) tb_error("====== BIT.B FLAG: Result check error: V=0, N=1, Z=0, C=1 =====");
+
+  @(r15 == 16'h4002);
+  if (r2 !== 16'h0002) tb_error("====== BIT.B FLAG: Flag   check error: V=0, N=0, Z=1, C=0 =====");
+  if (r5 !== 16'h77aa) tb_error("====== BIT.B FLAG: Result check error: V=0, N=0, Z=1, C=0 =====");
+
+
+  stimulus_done = 1;
+end
 

@@ -38,168 +38,157 @@
 
 `define LONG_TIMEOUT
 
-reg  [2:0] cpu_version;
-reg        cpu_asic;
-reg  [4:0] user_version;
-reg  [6:0] per_space;
-reg        mpy_info;
-reg  [8:0] dmem_size;
-reg  [5:0] pmem_size;
+reg [2:0] cpu_version;
+reg cpu_asic;
+reg [4:0] user_version;
+reg [6:0] per_space;
+reg mpy_info;
+reg [8:0] dmem_size;
+reg [5:0] pmem_size;
 reg [31:0] dbg_id;
 
 // Set oMSP parameters for later check
 defparam dut.INST_NR  = 8'h12;
 defparam dut.TOTAL_NR = 8'h34;
 
-integer    ii;
+integer ii;
 
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
 `ifdef DBG_EN
 `ifdef DBG_UART
-    #1 dbg_en = 1;
-      repeat(30) @(posedge mclk);
-      stimulus_done = 0;
+  #1 dbg_en = 1;
+  repeat (30) @(posedge mclk);
+  stimulus_done = 0;
 
-      // SEND UART SYNCHRONIZATION FRAME
-      dbg_uart_tx(DBG_SYNC);
+  // SEND UART SYNCHRONIZATION FRAME
+  dbg_uart_tx(DBG_SYNC);
 
-      // STOP CPU
-      dbg_uart_wr(CPU_CTL ,  16'h0001);
+  // STOP CPU
+  dbg_uart_wr(CPU_CTL, 16'h0001);
 
-      // TEST READ/WR TO ALL DEBUG REGISTERS
-      //--------------------------------------------------------
+  // TEST READ/WR TO ALL DEBUG REGISTERS
+  //--------------------------------------------------------
 
-      cpu_version  =  `CPU_VERSION;
+  cpu_version = `CPU_VERSION;
 `ifdef ASIC
-      cpu_asic     =  1'b1;
+  cpu_asic = 1'b1;
 `else
-      cpu_asic     =  1'b0;
+  cpu_asic = 1'b0;
 `endif
-      user_version =  `USER_VERSION;
-      per_space    = (`PER_SIZE  >> 9);
+  user_version = `USER_VERSION;
+  per_space    = (`PER_SIZE >> 9);
 `ifdef MULTIPLIER
-      mpy_info     =  1'b1;
+  mpy_info = 1'b1;
 `else
-      mpy_info     =  1'b0;
+  mpy_info = 1'b0;
 `endif
-      dmem_size    = (`DMEM_SIZE >> 7);
-      pmem_size    = (`PMEM_SIZE >> 10);
+  dmem_size = (`DMEM_SIZE >> 7);
+  pmem_size = (`PMEM_SIZE >> 10);
 
-      dbg_id       = {pmem_size,
-		      dmem_size,
-		      mpy_info,
-		      per_space,
-		      user_version,
-		      cpu_asic,
-                      cpu_version};
+  dbg_id    = {pmem_size, dmem_size, mpy_info, per_space, user_version, cpu_asic, cpu_version};
 
-      // Check reset value
-      for ( ii=0; ii < 64; ii=ii+1)
-	begin
-	   dbg_uart_rd(ii[7:0]);
+  // Check reset value
+  for (ii = 0; ii < 64; ii = ii + 1) begin
+    dbg_uart_rd(ii[7:0]);
 
-	   case(ii)
-	     0       : if (dbg_uart_buf !== dbg_id[15:0])  tb_error("READ 1 ERROR (CPU_ID_LO)");
-	     1       : if (dbg_uart_buf !== dbg_id[31:16]) tb_error("READ 1 ERROR (CPU_ID_HI)");
-	     2       : if (dbg_uart_buf !== 16'h0000)      tb_error("READ 1 ERROR (CPU_CTL)");
-	     3       : if (dbg_uart_buf !== 16'h0005)      tb_error("READ 1 ERROR (CPU_STAT)");
-	    24       : if (dbg_uart_buf !== 16'h3412)      tb_error("READ 1 ERROR (CPU_NR)");
-	     default : if (dbg_uart_buf !== 16'h0000)      tb_error("READ 1 ERROR");
-	   endcase
-	end
+    case (ii)
+      0:       if (dbg_uart_buf !== dbg_id[15:0]) tb_error("READ 1 ERROR (CPU_ID_LO)");
+      1:       if (dbg_uart_buf !== dbg_id[31:16]) tb_error("READ 1 ERROR (CPU_ID_HI)");
+      2:       if (dbg_uart_buf !== 16'h0000) tb_error("READ 1 ERROR (CPU_CTL)");
+      3:       if (dbg_uart_buf !== 16'h0005) tb_error("READ 1 ERROR (CPU_STAT)");
+      24:      if (dbg_uart_buf !== 16'h3412) tb_error("READ 1 ERROR (CPU_NR)");
+      default: if (dbg_uart_buf !== 16'h0000) tb_error("READ 1 ERROR");
+    endcase
+  end
 
-      // Write access
-      for ( ii=0; ii < 64; ii=ii+1)
-	begin
-	   // Skip write for MEM_CNT
-	   if (ii!=7)
-	     dbg_uart_wr(ii[7:0] ,  16'hffff);
-	end
-      
-      // Read value back
-      for ( ii=0; ii < 64; ii=ii+1)
-	begin
-	   dbg_uart_rd(ii[7:0]);
+  // Write access
+  for (ii = 0; ii < 64; ii = ii + 1) begin
+    // Skip write for MEM_CNT
+    if (ii != 7) dbg_uart_wr(ii[7:0], 16'hffff);
+  end
 
-	   case(ii)
-	     0       : if (dbg_uart_buf !== dbg_id[15:0])  tb_error("READ 2 ERROR (CPU_ID_LO)");
-	     1       : if (dbg_uart_buf !== dbg_id[31:16]) tb_error("READ 2 ERROR (CPU_ID_HI)");
-	     2       : if (dbg_uart_buf !== 16'h0078)      tb_error("READ 2 ERROR (CPU_CTL)");
-	     3       : if ((dbg_uart_buf !== 16'h0004)&0)  tb_error("READ 2 ERROR (CPU_STAT)");
-	     4       : if (dbg_uart_buf !== 16'h000E)      tb_error("READ 2 ERROR (MEM_CTL)");
-	     5       : if (dbg_uart_buf !== 16'hFFFF)      tb_error("READ 2 ERROR (MEM_ADDR)");
-	     6       : if (dbg_uart_buf !== 16'hFFFF)      tb_error("READ 2 ERROR (MEM_DATA)");
-	     7       : if (dbg_uart_buf !== 16'h0000)      tb_error("READ 2 ERROR (MEM_CNT)");
+  // Read value back
+  for (ii = 0; ii < 64; ii = ii + 1) begin
+    dbg_uart_rd(ii[7:0]);
+
+    case (ii)
+      0:       if (dbg_uart_buf !== dbg_id[15:0]) tb_error("READ 2 ERROR (CPU_ID_LO)");
+      1:       if (dbg_uart_buf !== dbg_id[31:16]) tb_error("READ 2 ERROR (CPU_ID_HI)");
+      2:       if (dbg_uart_buf !== 16'h0078) tb_error("READ 2 ERROR (CPU_CTL)");
+      3:       if ((dbg_uart_buf !== 16'h0004) & 0) tb_error("READ 2 ERROR (CPU_STAT)");
+      4:       if (dbg_uart_buf !== 16'h000E) tb_error("READ 2 ERROR (MEM_CTL)");
+      5:       if (dbg_uart_buf !== 16'hFFFF) tb_error("READ 2 ERROR (MEM_ADDR)");
+      6:       if (dbg_uart_buf !== 16'hFFFF) tb_error("READ 2 ERROR (MEM_DATA)");
+      7:       if (dbg_uart_buf !== 16'h0000) tb_error("READ 2 ERROR (MEM_CNT)");
 `ifdef DBG_HWBRK_0
-   `ifdef DBG_HWBRK_RANGE
-	     8       : if (dbg_uart_buf !== 16'h001F)      tb_error("READ 2 ERROR (BRK0_CTL)");
-   `else
-	     8       : if (dbg_uart_buf !== 16'h000F)      tb_error("READ 2 ERROR (BRK0_CTL)");
-   `endif
-	     9       : if (dbg_uart_buf !== 16'h0000)      tb_error("READ 2 ERROR (BRK0_STAT)");
-	    10       : if (dbg_uart_buf !== 16'hFFFF)      tb_error("READ 2 ERROR (BRK0_ADDR0)");
-	    11       : if (dbg_uart_buf !== 16'hFFFF)      tb_error("READ 2 ERROR (BRK0_ADDR1)");
+`ifdef DBG_HWBRK_RANGE
+      8:       if (dbg_uart_buf !== 16'h001F) tb_error("READ 2 ERROR (BRK0_CTL)");
+`else
+      8:       if (dbg_uart_buf !== 16'h000F) tb_error("READ 2 ERROR (BRK0_CTL)");
+`endif
+      9:       if (dbg_uart_buf !== 16'h0000) tb_error("READ 2 ERROR (BRK0_STAT)");
+      10:      if (dbg_uart_buf !== 16'hFFFF) tb_error("READ 2 ERROR (BRK0_ADDR0)");
+      11:      if (dbg_uart_buf !== 16'hFFFF) tb_error("READ 2 ERROR (BRK0_ADDR1)");
 `endif
 `ifdef DBG_HWBRK_1
-   `ifdef DBG_HWBRK_RANGE
-	    12       : if (dbg_uart_buf !== 16'h001F)      tb_error("READ 2 ERROR (BRK1_CTL)");
-   `else
-	    12       : if (dbg_uart_buf !== 16'h000F)      tb_error("READ 2 ERROR (BRK1_CTL)");
-   `endif
-	    13       : if (dbg_uart_buf !== 16'h0000)      tb_error("READ 2 ERROR (BRK1_STAT)");
-	    14       : if (dbg_uart_buf !== 16'hFFFF)      tb_error("READ 2 ERROR (BRK1_ADDR0)");
-	    15       : if (dbg_uart_buf !== 16'hFFFF)      tb_error("READ 2 ERROR (BRK1_ADDR1)");
+`ifdef DBG_HWBRK_RANGE
+      12:      if (dbg_uart_buf !== 16'h001F) tb_error("READ 2 ERROR (BRK1_CTL)");
+`else
+      12:      if (dbg_uart_buf !== 16'h000F) tb_error("READ 2 ERROR (BRK1_CTL)");
+`endif
+      13:      if (dbg_uart_buf !== 16'h0000) tb_error("READ 2 ERROR (BRK1_STAT)");
+      14:      if (dbg_uart_buf !== 16'hFFFF) tb_error("READ 2 ERROR (BRK1_ADDR0)");
+      15:      if (dbg_uart_buf !== 16'hFFFF) tb_error("READ 2 ERROR (BRK1_ADDR1)");
 `endif
 `ifdef DBG_HWBRK_2
-   `ifdef DBG_HWBRK_RANGE
-	    16       : if (dbg_uart_buf !== 16'h001F)      tb_error("READ 2 ERROR (BRK2_CTL)");
-   `else
-	    16       : if (dbg_uart_buf !== 16'h000F)      tb_error("READ 2 ERROR (BRK2_CTL)");
-   `endif
-	    17       : if (dbg_uart_buf !== 16'h0000)      tb_error("READ 2 ERROR (BRK2_STAT)");
-	    18       : if (dbg_uart_buf !== 16'hFFFF)      tb_error("READ 2 ERROR (BRK2_ADDR0)");
-	    19       : if (dbg_uart_buf !== 16'hFFFF)      tb_error("READ 2 ERROR (BRK2_ADDR1)");
+`ifdef DBG_HWBRK_RANGE
+      16:      if (dbg_uart_buf !== 16'h001F) tb_error("READ 2 ERROR (BRK2_CTL)");
+`else
+      16:      if (dbg_uart_buf !== 16'h000F) tb_error("READ 2 ERROR (BRK2_CTL)");
+`endif
+      17:      if (dbg_uart_buf !== 16'h0000) tb_error("READ 2 ERROR (BRK2_STAT)");
+      18:      if (dbg_uart_buf !== 16'hFFFF) tb_error("READ 2 ERROR (BRK2_ADDR0)");
+      19:      if (dbg_uart_buf !== 16'hFFFF) tb_error("READ 2 ERROR (BRK2_ADDR1)");
 `endif
 `ifdef DBG_HWBRK_3
-   `ifdef DBG_HWBRK_RANGE
-	    20       : if (dbg_uart_buf !== 16'h001F)      tb_error("READ 2 ERROR (BRK3_CTL)");
-   `else
-	    20       : if (dbg_uart_buf !== 16'h000F)      tb_error("READ 2 ERROR (BRK3_CTL)");
-   `endif
-	    21       : if (dbg_uart_buf !== 16'h0000)      tb_error("READ 2 ERROR (BRK3_STAT)");
-	    22       : if (dbg_uart_buf !== 16'hFFFF)      tb_error("READ 2 ERROR (BRK3_ADDR0)");
-	    23       : if (dbg_uart_buf !== 16'hFFFF)      tb_error("READ 2 ERROR (BRK3_ADDR1)");
+`ifdef DBG_HWBRK_RANGE
+      20:      if (dbg_uart_buf !== 16'h001F) tb_error("READ 2 ERROR (BRK3_CTL)");
+`else
+      20:      if (dbg_uart_buf !== 16'h000F) tb_error("READ 2 ERROR (BRK3_CTL)");
 `endif
-	    24       : if (dbg_uart_buf !== 16'h3412)      tb_error("READ 2 ERROR (CPU_NR)");
-	     default : if (dbg_uart_buf !== 16'h0000)      tb_error("READ 2 ERROR");
-	   endcase
-	end
+      21:      if (dbg_uart_buf !== 16'h0000) tb_error("READ 2 ERROR (BRK3_STAT)");
+      22:      if (dbg_uart_buf !== 16'hFFFF) tb_error("READ 2 ERROR (BRK3_ADDR0)");
+      23:      if (dbg_uart_buf !== 16'hFFFF) tb_error("READ 2 ERROR (BRK3_ADDR1)");
+`endif
+      24:      if (dbg_uart_buf !== 16'h3412) tb_error("READ 2 ERROR (CPU_NR)");
+      default: if (dbg_uart_buf !== 16'h0000) tb_error("READ 2 ERROR");
+    endcase
+  end
 
-      
-      dbg_uart_wr(CPU_CTL    ,  16'h0002); 
-      repeat(10) @(posedge mclk);
 
-      stimulus_done = 1;
+  dbg_uart_wr(CPU_CTL, 16'h0002);
+  repeat (10) @(posedge mclk);
+
+  stimulus_done = 1;
 `else
 
-       $display(" ===============================================");
-       $display("|               SIMULATION SKIPPED              |");
-       $display("|   (serial debug interface UART not included)  |");
-       $display(" ===============================================");
-       $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (serial debug interface UART not included)  |");
+  $display(" ===============================================");
+  $finish;
 `endif
 `else
 
-       $display(" ===============================================");
-       $display("|               SIMULATION SKIPPED              |");
-       $display("|      (serial debug interface not included)    |");
-       $display(" ===============================================");
-       $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|      (serial debug interface not included)    |");
+  $display(" ===============================================");
+  $finish;
 `endif
-   end
+end
 

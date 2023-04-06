@@ -34,55 +34,54 @@
 /* $LastChangedDate: 2009-08-04 23:47:15 +0200 (Tue, 04 Aug 2009) $          */
 /*===========================================================================*/
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
 
 
-      // BIC (WORD MODE)
-      //--------------------------------------------------------
-      @(r15==16'h1000);
+  // BIC (WORD MODE)
+  //--------------------------------------------------------
+  @(r15 == 16'h1000);
 
-      if (r5    !==16'h5555) tb_error("====== BIC Test =====");
-      if (r6    !==16'haaaa) tb_error("====== BIC Test =====");
-
-
-      // BIC.B (BYTE MODE)
-      //--------------------------------------------------------
-      @(r15==16'h2000);
-
-      if (r5    !==16'h0088) tb_error("====== BIC.B Test =====");
-      if (r6    !==16'h0022) tb_error("====== BIC.B Test =====");
+  if (r5 !== 16'h5555) tb_error("====== BIC Test =====");
+  if (r6 !== 16'haaaa) tb_error("====== BIC Test =====");
 
 
-      // BIC (WORD MODE): Check Flags
-      //--------------------------------------------------------
+  // BIC.B (BYTE MODE)
+  //--------------------------------------------------------
+  @(r15 == 16'h2000);
 
-      @(r15==16'h3000);
-      if (r2    !==16'h0005) tb_error("====== BIC FLAG: Flag   check error =====");
-      if (r5    !==16'h0444) tb_error("====== BIC FLAG: Result check error =====");
-
-      @(r15==16'h3001);
-      if (r2    !==16'h0102) tb_error("====== BIC FLAG: Flag   check error =====");
-      if (r5    !==16'h0444) tb_error("====== BIC FLAG: Result check error =====");
+  if (r5 !== 16'h0088) tb_error("====== BIC.B Test =====");
+  if (r6 !== 16'h0022) tb_error("====== BIC.B Test =====");
 
 
-      // BIC.B (BYTE MODE): Check Flags
-      //--------------------------------------------------------
+  // BIC (WORD MODE): Check Flags
+  //--------------------------------------------------------
 
-      @(r15==16'h4000);
-      if (r2    !==16'h0005) tb_error("====== BIC.B FLAG: Flag   check error =====");
-      if (r5    !==16'h0004) tb_error("====== BIC.B FLAG: Result check error =====");
+  @(r15 == 16'h3000);
+  if (r2 !== 16'h0005) tb_error("====== BIC FLAG: Flag   check error =====");
+  if (r5 !== 16'h0444) tb_error("====== BIC FLAG: Result check error =====");
 
-      @(r15==16'h4001);
-      if (r2    !==16'h0102) tb_error("====== BIC.B FLAG: Flag   check error =====");
-      if (r5    !==16'h0004) tb_error("====== BIC.B FLAG: Result check error =====");
+  @(r15 == 16'h3001);
+  if (r2 !== 16'h0102) tb_error("====== BIC FLAG: Flag   check error =====");
+  if (r5 !== 16'h0444) tb_error("====== BIC FLAG: Result check error =====");
 
 
-      stimulus_done = 1;
-   end
+  // BIC.B (BYTE MODE): Check Flags
+  //--------------------------------------------------------
+
+  @(r15 == 16'h4000);
+  if (r2 !== 16'h0005) tb_error("====== BIC.B FLAG: Flag   check error =====");
+  if (r5 !== 16'h0004) tb_error("====== BIC.B FLAG: Result check error =====");
+
+  @(r15 == 16'h4001);
+  if (r2 !== 16'h0102) tb_error("====== BIC.B FLAG: Flag   check error =====");
+  if (r5 !== 16'h0004) tb_error("====== BIC.B FLAG: Result check error =====");
+
+
+  stimulus_done = 1;
+end
 

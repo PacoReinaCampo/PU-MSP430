@@ -35,49 +35,48 @@
 /* $LastChangedDate: 2011-05-20 22:39:02 +0200 (Fri, 20 May 2011) $          */
 /*===========================================================================*/
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
 
-      // Initialization
-      @(r15==16'h1000);
-      if (r1    !==(`PER_SIZE+16'h0052)) tb_error("====== SP  initialization =====");
-      if (r5    !==16'h0000)             tb_error("====== R5  initialization  =====");
-
-
-      // Addressing mode: @Rn
-      @(r15==16'h2000);
-      if (r1    !==(`PER_SIZE+16'h0052)) tb_error("====== CALL (@Rn mode): SP value      =====");
-      if (r5    !==16'h5678)             tb_error("====== CALL (@Rn mode): R5 value      =====");
+  // Initialization
+  @(r15 == 16'h1000);
+  if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== SP  initialization =====");
+  if (r5 !== 16'h0000) tb_error("====== R5  initialization  =====");
 
 
-      // Addressing mode: @Rn+
-      @(r15==16'h3000);
-      if (r1    !==(`PER_SIZE+16'h0052)) tb_error("====== CALL (@Rn+ mode): SP value      =====");
-      if (r5    !==16'h9abc)             tb_error("====== CALL (@Rn+ mode): R5 value      =====");
-
-      // Addressing mode: X(Rn)
-      @(r15==16'h4000);
-      if (r1    !==(`PER_SIZE+16'h0052)) tb_error("====== CALL (X(Rn) mode): SP value      =====");
-      if (r5    !==16'hef01)             tb_error("====== CALL (X(Rn) mode): R5 value      =====");
+  // Addressing mode: @Rn
+  @(r15 == 16'h2000);
+  if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (@Rn mode): SP value      =====");
+  if (r5 !== 16'h5678) tb_error("====== CALL (@Rn mode): R5 value      =====");
 
 
-      // Addressing mode: EDE
-      @(r15==16'h5000);
-      if (r1    !==(`PER_SIZE+16'h0052)) tb_error("====== CALL (EDE mode): SP value      =====");
-      if (r5    !==16'h2345)             tb_error("====== CALL (EDE mode): R5 value      =====");
+  // Addressing mode: @Rn+
+  @(r15 == 16'h3000);
+  if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (@Rn+ mode): SP value      =====");
+  if (r5 !== 16'h9abc) tb_error("====== CALL (@Rn+ mode): R5 value      =====");
+
+  // Addressing mode: X(Rn)
+  @(r15 == 16'h4000);
+  if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (X(Rn) mode): SP value      =====");
+  if (r5 !== 16'hef01) tb_error("====== CALL (X(Rn) mode): R5 value      =====");
 
 
-      // Addressing mode: &EDE
-      @(r15==16'h6000);
-      if (r1    !==(`PER_SIZE+16'h0052)) tb_error("====== CALL (&EDE mode): SP value      =====");
-      if (r5    !==16'h6789)             tb_error("====== CALL (&EDE mode): R5 value      =====");
+  // Addressing mode: EDE
+  @(r15 == 16'h5000);
+  if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (EDE mode): SP value      =====");
+  if (r5 !== 16'h2345) tb_error("====== CALL (EDE mode): R5 value      =====");
 
 
-      stimulus_done = 1;
-   end
+  // Addressing mode: &EDE
+  @(r15 == 16'h6000);
+  if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (&EDE mode): SP value      =====");
+  if (r5 !== 16'h6789) tb_error("====== CALL (&EDE mode): R5 value      =====");
+
+
+  stimulus_done = 1;
+end
 

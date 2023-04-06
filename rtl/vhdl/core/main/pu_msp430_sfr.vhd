@@ -98,7 +98,7 @@ architecture rtl of pu_msp430_sfr is
   constant CPU_NRB    : std_logic_vector (DEC_WD_S - 1 downto 0) := std_logic_vector(to_unsigned(CPU_NRC, DEC_WD_S));
 
   --0.4.        Register one-hot decoder utilities
-  constant DEC_SZ_S   : integer                                   := 2**DEC_WD_S;
+  constant DEC_SZ_S   : integer                                  := 2**DEC_WD_S;
   constant BASE_REG_S : std_logic_vector (DEC_SZ_S - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_S));
 
   --0.5.        Register one-hot decoder
@@ -186,15 +186,15 @@ begin
 
     --1.3.      Register address decode
     reg_dec_s <= (IE1_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
-                                                            std_logic_vector(unsigned(IE1B) srl 1)))) or
+                                                              std_logic_vector(unsigned(IE1B) srl 1)))) or
                  (IFG1_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
-                                                             std_logic_vector(unsigned(IFG1B) srl 1)))) or
+                                                               std_logic_vector(unsigned(IFG1B) srl 1)))) or
                  (CPU_ID_LO_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
-                                                                  std_logic_vector(unsigned(CPU_ID_LOB) srl 1)))) or
+                                                                    std_logic_vector(unsigned(CPU_ID_LOB) srl 1)))) or
                  (CPU_ID_HI_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
-                                                                  std_logic_vector(unsigned(CPU_ID_HIB) srl 1)))) or
+                                                                    std_logic_vector(unsigned(CPU_ID_HIB) srl 1)))) or
                  (CPU_NRC_D and (0 to DEC_SZ_S - 1 => to_stdlogic(reg_addr_s =
-                                                                std_logic_vector(unsigned(CPU_NRB) srl 1))));
+                                                                  std_logic_vector(unsigned(CPU_NRB) srl 1))));
 
     --1.4.      Read/Write probes
     reg_lo_write_s <= per_we(0) and reg_sel_s;
@@ -323,9 +323,9 @@ begin
   begin
     --3.1.      Data output mux
     ie1_rd <= std_logic_vector((X"00" & (unsigned(ie1) and (0 to 7 => reg_rd_s(IE1C))))
-                                sll to_integer((0 to 3              => IE1B(0)) and to_unsigned(8, 4)));
+                               sll to_integer((0 to 3              => IE1B(0)) and to_unsigned(8, 4)));
     ifg1_rd <= std_logic_vector((X"00" & (unsigned(ifg1) and (0 to 7 => reg_rd_s(IFG1C))))
-                                 sll to_integer((0 to 3               => IFG1B(0)) and to_unsigned(8, 4)));
+                                sll to_integer((0 to 3               => IFG1B(0)) and to_unsigned(8, 4)));
     cpu_id_lo_rd_s <= cpu_id_lo and (0 to 15 => reg_rd_s(CPU_ID_LOC));
     cpu_id_hi_rd_s <= cpu_id_hi and (0 to 15 => reg_rd_s(CPU_ID_HIC));
     cpu_nr_rd_s    <= cpu_nr_s and (0 to 15  => reg_rd_s(CPU_NRC));

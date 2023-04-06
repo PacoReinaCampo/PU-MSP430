@@ -51,18 +51,18 @@
 `include "pu_msp430_defines.sv"
 `endif
 
-module  pu_msp430_multiplier (
+module pu_msp430_multiplier (
   // OUTPUTs
-  output       [15:0] per_dout,       // Peripheral data output
+  output [15:0] per_dout,  // Peripheral data output
 
   // INPUTs
-  input               mclk,           // Main system clock
-  input        [13:0] per_addr,       // Peripheral address
-  input        [15:0] per_din,        // Peripheral data input
-  input               per_en,         // Peripheral enable (high active)
-  input         [1:0] per_we,         // Peripheral write enable (high active)
-  input               puc_rst,        // Main system reset
-  input               scan_enable     // Scan enable (active during scan shifting)
+  input        mclk,        // Main system clock
+  input [13:0] per_addr,    // Peripheral address
+  input [15:0] per_din,     // Peripheral data input
+  input        per_en,      // Peripheral enable (high active)
+  input [ 1:0] per_we,      // Peripheral write enable (high active)
+  input        puc_rst,     // Main system reset
+  input        scan_enable  // Scan enable (active during scan shifting)
 );
 
   //=============================================================================
@@ -70,24 +70,17 @@ module  pu_msp430_multiplier (
   //=============================================================================
 
   // Register base address (must be aligned to decoder bit width)
-  parameter       [14:0] BASE_ADDR   = 15'h0130;
+  parameter [14:0] BASE_ADDR = 15'h0130;
 
   // Decoder bit width (defines how many bits are considered for address decoding)
-  parameter              DEC_WD      =  4;
+  parameter DEC_WD = 4;
 
   // Register addresses offset
-  parameter [DEC_WD-1:0] OP1_MPY     = 'h0,
-                         OP1_MPYS    = 'h2,
-                         OP1_MAC     = 'h4,
-                         OP1_MACS    = 'h6,
-                         OP2         = 'h8,
-                         RESLO       = 'hA,
-                         RESHI       = 'hC,
-                         SUMEXT      = 'hE;
+  parameter [DEC_WD-1:0] OP1_MPY = 'h0, OP1_MPYS = 'h2, OP1_MAC = 'h4, OP1_MACS = 'h6, OP2 = 'h8, RESLO = 'hA, RESHI = 'hC, SUMEXT = 'hE;
 
   // Register one-hot decoder utilities
-  parameter              DEC_SZ      =  (1 << DEC_WD);
-  parameter [DEC_SZ-1:0] BASE_REG    =  {{DEC_SZ-1{1'b0}}, 1'b1};
+  parameter DEC_SZ = (1 << DEC_WD);
+  parameter [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
   parameter [DEC_SZ-1:0] OP1_MPY_D   = (BASE_REG << OP1_MPY),
@@ -100,19 +93,19 @@ module  pu_msp430_multiplier (
                          SUMEXT_D    = (BASE_REG << SUMEXT);
 
   // Wire pre-declarations
-  wire  result_wr;
-  wire  result_clr;
-  wire  early_read;
+  wire result_wr;
+  wire result_clr;
+  wire early_read;
 
   //============================================================================
   // 2)  REGISTER DECODER
   //============================================================================
 
   // Local register selection
-  wire              reg_sel     =  per_en & (per_addr[13:DEC_WD-1]==BASE_ADDR[14:DEC_WD]);
+  wire reg_sel = per_en & (per_addr[13:DEC_WD-1] == BASE_ADDR[14:DEC_WD]);
 
   // Register local address
-  wire [DEC_WD-1:0] reg_addr    =  {per_addr[DEC_WD-2:0], 1'b0};
+  wire [DEC_WD-1:0] reg_addr = {per_addr[DEC_WD-2:0], 1'b0};
 
   // Register address decode
   wire [DEC_SZ-1:0] reg_dec     =  (OP1_MPY_D   &  {DEC_SZ{(reg_addr == OP1_MPY  )}})  |
@@ -125,15 +118,15 @@ module  pu_msp430_multiplier (
                                    (SUMEXT_D    &  {DEC_SZ{(reg_addr == SUMEXT   )}});
 
   // Read/Write probes
-  wire              reg_write   =  |per_we & reg_sel;
-  wire              reg_read    = ~|per_we & reg_sel;
+  wire reg_write = |per_we & reg_sel;
+  wire reg_read = ~|per_we & reg_sel;
 
   // Read/Write vectors
-  wire [DEC_SZ-1:0] reg_wr      = reg_dec & {DEC_SZ{reg_write}};
-  wire [DEC_SZ-1:0] reg_rd      = reg_dec & {DEC_SZ{reg_read}};
+  wire [DEC_SZ-1:0] reg_wr = reg_dec & {DEC_SZ{reg_write}};
+  wire [DEC_SZ-1:0] reg_rd = reg_dec & {DEC_SZ{reg_read}};
 
   // Masked input data for byte access
-  wire       [15:0] per_din_msk =  per_din & {{8{per_we[1]}}, 8'hff};
+  wire [15:0] per_din_msk = per_din & {{8{per_we[1]}}, 8'hff};
 
   //============================================================================
   // 3) REGISTERS
@@ -141,39 +134,36 @@ module  pu_msp430_multiplier (
 
   // OP1 Register
   //-----------------   
-  reg  [15:0] op1;
+  reg [15:0] op1;
 
-  wire        op1_wr = reg_wr[OP1_MPY]  |
-                       reg_wr[OP1_MPYS] |
-                       reg_wr[OP1_MAC]  |
-                       reg_wr[OP1_MACS];
+  wire op1_wr = reg_wr[OP1_MPY] | reg_wr[OP1_MPYS] | reg_wr[OP1_MAC] | reg_wr[OP1_MACS];
 
-  `ifdef CLOCK_GATING
-  wire        mclk_op1;
+`ifdef CLOCK_GATING
+  wire mclk_op1;
 
   pu_msp430_clock_gate clock_gate_op1 (
-    .gclk(mclk_op1),
-    .clk (mclk),
-    .enable(op1_wr),
+    .gclk       (mclk_op1),
+    .clk        (mclk),
+    .enable     (op1_wr),
     .scan_enable(scan_enable)
   );
-  `else
-  wire        mclk_op1 = mclk;
-  `endif
+`else
+  wire mclk_op1 = mclk;
+`endif
 
-  `ifdef CLOCK_GATING
-  always @ (posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst)      op1 <=  16'h0000;
-    else              op1 <=  per_din_msk;
+`ifdef CLOCK_GATING
+  always @(posedge mclk_op1 or posedge puc_rst) begin
+    if (puc_rst) op1 <= 16'h0000;
+    else op1 <= per_din_msk;
   end
-  `else
-  always @ (posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst)      op1 <=  16'h0000;
-    else if (op1_wr)  op1 <=  per_din_msk;
+`else
+  always @(posedge mclk_op1 or posedge puc_rst) begin
+    if (puc_rst) op1 <= 16'h0000;
+    else if (op1_wr) op1 <= per_din_msk;
   end
-  `endif
+`endif
 
-  wire [15:0] op1_rd  = op1;
+  wire [15:0] op1_rd = op1;
 
   // OP2 Register
   //-----------------   
@@ -181,32 +171,32 @@ module  pu_msp430_multiplier (
 
   wire        op2_wr = reg_wr[OP2];
 
-  `ifdef CLOCK_GATING
-  wire        mclk_op2;
+`ifdef CLOCK_GATING
+  wire mclk_op2;
 
   pu_msp430_clock_gate clock_gate_op2 (
-    .gclk(mclk_op2),
-    .clk (mclk),
-    .enable(op2_wr),
+    .gclk       (mclk_op2),
+    .clk        (mclk),
+    .enable     (op2_wr),
     .scan_enable(scan_enable)
   );
-  `else
-  wire        mclk_op2 = mclk;
-  `endif
+`else
+  wire mclk_op2 = mclk;
+`endif
 
-  `ifdef CLOCK_GATING
-  always @ (posedge mclk_op2 or posedge puc_rst) begin
-    if (puc_rst)      op2 <=  16'h0000;
-    else              op2 <=  per_din_msk;
+`ifdef CLOCK_GATING
+  always @(posedge mclk_op2 or posedge puc_rst) begin
+    if (puc_rst) op2 <= 16'h0000;
+    else op2 <= per_din_msk;
   end
-  `else
-  always @ (posedge mclk_op2 or posedge puc_rst) begin
-    if (puc_rst)      op2 <=  16'h0000;
-    else if (op2_wr)  op2 <=  per_din_msk;
+`else
+  always @(posedge mclk_op2 or posedge puc_rst) begin
+    if (puc_rst) op2 <= 16'h0000;
+    else if (op2_wr) op2 <= per_din_msk;
   end
-  `endif
+`endif
 
-  wire [15:0] op2_rd  = op2;
+  wire [15:0] op2_rd = op2;
 
   // RESLO Register
   //-----------------   
@@ -215,35 +205,35 @@ module  pu_msp430_multiplier (
   wire [15:0] reslo_nxt;
   wire        reslo_wr = reg_wr[RESLO];
 
-  `ifdef CLOCK_GATING
-  wire        reslo_en = reslo_wr | result_clr | result_wr;
-  wire        mclk_reslo;
+`ifdef CLOCK_GATING
+  wire reslo_en = reslo_wr | result_clr | result_wr;
+  wire mclk_reslo;
 
   pu_msp430_clock_gate clock_gate_reslo (
-    .gclk(mclk_reslo),
-    .clk (mclk),
-    .enable(reslo_en),
+    .gclk       (mclk_reslo),
+    .clk        (mclk),
+    .enable     (reslo_en),
     .scan_enable(scan_enable)
   );
-  `else
-  wire        mclk_reslo = mclk;
-  `endif
+`else
+  wire mclk_reslo = mclk;
+`endif
 
-  `ifdef CLOCK_GATING
-  always @ (posedge mclk_reslo or posedge puc_rst) begin
-    if (puc_rst)         reslo <=  16'h0000;
-    else if (reslo_wr)   reslo <=  per_din_msk;
-    else if (result_clr) reslo <=  16'h0000;
-    else                 reslo <=  reslo_nxt;
+`ifdef CLOCK_GATING
+  always @(posedge mclk_reslo or posedge puc_rst) begin
+    if (puc_rst) reslo <= 16'h0000;
+    else if (reslo_wr) reslo <= per_din_msk;
+    else if (result_clr) reslo <= 16'h0000;
+    else reslo <= reslo_nxt;
   end
-  `else
-  always @ (posedge mclk_reslo or posedge puc_rst) begin
-    if (puc_rst)         reslo <=  16'h0000;
-    else if (reslo_wr)   reslo <=  per_din_msk;
-    else if (result_clr) reslo <=  16'h0000;
-    else if (result_wr)  reslo <=  reslo_nxt;
+`else
+  always @(posedge mclk_reslo or posedge puc_rst) begin
+    if (puc_rst) reslo <= 16'h0000;
+    else if (reslo_wr) reslo <= per_din_msk;
+    else if (result_clr) reslo <= 16'h0000;
+    else if (result_wr) reslo <= reslo_nxt;
   end
-  `endif
+`endif
 
   wire [15:0] reslo_rd = early_read ? reslo_nxt : reslo;
 
@@ -254,73 +244,66 @@ module  pu_msp430_multiplier (
   wire [15:0] reshi_nxt;
   wire        reshi_wr = reg_wr[RESHI];
 
-  `ifdef CLOCK_GATING
-  wire        reshi_en = reshi_wr | result_clr | result_wr;
-  wire        mclk_reshi;
+`ifdef CLOCK_GATING
+  wire reshi_en = reshi_wr | result_clr | result_wr;
+  wire mclk_reshi;
 
   pu_msp430_clock_gate clock_gate_reshi (
-    .gclk(mclk_reshi),
-    .clk (mclk),
-    .enable(reshi_en),
+    .gclk       (mclk_reshi),
+    .clk        (mclk),
+    .enable     (reshi_en),
     .scan_enable(scan_enable)
   );
-  `else
-  wire        mclk_reshi = mclk;
-  `endif
+`else
+  wire mclk_reshi = mclk;
+`endif
 
-  `ifdef CLOCK_GATING
-  always @ (posedge mclk_reshi or posedge puc_rst) begin
-    if (puc_rst)         reshi <=  16'h0000;
-    else if (reshi_wr)   reshi <=  per_din_msk;
-    else if (result_clr) reshi <=  16'h0000;
-    else                 reshi <=  reshi_nxt;
+`ifdef CLOCK_GATING
+  always @(posedge mclk_reshi or posedge puc_rst) begin
+    if (puc_rst) reshi <= 16'h0000;
+    else if (reshi_wr) reshi <= per_din_msk;
+    else if (result_clr) reshi <= 16'h0000;
+    else reshi <= reshi_nxt;
   end
-  `else
-  always @ (posedge mclk_reshi or posedge puc_rst) begin
-    if (puc_rst)         reshi <=  16'h0000;
-    else if (reshi_wr)   reshi <=  per_din_msk;
-    else if (result_clr) reshi <=  16'h0000;
-    else if (result_wr)  reshi <=  reshi_nxt;
+`else
+  always @(posedge mclk_reshi or posedge puc_rst) begin
+    if (puc_rst) reshi <= 16'h0000;
+    else if (reshi_wr) reshi <= per_din_msk;
+    else if (result_clr) reshi <= 16'h0000;
+    else if (result_wr) reshi <= reshi_nxt;
   end
-  `endif
+`endif
 
-  wire [15:0] reshi_rd = early_read ? reshi_nxt  : reshi;
+  wire [15:0] reshi_rd = early_read ? reshi_nxt : reshi;
 
   // SUMEXT Register
   //-----------------   
-  reg  [1:0] sumext_s;
+  reg  [ 1:0] sumext_s;
 
-  wire [1:0] sumext_s_nxt;
+  wire [ 1:0] sumext_s_nxt;
 
-  always @ (posedge mclk or posedge puc_rst) begin
-    if (puc_rst)         sumext_s <=  2'b00;
-    else if (op2_wr)     sumext_s <=  2'b00;
-    else if (result_wr)  sumext_s <=  sumext_s_nxt;
+  always @(posedge mclk or posedge puc_rst) begin
+    if (puc_rst) sumext_s <= 2'b00;
+    else if (op2_wr) sumext_s <= 2'b00;
+    else if (result_wr) sumext_s <= sumext_s_nxt;
   end
 
   wire [15:0] sumext_nxt = {{14{sumext_s_nxt[1]}}, sumext_s_nxt};
-  wire [15:0] sumext     = {{14{sumext_s[1]}},     sumext_s};
-  wire [15:0] sumext_rd  = early_read ? sumext_nxt : sumext;
+  wire [15:0] sumext = {{14{sumext_s[1]}}, sumext_s};
+  wire [15:0] sumext_rd = early_read ? sumext_nxt : sumext;
 
   //============================================================================
   // 4) DATA OUTPUT GENERATION
   //============================================================================
 
   // Data output mux
-  wire [15:0] op1_mux    = op1_rd     & {16{reg_rd[OP1_MPY]  |
-                                            reg_rd[OP1_MPYS] |
-                                            reg_rd[OP1_MAC]  |
-                                            reg_rd[OP1_MACS]}};
-  wire [15:0] op2_mux    = op2_rd     & {16{reg_rd[OP2]}};
-  wire [15:0] reslo_mux  = reslo_rd   & {16{reg_rd[RESLO]}};
-  wire [15:0] reshi_mux  = reshi_rd   & {16{reg_rd[RESHI]}};
-  wire [15:0] sumext_mux = sumext_rd  & {16{reg_rd[SUMEXT]}};
+  wire [15:0] op1_mux = op1_rd & {16{reg_rd[OP1_MPY] | reg_rd[OP1_MPYS] | reg_rd[OP1_MAC] | reg_rd[OP1_MACS]}};
+  wire [15:0] op2_mux = op2_rd & {16{reg_rd[OP2]}};
+  wire [15:0] reslo_mux = reslo_rd & {16{reg_rd[RESLO]}};
+  wire [15:0] reshi_mux = reshi_rd & {16{reg_rd[RESHI]}};
+  wire [15:0] sumext_mux = sumext_rd & {16{reg_rd[SUMEXT]}};
 
-  assign      per_dout   = op1_mux    |
-                           op2_mux    |
-                           reslo_mux  |
-                           reshi_mux  |
-                           sumext_mux;
+  assign per_dout = op1_mux | op2_mux | reslo_mux | reshi_mux | sumext_mux;
 
   //============================================================================
   // 5) HARDWARE MULTIPLIER FUNCTIONAL LOGIC
@@ -331,47 +314,47 @@ module  pu_msp430_multiplier (
 
   // Detect signed mode
   reg sign_sel;
-  `ifdef CLOCK_GATING
-  always @ (posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst)     sign_sel <=  1'b0;
-    else             sign_sel <=  reg_wr[OP1_MPYS] | reg_wr[OP1_MACS];
+`ifdef CLOCK_GATING
+  always @(posedge mclk_op1 or posedge puc_rst) begin
+    if (puc_rst) sign_sel <= 1'b0;
+    else sign_sel <= reg_wr[OP1_MPYS] | reg_wr[OP1_MACS];
   end
-  `else
-  always @ (posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst)     sign_sel <=  1'b0;
-    else if (op1_wr) sign_sel <=  reg_wr[OP1_MPYS] | reg_wr[OP1_MACS];
+`else
+  always @(posedge mclk_op1 or posedge puc_rst) begin
+    if (puc_rst) sign_sel <= 1'b0;
+    else if (op1_wr) sign_sel <= reg_wr[OP1_MPYS] | reg_wr[OP1_MACS];
   end
-  `endif
+`endif
 
   // Detect accumulate mode
   reg acc_sel;
-  `ifdef CLOCK_GATING
-  always @ (posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst)     acc_sel  <=  1'b0;
-    else             acc_sel  <=  reg_wr[OP1_MAC]  | reg_wr[OP1_MACS];
+`ifdef CLOCK_GATING
+  always @(posedge mclk_op1 or posedge puc_rst) begin
+    if (puc_rst) acc_sel <= 1'b0;
+    else acc_sel <= reg_wr[OP1_MAC] | reg_wr[OP1_MACS];
   end
-  `else
-  always @ (posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst)     acc_sel  <=  1'b0;
-    else if (op1_wr) acc_sel  <=  reg_wr[OP1_MAC]  | reg_wr[OP1_MACS];
+`else
+  always @(posedge mclk_op1 or posedge puc_rst) begin
+    if (puc_rst) acc_sel <= 1'b0;
+    else if (op1_wr) acc_sel <= reg_wr[OP1_MAC] | reg_wr[OP1_MACS];
   end
-  `endif
+`endif
 
   // Detect whenever the RESHI and RESLO registers should be cleared
-  assign      result_clr = op2_wr & ~acc_sel;
+  assign result_clr = op2_wr & ~acc_sel;
 
   // Combine RESHI & RESLO 
-  wire [31:0] result     = {reshi, reslo};
+  wire [31:0] result = {reshi, reslo};
 
   // 16x16 Multiplier (result computed in 1 clock cycle)
   //-----------------------------------------------------
-  `ifdef MPY_16x16
+`ifdef MPY_16x16
 
   // Detect start of a multiplication
   reg cycle;
-  always @ (posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cycle <=  1'b0;
-    else         cycle <=  op2_wr;
+  always @(posedge mclk or posedge puc_rst) begin
+    if (puc_rst) cycle <= 1'b0;
+    else cycle <= op2_wr;
   end
 
   assign result_wr = cycle;
@@ -384,13 +367,12 @@ module  pu_msp430_multiplier (
   wire signed [33:0] product = op1_xp * op2_xp;
 
   // Accumulate
-  wire [32:0] result_nxt = {1'b0, result} + {1'b0, product[31:0]};
+  wire        [32:0] result_nxt = {1'b0, result} + {1'b0, product[31:0]};
 
   // Next register values
   assign reslo_nxt    = result_nxt[15:0];
   assign reshi_nxt    = result_nxt[31:16];
-  assign sumext_s_nxt =  sign_sel ? {2{result_nxt[31]}} :
-                                    {1'b0, result_nxt[32]};
+  assign sumext_s_nxt = sign_sel ? {2{result_nxt[31]}} : {1'b0, result_nxt[32]};
 
   // Since the MAC is completed within 1 clock cycle,
   // an early read can't happen.
@@ -398,43 +380,41 @@ module  pu_msp430_multiplier (
 
   // 16x8 Multiplier (result computed in 2 clock cycles)
   //-----------------------------------------------------
-  `else
+`else
 
   // Detect start of a multiplication
   reg [1:0] cycle;
-  always @ (posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cycle <=  2'b00;
-    else         cycle <=  {cycle[0], op2_wr};
+  always @(posedge mclk or posedge puc_rst) begin
+    if (puc_rst) cycle <= 2'b00;
+    else cycle <= {cycle[0], op2_wr};
   end
 
   assign result_wr = |cycle;
 
   // Expand the operands to support signed & unsigned operations
-  wire signed [16:0] op1_xp    = {sign_sel & op1[15], op1};
-  wire signed  [8:0] op2_hi_xp = {sign_sel & op2[15], op2[15:8]};
-  wire signed  [8:0] op2_lo_xp = {              1'b0, op2[7:0]};
-  wire signed  [8:0] op2_xp    = cycle[0] ? op2_hi_xp : op2_lo_xp;
+  wire signed [16:0] op1_xp = {sign_sel & op1[15], op1};
+  wire signed [ 8:0] op2_hi_xp = {sign_sel & op2[15], op2[15:8]};
+  wire signed [ 8:0] op2_lo_xp = {1'b0, op2[7:0]};
+  wire signed [ 8:0] op2_xp = cycle[0] ? op2_hi_xp : op2_lo_xp;
 
   // 17x9 signed multiplication
-  wire signed [25:0] product    = op1_xp * op2_xp;
+  wire signed [25:0] product = op1_xp * op2_xp;
 
-  wire        [31:0] product_xp = cycle[0] ? {product[23:0], 8'h00} :
-                                             {{8{sign_sel & product[23]}}, product[23:0]};
+  wire        [31:0] product_xp = cycle[0] ? {product[23:0], 8'h00} : {{8{sign_sel & product[23]}}, product[23:0]};
 
   // Accumulate
-  wire [32:0] result_nxt  = {1'b0, result} + {1'b0, product_xp[31:0]};
+  wire        [32:0] result_nxt = {1'b0, result} + {1'b0, product_xp[31:0]};
 
   // Next register values
   assign reslo_nxt    = result_nxt[15:0];
   assign reshi_nxt    = result_nxt[31:16];
-  assign sumext_s_nxt =  sign_sel ? {2{result_nxt[31]}} :
-                                    {1'b0, result_nxt[32] | sumext_s[0]};
+  assign sumext_s_nxt = sign_sel ? {2{result_nxt[31]}} : {1'b0, result_nxt[32] | sumext_s[0]};
 
   // Since the MAC is completed within 2 clock cycle,
   // an early read can happen during the second cycle.
   assign early_read   = cycle[1];
-  `endif
-endmodule // pu_msp430_multiplier
+`endif
+endmodule  // pu_msp430_multiplier
 
 `ifdef OMSP_NO_INCLUDE
 `else

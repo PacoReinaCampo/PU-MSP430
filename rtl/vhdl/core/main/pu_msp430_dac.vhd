@@ -57,28 +57,28 @@ use work.pu_msp430_pkg.all;
 entity pu_msp430_dac is
   generic (
     -- Serial clock divider (Tsclk=Tmclk*(SCLK_DIV+1)*2)
-    constant SCLK_DIV  : integer := 0;
+    constant SCLK_DIV : integer := 0;
 
     -- Registers base address
     constant BASE_ADDR : std_logic_vector(15 downto 0) := X"0190"
-    );
+  );
   port (
     -- OUTPUTs
     cntrl1   : out std_logic_vector(15 downto 0);  -- Control value 1
     cntrl2   : out std_logic_vector(15 downto 0);  -- Control value 2
-    din      : out std_logic;                      -- SPI Serial Data
+    din      : out std_logic;           -- SPI Serial Data
     per_dout : out std_logic_vector(15 downto 0);  -- Peripheral data output
-    sclk     : out std_logic;                      -- SPI Serial Clock
-    sync_n   : out std_logic;                      -- SPI Frame synchronization signal (low active)
+    sclk     : out std_logic;           -- SPI Serial Clock
+    sync_n   : out std_logic;  -- SPI Frame synchronization signal (low active)
 
     -- INPUTs
-    mclk     : in std_logic;                      -- Main system clock
+    mclk     : in std_logic;            -- Main system clock
     per_addr : in std_logic_vector(13 downto 0);  -- Peripheral address
     per_din  : in std_logic_vector(15 downto 0);  -- Peripheral data input
-    per_en   : in std_logic;                      -- Peripheral enable (high active)
-    per_we   : in std_logic_vector(1 downto 0);   -- Peripheral write enable (high active)
-    puc_rst  : in std_logic                       -- Main system reset
-    );
+    per_en   : in std_logic;            -- Peripheral enable (high active)
+    per_we   : in std_logic_vector(1 downto 0);  -- Peripheral write enable (high active)
+    puc_rst  : in std_logic             -- Main system reset
+  );
 end pu_msp430_dac;
 
 architecture rtl of pu_msp430_dac is
@@ -95,7 +95,7 @@ architecture rtl of pu_msp430_dac is
   constant DAC_STATX : integer := 3;
   constant CNTRLX1   : integer := 4;
   constant CNTRLX2   : integer := 6;
-  
+
   -- Register one-hot decoder utilities
   constant DEC_SZ   : integer                             := 2**DEC_WD;
   constant BASE_REG : std_logic_vector(DEC_SZ-1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ));
@@ -193,9 +193,9 @@ begin
   reg_sel  <= per_en and to_stdlogic(per_addr(13 downto DEC_WD-1) = BASE_ADDR(14 downto DEC_WD));
   reg_addr <= (per_addr(DEC_WD-2 downto 0) & '0');
   reg_dec  <= (DAC_VAL_D and (DEC_SZ-1 downto 0 => to_stdlogic(reg_addr = DAC_VAL_X))) or
-              (DAC_STAT_D and (DEC_SZ-1 downto 0 => to_stdlogic(reg_addr = DAC_STAT_X))) or
-              (CNTRL1_D and (DEC_SZ-1 downto 0 => to_stdlogic(reg_addr = CNTRL1_X))) or
-              (CNTRL2_D and (DEC_SZ-1 downto 0 => to_stdlogic(reg_addr = CNTRL2_X)));
+             (DAC_STAT_D and (DEC_SZ-1 downto 0 => to_stdlogic(reg_addr = DAC_STAT_X))) or
+             (CNTRL1_D and (DEC_SZ-1 downto 0   => to_stdlogic(reg_addr = CNTRL1_X))) or
+             (CNTRL2_D and (DEC_SZ-1 downto 0   => to_stdlogic(reg_addr = CNTRL2_X)));
 
   reg_write  <= reduce_or(per_we) and reg_sel;
   reg_read   <= reduce_nor(per_we) and reg_sel;
@@ -245,9 +245,9 @@ begin
   end process;
 
   dac_val_rd  <= ("00" & dac_pd1 & dac_pd0 & dac_val) and (15 downto 0 => reg_rd(DAC_VALX));
-  dac_stat_rd <= ("000000000000000" & not sync_n_s) and (15 downto 0 => reg_rd(DAC_STATX));
-  cntrl1_rd   <= cntrl1_s and (15 downto 0 => reg_rd(CNTRLX1));
-  cntrl2_rd   <= cntrl2_s and (15 downto 0 => reg_rd(CNTRLX2));
+  dac_stat_rd <= ("000000000000000" & not sync_n_s) and (15 downto 0   => reg_rd(DAC_STATX));
+  cntrl1_rd   <= cntrl1_s and (15 downto 0                             => reg_rd(CNTRLX1));
+  cntrl2_rd   <= cntrl2_s and (15 downto 0                             => reg_rd(CNTRLX2));
   per_dout    <= dac_val_rd or dac_stat_rd or cntrl1_rd or cntrl2_rd;
 
   processing_3 : process (mclk, puc_rst)

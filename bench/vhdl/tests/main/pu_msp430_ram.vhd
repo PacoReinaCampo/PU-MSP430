@@ -47,18 +47,18 @@ use work.pu_msp430_pkg.all;
 
 entity pu_msp430_ram is
   generic (
-    ADDR_MSB : integer := 6;     -- MSB of the address bus
-    MEM_SIZE : integer := 256);  -- Memory size in bytes
+    ADDR_MSB : integer := 6;                       -- MSB of the address bus
+    MEM_SIZE : integer := 256);                    -- Memory size in bytes
   port (
     -- OUTPUTs
     ram_dout : out std_logic_vector(15 downto 0);  -- RAM data output
 
     -- INPUTs
     ram_addr : in std_logic_vector(ADDR_MSB downto 0);  -- RAM address
-    ram_cen  : in std_logic;                            -- RAM chip enable (low active)
-    ram_clk  : in std_logic;                            -- RAM clock
-    ram_din  : in std_logic_vector(15 downto 0);        -- RAM data input
-    ram_wen  : in std_logic_vector(1 downto 0));        -- RAM write enable (low active)    
+    ram_cen  : in std_logic;            -- RAM chip enable (low active)
+    ram_clk  : in std_logic;            -- RAM clock
+    ram_din  : in std_logic_vector(15 downto 0);  -- RAM data input
+    ram_wen  : in std_logic_vector(1 downto 0));  -- RAM write enable (low active)    
 end pu_msp430_ram;
 
 architecture rtl of pu_msp430_ram is

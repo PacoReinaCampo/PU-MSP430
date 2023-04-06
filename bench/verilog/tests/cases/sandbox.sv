@@ -35,16 +35,15 @@
 /*===========================================================================*/
 
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
 
- 
-     
-      stimulus_done = 1;
-   end
+
+
+  stimulus_done = 1;
+end
 

@@ -48,12 +48,12 @@
 
 module pu_msp430_clock_gate (
   // OUTPUTs
-  output         gclk,           // Gated clock
+  output gclk,  // Gated clock
 
   // INPUTs
-  input          clk,            // Clock
-  input          enable,         // Clock enable
-  input          scan_enable     // Scan enable (active during scan shifting)
+  input clk,         // Clock
+  input enable,      // Clock enable
+  input scan_enable  // Scan enable (active during scan shifting)
 );
 
   //=============================================================================
@@ -65,12 +65,11 @@ module pu_msp430_clock_gate (
   wire enable_in = (enable | scan_enable);
 
   // LATCH the enable signal
-  reg enable_latch;
+  reg  enable_latch;
   always @(clk or enable_in) begin
-    if (~clk)
-      enable_latch <= enable_in;
+    if (~clk) enable_latch <= enable_in;
   end
 
   // AND gate
-  assign  gclk =  (clk & enable_latch);
-endmodule // pu_msp430_clock_gate
+  assign gclk = (clk & enable_latch);
+endmodule  // pu_msp430_clock_gate

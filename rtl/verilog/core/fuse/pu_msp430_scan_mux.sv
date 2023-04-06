@@ -48,17 +48,17 @@
 
 module pu_msp430_scan_mux (
   // OUTPUTs
-  output              data_out,      // Scan mux data output
+  output data_out,  // Scan mux data output
 
   // INPUTs
-  input               data_in_scan,  // Selected data input for scan mode
-  input               data_in_func,  // Selected data input for functional mode
-  input               scan_mode      // Scan mode
+  input data_in_scan,  // Selected data input for scan mode
+  input data_in_func,  // Selected data input for functional mode
+  input scan_mode      // Scan mode
 );
 
   //=============================================================================
   // 1)  SCAN MUX
   //=============================================================================
 
-  assign  data_out  =  scan_mode ? data_in_scan : data_in_func;
-endmodule // pu_msp430_scan_mux
+  assign data_out = scan_mode ? data_in_scan : data_in_func;
+endmodule  // pu_msp430_scan_mux

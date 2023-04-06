@@ -85,7 +85,7 @@ entity pu_msp430_pu1 is
     puc_rst : out std_logic;
 
     -- Clock & Reset
-    dco_clk : in std_logic;  -- Fast oscillator (fast clock)
+    dco_clk : in std_logic;             -- Fast oscillator (fast clock)
     reset_n : in std_logic;  -- Reset Pin (low active, asynchronous and non-glitchy)
 
     -- Serial Debug Interface (I2C)
@@ -96,24 +96,24 @@ entity pu_msp430_pu1 is
     dbg_i2c_sda_out   : out std_logic;  -- Debug interface: I2C SDA OUT
 
     -- Data Memory
-    dmem_dout : in  std_logic_vector(15 downto 0);        -- Data Memory data output
+    dmem_dout : in  std_logic_vector(15 downto 0);  -- Data Memory data output
     dmem_addr : out std_logic_vector(DMEM_MSB downto 0);  -- Data Memory address
-    dmem_cen  : out std_logic;                            -- Data Memory chip enable (low active)
-    dmem_din  : out std_logic_vector(15 downto 0);        -- Data Memory data input
-    dmem_wen  : out std_logic_vector(1 downto 0);         -- Data Memory write enable (low active)
+    dmem_cen  : out std_logic;          -- Data Memory chip enable (low active)
+    dmem_din  : out std_logic_vector(15 downto 0);  -- Data Memory data input
+    dmem_wen  : out std_logic_vector(1 downto 0);  -- Data Memory write enable (low active)
 
     -- Program Memory
-    pmem_dout : in  std_logic_vector(15 downto 0);        -- Program Memory data output
+    pmem_dout : in  std_logic_vector(15 downto 0);  -- Program Memory data output
     pmem_addr : out std_logic_vector(PMEM_MSB downto 0);  -- Program Memory address
-    pmem_cen  : out std_logic;                            -- Program Memory chip enable (low active)
-    pmem_din  : out std_logic_vector(15 downto 0);        -- Program Memory data input (optional)
-    pmem_wen  : out std_logic_vector(1 downto 0);         -- Program Memory write enable (low active) (optional)
+    pmem_cen  : out std_logic;  -- Program Memory chip enable (low active)
+    pmem_din  : out std_logic_vector(15 downto 0);  -- Program Memory data input (optional)
+    pmem_wen  : out std_logic_vector(1 downto 0);  -- Program Memory write enable (low active) (optional)
 
     -- DACs
-    din_x    : out std_logic;  -- SPI Serial Data
-    din_y    : out std_logic;  -- SPI Serial Data
-    sclk_x   : out std_logic;  -- SPI Serial Clock
-    sclk_y   : out std_logic;  -- SPI Serial Clock
+    din_x    : out std_logic;           -- SPI Serial Data
+    din_y    : out std_logic;           -- SPI Serial Data
+    sclk_x   : out std_logic;           -- SPI Serial Clock
+    sclk_y   : out std_logic;           -- SPI Serial Clock
     sync_n_x : out std_logic;  -- SPI Frame synchronization signal (low active)
     sync_n_y : out std_logic;  -- SPI Frame synchronization signal (low active)
 
@@ -123,234 +123,234 @@ entity pu_msp430_pu1 is
 end pu_msp430_pu1;
 
 architecture rtl of pu_msp430_pu1 is
-component pu_msp430_core
-  port (
-    --FRONTEND - SCAN
-    scan_enable : in std_logic;
-    scan_mode   : in std_logic;
+  component pu_msp430_core
+    port (
+      --FRONTEND - SCAN
+      scan_enable : in std_logic;
+      scan_mode   : in std_logic;
 
-    --FRONTEND - INTERRUPTION
-    irq_acc : out std_logic_vector (IRQ_NR - 3 downto 0);
-    nmi     : in  std_logic;
-    irq     : in  std_logic_vector (IRQ_NR - 3 downto 0);
+      --FRONTEND - INTERRUPTION
+      irq_acc : out std_logic_vector (IRQ_NR - 3 downto 0);
+      nmi     : in  std_logic;
+      irq     : in  std_logic_vector (IRQ_NR - 3 downto 0);
 
-    --FRONTEND - RESET
-    puc_rst : out std_logic;
-    reset_n : in  std_logic;
+      --FRONTEND - RESET
+      puc_rst : out std_logic;
+      reset_n : in  std_logic;
 
-    --DATA MEMORY
-    dmem_cen  : out std_logic;
-    dmem_wen  : out std_logic_vector (1 downto 0);
-    dmem_din  : out std_logic_vector (15 downto 0);
-    dmem_addr : out std_logic_vector (DMEM_MSB downto 0);
-    dmem_dout : in  std_logic_vector (15 downto 0);
+      --DATA MEMORY
+      dmem_cen  : out std_logic;
+      dmem_wen  : out std_logic_vector (1 downto 0);
+      dmem_din  : out std_logic_vector (15 downto 0);
+      dmem_addr : out std_logic_vector (DMEM_MSB downto 0);
+      dmem_dout : in  std_logic_vector (15 downto 0);
 
-    --INSTRUCTION MEMORY
-    pmem_cen  : out std_logic;
-    pmem_wen  : out std_logic_vector (1 downto 0);
-    pmem_din  : out std_logic_vector (15 downto 0);
-    pmem_addr : out std_logic_vector (PMEM_MSB downto 0);
-    pmem_dout : in  std_logic_vector (15 downto 0);
+      --INSTRUCTION MEMORY
+      pmem_cen  : out std_logic;
+      pmem_wen  : out std_logic_vector (1 downto 0);
+      pmem_din  : out std_logic_vector (15 downto 0);
+      pmem_addr : out std_logic_vector (PMEM_MSB downto 0);
+      pmem_dout : in  std_logic_vector (15 downto 0);
 
-    --PERIPHERAL MEMORY
-    per_en   : out std_logic;
-    per_we   : out std_logic_vector (1 downto 0);
-    per_addr : out std_logic_vector (13 downto 0);
-    per_din  : out std_logic_vector (15 downto 0);
-    per_dout : in  std_logic_vector (15 downto 0);
+      --PERIPHERAL MEMORY
+      per_en   : out std_logic;
+      per_we   : out std_logic_vector (1 downto 0);
+      per_addr : out std_logic_vector (13 downto 0);
+      per_din  : out std_logic_vector (15 downto 0);
+      per_dout : in  std_logic_vector (15 downto 0);
 
-    --EXECUTION - REGISTERS
-    r0  : out std_logic_vector (15 downto 0);
-    r1  : out std_logic_vector (15 downto 0);
-    r2  : out std_logic_vector (15 downto 0);
-    r3  : out std_logic_vector (15 downto 0);
-    r4  : out std_logic_vector (15 downto 0);
-    r5  : out std_logic_vector (15 downto 0);
-    r6  : out std_logic_vector (15 downto 0);
-    r7  : out std_logic_vector (15 downto 0);
-    r8  : out std_logic_vector (15 downto 0);
-    r9  : out std_logic_vector (15 downto 0);
-    r10 : out std_logic_vector (15 downto 0);
-    r11 : out std_logic_vector (15 downto 0);
-    r12 : out std_logic_vector (15 downto 0);
-    r13 : out std_logic_vector (15 downto 0);
-    r14 : out std_logic_vector (15 downto 0);
-    r15 : out std_logic_vector (15 downto 0);
+      --EXECUTION - REGISTERS
+      r0  : out std_logic_vector (15 downto 0);
+      r1  : out std_logic_vector (15 downto 0);
+      r2  : out std_logic_vector (15 downto 0);
+      r3  : out std_logic_vector (15 downto 0);
+      r4  : out std_logic_vector (15 downto 0);
+      r5  : out std_logic_vector (15 downto 0);
+      r6  : out std_logic_vector (15 downto 0);
+      r7  : out std_logic_vector (15 downto 0);
+      r8  : out std_logic_vector (15 downto 0);
+      r9  : out std_logic_vector (15 downto 0);
+      r10 : out std_logic_vector (15 downto 0);
+      r11 : out std_logic_vector (15 downto 0);
+      r12 : out std_logic_vector (15 downto 0);
+      r13 : out std_logic_vector (15 downto 0);
+      r14 : out std_logic_vector (15 downto 0);
+      r15 : out std_logic_vector (15 downto 0);
 
-    dbg_clk    : out std_logic;
-    dbg_rst    : out std_logic;
-    irq_detect : out std_logic;
-    nmi_detect : out std_logic;
+      dbg_clk    : out std_logic;
+      dbg_rst    : out std_logic;
+      irq_detect : out std_logic;
+      nmi_detect : out std_logic;
 
-    i_state : out std_logic_vector (2 downto 0);
-    e_state : out std_logic_vector (3 downto 0);
-    decode  : out std_logic;
-    ir      : out std_logic_vector (15 downto 0);
-    irq_num : out std_logic_vector (5 downto 0);
-    pc      : out std_logic_vector (15 downto 0);
+      i_state : out std_logic_vector (2 downto 0);
+      e_state : out std_logic_vector (3 downto 0);
+      decode  : out std_logic;
+      ir      : out std_logic_vector (15 downto 0);
+      irq_num : out std_logic_vector (5 downto 0);
+      pc      : out std_logic_vector (15 downto 0);
 
-    nodiv_smclk : out std_logic;
+      nodiv_smclk : out std_logic;
 
-    --DBG
-    dbg_freeze : out std_logic;
-    dbg_en     : in  std_logic;
+      --DBG
+      dbg_freeze : out std_logic;
+      dbg_en     : in  std_logic;
 
-    --DBG - I2C
-    dbg_i2c_sda_out   : out std_logic;
-    dbg_i2c_scl       : in  std_logic;
-    dbg_i2c_sda_in    : in  std_logic;
-    dbg_i2c_addr      : in  std_logic_vector (6 downto 0);
-    dbg_i2c_broadcast : in  std_logic_vector (6 downto 0);
+      --DBG - I2C
+      dbg_i2c_sda_out   : out std_logic;
+      dbg_i2c_scl       : in  std_logic;
+      dbg_i2c_sda_in    : in  std_logic;
+      dbg_i2c_addr      : in  std_logic_vector (6 downto 0);
+      dbg_i2c_broadcast : in  std_logic_vector (6 downto 0);
 
-    --DBG - UART
-    dbg_uart_txd : out std_logic;
-    dbg_uart_rxd : in  std_logic;
+      --DBG - UART
+      dbg_uart_txd : out std_logic;
+      dbg_uart_rxd : in  std_logic;
 
-    --BCM
-    aclk        : out std_logic;
-    aclk_en     : out std_logic;
-    dco_enable  : out std_logic;
-    dco_wkup    : out std_logic;
-    lfxt_enable : out std_logic;
-    lfxt_wkup   : out std_logic;
-    mclk        : out std_logic;
-    smclk       : out std_logic;
-    smclk_en    : out std_logic;
-    cpu_en      : in  std_logic;
-    dco_clk     : in  std_logic;
-    lfxt_clk    : in  std_logic;
-    wkup        : in  std_logic);
-end component pu_msp430_core;
+      --BCM
+      aclk        : out std_logic;
+      aclk_en     : out std_logic;
+      dco_enable  : out std_logic;
+      dco_wkup    : out std_logic;
+      lfxt_enable : out std_logic;
+      lfxt_wkup   : out std_logic;
+      mclk        : out std_logic;
+      smclk       : out std_logic;
+      smclk_en    : out std_logic;
+      cpu_en      : in  std_logic;
+      dco_clk     : in  std_logic;
+      lfxt_clk    : in  std_logic;
+      wkup        : in  std_logic);
+  end component pu_msp430_core;
 
-component pu_msp430_gpio
-  port (
-    p1_dout : out std_logic_vector (7 downto 0);
-    p2_dout : out std_logic_vector (7 downto 0);
-    p3_dout : out std_logic_vector (7 downto 0);
-    p4_dout : out std_logic_vector (7 downto 0);
-    p5_dout : out std_logic_vector (7 downto 0);
-    p6_dout : out std_logic_vector (7 downto 0);
+  component pu_msp430_gpio
+    port (
+      p1_dout : out std_logic_vector (7 downto 0);
+      p2_dout : out std_logic_vector (7 downto 0);
+      p3_dout : out std_logic_vector (7 downto 0);
+      p4_dout : out std_logic_vector (7 downto 0);
+      p5_dout : out std_logic_vector (7 downto 0);
+      p6_dout : out std_logic_vector (7 downto 0);
 
-    p1_dout_en : out std_logic_vector (7 downto 0);
-    p2_dout_en : out std_logic_vector (7 downto 0);
-    p3_dout_en : out std_logic_vector (7 downto 0);
-    p4_dout_en : out std_logic_vector (7 downto 0);
-    p5_dout_en : out std_logic_vector (7 downto 0);
-    p6_dout_en : out std_logic_vector (7 downto 0);
+      p1_dout_en : out std_logic_vector (7 downto 0);
+      p2_dout_en : out std_logic_vector (7 downto 0);
+      p3_dout_en : out std_logic_vector (7 downto 0);
+      p4_dout_en : out std_logic_vector (7 downto 0);
+      p5_dout_en : out std_logic_vector (7 downto 0);
+      p6_dout_en : out std_logic_vector (7 downto 0);
 
-    p1_sel : out std_logic_vector (7 downto 0);
-    p2_sel : out std_logic_vector (7 downto 0);
-    p3_sel : out std_logic_vector (7 downto 0);
-    p4_sel : out std_logic_vector (7 downto 0);
-    p5_sel : out std_logic_vector (7 downto 0);
-    p6_sel : out std_logic_vector (7 downto 0);
+      p1_sel : out std_logic_vector (7 downto 0);
+      p2_sel : out std_logic_vector (7 downto 0);
+      p3_sel : out std_logic_vector (7 downto 0);
+      p4_sel : out std_logic_vector (7 downto 0);
+      p5_sel : out std_logic_vector (7 downto 0);
+      p6_sel : out std_logic_vector (7 downto 0);
 
-    p1dir : out std_logic_vector (7 downto 0);
-    p1ifg : out std_logic_vector (7 downto 0);
+      p1dir : out std_logic_vector (7 downto 0);
+      p1ifg : out std_logic_vector (7 downto 0);
 
-    p1_din : in std_logic_vector (7 downto 0);
-    p2_din : in std_logic_vector (7 downto 0);
-    p3_din : in std_logic_vector (7 downto 0);
-    p4_din : in std_logic_vector (7 downto 0);
-    p5_din : in std_logic_vector (7 downto 0);
-    p6_din : in std_logic_vector (7 downto 0);
+      p1_din : in std_logic_vector (7 downto 0);
+      p2_din : in std_logic_vector (7 downto 0);
+      p3_din : in std_logic_vector (7 downto 0);
+      p4_din : in std_logic_vector (7 downto 0);
+      p5_din : in std_logic_vector (7 downto 0);
+      p6_din : in std_logic_vector (7 downto 0);
 
-    irq_port1 : out std_logic;
-    irq_port2 : out std_logic;
+      irq_port1 : out std_logic;
+      irq_port2 : out std_logic;
 
-    per_dout : out std_logic_vector (15 downto 0);
-    mclk     : in  std_logic;
-    per_en   : in  std_logic;
-    puc_rst  : in  std_logic;
-    per_we   : in  std_logic_vector (1 downto 0);
-    per_addr : in  std_logic_vector (13 downto 0);
-    per_din  : in  std_logic_vector (15 downto 0));
-end component pu_msp430_gpio;
+      per_dout : out std_logic_vector (15 downto 0);
+      mclk     : in  std_logic;
+      per_en   : in  std_logic;
+      puc_rst  : in  std_logic;
+      per_we   : in  std_logic_vector (1 downto 0);
+      per_addr : in  std_logic_vector (13 downto 0);
+      per_din  : in  std_logic_vector (15 downto 0));
+  end component pu_msp430_gpio;
 
-component pu_msp430_ta
-  port (
-    ta_out0 : out std_logic;
-    ta_out1 : out std_logic;
-    ta_out2 : out std_logic;
-            
-    ta_out0_en : out std_logic;
-    ta_out1_en : out std_logic;
-    ta_out2_en : out std_logic;
-          
-    ta_cci0a : in std_logic;
-    ta_cci1a : in std_logic;
-    ta_cci2a : in std_logic;
-    
-    ta_cci0b : in std_logic;
-    ta_cci1b : in std_logic;
-    ta_cci2b : in std_logic;
+  component pu_msp430_ta
+    port (
+      ta_out0 : out std_logic;
+      ta_out1 : out std_logic;
+      ta_out2 : out std_logic;
 
-    aclk_en     : in std_logic;
-    dbg_freeze  : in std_logic;
-    inclk       : in std_logic;
-    irq_ta0_acc : in std_logic;
-    smclk_en    : in std_logic;
-    taclk       : in std_logic;
-    
-    irq_ta0 : out std_logic;
-    irq_ta1 : out std_logic;
+      ta_out0_en : out std_logic;
+      ta_out1_en : out std_logic;
+      ta_out2_en : out std_logic;
 
-    tar    : out std_logic_vector (15 downto 0);
-    taccr0 : out std_logic_vector (15 downto 0);
-        
-    per_dout : out std_logic_vector (15 downto 0);
-    mclk     : in std_logic;
-    per_en   : in std_logic;
-    puc_rst  : in std_logic;
-    per_we   : in std_logic_vector (1 downto 0);
-    per_addr : in std_logic_vector (13 downto 0);
-    per_din  : in std_logic_vector (15 downto 0));
-end component pu_msp430_ta;
+      ta_cci0a : in std_logic;
+      ta_cci1a : in std_logic;
+      ta_cci2a : in std_logic;
 
-component pu_msp430_uart
-  port (
-    uart_txd : out std_logic;
-    uart_rxd : in  std_logic;
-    smclk_en : in  std_logic;
+      ta_cci0b : in std_logic;
+      ta_cci1b : in std_logic;
+      ta_cci2b : in std_logic;
 
-    irq_uart_rx : out std_logic;
-    irq_uart_tx : out std_logic;
+      aclk_en     : in std_logic;
+      dbg_freeze  : in std_logic;
+      inclk       : in std_logic;
+      irq_ta0_acc : in std_logic;
+      smclk_en    : in std_logic;
+      taclk       : in std_logic;
 
-    per_dout : out std_logic_vector (15 downto 0);
-    mclk     : in  std_logic;
-    per_en   : in  std_logic;
-    puc_rst  : in  std_logic;
-    per_we   : in  std_logic_vector (1 downto 0);
-    per_addr : in  std_logic_vector (13 downto 0);
-    per_din  : in  std_logic_vector (15 downto 0));
-end component pu_msp430_uart;
+      irq_ta0 : out std_logic;
+      irq_ta1 : out std_logic;
 
-component pu_msp430_dac
-  generic (
-    -- Serial clock divider (Tsclk=Tmclk*(SCLK_DIV+1)*2)
-    constant SCLK_DIV  : integer := 0;
+      tar    : out std_logic_vector (15 downto 0);
+      taccr0 : out std_logic_vector (15 downto 0);
 
-    -- Registers base address
-    constant BASE_ADDR : std_logic_vector(15 downto 0) := X"0190"
+      per_dout : out std_logic_vector (15 downto 0);
+      mclk     : in  std_logic;
+      per_en   : in  std_logic;
+      puc_rst  : in  std_logic;
+      per_we   : in  std_logic_vector (1 downto 0);
+      per_addr : in  std_logic_vector (13 downto 0);
+      per_din  : in  std_logic_vector (15 downto 0));
+  end component pu_msp430_ta;
+
+  component pu_msp430_uart
+    port (
+      uart_txd : out std_logic;
+      uart_rxd : in  std_logic;
+      smclk_en : in  std_logic;
+
+      irq_uart_rx : out std_logic;
+      irq_uart_tx : out std_logic;
+
+      per_dout : out std_logic_vector (15 downto 0);
+      mclk     : in  std_logic;
+      per_en   : in  std_logic;
+      puc_rst  : in  std_logic;
+      per_we   : in  std_logic_vector (1 downto 0);
+      per_addr : in  std_logic_vector (13 downto 0);
+      per_din  : in  std_logic_vector (15 downto 0));
+  end component pu_msp430_uart;
+
+  component pu_msp430_dac
+    generic (
+      -- Serial clock divider (Tsclk=Tmclk*(SCLK_DIV+1)*2)
+      constant SCLK_DIV : integer := 0;
+
+      -- Registers base address
+      constant BASE_ADDR : std_logic_vector(15 downto 0) := X"0190"
     );
-  port (
-    -- OUTPUTs
-    cntrl1   : out std_logic_vector(15 downto 0);  -- Control value 1
-    cntrl2   : out std_logic_vector(15 downto 0);  -- Control value 2
-    din      : out std_logic;                      -- SPI Serial Data
-    per_dout : out std_logic_vector(15 downto 0);  -- Peripheral data output
-    sclk     : out std_logic;                      -- SPI Serial Clock
-    sync_n   : out std_logic;                      -- SPI Frame synchronization signal (low active)
+    port (
+      -- OUTPUTs
+      cntrl1   : out std_logic_vector(15 downto 0);  -- Control value 1
+      cntrl2   : out std_logic_vector(15 downto 0);  -- Control value 2
+      din      : out std_logic;         -- SPI Serial Data
+      per_dout : out std_logic_vector(15 downto 0);  -- Peripheral data output
+      sclk     : out std_logic;         -- SPI Serial Clock
+      sync_n   : out std_logic;  -- SPI Frame synchronization signal (low active)
 
-    -- INPUTs
-    mclk     : in std_logic;                      -- Main system clock
-    per_addr : in std_logic_vector(13 downto 0);  -- Peripheral address
-    per_din  : in std_logic_vector(15 downto 0);  -- Peripheral data input
-    per_en   : in std_logic;                      -- Peripheral enable (high active)
-    per_we   : in std_logic_vector(1 downto 0);   -- Peripheral write enable (high active)
-    puc_rst  : in std_logic                       -- Main system reset
+      -- INPUTs
+      mclk     : in std_logic;          -- Main system clock
+      per_addr : in std_logic_vector(13 downto 0);  -- Peripheral address
+      per_din  : in std_logic_vector(15 downto 0);  -- Peripheral data input
+      per_en   : in std_logic;          -- Peripheral enable (high active)
+      per_we   : in std_logic_vector(1 downto 0);  -- Peripheral write enable (high active)
+      puc_rst  : in std_logic           -- Main system reset
     );
-end component pu_msp430_dac;
+  end component pu_msp430_dac;
 
   ------------------------------------------------------------------------------
   -- 1)  INTERNAL WIRES/REGISTERS/PARAMETERS DECLARATION
@@ -444,52 +444,52 @@ begin
 
       nodiv_smclk => open,
 
-      aclk            => open,             -- ASIC ONLY: ACLK
-      aclk_en         => aclk_en,          -- FPGA ONLY: ACLK enable
-      dbg_freeze      => dbg_freeze,       -- Freeze peripherals
+      aclk            => open,          -- ASIC ONLY: ACLK
+      aclk_en         => aclk_en,       -- FPGA ONLY: ACLK enable
+      dbg_freeze      => dbg_freeze,    -- Freeze peripherals
       dbg_i2c_sda_out => dbg_i2c_sda_out,  -- Debug interface: I2C SDA OUT
-      dbg_uart_txd    => open,             -- Debug interface: UART TXD
-      dco_enable      => open,             -- ASIC ONLY: Fast oscillator enable
-      dco_wkup        => open,             -- ASIC ONLY: Fast oscillator wake-up (asynchronous)
-      dmem_addr       => dmem_addr,        -- Data Memory address
-      dmem_cen        => dmem_cen,         -- Data Memory chip enable (low active)
-      dmem_din        => dmem_din,         -- Data Memory data input
-      dmem_wen        => dmem_wen,         -- Data Memory write enable (low active)
-      irq_acc         => irq_acc,          -- Interrupt request accepted (one-hot signal)
-      lfxt_enable     => open,             -- ASIC ONLY: Low frequency oscillator enable
-      lfxt_wkup       => open,             -- ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
-      mclk            => mclk_omsp,        -- Main system clock
-      per_addr        => per_addr,         -- Peripheral address
-      per_din         => per_din,          -- Peripheral data input
-      per_we          => per_we,           -- Peripheral write enable (high active)
-      per_en          => per_en,           -- Peripheral enable (high active)
-      pmem_addr       => pmem_addr,        -- Program Memory address
-      pmem_cen        => pmem_cen,         -- Program Memory chip enable (low active)
-      pmem_din        => pmem_din,         -- Program Memory data input (optional)
-      pmem_wen        => pmem_wen,         -- Program Memory write enable (low active) (optional)
-      puc_rst         => puc_rst_omsp,     -- Main system reset
-      smclk           => open,             -- ASIC ONLY: SMCLK
-      smclk_en        => smclk_en,         -- FPGA ONLY: SMCLK enable
+      dbg_uart_txd    => open,          -- Debug interface: UART TXD
+      dco_enable      => open,          -- ASIC ONLY: Fast oscillator enable
+      dco_wkup        => open,  -- ASIC ONLY: Fast oscillator wake-up (asynchronous)
+      dmem_addr       => dmem_addr,     -- Data Memory address
+      dmem_cen        => dmem_cen,      -- Data Memory chip enable (low active)
+      dmem_din        => dmem_din,      -- Data Memory data input
+      dmem_wen        => dmem_wen,  -- Data Memory write enable (low active)
+      irq_acc         => irq_acc,  -- Interrupt request accepted (one-hot signal)
+      lfxt_enable     => open,  -- ASIC ONLY: Low frequency oscillator enable
+      lfxt_wkup       => open,  -- ASIC ONLY: Low frequency oscillator wake-up (asynchronous)
+      mclk            => mclk_omsp,     -- Main system clock
+      per_addr        => per_addr,      -- Peripheral address
+      per_din         => per_din,       -- Peripheral data input
+      per_we          => per_we,   -- Peripheral write enable (high active)
+      per_en          => per_en,        -- Peripheral enable (high active)
+      pmem_addr       => pmem_addr,     -- Program Memory address
+      pmem_cen        => pmem_cen,  -- Program Memory chip enable (low active)
+      pmem_din        => pmem_din,      -- Program Memory data input (optional)
+      pmem_wen        => pmem_wen,  -- Program Memory write enable (low active) (optional)
+      puc_rst         => puc_rst_omsp,  -- Main system reset
+      smclk           => open,          -- ASIC ONLY: SMCLK
+      smclk_en        => smclk_en,      -- FPGA ONLY: SMCLK enable
 
       -- INPUTs
-      cpu_en            => '1',                -- Enable CPU code execution (asynchronous and non-glitchy)
-      dbg_en            => dbg_en,             -- Debug interface enable (asynchronous and non-glitchy)
+      cpu_en            => '1',  -- Enable CPU code execution (asynchronous and non-glitchy)
+      dbg_en            => dbg_en,  -- Debug interface enable (asynchronous and non-glitchy)
       dbg_i2c_addr      => dbg_i2c_addr,       -- Debug interface: I2C Address
       dbg_i2c_broadcast => dbg_i2c_broadcast,  -- Debug interface: I2C Broadcast Address (for multicore systems)
       dbg_i2c_scl       => dbg_i2c_scl,        -- Debug interface: I2C SCL
       dbg_i2c_sda_in    => dbg_i2c_sda_in,     -- Debug interface: I2C SDA IN
-      dbg_uart_rxd      => '1',                -- Debug interface: UART RXD (asynchronous)
-      dco_clk           => dco_clk,            -- Fast oscillator (fast clock)
-      dmem_dout         => dmem_dout,          -- Data Memory data output
-      irq               => irq_bus,            -- Maskable interrupts
-      lfxt_clk          => '0',                -- Low frequency oscillator (typ 32kHz)
-      nmi               => nmi,                -- Non-maskable interrupt (asynchronous)
-      per_dout          => per_dout,           -- Peripheral data output
-      pmem_dout         => pmem_dout,          -- Program Memory data output
-      reset_n           => reset_n,            -- Reset Pin (low active, asynchronous and non-glitchy)
-      scan_enable       => '0',                -- ASIC ONLY: Scan enable (active during scan shifting)
-      scan_mode         => '0',                -- ASIC ONLY: Scan mode
-      wkup              => '0');               -- ASIC ONLY: System Wake-up (asynchronous and non-glitchy)
+      dbg_uart_rxd      => '1',  -- Debug interface: UART RXD (asynchronous)
+      dco_clk           => dco_clk,     -- Fast oscillator (fast clock)
+      dmem_dout         => dmem_dout,   -- Data Memory data output
+      irq               => irq_bus,     -- Maskable interrupts
+      lfxt_clk          => '0',         -- Low frequency oscillator (typ 32kHz)
+      nmi               => nmi,  -- Non-maskable interrupt (asynchronous)
+      per_dout          => per_dout,    -- Peripheral data output
+      pmem_dout         => pmem_dout,   -- Program Memory data output
+      reset_n           => reset_n,  -- Reset Pin (low active, asynchronous and non-glitchy)
+      scan_enable       => '0',  -- ASIC ONLY: Scan enable (active during scan shifting)
+      scan_mode         => '0',         -- ASIC ONLY: Scan mode
+      wkup              => '0');  -- ASIC ONLY: System Wake-up (asynchronous and non-glitchy)
 
   dbg_en <= '1';
 
@@ -536,7 +536,7 @@ begin
       per_addr => per_addr,             -- Peripheral address
       per_din  => per_din,              -- Peripheral data input
       per_en   => per_en,               -- Peripheral enable (high active)
-      per_we   => per_we,               -- Peripheral write enable (high active)
+      per_we   => per_we,         -- Peripheral write enable (high active)
       puc_rst  => puc_rst_omsp);        -- Main system reset
 
   -- Assign LEDs
@@ -551,7 +551,7 @@ begin
     port map (
       -- OUTPUTs
       irq_ta0    => irq_ta0,            -- Timer A interrupt: TACCR0
-      irq_ta1    => irq_ta1,            -- Timer A interrupt: TAIV, TACCR1, TACCR2
+      irq_ta1    => irq_ta1,      -- Timer A interrupt: TAIV, TACCR1, TACCR2
       per_dout   => per_dout_tA,        -- Peripheral data output
       ta_out0    => open,               -- Timer A output 0
       ta_out0_en => open,               -- Timer A output 0 enable
@@ -571,7 +571,7 @@ begin
       per_addr    => per_addr,          -- Peripheral address
       per_din     => per_din,           -- Peripheral data input
       per_en      => per_en,            -- Peripheral enable (high active)
-      per_we      => per_we,            -- Peripheral write enable (high active)
+      per_we      => per_we,        -- Peripheral write enable (high active)
       puc_rst     => puc_rst_omsp,      -- Main system reset
       smclk_en    => smclk_en,          -- SMCLK enable (from CPU)
       ta_cci0a    => '0',               -- Timer A capture 0 input A
@@ -592,20 +592,20 @@ begin
       BASE_ADDR => X"0190")
     port map (
       -- OUTPUTs
-      cntrl1   => cntrl1_x,        -- Control value 1
-      cntrl2   => cntrl2_x,        -- Control value 2
-      din      => din_x,           -- SPI Serial Data
-      per_dout => per_dout_dac_x,  -- Peripheral data output
-      sclk     => sclk_x,          -- SPI Serial Clock
-      sync_n   => sync_n_x,        -- SPI Frame synchronization signal (low active)
+      cntrl1   => cntrl1_x,             -- Control value 1
+      cntrl2   => cntrl2_x,             -- Control value 2
+      din      => din_x,                -- SPI Serial Data
+      per_dout => per_dout_dac_x,       -- Peripheral data output
+      sclk     => sclk_x,               -- SPI Serial Clock
+      sync_n   => sync_n_x,  -- SPI Frame synchronization signal (low active)
 
       -- INPUTs
-      mclk     => mclk,      -- Main system clock
-      per_addr => per_addr,  -- Peripheral address
-      per_din  => per_din,   -- Peripheral data input
-      per_en   => per_en,    -- Peripheral enable (high active)
+      mclk     => mclk,                 -- Main system clock
+      per_addr => per_addr,             -- Peripheral address
+      per_din  => per_din,              -- Peripheral data input
+      per_en   => per_en,               -- Peripheral enable (high active)
       per_we   => per_we,    -- Peripheral write enable (high active)
-      puc_rst  => puc_rst);  -- Main system reset
+      puc_rst  => puc_rst);             -- Main system reset
 
   msp430_dac_y : pu_msp430_dac
     generic map (
@@ -616,20 +616,20 @@ begin
       BASE_ADDR => X"0190")
     port map (
       -- OUTPUTs
-      cntrl1   => cntrl1_y,        -- Control value 1
-      cntrl2   => cntrl2_y,        -- Control value 2
-      din      => din_y,           -- SPI Serial Data
-      per_dout => per_dout_dac_y,  -- Peripheral data output
-      sclk     => sclk_y,          -- SPI Serial Clock
-      sync_n   => sync_n_y,        -- SPI Frame synchronization signal (low active)
+      cntrl1   => cntrl1_y,             -- Control value 1
+      cntrl2   => cntrl2_y,             -- Control value 2
+      din      => din_y,                -- SPI Serial Data
+      per_dout => per_dout_dac_y,       -- Peripheral data output
+      sclk     => sclk_y,               -- SPI Serial Clock
+      sync_n   => sync_n_y,  -- SPI Frame synchronization signal (low active)
 
       -- INPUTs
-      mclk     => mclk,      -- Main system clock
-      per_addr => per_addr,  -- Peripheral address
-      per_din  => per_din,   -- Peripheral data input
-      per_en   => per_en,    -- Peripheral enable (high active)
+      mclk     => mclk,                 -- Main system clock
+      per_addr => per_addr,             -- Peripheral address
+      per_din  => per_din,              -- Peripheral data input
+      per_en   => per_en,               -- Peripheral enable (high active)
       per_we   => per_we,    -- Peripheral write enable (high active)
-      puc_rst  => puc_rst);  -- Main system reset
+      puc_rst  => puc_rst);             -- Main system reset
 
   -- Combine peripheral data buses
   per_dout <= per_dout_gpio or per_dout_tA or per_dout_dac_x or per_dout_dac_y;
@@ -640,14 +640,14 @@ begin
               '0' &                     -- Vector 12  (0xFFF8)
               '0' &                     -- Vector 11  (0xFFF6)
               '0' &                     -- Vector 10  (0xFFF4) - Watchdog -
-              '0' &                     -- Vector  9  (0xFFF2) - Reserved (Timer-A 0 from system 0)
-              '0' &                     -- Vector  8  (0xFFF0) - Reserved (Timer-A 1 from system 0)
-              '0' &                     -- Vector  7  (0xFFEE) - Reserved (UART RX from system 0)
-              '0' &                     -- Vector  6  (0xFFEC) - Reserved (UART TX from system 0)
+              '0' &  -- Vector  9  (0xFFF2) - Reserved (Timer-A 0 from system 0)
+              '0' &  -- Vector  8  (0xFFF0) - Reserved (Timer-A 1 from system 0)
+              '0' &  -- Vector  7  (0xFFEE) - Reserved (UART RX from system 0)
+              '0' &  -- Vector  6  (0xFFEC) - Reserved (UART TX from system 0)
               irq_ta0 &                 -- Vector  5  (0xFFEA)
               irq_ta1 &                 -- Vector  4  (0xFFE8)
-              '0' &                     -- Vector  3  (0xFFE6) - Reserved (Port 2 from system 0)
-              '0' &                     -- Vector  2  (0xFFE4) - Reserved (Port 1 from system 0)
+              '0' &  -- Vector  3  (0xFFE6) - Reserved (Port 2 from system 0)
+              '0' &  -- Vector  2  (0xFFE4) - Reserved (Port 1 from system 0)
               irq_port2 &               -- Vector  1  (0xFFE2)
               irq_port1);               -- Vector  0  (0xFFE0)
 

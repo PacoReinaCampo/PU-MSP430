@@ -89,10 +89,10 @@ architecture rtl of pu_msp430_watchdog is
 
   --0.3.        Register addresses offset
   constant WDTCTLB : std_logic_vector (DEC_WD_W - 1 downto 0) := (others => '0');
-  constant WDTCTLC : integer                                   := to_integer(unsigned(WDTCTLB));
+  constant WDTCTLC : integer                                  := to_integer(unsigned(WDTCTLB));
 
   --0.4.        Register one-hot decoder utilities
-  constant DEC_SZ_W   : integer                                   := 2**DEC_WD_W;
+  constant DEC_SZ_W   : integer                                  := 2**DEC_WD_W;
   constant BASE_REG_W : std_logic_vector (DEC_SZ_W - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_W));
 
   --0.5.        Register one-hot decoder

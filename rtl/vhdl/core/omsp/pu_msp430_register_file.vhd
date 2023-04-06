@@ -198,7 +198,7 @@ begin
 
   clock_gating_1_on : if (CLOCK_GATING = '1') generate
     r2_c   <= alu_stat(0)                 when alu_stat_wr(0) = '1' else reg_dest_val_in(0);
-    r2_z   <= alu_stat(1)                  when alu_stat_wr(1) = '1' else reg_dest_val_in(1);
+    r2_z   <= alu_stat(1)                 when alu_stat_wr(1) = '1' else reg_dest_val_in(1);
     r2_n   <= alu_stat(2)                 when alu_stat_wr(2) = '1' else reg_dest_val_in(2);
     r2_nxt <= reg_dest_val_in(7 downto 3) when r2_wr = '1'          else re(2)(7 downto 3);
     r2_v   <= alu_stat(3)                 when alu_stat_wr(3) = '1' else reg_dest_val_in(8);

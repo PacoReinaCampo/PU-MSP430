@@ -87,7 +87,7 @@ architecture rtl of pu_msp430_multiplier is
   constant SUMEXTCB  : std_logic_vector (DEC_WD_M - 1 downto 0) := std_logic_vector(to_unsigned(SUMEXTC, DEC_WD_M));
 
   --0.4.                Register one-hot decoder utilities
-  constant DEC_SZ_M   : integer                                   := 2**DEC_WD_M;
+  constant DEC_SZ_M   : integer                                  := 2**DEC_WD_M;
   constant BASE_REG_M : std_logic_vector (DEC_SZ_M - 1 downto 0) := std_logic_vector(to_unsigned(1, DEC_SZ_M));
 
   --0.5.                Register one-hot decoder

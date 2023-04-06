@@ -37,65 +37,63 @@
 
 reg [15:0] r13_bkup;
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
 `ifdef DBG_EN
 `ifdef DBG_UART
-      #1 dbg_en = 1;
-      repeat(30) @(posedge mclk);
-      stimulus_done = 0;
+  #1 dbg_en = 1;
+  repeat (30) @(posedge mclk);
+  stimulus_done = 0;
 
-      // Initialize the debug interface and send the CPU in halt mode
-      dbg_uart_tx(DBG_SYNC);
+  // Initialize the debug interface and send the CPU in halt mode
+  dbg_uart_tx(DBG_SYNC);
 
 `ifdef DBG_RST_BRK_EN
-      dbg_uart_wr(CPU_CTL,  16'h0002);  // RUN
+  dbg_uart_wr(CPU_CTL, 16'h0002);  // RUN
 `endif
 
-      // Wait until software initialization is done
-      if (r15!==(`PER_SIZE+16'h0000))
-	@(r15==(`PER_SIZE+16'h0000));
+  // Wait until software initialization is done
+  if (r15 !== (`PER_SIZE + 16'h0000)) @(r15 == (`PER_SIZE + 16'h0000));
 
 
-      dbg_uart_wr(CPU_CTL,  16'h0001);  // HALT
-      repeat(150) @(posedge mclk);
-      r13_bkup = r13;
-	
-      // Generate a GPIO interrupt
-      p1_din[0] = 1'b1;
-      repeat(150) @(posedge mclk);
+  dbg_uart_wr(CPU_CTL, 16'h0001);  // HALT
+  repeat (150) @(posedge mclk);
+  r13_bkup  = r13;
 
-      // Re-start the CPU
-      dbg_uart_wr(CPU_CTL,  16'h0002);  // RUN
-      repeat(150) @(posedge mclk);
+  // Generate a GPIO interrupt
+  p1_din[0] = 1'b1;
+  repeat (150) @(posedge mclk);
 
-      // Make sure the interrupt was serviced
-      if (r14 !== 16'haaaa) tb_error("====== Interrupt was not properly serviced =====");
-      
-      // Make sure the program resumed execution when coming back from IRQ
-      if (r13 === r13_bkup) tb_error("====== Program didn't properly resumed execution =====");
+  // Re-start the CPU
+  dbg_uart_wr(CPU_CTL, 16'h0002);  // RUN
+  repeat (150) @(posedge mclk);
+
+  // Make sure the interrupt was serviced
+  if (r14 !== 16'haaaa) tb_error("====== Interrupt was not properly serviced =====");
+
+  // Make sure the program resumed execution when coming back from IRQ
+  if (r13 === r13_bkup) tb_error("====== Program didn't properly resumed execution =====");
 
 
-      p1_din[1] = 1'b1;     
-      stimulus_done = 1;
+  p1_din[1]     = 1'b1;
+  stimulus_done = 1;
 `else
 
-       $display(" ===============================================");
-       $display("|               SIMULATION SKIPPED              |");
-       $display("|   (serial debug interface UART not included)  |");
-       $display(" ===============================================");
-       $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (serial debug interface UART not included)  |");
+  $display(" ===============================================");
+  $finish;
 `endif
 `else
 
-       $display(" ===============================================");
-       $display("|               SIMULATION SKIPPED              |");
-       $display("|      (serial debug interface not included)    |");
-       $display(" ===============================================");
-       $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|      (serial debug interface not included)    |");
+  $display(" ===============================================");
+  $finish;
 `endif
-   end
+end
 

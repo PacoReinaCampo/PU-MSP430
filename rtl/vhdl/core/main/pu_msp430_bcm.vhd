@@ -366,9 +366,9 @@ begin
   begin
     --3.1.      Data output mux
     bcsctl_rd(0) <= std_logic_vector((X"00" & (unsigned(bcsctl(0)) and (0 to 7 => reg_rd_b(BCSCTL1C))))
-                                      sll to_integer((0 to 3                    => BCSCTL1B(0)) and to_unsigned(8, 4)));
+                                     sll to_integer((0 to 3                    => BCSCTL1B(0)) and to_unsigned(8, 4)));
     bcsctl_rd(1) <= std_logic_vector((X"00" & (unsigned(bcsctl(1)) and (0 to 7 => reg_rd_b(BCSCTL2C))))
-                                      sll to_integer((0 to 3                    => BCSCTL2B(0)) and to_unsigned(8, 4)));
+                                     sll to_integer((0 to 3                    => BCSCTL2B(0)) and to_unsigned(8, 4)));
     per_dout <= bcsctl_rd(0) or bcsctl_rd(1);
   end block DATA_OUTPUT_GENERATION;
 

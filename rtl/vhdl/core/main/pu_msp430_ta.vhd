@@ -354,15 +354,15 @@ begin
   reg_addr <= (per_addr(DEC_WD-2 downto 0) & '0');
 
   -- Register address decode
-  reg_dec <= (TACTL_D   and (0 to DEC_SZ - 1 => to_stdlogic(reg_addr = TACTLX))) or
-             (TAR_D     and (0 to DEC_SZ - 1 => to_stdlogic(reg_addr = TARX))) or
+  reg_dec <= (TACTL_D and (0 to DEC_SZ - 1 => to_stdlogic(reg_addr = TACTLX))) or
+             (TAR_D and (0 to DEC_SZ - 1     => to_stdlogic(reg_addr = TARX))) or
              (TACCTL0_D and (0 to DEC_SZ - 1 => to_stdlogic(reg_addr = TACCTLX0))) or
-             (TACCR0_D  and (0 to DEC_SZ - 1 => to_stdlogic(reg_addr = TACCRX0))) or
+             (TACCR0_D and (0 to DEC_SZ - 1  => to_stdlogic(reg_addr = TACCRX0))) or
              (TACCTL1_D and (0 to DEC_SZ - 1 => to_stdlogic(reg_addr = TACCTLX1))) or
-             (TACCR1_D  and (0 to DEC_SZ - 1 => to_stdlogic(reg_addr = TACCRX1))) or
+             (TACCR1_D and (0 to DEC_SZ - 1  => to_stdlogic(reg_addr = TACCRX1))) or
              (TACCTL2_D and (0 to DEC_SZ - 1 => to_stdlogic(reg_addr = TACCTLX2))) or
-             (TACCR2_D  and (0 to DEC_SZ - 1 => to_stdlogic(reg_addr = TACCRX2))) or
-             (TAIV_D    and (0 to DEC_SZ - 1 => to_stdlogic(reg_addr = TAIVX)));
+             (TACCR2_D and (0 to DEC_SZ - 1  => to_stdlogic(reg_addr = TACCRX2))) or
+             (TAIV_D and (0 to DEC_SZ - 1    => to_stdlogic(reg_addr = TAIVX)));
 
   -- Read/Write probes
   reg_write <= (per_we(0) or per_we(1)) and reg_sel;
@@ -587,14 +587,14 @@ begin
   -- Timer clock input mux
   inclk_en <= inclk_s and not inclk_dly;
   sel_clk  <= taclk_en
-              when (tactl(9 downto 8) = "00") else aclk_en
-              when (tactl(9 downto 8) = "01") else smclk_en
-              when (tactl(9 downto 8) = "10") else inclk_en;
+             when (tactl(9 downto 8) = "00") else aclk_en
+             when (tactl(9 downto 8) = "01") else smclk_en
+             when (tactl(9 downto 8) = "10") else inclk_en;
 
   -- Generate update pluse for the counter (<=> divided clock)
   tar_clk <= sel_clk and '1' when (tactl(7 downto 6) = "00") else clk_div(0)
-                             when (tactl(7 downto 6) = "01") else (clk_div(0) and clk_div(1))
-                             when (tactl(7 downto 6) = "10") else (clk_div(0) and clk_div(1) and clk_div(2));
+             when (tactl(7 downto 6) = "01") else (clk_div(0) and clk_div(1))
+             when (tactl(7 downto 6) = "10") else (clk_div(0) and clk_div(1) and clk_div(2));
 
   processing_10 : process (mclk, puc_rst)
   begin

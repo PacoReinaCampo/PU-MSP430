@@ -38,101 +38,97 @@
 `define LONG_TIMEOUT
 
 integer mclk_counter;
-always @ (negedge mclk)
-  mclk_counter     <=  mclk_counter+1;
+always @(negedge mclk) mclk_counter <= mclk_counter + 1;
 
 integer lfxt_clk_counter;
-always @ (negedge lfxt_clk)
-  lfxt_clk_counter <=  lfxt_clk_counter+1;
+always @(negedge lfxt_clk) lfxt_clk_counter <= lfxt_clk_counter + 1;
 
 reg [15:0] reg_val;
-   
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
+
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
 
 `ifdef ASIC_CLOCKING
-  `ifdef OSCOFF_EN
-     `ifdef MCLK_MUX
-    
-      //--------------------------------------------------------
-      // First make sure CPU runs with LFXT_CLK
-      //--------------------------------------------------------
+`ifdef OSCOFF_EN
+`ifdef MCLK_MUX
 
-      @(r15 === 16'h0001);
-      #10;
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      @(r15 === 16'h0002);
-      #10;
-      if (mclk_counter     !==  40) tb_error("====== CLOCK GENERATOR: TEST 1 =====");
-      if (lfxt_clk_counter !==  40) tb_error("====== CLOCK GENERATOR: TEST 2 =====");
-      if (r10              !==  0)  tb_error("====== CLOCK GENERATOR: TEST 3 =====");
+  //--------------------------------------------------------
+  // First make sure CPU runs with LFXT_CLK
+  //--------------------------------------------------------
 
-
-      //--------------------------------------------------------
-      // Make sure the CPU stops and LFXT oscillator too
-      //--------------------------------------------------------
-
-      #10000;
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      #10000;
-      if (mclk_counter     !==  0)  tb_error("====== CLOCK GENERATOR: TEST 4 =====");
-      if (lfxt_clk_counter !==  0)  tb_error("====== CLOCK GENERATOR: TEST 5 =====");
-      if (r10              !==  0)  tb_error("====== CLOCK GENERATOR: TEST 6 =====");
-      #10000;
+  @(r15 === 16'h0001);
+  #10;
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  @(r15 === 16'h0002);
+  #10;
+  if (mclk_counter !== 40) tb_error("====== CLOCK GENERATOR: TEST 1 =====");
+  if (lfxt_clk_counter !== 40) tb_error("====== CLOCK GENERATOR: TEST 2 =====");
+  if (r10 !== 0) tb_error("====== CLOCK GENERATOR: TEST 3 =====");
 
 
-      //--------------------------------------------------------
-      // Generate IRQ and make sure CPU re-runs with LFXT_CLK
-      //--------------------------------------------------------
+  //--------------------------------------------------------
+  // Make sure the CPU stops and LFXT oscillator too
+  //--------------------------------------------------------
 
-      wkup[0]   = 1'b1;
-      @(negedge mclk);
-      irq[0]    = 1'b1;
-      @(negedge irq_acc[0])
-      @(negedge mclk);
-      wkup[0]   = 1'b0;
-      irq[0]    = 1'b0;
-
-      @(r15 === 16'h0003);
-      #10;
-      mclk_counter     = 0;
-      lfxt_clk_counter = 0;
-      @(r15 === 16'h0004);
-      #10;
-      if (mclk_counter     !==  40)        tb_error("====== CLOCK GENERATOR: TEST 7 =====");
-      if (lfxt_clk_counter !==  40)        tb_error("====== CLOCK GENERATOR: TEST 8 =====");
-      if (r10              !==  16'h5678)  tb_error("====== CLOCK GENERATOR: TEST 9 =====");
+  #10000;
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  #10000;
+  if (mclk_counter !== 0) tb_error("====== CLOCK GENERATOR: TEST 4 =====");
+  if (lfxt_clk_counter !== 0) tb_error("====== CLOCK GENERATOR: TEST 5 =====");
+  if (r10 !== 0) tb_error("====== CLOCK GENERATOR: TEST 6 =====");
+  #10000;
 
 
-     `else
-      $display(" ===============================================");
-      $display("|               SIMULATION SKIPPED              |");
-      $display("|   (this test requires the MCLK clock mux)     |");
-      $display(" ===============================================");
-      $finish;
-     `endif
-  `else
-      $display(" ===============================================");
-      $display("|               SIMULATION SKIPPED              |");
-      $display("|   (this test requires the OSCOFF option)      |");
-      $display(" ===============================================");
-      $finish;
-  `endif
+  //--------------------------------------------------------
+  // Generate IRQ and make sure CPU re-runs with LFXT_CLK
+  //--------------------------------------------------------
+
+  wkup[0] = 1'b1;
+  @(negedge mclk);
+  irq[0] = 1'b1;
+  @(negedge irq_acc[0]) @(negedge mclk);
+  wkup[0] = 1'b0;
+  irq[0]  = 1'b0;
+
+  @(r15 === 16'h0003);
+  #10;
+  mclk_counter     = 0;
+  lfxt_clk_counter = 0;
+  @(r15 === 16'h0004);
+  #10;
+  if (mclk_counter !== 40) tb_error("====== CLOCK GENERATOR: TEST 7 =====");
+  if (lfxt_clk_counter !== 40) tb_error("====== CLOCK GENERATOR: TEST 8 =====");
+  if (r10 !== 16'h5678) tb_error("====== CLOCK GENERATOR: TEST 9 =====");
+
+
 `else
-      $display(" ===============================================");
-      $display("|               SIMULATION SKIPPED              |");
-      $display("|   (this test is not supported in FPGA mode)   |");
-      $display(" ===============================================");
-      $finish;
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (this test requires the MCLK clock mux)     |");
+  $display(" ===============================================");
+  $finish;
+`endif
+`else
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (this test requires the OSCOFF option)      |");
+  $display(" ===============================================");
+  $finish;
+`endif
+`else
+  $display(" ===============================================");
+  $display("|               SIMULATION SKIPPED              |");
+  $display("|   (this test is not supported in FPGA mode)   |");
+  $display(" ===============================================");
+  $finish;
 `endif
 
-      stimulus_done = 1;
-   end
+  stimulus_done = 1;
+end
 

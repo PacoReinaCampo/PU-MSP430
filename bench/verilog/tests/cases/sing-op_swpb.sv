@@ -34,73 +34,72 @@
 /* $LastChangedDate: 2011-05-20 22:39:02 +0200 (Fri, 20 May 2011) $          */
 /*===========================================================================*/
 
-initial
-   begin
-      $display(" ===============================================");
-      $display("|                 START SIMULATION              |");
-      $display(" ===============================================");
-      repeat(5) @(posedge mclk);
-      stimulus_done = 0;
+initial begin
+  $display(" ===============================================");
+  $display("|                 START SIMULATION              |");
+  $display(" ===============================================");
+  repeat (5) @(posedge mclk);
+  stimulus_done = 0;
 
 
-      // Addressing mode: Rn
-      @(r15==16'h1000);
-      if (r4     !==16'h2475) tb_error("====== SWPB (Rn mode): test 1 (result) =====");
-      if (r5     !==16'h0102) tb_error("====== SWPB (Rn mode): test 1 (C flag) =====");
+  // Addressing mode: Rn
+  @(r15 == 16'h1000);
+  if (r4 !== 16'h2475) tb_error("====== SWPB (Rn mode): test 1 (result) =====");
+  if (r5 !== 16'h0102) tb_error("====== SWPB (Rn mode): test 1 (C flag) =====");
 
-      if (r6     !==16'hb61c) tb_error("====== SWPB (Rn mode): test 2 (result) =====");
-      if (r7     !==16'h0005) tb_error("====== SWPB (Rn mode): test 2 (C flag) =====");
-
-
-      // Addressing mode: @Rn
-      @(r15==16'h2000);
-      if (mem200 !==16'h2475)             tb_error("====== SWPB (@Rn mode): test 1 (result)  =====");
-      if (r4     !==(`PER_SIZE+16'h0000)) tb_error("====== SWPB (@Rn mode): test 1 (address) =====");
-      if (r5     !==16'h0102)             tb_error("====== SWPB (@Rn mode): test 1 (C flag)  =====");
-
-      if (mem202 !==16'hb61c)             tb_error("====== SWPB (@Rn mode): test 2 (result)  =====");
-      if (r6     !==(`PER_SIZE+16'h0002)) tb_error("====== SWPB (@Rn mode): test 2 (address) =====");
-      if (r7     !==16'h0005)             tb_error("====== SWPB (@Rn mode): test 2 (C flag)  =====");
+  if (r6 !== 16'hb61c) tb_error("====== SWPB (Rn mode): test 2 (result) =====");
+  if (r7 !== 16'h0005) tb_error("====== SWPB (Rn mode): test 2 (C flag) =====");
 
 
-      // Addressing mode: @Rn+
-      @(r15==16'h3000);
-      if (mem208 !==16'h2475)             tb_error("====== SWPB (@Rn+ mode): test 1 (result)  =====");
-      if (r4     !==(`PER_SIZE+16'h000A)) tb_error("====== SWPB (@Rn+ mode): test 1 (address) =====");
-      if (r5     !==16'h0102)             tb_error("====== SWPB (@Rn+ mode): test 1 (C flag)  =====");
+  // Addressing mode: @Rn
+  @(r15 == 16'h2000);
+  if (mem200 !== 16'h2475) tb_error("====== SWPB (@Rn mode): test 1 (result)  =====");
+  if (r4 !== (`PER_SIZE + 16'h0000)) tb_error("====== SWPB (@Rn mode): test 1 (address) =====");
+  if (r5 !== 16'h0102) tb_error("====== SWPB (@Rn mode): test 1 (C flag)  =====");
 
-      if (mem20A !==16'hb61c)             tb_error("====== SWPB (@Rn+ mode): test 2 (result)  =====");
-      if (r6     !==(`PER_SIZE+16'h000C)) tb_error("====== SWPB (@Rn+ mode): test 2 (address) =====");
-      if (r7     !==16'h0005)             tb_error("====== SWPB (@Rn+ mode): test 2 (C flag)  =====");
-
-
-      // Addressing mode: X(Rn)
-      @(r15==16'h4000);
-      if (mem210 !==16'h2475) tb_error("====== SWPB (X(Rn) mode): test 1 (result)  =====");
-      if (r5     !==16'h0102) tb_error("====== SWPB (X(Rn) mode): test 1 (C flag)  =====");
-
-      if (mem212 !==16'hb61c) tb_error("====== SWPB (X(Rn) mode): test 2 (result)  =====");
-      if (r7     !==16'h0005) tb_error("====== SWPB (X(Rn) mode): test 2 (C flag)  =====");
+  if (mem202 !== 16'hb61c) tb_error("====== SWPB (@Rn mode): test 2 (result)  =====");
+  if (r6 !== (`PER_SIZE + 16'h0002)) tb_error("====== SWPB (@Rn mode): test 2 (address) =====");
+  if (r7 !== 16'h0005) tb_error("====== SWPB (@Rn mode): test 2 (C flag)  =====");
 
 
-      // Addressing mode: EDE
-      @(r15==16'h5000);
-      if (mem218 !==16'h2475) tb_error("====== SWPB (EDE mode): test 1 (result)  =====");
-      if (r5     !==16'h0102) tb_error("====== SWPB (EDE mode): test 1 (C flag)  =====");
+  // Addressing mode: @Rn+
+  @(r15 == 16'h3000);
+  if (mem208 !== 16'h2475) tb_error("====== SWPB (@Rn+ mode): test 1 (result)  =====");
+  if (r4 !== (`PER_SIZE + 16'h000A)) tb_error("====== SWPB (@Rn+ mode): test 1 (address) =====");
+  if (r5 !== 16'h0102) tb_error("====== SWPB (@Rn+ mode): test 1 (C flag)  =====");
 
-      if (mem21A !==16'hb61c) tb_error("====== SWPB (EDE mode): test 2 (result)  =====");
-      if (r7     !==16'h0005) tb_error("====== SWPB (EDE mode): test 2 (C flag)  =====");
-
-
-      // Addressing mode: &EDE
-      @(r15==16'h6000);
-      if (mem220 !==16'h2475) tb_error("====== SWPB (&EDE mode): test 1 (result)  =====");
-      if (r5     !==16'h0102) tb_error("====== SWPB (&EDE mode): test 1 (C flag)  =====");
-
-      if (mem222 !==16'hb61c) tb_error("====== SWPB (&EDE mode): test 2 (result)  =====");
-      if (r7     !==16'h0005) tb_error("====== SWPB (&EDE mode): test 2 (C flag)  =====");
+  if (mem20A !== 16'hb61c) tb_error("====== SWPB (@Rn+ mode): test 2 (result)  =====");
+  if (r6 !== (`PER_SIZE + 16'h000C)) tb_error("====== SWPB (@Rn+ mode): test 2 (address) =====");
+  if (r7 !== 16'h0005) tb_error("====== SWPB (@Rn+ mode): test 2 (C flag)  =====");
 
 
-      stimulus_done = 1;
-   end
+  // Addressing mode: X(Rn)
+  @(r15 == 16'h4000);
+  if (mem210 !== 16'h2475) tb_error("====== SWPB (X(Rn) mode): test 1 (result)  =====");
+  if (r5 !== 16'h0102) tb_error("====== SWPB (X(Rn) mode): test 1 (C flag)  =====");
+
+  if (mem212 !== 16'hb61c) tb_error("====== SWPB (X(Rn) mode): test 2 (result)  =====");
+  if (r7 !== 16'h0005) tb_error("====== SWPB (X(Rn) mode): test 2 (C flag)  =====");
+
+
+  // Addressing mode: EDE
+  @(r15 == 16'h5000);
+  if (mem218 !== 16'h2475) tb_error("====== SWPB (EDE mode): test 1 (result)  =====");
+  if (r5 !== 16'h0102) tb_error("====== SWPB (EDE mode): test 1 (C flag)  =====");
+
+  if (mem21A !== 16'hb61c) tb_error("====== SWPB (EDE mode): test 2 (result)  =====");
+  if (r7 !== 16'h0005) tb_error("====== SWPB (EDE mode): test 2 (C flag)  =====");
+
+
+  // Addressing mode: &EDE
+  @(r15 == 16'h6000);
+  if (mem220 !== 16'h2475) tb_error("====== SWPB (&EDE mode): test 1 (result)  =====");
+  if (r5 !== 16'h0102) tb_error("====== SWPB (&EDE mode): test 1 (C flag)  =====");
+
+  if (mem222 !== 16'hb61c) tb_error("====== SWPB (&EDE mode): test 2 (result)  =====");
+  if (r7 !== 16'h0005) tb_error("====== SWPB (&EDE mode): test 2 (C flag)  =====");
+
+
+  stimulus_done = 1;
+end
 
