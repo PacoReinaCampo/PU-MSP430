@@ -24,13 +24,13 @@ vhdl
 │   │   ├── pu_msp430_uart.vhd
 │   │   └── pu_msp430_watchdog.vhd
 │   └── omsp
+│       ├── msp430_interrupt.vhd
+│       ├── msp430_state_machine.vhd
 │       ├── pu_msp430_alu.vhd
 │       ├── pu_msp430_dbg_hwbrk.vhd
 │       ├── pu_msp430_dbg_i2c.vhd
 │       ├── pu_msp430_dbg_uart.vhd
-│       ├── msp430_interrupt.vhd
-│       ├── pu_msp430_register_file.vhd
-│       └── msp430_state_machine.vhd
+│       └── pu_msp430_register_file.vhd
 ├── pkg
 │   └── pu_msp430_pkg.vhd
 ├── pu

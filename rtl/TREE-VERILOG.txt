@@ -31,8 +31,8 @@ verilog
 │       └── pu_msp430_register_file.sv
 ├── pkg
 │   ├── pu_msp430_defines.sv
-│   ├── pu_msp430_undefines.sv
-│   └── pu_msp430_timescale.sv
+│   ├── pu_msp430_timescale.sv
+│   └── pu_msp430_undefines.sv
 ├── pu
 │   ├── pu_msp430_core.sv
 │   ├── pu_msp430_pu0.sv

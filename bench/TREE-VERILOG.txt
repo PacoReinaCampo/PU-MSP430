@@ -5,16 +5,16 @@ verilog
 │   │   └── pu_msp430_leds.sv
 │   └── main
 │       ├── pu_msp430_dac.sv
-│       ├── pu_msp430_glbl.sv
 │       ├── pu_msp430_debug.sv
-│       ├── pu_msp430_testbench.sv
+│       ├── pu_msp430_glbl.sv
 │       ├── pu_msp430_ram_d1.sv
 │       ├── pu_msp430_ram_d2.sv
 │       ├── pu_msp430_ram_dp.sv
 │       ├── pu_msp430_ram_p2.sv
 │       ├── pu_msp430_ram_sp.sv
 │       ├── pu_msp430_registers_omsp0.sv
-│       └── pu_msp430_registers_omsp1.sv
+│       ├── pu_msp430_registers_omsp1.sv
+│       └── pu_msp430_testbench.sv
 └── tests
     ├── cases
     │   ├── c-jump_jc.sv
