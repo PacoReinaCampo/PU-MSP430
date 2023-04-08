@@ -121,8 +121,8 @@ else
             rm -rf xsim.dir
             xvhdl -2008 -prj $4
             xvlog -i ../../../../../../../rtl/verilog/pkg/ -prj $3
-            xelab pu_pu_msp430_testbench
-        exec xsim -R pu_pu_msp430_testbench;;
+            xelab pu_msp430_testbench
+        exec xsim -R pu_msp430_testbench;;
     esac
     
     echo "Running: $OMSP_SIMULATOR -f $5 $vargs"
