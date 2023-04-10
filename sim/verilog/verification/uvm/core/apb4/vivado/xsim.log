@@ -1,0 +1,101 @@
+#-----------------------------------------------------------
+# xsim v2020.2 (64-bit)
+# SW Build 3064766 on Wed Nov 18 09:12:47 MST 2020
+# IP Build 3064653 on Wed Nov 18 14:17:31 MST 2020
+# Start of session at: Mon Apr 10 20:45:49 2023
+# Process ID: 10205
+# Current directory: /home/user/GitHub/code/Architecture/PU-MSP430/sim/verilog/verification/uvm/core/apb4/vivado
+# Command line: xsim -mode tcl -source {xsim.dir/top/xsim_script.tcl}
+# Log file: /home/user/GitHub/code/Architecture/PU-MSP430/sim/verilog/verification/uvm/core/apb4/vivado/xsim.log
+# Journal file: /home/user/GitHub/code/Architecture/PU-MSP430/sim/verilog/verification/uvm/core/apb4/vivado/xsim.jou
+#-----------------------------------------------------------
+source xsim.dir/top/xsim_script.tcl
+# xsim {top} -testplusarg UVM_TESTNAME=peripheral_uvm_test -testplusarg UVM_VERBOSITY=UVM_LOW -autoloadwcfg -runall
+Vivado Simulator 2020.2
+Time resolution is 1 ps
+run -all
+UVM_INFO /proj/xbuilds/SWIP/2020.2_0711_1805/installs/lin64/Vivado/2020.2/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv(18601) @ 0: reporter [UVM/RELNOTES] 
+      (Specify +UVM_NO_RELNOTES to turn off this notice)
+  with `UVM_OBJECT_DO_NOT_NEED_CONSTRUCTOR undefined.
+
+  You are using a version of the UVM library that has been compiled
+  with `UVM_NO_DEPRECATED undefined.
+
+  You are using a version of the UVM library that has been compiled
+
+  ***********       IMPORTANT RELEASE NOTES         ************
+----------------------------------------------------------------
+(C) 2013-2014 NVIDIA Corporation
+(C) 2011-2013 Cypress Semiconductor Corp.
+(C) 2006-2014 Synopsys, Inc.
+(C) 2007-2014 Cadence Design Systems, Inc.
+(C) 2007-2014 Mentor Graphics Corporation
+
+
+----------------------------------------------------------------
+
+UVM_INFO /proj/xbuilds/SWIP/2020.2_0711_1805/installs/lin64/Vivado/2020.2/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv(18648) @ 0: reporter [NO_DPI_TSTNAME] UVM_NO_DPI defined--getting UVM_TESTNAME directly, without DPI
+UVM_INFO @ 0: reporter [RNTST] Running test peripheral_uvm_test...
+UVM_INFO /proj/xbuilds/SWIP/2020.2_0711_1805/installs/lin64/Vivado/2020.2/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv(20867) @ 0: reporter [UVM/COMP/NAMECHECK] This implementation of the component name checks requires DPI to be enabled
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_sequence.sv(49) @ 5000: uvm_test_top.environment.agent.sequencer@@base_sequence [peripheral_uvm_sequence] Base Sequence: Inside Body
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_driver.sv(58) @ 5000: uvm_test_top.environment.agent.driver [peripheral_uvm_driver] ip1 = 34, ip2 = 44
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_scoreboard.sv(67) @ 10000: uvm_test_top.environment.scoreboard [peripheral_uvm_scoreboard] Matched: ip1 = 34, ip2 = 44, out = 78
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_sequence.sv(49) @ 10000: uvm_test_top.environment.agent.sequencer@@base_sequence [peripheral_uvm_sequence] Base Sequence: Inside Body
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_driver.sv(58) @ 10000: uvm_test_top.environment.agent.driver [peripheral_uvm_driver] ip1 = 31, ip2 = 31
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_sequence.sv(49) @ 15000: uvm_test_top.environment.agent.sequencer@@base_sequence [peripheral_uvm_sequence] Base Sequence: Inside Body
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_driver.sv(58) @ 15000: uvm_test_top.environment.agent.driver [peripheral_uvm_driver] ip1 = 50, ip2 = 59
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_scoreboard.sv(67) @ 18000: uvm_test_top.environment.scoreboard [peripheral_uvm_scoreboard] Matched: ip1 = 31, ip2 = 31, out = 62
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_sequence.sv(49) @ 20000: uvm_test_top.environment.agent.sequencer@@base_sequence [peripheral_uvm_sequence] Base Sequence: Inside Body
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_driver.sv(58) @ 20000: uvm_test_top.environment.agent.driver [peripheral_uvm_driver] ip1 = 9, ip2 = 14
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_sequence.sv(49) @ 25000: uvm_test_top.environment.agent.sequencer@@base_sequence [peripheral_uvm_sequence] Base Sequence: Inside Body
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_driver.sv(58) @ 25000: uvm_test_top.environment.agent.driver [peripheral_uvm_driver] ip1 = 44, ip2 = 87
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_scoreboard.sv(67) @ 26000: uvm_test_top.environment.scoreboard [peripheral_uvm_scoreboard] Matched: ip1 = 9, ip2 = 14, out = 23
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_sequence.sv(49) @ 30000: uvm_test_top.environment.agent.sequencer@@base_sequence [peripheral_uvm_sequence] Base Sequence: Inside Body
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_driver.sv(58) @ 30000: uvm_test_top.environment.agent.driver [peripheral_uvm_driver] ip1 = 66, ip2 = 37
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_scoreboard.sv(67) @ 34000: uvm_test_top.environment.scoreboard [peripheral_uvm_scoreboard] Matched: ip1 = 44, ip2 = 87, out = 131
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_sequence.sv(49) @ 35000: uvm_test_top.environment.agent.sequencer@@base_sequence [peripheral_uvm_sequence] Base Sequence: Inside Body
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_driver.sv(58) @ 35000: uvm_test_top.environment.agent.driver [peripheral_uvm_driver] ip1 = 26, ip2 = 63
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_sequence.sv(49) @ 40000: uvm_test_top.environment.agent.sequencer@@base_sequence [peripheral_uvm_sequence] Base Sequence: Inside Body
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_driver.sv(58) @ 40000: uvm_test_top.environment.agent.driver [peripheral_uvm_driver] ip1 = 6, ip2 = 41
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_scoreboard.sv(67) @ 42000: uvm_test_top.environment.scoreboard [peripheral_uvm_scoreboard] Matched: ip1 = 26, ip2 = 63, out = 89
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_sequence.sv(49) @ 45000: uvm_test_top.environment.agent.sequencer@@base_sequence [peripheral_uvm_sequence] Base Sequence: Inside Body
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_driver.sv(58) @ 45000: uvm_test_top.environment.agent.driver [peripheral_uvm_driver] ip1 = 9, ip2 = 74
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_scoreboard.sv(67) @ 50000: uvm_test_top.environment.scoreboard [peripheral_uvm_scoreboard] Matched: ip1 = 9, ip2 = 74, out = 83
+----------------------------------------------------------------------------------------------------------
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_sequence.sv(49) @ 50000: uvm_test_top.environment.agent.sequencer@@base_sequence [peripheral_uvm_sequence] Base Sequence: Inside Body
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_driver.sv(58) @ 50000: uvm_test_top.environment.agent.driver [peripheral_uvm_driver] ip1 = 53, ip2 = 9
+UVM_INFO /home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_test.sv(66) @ 50000: uvm_test_top [peripheral_uvm_test] End of TestCase
+UVM_INFO /proj/xbuilds/SWIP/2020.2_0711_1805/installs/lin64/Vivado/2020.2/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv(19968) @ 50000: reporter [TEST_DONE] 'run' phase is ready to proceed to the 'extract' phase
+UVM_INFO /proj/xbuilds/SWIP/2020.2_0711_1805/installs/lin64/Vivado/2020.2/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv(13673) @ 50000: reporter [UVM/REPORT/SERVER] [peripheral_uvm_test]     1
+[peripheral_uvm_sequence]    10
+[peripheral_uvm_scoreboard]     6
+[peripheral_uvm_driver]    10
+[UVM/RELNOTES]     1
+[UVM/COMP/NAMECHECK]     1
+[TEST_DONE]     1
+[RNTST]     1
+[NO_DPI_TSTNAME]     1
+** Report counts by id
+UVM_FATAL :    0
+UVM_ERROR :    0
+UVM_WARNING :    0
+UVM_INFO :   32
+** Report counts by severity
+
+--- UVM Report Summary ---
+
+
+$finish called at time : 50 ns : File "/opt/Xilinx/Vivado/2020.2/data/system_verilog/uvm_1.2/xlnx_uvm_package.sv" Line 18699
+exit
+INFO: [Common 17-206] Exiting xsim at Mon Apr 10 20:45:57 2023...

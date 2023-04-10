@@ -1,0 +1,4 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/library/core/apb4/peripheral_uvm_testbench.sv" into library work
+INFO: [VRFC 10-311] analyzing module peripheral_uvm_testbench
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/user/GitHub/code/Architecture/PU-MSP430/verification/uvm/application/core/apb4/peripheral_design.sv" into library work
+INFO: [VRFC 10-311] analyzing module peripheral_adder
