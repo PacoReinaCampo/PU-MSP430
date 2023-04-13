@@ -1,1 +1,0 @@
-"peripheral_uvm_testbench" -relax -s "top" -timescale "1ns/1ps" 

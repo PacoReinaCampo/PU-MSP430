@@ -1,7 +1,0 @@
-Running: xsim.dir/top/xsimk -runall -simmode gui -testplusarg UVM_TESTNAME=peripheral_uvm_test -testplusarg UVM_VERBOSITY=UVM_LOW -wdb top.wdb -simrunnum 0 -socket 36883
-Design successfully loaded
-Design Loading Memory Usage: 39228 KB (Peak: 39228 KB)
-Design Loading CPU Usage: 0 ms
-Simulation completed
-Simulation Memory Usage: 126560 KB (Peak: 178496 KB)
-Simulation CPU Usage: 10 ms

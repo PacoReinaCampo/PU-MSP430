@@ -1,1 +1,0 @@
-  CREATE_STREAM @5000 {NAME:base_sequence T:Transactions SCOPE:uvm_test_top.environment.agent.sequencer STREAM:632}
