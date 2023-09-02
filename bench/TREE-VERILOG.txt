@@ -1,5 +1,5 @@
 verilog
-├── baremetal
+├── procedures
 │   ├── cases
 │   │   ├── pu_msp430_dac.sv
 │   │   └── pu_msp430_leds.sv
