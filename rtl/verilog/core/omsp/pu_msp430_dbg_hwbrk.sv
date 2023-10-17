@@ -113,8 +113,11 @@ module pu_msp430_dbg_hwbrk (
   wire       brk_ctl_wr = brk_reg_wr[BRK_CTL];
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) brk_ctl <= 5'h00;
-    else if (brk_ctl_wr) brk_ctl <= {`HWBRK_RANGE & dbg_din[4], dbg_din[3:0]};
+    if (dbg_rst) begin
+      brk_ctl <= 5'h00;
+    end else if (brk_ctl_wr) begin
+      brk_ctl <= {`HWBRK_RANGE & dbg_din[4], dbg_din[3:0]};
+    end
   end
 
   wire [7:0] brk_ctl_full = {3'b000, brk_ctl};
@@ -131,9 +134,13 @@ module pu_msp430_dbg_hwbrk (
   wire [5:0] brk_stat_clr = ~dbg_din[5:0];
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) brk_stat <= 6'h00;
-    else if (brk_stat_wr) brk_stat <= ((brk_stat & brk_stat_clr) | brk_stat_set);
-    else brk_stat <= (brk_stat | brk_stat_set);
+    if (dbg_rst) begin
+      brk_stat <= 6'h00;
+    end else if (brk_stat_wr) begin
+      brk_stat <= ((brk_stat & brk_stat_clr) | brk_stat_set);
+    end else begin
+      brk_stat <= (brk_stat | brk_stat_set);
+    end
   end
 
   wire [7:0] brk_stat_full = {2'b00, brk_stat};
@@ -146,8 +153,11 @@ module pu_msp430_dbg_hwbrk (
   wire        brk_addr0_wr = brk_reg_wr[BRK_ADDR0];
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) brk_addr0 <= 16'h0000;
-    else if (brk_addr0_wr) brk_addr0 <= dbg_din;
+    if (dbg_rst) begin
+      brk_addr0 <= 16'h0000;
+    end else if (brk_addr0_wr) begin
+      brk_addr0 <= dbg_din;
+    end
   end
 
   // BRK_ADDR1/DATA0 Register
@@ -157,8 +167,11 @@ module pu_msp430_dbg_hwbrk (
   wire        brk_addr1_wr = brk_reg_wr[BRK_ADDR1];
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) brk_addr1 <= 16'h0000;
-    else if (brk_addr1_wr) brk_addr1 <= dbg_din;
+    if (dbg_rst) begin
+      brk_addr1 <= 16'h0000;
+    end else if (brk_addr1_wr) begin
+      brk_addr1 <= dbg_din;
+    end
   end
 
   //============================================================================

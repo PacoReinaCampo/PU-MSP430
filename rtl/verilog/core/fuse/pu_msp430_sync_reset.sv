@@ -62,8 +62,11 @@ module pu_msp430_sync_reset (
   reg [1:0] data_sync;
 
   always @(posedge clk or posedge rst_a) begin
-    if (rst_a) data_sync <= 2'b11;
-    else data_sync <= {data_sync[0], 1'b0};
+    if (rst_a) begin
+      data_sync <= 2'b11;
+    end else begin
+      data_sync <= {data_sync[0], 1'b0};
+    end
   end
 
   assign rst_s = data_sync[1];

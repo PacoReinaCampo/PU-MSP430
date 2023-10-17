@@ -67,7 +67,9 @@ module pu_msp430_clock_gate (
   // LATCH the enable signal
   reg  enable_latch;
   always @(clk or enable_in) begin
-    if (~clk) enable_latch <= enable_in;
+    if (~clk) begin
+      enable_latch <= enable_in;
+    end
   end
 
   // AND gate

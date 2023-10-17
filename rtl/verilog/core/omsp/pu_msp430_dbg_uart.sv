@@ -99,8 +99,11 @@ module pu_msp430_dbg_uart (
   reg [1:0] rxd_buf;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) rxd_buf <= 2'h3;
-    else rxd_buf <= {rxd_buf[0], uart_rxd};
+    if (dbg_rst) begin
+      rxd_buf <= 2'h3;
+    end else begin
+      rxd_buf <= {rxd_buf[0], uart_rxd};
+    end
   end
 
   // Majority decision
@@ -110,8 +113,11 @@ module pu_msp430_dbg_uart (
   wire rxd_maj_nxt = (uart_rxd & rxd_buf[0]) | (uart_rxd & rxd_buf[1]) | (rxd_buf[0] & rxd_buf[1]);
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) rxd_maj <= 1'b1;
-    else rxd_maj <= rxd_maj_nxt;
+    if (dbg_rst) begin
+      rxd_maj <= 1'b1;
+    end else begin
+      rxd_maj <= rxd_maj_nxt;
+    end
   end
 
   wire        rxd_s = rxd_maj;
@@ -159,8 +165,11 @@ module pu_msp430_dbg_uart (
 
   // State machine
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) uart_state <= RX_SYNC;
-    else if (xfer_done | sync_done | mem_burst_wr | mem_burst_rd) uart_state <= uart_state_nxt;
+    if (dbg_rst) begin
+      uart_state <= RX_SYNC;
+    end else if (xfer_done | sync_done | mem_burst_wr | mem_burst_rd) begin
+      uart_state <= uart_state_nxt;
+    end
   end
 
   // Utility signals
@@ -178,9 +187,13 @@ module pu_msp430_dbg_uart (
   reg  sync_busy;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) sync_busy <= 1'b0;
-    else if ((uart_state == RX_SYNC) & rxd_fe) sync_busy <= 1'b1;
-    else if ((uart_state == RX_SYNC) & rxd_re) sync_busy <= 1'b0;
+    if (dbg_rst) begin
+      sync_busy <= 1'b0;
+    end else if ((uart_state == RX_SYNC) & rxd_fe) begin
+      sync_busy <= 1'b1;
+    end else if ((uart_state == RX_SYNC) & rxd_re) begin
+      sync_busy <= 1'b0;
+    end
   end
 
   assign sync_done = (uart_state == RX_SYNC) & rxd_re & sync_busy;
@@ -190,8 +203,11 @@ module pu_msp430_dbg_uart (
   reg [`DBG_UART_XFER_CNT_W+2:0] sync_cnt;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) sync_cnt <= {{`DBG_UART_XFER_CNT_W{1'b1}}, 3'b000};
-    else if (sync_busy | (~sync_busy & sync_cnt[2])) sync_cnt <= sync_cnt + {{`DBG_UART_XFER_CNT_W + 2{1'b0}}, 1'b1};
+    if (dbg_rst) begin
+      sync_cnt <= {{`DBG_UART_XFER_CNT_W{1'b1}}, 3'b000};
+    end else if (sync_busy | (~sync_busy & sync_cnt[2])) begin
+      sync_cnt <= sync_cnt + {{`DBG_UART_XFER_CNT_W + 2{1'b0}}, 1'b1};
+    end
   end
 
   wire [`DBG_UART_XFER_CNT_W-1:0] bit_cnt_max = sync_cnt[`DBG_UART_XFER_CNT_W+2:3];
@@ -214,17 +230,27 @@ module pu_msp430_dbg_uart (
   assign xfer_done = rx_active ? (xfer_bit == 4'ha) : (xfer_bit == 4'hb);
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) xfer_bit <= 4'h0;
-    else if (txd_start | rxd_start) xfer_bit <= 4'h1;
-    else if (xfer_done) xfer_bit <= 4'h0;
-    else if (xfer_bit_inc) xfer_bit <= xfer_bit + 4'h1;
+    if (dbg_rst) begin
+      xfer_bit <= 4'h0;
+    end else if (txd_start | rxd_start) begin
+      xfer_bit <= 4'h1;
+    end else if (xfer_done) begin
+      xfer_bit <= 4'h0;
+    end else if (xfer_bit_inc) begin
+      xfer_bit <= xfer_bit + 4'h1;
+    end
   end
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) xfer_cnt <= {`DBG_UART_XFER_CNT_W{1'b0}};
-    else if (rx_active & rxd_edge) xfer_cnt <= {1'b0, bit_cnt_max[`DBG_UART_XFER_CNT_W-1:1]};
-    else if (txd_start | xfer_bit_inc) xfer_cnt <= bit_cnt_max;
-    else if (|xfer_cnt) xfer_cnt <= xfer_cnt + {`DBG_UART_XFER_CNT_W{1'b1}};
+    if (dbg_rst) begin
+      xfer_cnt <= {`DBG_UART_XFER_CNT_W{1'b0}};
+    end else if (rx_active & rxd_edge) begin
+      xfer_cnt <= {1'b0, bit_cnt_max[`DBG_UART_XFER_CNT_W-1:1]};
+    end else if (txd_start | xfer_bit_inc) begin
+      xfer_cnt <= bit_cnt_max;
+    end else if (|xfer_cnt) begin
+      xfer_cnt <= xfer_cnt + {`DBG_UART_XFER_CNT_W{1'b1}};
+    end
   end
 
   // Receive/Transmit buffer
@@ -232,16 +258,23 @@ module pu_msp430_dbg_uart (
   assign xfer_buf_nxt = {rxd_s, xfer_buf[19:1]};
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) xfer_buf <= 20'h00000;
-    else if (dbg_rd_rdy) xfer_buf <= {1'b1, dbg_dout[15:8], 2'b01, dbg_dout[7:0], 1'b0};
-    else if (xfer_bit_inc) xfer_buf <= xfer_buf_nxt;
+    if (dbg_rst) begin
+      xfer_buf <= 20'h00000;
+    end else if (dbg_rd_rdy) begin
+      xfer_buf <= {1'b1, dbg_dout[15:8], 2'b01, dbg_dout[7:0], 1'b0};
+    end else if (xfer_bit_inc) begin
+      xfer_buf <= xfer_buf_nxt;
+    end
   end
 
   // Generate TXD output
   //------------------------
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_uart_txd <= 1'b1;
-    else if (xfer_bit_inc & tx_active) dbg_uart_txd <= xfer_buf[0];
+    if (dbg_rst) begin
+      dbg_uart_txd <= 1'b1;
+    end else if (xfer_bit_inc & tx_active) begin
+      dbg_uart_txd <= xfer_buf[0];
+    end
   end
 
   //=============================================================================
@@ -249,15 +282,21 @@ module pu_msp430_dbg_uart (
   //=============================================================================
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_addr <= 6'h00;
-    else if (cmd_valid) dbg_addr <= xfer_buf_nxt[`DBG_UART_ADDR];
+    if (dbg_rst) begin
+      dbg_addr <= 6'h00;
+    end else if (cmd_valid) begin
+      dbg_addr <= xfer_buf_nxt[`DBG_UART_ADDR];
+    end
   end
 
   reg dbg_bw;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_bw <= 1'b0;
-    else if (cmd_valid) dbg_bw <= xfer_buf_nxt[`DBG_UART_BW];
+    if (dbg_rst) begin
+      dbg_bw <= 1'b0;
+    end else if (cmd_valid) begin
+      dbg_bw <= xfer_buf_nxt[`DBG_UART_BW];
+    end
   end
 
   wire dbg_din_bw = mem_burst ? mem_bw : dbg_bw;

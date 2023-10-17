@@ -150,8 +150,11 @@ module pu_msp430_memory (
   reg [15:0] per_dout_val;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) per_dout_val <= 16'h0000;
-    else per_dout_val <= per_dout;
+    if (puc_rst) begin
+      per_dout_val <= 16'h0000;
+    end else begin
+      per_dout_val <= per_dout;
+    end
   end
 
   // Frontend data Mux
@@ -162,8 +165,11 @@ module pu_msp430_memory (
   reg fe_pmem_cen_dly;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) fe_pmem_cen_dly <= 1'b0;
-    else fe_pmem_cen_dly <= fe_pmem_cen;
+    if (puc_rst) begin
+      fe_pmem_cen_dly <= 1'b0;
+    end else begin
+      fe_pmem_cen_dly <= fe_pmem_cen;
+    end
   end
 
   wire fe_pmem_save = (fe_pmem_cen & ~fe_pmem_cen_dly) & ~dbg_halt_st;
@@ -186,13 +192,19 @@ module pu_msp430_memory (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_bckup or posedge puc_rst) begin
-    if (puc_rst) pmem_dout_bckup <= 16'h0000;
-    else pmem_dout_bckup <= pmem_dout;
+    if (puc_rst) begin
+      pmem_dout_bckup <= 16'h0000;
+    end else begin
+      pmem_dout_bckup <= pmem_dout;
+    end
   end
 `else
   always @(posedge mclk_bckup or posedge puc_rst) begin
-    if (puc_rst) pmem_dout_bckup <= 16'h0000;
-    else if (fe_pmem_save) pmem_dout_bckup <= pmem_dout;
+    if (puc_rst) begin
+      pmem_dout_bckup <= 16'h0000;
+    else if (fe_pmem_save) begin
+      pmem_dout_bckup <= pmem_dout;
+    end
   end
 `endif
 
@@ -200,9 +212,13 @@ module pu_msp430_memory (
   reg pmem_dout_bckup_sel;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) pmem_dout_bckup_sel <= 1'b0;
-    else if (fe_pmem_save) pmem_dout_bckup_sel <= 1'b1;
-    else if (fe_pmem_restore) pmem_dout_bckup_sel <= 1'b0;
+    if (puc_rst) begin
+      pmem_dout_bckup_sel <= 1'b0;
+    end else if (fe_pmem_save) begin
+      pmem_dout_bckup_sel <= 1'b1;
+    end else if (fe_pmem_restore) begin
+      pmem_dout_bckup_sel <= 1'b0;
+    end
   end
 
   assign fe_mdb_in = pmem_dout_bckup_sel ? pmem_dout_bckup : pmem_dout;
@@ -214,8 +230,11 @@ module pu_msp430_memory (
   reg [1:0] eu_mdb_in_sel;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) eu_mdb_in_sel <= 2'b00;
-    else eu_mdb_in_sel <= {~eu_pmem_cen, per_en};
+    if (puc_rst) begin
+      eu_mdb_in_sel <= 2'b00;
+    end else begin
+      eu_mdb_in_sel <= {~eu_pmem_cen, per_en};
+    end
   end
 
   // Mux
@@ -229,8 +248,11 @@ module pu_msp430_memory (
   reg [1:0] dbg_mem_din_sel;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) dbg_mem_din_sel <= 2'b00;
-    else dbg_mem_din_sel <= {~dbg_pmem_cen, dbg_per_en};
+    if (puc_rst) begin
+      dbg_mem_din_sel <= 2'b00;
+    end else begin
+      dbg_mem_din_sel <= {~dbg_pmem_cen, dbg_per_en};
+    end
   end
 `else
   wire [1:0] dbg_mem_din_sel = 2'b00;

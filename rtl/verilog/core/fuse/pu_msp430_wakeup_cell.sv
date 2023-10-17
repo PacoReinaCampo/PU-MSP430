@@ -92,8 +92,11 @@ module pu_msp430_wakeup_cell (
 
   // Wakeup capture
   always @(posedge wkup_clk or posedge wkup_rst) begin
-    if (wkup_rst) wkup_out <= 1'b0;
-    else wkup_out <= 1'b1;
+    if (wkup_rst) begin
+      wkup_out <= 1'b0;
+    end else begin
+      wkup_out <= 1'b1;
+    end
   end
 endmodule  // pu_msp430_wakeup_cell
 

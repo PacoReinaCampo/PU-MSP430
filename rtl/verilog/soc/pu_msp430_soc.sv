@@ -452,9 +452,13 @@ module pu_msp430_soc (
   assign omsp0_dmem_dout   = omsp0_dmem_dout_sel ? omsp0_dmem_dout_sp : omsp0_dmem_dout_dp;
 
   always @(posedge dco_clk or posedge dco_rst) begin
-    if (dco_rst) omsp0_dmem_dout_sel <= 1'b1;
-    else if (~omsp0_dmem_cen_sp) omsp0_dmem_dout_sel <= 1'b1;
-    else if (~omsp0_dmem_cen_dp) omsp0_dmem_dout_sel <= 1'b0;
+    if (dco_rst) begin
+      omsp0_dmem_dout_sel <= 1'b1;
+    end else if (~omsp0_dmem_cen_sp) begin
+      omsp0_dmem_dout_sel <= 1'b1;
+    end else if (~omsp0_dmem_cen_dp) begin
+      omsp0_dmem_dout_sel <= 1'b0;
+    end
   end
 
   // Memory muxing (CPU 1)
@@ -463,9 +467,13 @@ module pu_msp430_soc (
   assign omsp1_dmem_dout   = omsp1_dmem_dout_sel ? omsp1_dmem_dout_sp : omsp1_dmem_dout_dp;
 
   always @(posedge dco_clk or posedge dco_rst) begin
-    if (dco_rst) omsp1_dmem_dout_sel <= 1'b1;
-    else if (~omsp1_dmem_cen_sp) omsp1_dmem_dout_sel <= 1'b1;
-    else if (~omsp1_dmem_cen_dp) omsp1_dmem_dout_sel <= 1'b0;
+    if (dco_rst) begin
+      omsp1_dmem_dout_sel <= 1'b1;
+    end else if (~omsp1_dmem_cen_sp) begin
+      omsp1_dmem_dout_sel <= 1'b1;
+    end else if (~omsp1_dmem_cen_dp) begin
+      omsp1_dmem_dout_sel <= 1'b0;
+    end
   end
 
   //=============================================================================

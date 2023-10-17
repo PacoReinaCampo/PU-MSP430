@@ -122,13 +122,19 @@ module pu_msp430_clock_mux (
   assign in0_select = ~selection & ~in1_select_ss;
 
   always @(posedge clk_in0_inv or posedge reset) begin
-    if (reset) in0_select_s <= 1'b1;
-    else in0_select_s <= in0_select;
+    if (reset) begin
+      in0_select_s <= 1'b1;
+    end else begin
+      in0_select_s <= in0_select;
+    end
   end
 
   always @(posedge clk_in0 or posedge reset) begin
-    if (reset) in0_select_ss <= 1'b1;
-    else in0_select_ss <= in0_select_s;
+    if (reset) begin
+      in0_select_ss <= 1'b1;
+    end else begin
+      in0_select_ss <= in0_select_s;
+    end
   end
 
   assign in0_enable = in0_select_ss | scan_mode;
@@ -140,13 +146,19 @@ module pu_msp430_clock_mux (
   assign in1_select = selection & ~in0_select_ss;
 
   always @(posedge clk_in1_inv or posedge reset) begin
-    if (reset) in1_select_s <= 1'b0;
-    else in1_select_s <= in1_select;
+    if (reset) begin
+      in1_select_s <= 1'b0;
+    end else begin
+      in1_select_s <= in1_select;
+    end
   end
 
   always @(posedge clk_in1 or posedge reset) begin
-    if (reset) in1_select_ss <= 1'b0;
-    else in1_select_ss <= in1_select_s;
+    if (reset) begin
+      in1_select_ss <= 1'b0;
+    end else begin
+      in1_select_ss <= in1_select_s;
+    end
   end
 
   assign in1_enable    = in1_select_ss & ~scan_mode;
