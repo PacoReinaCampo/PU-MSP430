@@ -137,9 +137,13 @@ module pu_msp430_sfr (
 `ifdef NMI
   reg nmie;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) nmie <= 1'b0;
-    else if (nmi_acc) nmie <= 1'b0;
-    else if (ie1_wr) nmie <= ie1_nxt[4];
+    if (puc_rst) begin
+      nmie <= 1'b0;
+    end else if (nmi_acc) begin
+      nmie <= 1'b0;
+    end else if (ie1_wr) begin
+      nmie <= ie1_nxt[4];
+    end
   end
 `else
   wire nmie = 1'b0;
@@ -147,8 +151,11 @@ module pu_msp430_sfr (
 
 `ifdef WATCHDOG
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) wdtie <= 1'b0;
-    else if (ie1_wr) wdtie <= ie1_nxt[0];
+    if (puc_rst) begin
+      wdtie <= 1'b0;
+    end else if (ie1_wr) begin
+      wdtie <= ie1_nxt[0];
+    end
   end
 `else
   assign wdtie = 1'b0;
@@ -167,9 +174,13 @@ module pu_msp430_sfr (
   reg  nmiifg;
   wire nmi_edge;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) nmiifg <= 1'b0;
-    else if (nmi_edge) nmiifg <= 1'b1;
-    else if (ifg1_wr) nmiifg <= ifg1_nxt[4];
+    if (puc_rst) begin
+      nmiifg <= 1'b0;
+    end else if (nmi_edge) begin
+      nmiifg <= 1'b1;
+    end else if (ifg1_wr) begin
+      nmiifg <= ifg1_nxt[4];
+    end
   end
 `else
   wire nmiifg = 1'b0;
@@ -258,8 +269,11 @@ module pu_msp430_sfr (
   reg nmi_capture_rst;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) nmi_capture_rst <= 1'b1;
-    else nmi_capture_rst <= ifg1_wr & ~ifg1_nxt[4];
+    if (puc_rst) begin
+      nmi_capture_rst <= 1'b1;
+    end else begin
+      nmi_capture_rst <= ifg1_wr & ~ifg1_nxt[4];
+    end
   end
 
   // NMI event capture
@@ -300,8 +314,11 @@ module pu_msp430_sfr (
   reg nmi_dly;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) nmi_dly <= 1'b0;
-    else nmi_dly <= nmi_s;
+    if (puc_rst) begin
+      nmi_dly <= 1'b0;
+    end else begin
+      nmi_dly <= nmi_s;
+    end
   end
 
   // Edge detection
