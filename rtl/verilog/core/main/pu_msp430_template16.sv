@@ -113,8 +113,11 @@ module pu_msp430_template16 (
   wire              cntrl1_wr = reg_wr[CNTRL1];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cntrl1 <= 16'h0000;
-    else if (cntrl1_wr) cntrl1 <= per_din;
+    if (puc_rst) begin
+      cntrl1 <= 16'h0000;
+    end else if (cntrl1_wr) begin
+      cntrl1 <= per_din;
+    end
   end
 
   // CNTRL2 Register
@@ -124,8 +127,11 @@ module pu_msp430_template16 (
   wire        cntrl2_wr = reg_wr[CNTRL2];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cntrl2 <= 16'h0000;
-    else if (cntrl2_wr) cntrl2 <= per_din;
+    if (puc_rst) begin
+      cntrl2 <= 16'h0000;
+    end else if (cntrl2_wr) begin
+      cntrl2 <= per_din;
+    end
   end
 
   // CNTRL3 Register
@@ -135,8 +141,11 @@ module pu_msp430_template16 (
   wire        cntrl3_wr = reg_wr[CNTRL3];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cntrl3 <= 16'h0000;
-    else if (cntrl3_wr) cntrl3 <= per_din;
+    if (puc_rst) begin
+      cntrl3 <= 16'h0000;
+    end else if (cntrl3_wr) begin
+      cntrl3 <= per_din;
+    end
   end
 
   // CNTRL4 Register
@@ -146,8 +155,11 @@ module pu_msp430_template16 (
   wire        cntrl4_wr = reg_wr[CNTRL4];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cntrl4 <= 16'h0000;
-    else if (cntrl4_wr) cntrl4 <= per_din;
+    if (puc_rst) begin
+      cntrl4 <= 16'h0000;
+    end else if (cntrl4_wr) begin
+      cntrl4 <= per_din;
+    end
   end
 
   //============================================================================

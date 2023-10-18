@@ -132,16 +132,22 @@ module pu_msp430_dac #(
   wire cntrl1_wr = reg_wr[CNTRL1];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cntrl1 <= 4'h0;
-    else if (cntrl1_wr) cntrl1 <= per_din;
+    if (puc_rst) begin
+      cntrl1 <= 4'h0;
+    end else if (cntrl1_wr) begin
+      cntrl1 <= per_din;
+    end
   end
 
   // CNTRL2 Register
   wire cntrl2_wr = reg_wr[CNTRL2];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cntrl2 <= 4'h0;
-    else if (cntrl2_wr) cntrl2 <= per_din;
+    if (puc_rst) begin
+      cntrl2 <= 4'h0;
+    end else if (cntrl2_wr) begin
+      cntrl2 <= per_din;
+    end
   end
 
   //============================================================================
@@ -163,15 +169,22 @@ module pu_msp430_dac #(
   // SPI Clock divider
   reg [3:0] spi_clk_div;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) spi_clk_div <= SCLK_DIV;
-    else if (spi_clk_div == 0) spi_clk_div <= SCLK_DIV;
-    else spi_clk_div <= spi_clk_div - 1;
+    if (puc_rst) begin
+      spi_clk_div <= SCLK_DIV;
+    end else if (spi_clk_div == 0) begin
+      spi_clk_div <= SCLK_DIV;
+    end else begin
+      spi_clk_div <= spi_clk_div - 1;
+    end
   end
 
   // SPI Clock generation
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) sclk <= 1'b0;
-    else if (spi_clk_div == 0) sclk <= ~sclk;
+    if (puc_rst) begin
+      sclk <= 1'b0;
+    end else if (spi_clk_div == 0) begin
+      sclk <= ~sclk;
+    end
   end
 
   wire sclk_re = (spi_clk_div == 0) & ~sclk;
@@ -179,9 +192,13 @@ module pu_msp430_dac #(
   // SPI Transfer trigger
   reg  spi_tfx_trig;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) spi_tfx_trig <= 1'b0;
-    else if (dac_val_wr) spi_tfx_trig <= 1'b1;
-    else if (sclk_re & sync_n) spi_tfx_trig <= 1'b0;
+    if (puc_rst) begin
+      spi_tfx_trig <= 1'b0;
+    end else if (dac_val_wr) begin
+      spi_tfx_trig <= 1'b1;
+    end else if (sclk_re & sync_n) begin
+      spi_tfx_trig <= 1'b0;
+    end
   end
 
   wire       spi_tfx_init = spi_tfx_trig & sync_n;
@@ -190,29 +207,41 @@ module pu_msp430_dac #(
   reg  [3:0] spi_cnt;
   wire       spi_cnt_done = (spi_cnt == 4'hf);
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) spi_cnt <= 4'hf;
+    if (puc_rst) begin
+      spi_cnt <= 4'hf;
     else if (sclk_re) begin
-      if (spi_tfx_init) spi_cnt <= 4'he;
-      else if (~spi_cnt_done) spi_cnt <= spi_cnt - 1;
+      if (spi_tfx_init) begin
+        spi_cnt <= 4'he;
+      end else if (~spi_cnt_done) begin
+        spi_cnt <= spi_cnt - 1;
+      end
     end
   end
 
   // Frame synchronization signal (low active)
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) sync_n <= 1'b1;
+    if (puc_rst) begin
+      sync_n <= 1'b1;
     else if (sclk_re) begin
-      if (spi_tfx_init) sync_n <= 1'b0;
-      else if (spi_cnt_done) sync_n <= 1'b1;
+      if (spi_tfx_init) 
+        sync_n <= 1'b0;
+      end else if (spi_cnt_done) begin
+        sync_n <= 1'b1;
+      end
     end
   end
 
   // Value to be shifted_out
   reg [15:0] dac_shifter;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) dac_shifter <= 16'h000;
+    if (puc_rst) begin
+      dac_shifter <= 16'h000;
     else if (sclk_re) begin
-      if (spi_tfx_init) dac_shifter <= {2'b00, dac_pd1, dac_pd0, dac_val[11:0]};
-      else dac_shifter <= {dac_shifter[14:0], 1'b0};
+      if (spi_tfx_init) 
+        dac_shifter <= {2'b00, dac_pd1, dac_pd0, dac_val[11:0]};
+      end else begin
+        dac_shifter <= {dac_shifter[14:0], 1'b0};
+      end
     end
   end
 

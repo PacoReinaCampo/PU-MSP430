@@ -114,8 +114,11 @@ module pu_msp430_template08 (
   wire [       7:0] cntrl1_nxt = CNTRL1[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cntrl1 <= 8'h00;
-    else if (cntrl1_wr) cntrl1 <= cntrl1_nxt;
+    if (puc_rst) begin
+      cntrl1 <= 8'h00;
+    end else if (cntrl1_wr) begin
+      cntrl1 <= cntrl1_nxt;
+    end
   end
 
   // CNTRL2 Register
@@ -126,8 +129,11 @@ module pu_msp430_template08 (
   wire [7:0] cntrl2_nxt = CNTRL2[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cntrl2 <= 8'h00;
-    else if (cntrl2_wr) cntrl2 <= cntrl2_nxt;
+    if (puc_rst) begin
+      cntrl2 <= 8'h00;
+    end else if (cntrl2_wr) begin
+      cntrl2 <= cntrl2_nxt;
+    end  
   end
 
   // CNTRL3 Register
@@ -138,8 +144,11 @@ module pu_msp430_template08 (
   wire [7:0] cntrl3_nxt = CNTRL3[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cntrl3 <= 8'h00;
-    else if (cntrl3_wr) cntrl3 <= cntrl3_nxt;
+    if (puc_rst) begin
+      cntrl3 <= 8'h00;
+    end else if (cntrl3_wr) begin
+      cntrl3 <= cntrl3_nxt;
+    end
   end
 
   // CNTRL4 Register
@@ -150,8 +159,11 @@ module pu_msp430_template08 (
   wire [7:0] cntrl4_nxt = CNTRL4[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cntrl4 <= 8'h00;
-    else if (cntrl4_wr) cntrl4 <= cntrl4_nxt;
+    if (puc_rst) begin
+      cntrl4 <= 8'h00;
+    end else if (cntrl4_wr) begin
+      cntrl4 <= cntrl4_nxt;
+    end
   end
 
   //============================================================================

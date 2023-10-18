@@ -110,15 +110,21 @@ module pu_msp430_dbg_i2c (
   reg  [1:0] scl_buf;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) scl_buf <= 2'h3;
-    else scl_buf <= {scl_buf[0], scl_sync};
+    if (dbg_rst) begin
+      scl_buf <= 2'h3;
+    end else begin
+      scl_buf <= {scl_buf[0], scl_sync};
+    end
   end
 
   reg [1:0] sda_in_buf;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) sda_in_buf <= 2'h3;
-    else sda_in_buf <= {sda_in_buf[0], sda_in_sync};
+    if (dbg_rst) begin
+      sda_in_buf <= 2'h3;
+    end else begin
+      sda_in_buf <= {sda_in_buf[0], sda_in_sync};
+    end
   end
 
   // SCL/SDA Majority decision
@@ -135,8 +141,11 @@ module pu_msp430_dbg_i2c (
   reg  sda_in_dly;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) sda_in_dly <= 1'b1;
-    else sda_in_dly <= sda_in;
+    if (dbg_rst) begin
+      sda_in_dly <= 1'b1;
+    end else begin
+      sda_in_dly <= sda_in;
+    end
   end
 
   wire sda_in_fe = sda_in_dly & ~sda_in;
@@ -147,8 +156,11 @@ module pu_msp430_dbg_i2c (
   reg  scl_dly;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) scl_dly <= 1'b1;
-    else scl_dly <= scl;
+    if (dbg_rst) begin
+      scl_dly <= 1'b1;
+    end else begin
+      scl_dly <= scl;
+    end
   end
 
   wire       scl_fe = scl_dly & ~scl;
@@ -158,8 +170,11 @@ module pu_msp430_dbg_i2c (
   // Delayed SCL Rising-Edge for SDA data sampling
   reg  [1:0] scl_re_dly;
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) scl_re_dly <= 2'b00;
-    else scl_re_dly <= {scl_re_dly[0], scl_re};
+    if (dbg_rst) begin
+      scl_re_dly <= 2'b00;
+    end else begin
+      scl_re_dly <= {scl_re_dly[0], scl_re};
+    end
   end
 
   wire scl_sample = scl_re_dly[1];
@@ -192,9 +207,13 @@ module pu_msp430_dbg_i2c (
   reg  i2c_active_seq;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) i2c_active_seq <= 1'b0;
-    else if (start_detect) i2c_active_seq <= 1'b1;
-    else if (stop_detect || i2c_addr_not_valid) i2c_active_seq <= 1'b0;
+    if (dbg_rst) begin
+      i2c_active_seq <= 1'b0;
+    end else if (start_detect) begin
+      i2c_active_seq <= 1'b1;
+    end else if (stop_detect || i2c_addr_not_valid) begin
+      i2c_active_seq <= 1'b0;
+    end
   end
 
   wire       i2c_active = i2c_active_seq & ~stop_detect;
@@ -243,8 +262,11 @@ module pu_msp430_dbg_i2c (
 
   // State machine
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) i2c_state <= RX_ADDR;
-    else i2c_state <= i2c_state_nxt;
+    if (dbg_rst) begin
+      i2c_state <= RX_ADDR;
+    end else begin
+      i2c_state <= i2c_state_nxt;
+    end
   end
 
   //=============================================================================
@@ -266,15 +288,18 @@ module pu_msp430_dbg_i2c (
 
   wire [7:0] shift_tx_val;
 
-  wire [8:0] shift_buf_nxt = shift_buf_rx_init ? 9'h001 :  // RX Init 
-  shift_buf_tx_init ? {shift_tx_val, 1'b1} :  // TX Init 
+  wire [8:0] shift_buf_nxt = shift_buf_rx_init ? 9'h001 :  // RX Init
+  shift_buf_tx_init ? {shift_tx_val, 1'b1} :  // TX Init
   shift_buf_rx_en ? {shift_buf[7:0], sda_in} :  // RX Shift
   shift_buf_tx_en ? {shift_buf[7:0], 1'b0} :  // TX Shift
   shift_buf[8:0];  // Hold
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) shift_buf <= 9'h001;
-    else shift_buf <= shift_buf_nxt;
+    if (dbg_rst) begin
+      shift_buf <= 9'h001;
+    end else begin
+      shift_buf <= shift_buf_nxt;
+    end
   end
 
   // Detect when the received I2C device address is not valid
@@ -293,8 +318,11 @@ module pu_msp430_dbg_i2c (
   //=============================================================================
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_i2c_sda_out <= 1'b1;
-    else if (scl_fe) dbg_i2c_sda_out <= ~((i2c_state_nxt == RX_ADDR_ACK) || (i2c_state_nxt == RX_DATA_ACK) || (shift_buf_tx_en & ~shift_buf[8]));
+    if (dbg_rst) begin
+      dbg_i2c_sda_out <= 1'b1;
+    end else if (scl_fe) begin
+      dbg_i2c_sda_out <= ~((i2c_state_nxt == RX_ADDR_ACK) || (i2c_state_nxt == RX_DATA_ACK) || (shift_buf_tx_en & ~shift_buf[8]));
+    end
   end
 
   //=============================================================================
@@ -335,8 +363,11 @@ module pu_msp430_dbg_i2c (
 
   // State machine
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_state <= RX_CMD;
-    else dbg_state <= dbg_state_nxt;
+    if (dbg_rst) begin
+      dbg_state <= RX_CMD;
+    end else begin
+      dbg_state <= dbg_state_nxt;
+    end
   end
 
   // Utility signals
@@ -368,33 +399,46 @@ module pu_msp430_dbg_i2c (
   reg [7:0] dbg_din_lo;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_din_lo <= 8'h00;
-    else if (rx_lo_valid) dbg_din_lo <= shift_buf[7:0];
+    if (dbg_rst) begin
+      dbg_din_lo <= 8'h00;
+    end else if (rx_lo_valid) begin
+      dbg_din_lo <= shift_buf[7:0];
+    end
   end
 
   reg [7:0] dbg_din_hi;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_din_hi <= 8'h00;
-    else if (rx_lo_valid) dbg_din_hi <= 8'h00;
-    else if (rx_hi_valid) dbg_din_hi <= shift_buf[7:0];
+    if (dbg_rst) begin
+      dbg_din_hi <= 8'h00;
+    end else if (rx_lo_valid) begin
+      dbg_din_hi <= 8'h00;
+    end else if (rx_hi_valid) begin
+      dbg_din_hi <= shift_buf[7:0];
+    end
   end
 
   assign dbg_din = {dbg_din_hi, dbg_din_lo};
 
   // Debug register data write command
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_wr <= 1'b0;
-    else dbg_wr <= (mem_burst & mem_bw) ? rx_lo_valid : (mem_burst & ~mem_bw) ? rx_hi_valid : dbg_bw ? rx_lo_valid : rx_hi_valid;
+    if (dbg_rst) begin
+      dbg_wr <= 1'b0;
+    end else begin
+      dbg_wr <= (mem_burst & mem_bw) ? rx_lo_valid : (mem_burst & ~mem_bw) ? rx_hi_valid : dbg_bw ? rx_lo_valid : rx_hi_valid;
+    end
   end
 
   // Debug register data read command
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_rd <= 1'b0;
-    else dbg_rd <= (mem_burst & mem_bw) ? (shift_tx_data_done & (dbg_state == TX_BYTE_LO)) : (mem_burst & ~mem_bw) ? (shift_tx_data_done & (dbg_state == TX_BYTE_HI)) : cmd_valid ? ~shift_buf[7] : 1'b0;
+    if (dbg_rst) begin
+      dbg_rd <= 1'b0;
+    end else begin
+      dbg_rd <= (mem_burst & mem_bw) ? (shift_tx_data_done & (dbg_state == TX_BYTE_LO)) : (mem_burst & ~mem_bw) ? (shift_tx_data_done & (dbg_state == TX_BYTE_HI)) : cmd_valid ? ~shift_buf[7] : 1'b0;
+    end
   end
 
-  // Debug register data read value 
+  // Debug register data read value
   assign shift_tx_val = (dbg_state == TX_BYTE_HI) ? dbg_dout[15:8] : dbg_dout[7:0];
 endmodule
 
