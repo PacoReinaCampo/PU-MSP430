@@ -92,7 +92,7 @@ module pu_msp430_ram_dp #(
         mem[ram_addrb] <= ram_dinb;
       end else if (ram_wenb == 2'b01) begin
         mem[ram_addrb] <= {ram_dinb[15:8], mem_valb[7:0]};
-      else if (ram_wenb == 2'b10) begin
+      end else if (ram_wenb == 2'b10) begin
         mem[ram_addrb] <= {mem_valb[15:8], ram_dinb[7:0]};
       end
       ram_addrb_reg <= ram_addrb;

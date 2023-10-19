@@ -442,8 +442,8 @@ module pu_msp430_debug (
 
     inst_full = myFormat(inst_full, inst_ad, 1);
 
-    if (opcode == 16'h4303) inst_begin
-      full = "NOP";
+    if (opcode == 16'h4303) begin
+      inst_full = "NOP";
     end  
 
     if (opcode == `DBG_SWBRK_OP) begin

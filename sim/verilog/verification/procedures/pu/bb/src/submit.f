@@ -45,16 +45,16 @@
 // Testbench related
 //=============================================================================
 
-+incdir+../../../../../../../bench/verilog/baremetal/main/
++incdir+../../../../../../../bench/verilog/procedures/main/
 
-../../../../../../../bench/verilog/baremetal/main/pu_msp430_ram_d1.sv
-../../../../../../../bench/verilog/baremetal/main/pu_msp430_ram_d2.sv
-../../../../../../../bench/verilog/baremetal/main/pu_msp430_ram_dp.sv
-../../../../../../../bench/verilog/baremetal/main/pu_msp430_ram_p2.sv
-../../../../../../../bench/verilog/baremetal/main/pu_msp430_ram_sp.sv
-../../../../../../../bench/verilog/baremetal/main/pu_msp430_glbl.sv
-../../../../../../../bench/verilog/baremetal/main/pu_msp430_debug.sv
-../../../../../../../bench/verilog/baremetal/main/pu_msp430_testbench.sv
+../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_d1.sv
+../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_d2.sv
+../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_dp.sv
+../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_p2.sv
+../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_sp.sv
+../../../../../../../bench/verilog/procedures/main/pu_msp430_glbl.sv
+../../../../../../../bench/verilog/procedures/main/pu_msp430_debug.sv
+../../../../../../../bench/verilog/procedures/main/pu_msp430_testbench.sv
 
 
 //=============================================================================
