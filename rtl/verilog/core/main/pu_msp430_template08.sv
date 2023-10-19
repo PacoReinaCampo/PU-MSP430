@@ -133,7 +133,7 @@ module pu_msp430_template08 (
       cntrl2 <= 8'h00;
     end else if (cntrl2_wr) begin
       cntrl2 <= cntrl2_nxt;
-    end  
+    end
   end
 
   // CNTRL3 Register

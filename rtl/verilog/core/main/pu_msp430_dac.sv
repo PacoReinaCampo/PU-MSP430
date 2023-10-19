@@ -209,7 +209,7 @@ module pu_msp430_dac #(
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst) begin
       spi_cnt <= 4'hf;
-    else if (sclk_re) begin
+    end else if (sclk_re) begin
       if (spi_tfx_init) begin
         spi_cnt <= 4'he;
       end else if (~spi_cnt_done) begin
@@ -222,8 +222,8 @@ module pu_msp430_dac #(
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst) begin
       sync_n <= 1'b1;
-    else if (sclk_re) begin
-      if (spi_tfx_init) 
+    end else if (sclk_re) begin
+      if (spi_tfx_init) begin
         sync_n <= 1'b0;
       end else if (spi_cnt_done) begin
         sync_n <= 1'b1;
@@ -236,8 +236,8 @@ module pu_msp430_dac #(
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst) begin
       dac_shifter <= 16'h000;
-    else if (sclk_re) begin
-      if (spi_tfx_init) 
+    end else if (sclk_re) begin
+      if (spi_tfx_init) begin
         dac_shifter <= {2'b00, dac_pd1, dac_pd0, dac_val[11:0]};
       end else begin
         dac_shifter <= {dac_shifter[14:0], 1'b0};

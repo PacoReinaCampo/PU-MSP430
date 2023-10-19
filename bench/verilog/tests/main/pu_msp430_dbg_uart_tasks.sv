@@ -192,7 +192,9 @@ task dbg_uart_wr;
   begin
     dbg_uart_tx(DBG_WR | dbg_reg);
     dbg_uart_tx(dbg_data[7:0]);
-    if (~dbg_reg[6]) dbg_uart_tx(dbg_data[15:8]);
+    if (~dbg_reg[6]) begin
+      dbg_uart_tx(dbg_data[15:8]);
+    end
   end
 endtask
 
@@ -209,7 +211,9 @@ task dbg_uart_rd;
     rxbuf_hi = 8'h00;
     dbg_uart_tx(DBG_RD | dbg_reg);
     dbg_uart_rx(rxbuf_lo);
-    if (~dbg_reg[6]) dbg_uart_rx(rxbuf_hi);
+    if (~dbg_reg[6]) begin
+      dbg_uart_rx(rxbuf_hi);
+    end
 
     dbg_uart_buf = {rxbuf_hi, rxbuf_lo};
   end

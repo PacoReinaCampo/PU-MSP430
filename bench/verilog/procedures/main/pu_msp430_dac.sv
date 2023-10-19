@@ -69,9 +69,13 @@ module pu_msp430_dac (
   wire       spi_cnt_done = (spi_cnt == 4'hf);
 
   always @(negedge sclk) begin
-    if (sync_n) spi_cnt <= 4'hf;
-    else if (spi_tfx_start) spi_cnt <= 4'he;
-    else if (~spi_cnt_done) spi_cnt <= spi_cnt - 1;
+    if (sync_n) begin
+      spi_cnt <= 4'hf;
+    end else if (spi_tfx_start) begin
+      spi_cnt <= 4'he;
+    end else if (~spi_cnt_done) begin
+      spi_cnt <= spi_cnt - 1;
+    end
   end
 
   wire        spi_tfx_done = sync_n & ~sync_dly_n & spi_cnt_done;

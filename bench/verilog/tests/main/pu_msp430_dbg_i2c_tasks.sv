@@ -234,7 +234,9 @@ task dbg_i2c_tx16;
     dbg_i2c_ack_rd;
     dbg_i2c_send(dbg_data[15:8]);  // write MSB
     dbg_i2c_ack_rd;
-    if (is_last) dbg_i2c_stop;  // STOP CONDITION
+    if (is_last) begin
+      dbg_i2c_stop;  // STOP CONDITION
+    end  
   end
 endtask
 
@@ -270,7 +272,9 @@ task dbg_i2c_tx8;
   begin
     dbg_i2c_send(dbg_data);  // write LSB
     dbg_i2c_ack_rd;
-    if (is_last) dbg_i2c_stop;  // STOP CONDITION
+    if (is_last) begin
+      dbg_i2c_stop;  // STOP CONDITION
+    end
   end
 endtask
 
@@ -286,9 +290,11 @@ task dbg_i2c_wr;
     dbg_i2c_tx8({I2C_ADDR, 1'b0}, 0);  // Device Address + Write access
     dbg_i2c_tx8(DBG_WR | dbg_reg, 0);  // Command
 
-    if (~dbg_reg[6]) dbg_i2c_tx16(dbg_data, 1);
-    else dbg_i2c_tx8(dbg_data[7:0], 1);
-
+    if (~dbg_reg[6]) begin
+      dbg_i2c_tx16(dbg_data, 1);
+    end else begin
+      dbg_i2c_tx8(dbg_data[7:0], 1);
+    end
   end
 endtask
 
@@ -311,8 +317,11 @@ task dbg_i2c_rd;
     dbg_i2c_start;  // START
     dbg_i2c_tx8({I2C_ADDR, 1'b1}, 0);  // Device Address + Read access
 
-    if (~dbg_reg[6]) dbg_i2c_rx16(1);
-    else dbg_i2c_rx8(1);
+    if (~dbg_reg[6]) begin
+      dbg_i2c_rx16(1);
+    end else begin
+      dbg_i2c_rx8(1);
+    end
   end
 endtask
 

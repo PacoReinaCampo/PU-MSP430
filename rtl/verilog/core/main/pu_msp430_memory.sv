@@ -202,7 +202,7 @@ module pu_msp430_memory (
   always @(posedge mclk_bckup or posedge puc_rst) begin
     if (puc_rst) begin
       pmem_dout_bckup <= 16'h0000;
-    else if (fe_pmem_save) begin
+    end else if (fe_pmem_save) begin
       pmem_dout_bckup <= pmem_dout;
     end
   end

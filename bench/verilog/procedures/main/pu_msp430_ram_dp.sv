@@ -73,9 +73,13 @@ module pu_msp430_ram_dp #(
 
   always @(posedge ram_clka) begin
     if (~ram_cena && (ram_addra < (MEM_SIZE / 2))) begin
-      if (ram_wena == 2'b00) mem[ram_addra] <= ram_dina;
-      else if (ram_wena == 2'b01) mem[ram_addra] <= {ram_dina[15:8], mem_vala[7:0]};
-      else if (ram_wena == 2'b10) mem[ram_addra] <= {mem_vala[15:8], ram_dina[7:0]};
+      if (ram_wena == 2'b00) begin
+        mem[ram_addra] <= ram_dina;
+      end else if (ram_wena == 2'b01) begin
+        mem[ram_addra] <= {ram_dina[15:8], mem_vala[7:0]};
+      end else if (ram_wena == 2'b10) begin
+        mem[ram_addra] <= {mem_vala[15:8], ram_dina[7:0]};
+      end
       ram_addra_reg <= ram_addra;
     end
   end
@@ -84,9 +88,13 @@ module pu_msp430_ram_dp #(
 
   always @(posedge ram_clkb) begin
     if (~ram_cenb && (ram_addrb < (MEM_SIZE / 2))) begin
-      if (ram_wenb == 2'b00) mem[ram_addrb] <= ram_dinb;
-      else if (ram_wenb == 2'b01) mem[ram_addrb] <= {ram_dinb[15:8], mem_valb[7:0]};
-      else if (ram_wenb == 2'b10) mem[ram_addrb] <= {mem_valb[15:8], ram_dinb[7:0]};
+      if (ram_wenb == 2'b00) begin
+        mem[ram_addrb] <= ram_dinb;
+      end else if (ram_wenb == 2'b01) begin
+        mem[ram_addrb] <= {ram_dinb[15:8], mem_valb[7:0]};
+      else if (ram_wenb == 2'b10) begin
+        mem[ram_addrb] <= {mem_valb[15:8], ram_dinb[7:0]};
+      end
       ram_addrb_reg <= ram_addrb;
     end
   end

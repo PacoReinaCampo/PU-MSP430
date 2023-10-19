@@ -79,7 +79,9 @@ module pu_msp430_debug (
       j = 0;
       for (i = 0; i < 32; i = i + 1) begin  // Copy string2
         myFormat[8*i +: 8] = string2[8*i +: 8];
-        if ((string2[8*i +: 8] == 0) && (j == 0)) j = i;
+        if ((string2[8*i +: 8] == 0) && (j == 0)) begin
+          j = i;
+        end
       end
 
       for (i = 0; i < space; i = i + 1)  // Add spaces
@@ -300,9 +302,11 @@ module pu_msp430_debug (
   wire [     3:0] src_reg = (inst_type == "SIG-OP") ? opcode[3:0] : opcode[11:8];
 
   always @(src_reg or inst_type) begin
-    if (inst_type == "IRQ") inst_src = "";
-    else if (inst_type == "JUMP") inst_src = "";
-    else if ((inst_type == "SIG-OP") || (inst_type == "TWO-OP"))
+    if (inst_type == "IRQ") begin
+      inst_src = "";
+    end else if (inst_type == "JUMP") begin
+      inst_src = "";
+    end else if ((inst_type == "SIG-OP") || (inst_type == "TWO-OP"))begin
       case (src_reg)
         4'b0000: inst_src = "r0";
         4'b0001: inst_src = "r1";
@@ -321,15 +325,20 @@ module pu_msp430_debug (
         4'b1110: inst_src = "r14";
         default: inst_src = "r15";
       endcase
+    end
   end
 
   // Destination register
   reg [8*32-1:0] inst_dst;
+
   always @(opcode or inst_type) begin
-    if (inst_type == "IRQ") inst_dst = "";
-    else if (inst_type == "SIG-OP") inst_dst = "";
-    else if (inst_type == "JUMP") inst_dst = "";
-    else if (inst_type == "TWO-OP")
+    if (inst_type == "IRQ") begin
+      inst_dst = "";
+    end else if (inst_type == "SIG-OP") begin
+      inst_dst = "";
+    end else if (inst_type == "JUMP") begin
+      inst_dst = "";
+    end else if (inst_type == "TWO-OP") begin
       case (opcode[3:0])
         4'b0000: inst_dst = "r0";
         4'b0001: inst_dst = "r1";
@@ -348,6 +357,7 @@ module pu_msp430_debug (
         4'b1110: inst_dst = "r14";
         default: inst_dst = "r15";
       endcase
+    end
   end
 
   // Source Addressing mode
@@ -394,18 +404,19 @@ module pu_msp430_debug (
   // Destination Addressing mode
   reg [8*32-1:0] inst_ad;
   always @(opcode or inst_type or inst_dst) begin
-    if (inst_type != "TWO-OP") inst_ad = "";
-    else if (opcode[3:0] == 4'h2)  // Addressing mode using R2
+    if (inst_type != "TWO-OP") begin
+      inst_ad = "";
+    end else if (opcode[3:0] == 4'h2) begin  // Addressing mode using R2
       case (opcode[7])
         1'b1:    inst_ad = "&EDE";
         default: inst_ad = inst_dst;
       endcase
-    else if (opcode[3:0] == 4'h0)  // Addressing mode using R0
+    end else if (opcode[3:0] == 4'h0) begin  // Addressing mode using R0
       case (opcode[7])
         2'b1:    inst_ad = "EDE";
         default: inst_ad = inst_dst;
       endcase
-    else  // General Addressing mode
+    end else begin  // General Addressing mode
       case (opcode[7])
         2'b1: begin
           inst_ad = myFormat("x(", inst_dst, 0);
@@ -413,6 +424,7 @@ module pu_msp430_debug (
         end
         default: inst_ad = inst_dst;
       endcase
+    end
   end
 
   // Currently executed instruction
@@ -423,17 +435,30 @@ module pu_msp430_debug (
   always @(inst_type or inst_name or inst_bw or inst_as or inst_ad) begin
     inst_full = myFormat(inst_name, inst_bw, 0);
     inst_full = myFormat(inst_full, inst_as, 1);
-    if (inst_type == "TWO-OP") inst_full = myFormat(inst_full, ",", 0);
+
+    if (inst_type == "TWO-OP") begin
+      inst_full = myFormat(inst_full, ",", 0);
+    end  
+
     inst_full = myFormat(inst_full, inst_ad, 1);
-    if (opcode == 16'h4303) inst_full = "NOP";
-    if (opcode == `DBG_SWBRK_OP) inst_full = "SBREAK";
+
+    if (opcode == 16'h4303) inst_begin
+      full = "NOP";
+    end  
+
+    if (opcode == `DBG_SWBRK_OP) begin
+      inst_full = "SBREAK";
+    end  
   end
 
   // Instruction program counter
   //================================
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) inst_pc <= 16'h0000;
-    else if (decode) inst_pc <= pc;
+    if (puc_rst) begin
+      inst_pc <= 16'h0000;
+    end else if (decode) begin
+      inst_pc <= pc;
+    end  
   end
 endmodule  // pu_msp430_debug
