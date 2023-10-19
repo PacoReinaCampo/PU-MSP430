@@ -153,13 +153,19 @@ module pu_msp430_multiplier (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst) op1 <= 16'h0000;
-    else op1 <= per_din_msk;
+    if (puc_rst) begin
+      op1 <= 16'h0000;
+    end else begin
+      op1 <= per_din_msk;
+    end
   end
 `else
   always @(posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst) op1 <= 16'h0000;
-    else if (op1_wr) op1 <= per_din_msk;
+    if (puc_rst) begin
+      op1 <= 16'h0000;
+    end else if (op1_wr) begin
+      op1 <= per_din_msk;
+    end
   end
 `endif
 
@@ -186,13 +192,19 @@ module pu_msp430_multiplier (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_op2 or posedge puc_rst) begin
-    if (puc_rst) op2 <= 16'h0000;
-    else op2 <= per_din_msk;
+    if (puc_rst) begin
+      op2 <= 16'h0000;
+    end else begin
+      op2 <= per_din_msk;
+    end
   end
 `else
   always @(posedge mclk_op2 or posedge puc_rst) begin
-    if (puc_rst) op2 <= 16'h0000;
-    else if (op2_wr) op2 <= per_din_msk;
+    if (puc_rst) begin
+      op2 <= 16'h0000;
+    end else if (op2_wr) begin
+      op2 <= per_din_msk;
+    end
   end
 `endif
 
@@ -221,17 +233,27 @@ module pu_msp430_multiplier (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_reslo or posedge puc_rst) begin
-    if (puc_rst) reslo <= 16'h0000;
-    else if (reslo_wr) reslo <= per_din_msk;
-    else if (result_clr) reslo <= 16'h0000;
-    else reslo <= reslo_nxt;
+    if (puc_rst) begin
+      reslo <= 16'h0000;
+    end else if (reslo_wr) begin
+      reslo <= per_din_msk;
+    end else if (result_clr) begin
+      reslo <= 16'h0000;
+    end else begin
+      reslo <= reslo_nxt;
+    end
   end
 `else
   always @(posedge mclk_reslo or posedge puc_rst) begin
-    if (puc_rst) reslo <= 16'h0000;
-    else if (reslo_wr) reslo <= per_din_msk;
-    else if (result_clr) reslo <= 16'h0000;
-    else if (result_wr) reslo <= reslo_nxt;
+    if (puc_rst) begin
+      reslo <= 16'h0000;
+    end else if (reslo_wr) begin
+      reslo <= per_din_msk;
+    end else if (result_clr) begin
+      reslo <= 16'h0000;
+    end else if (result_wr) begin
+      reslo <= reslo_nxt;
+    end
   end
 `endif
 
@@ -260,17 +282,27 @@ module pu_msp430_multiplier (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_reshi or posedge puc_rst) begin
-    if (puc_rst) reshi <= 16'h0000;
-    else if (reshi_wr) reshi <= per_din_msk;
-    else if (result_clr) reshi <= 16'h0000;
-    else reshi <= reshi_nxt;
+    if (puc_rst) begin
+      reshi <= 16'h0000;
+    end else if (reshi_wr) begin
+      reshi <= per_din_msk;
+    end else if (result_clr) begin
+      reshi <= 16'h0000;
+    end else begin
+      reshi <= reshi_nxt;
+    end
   end
 `else
   always @(posedge mclk_reshi or posedge puc_rst) begin
-    if (puc_rst) reshi <= 16'h0000;
-    else if (reshi_wr) reshi <= per_din_msk;
-    else if (result_clr) reshi <= 16'h0000;
-    else if (result_wr) reshi <= reshi_nxt;
+    if (puc_rst) begin
+      reshi <= 16'h0000;
+    end else if (reshi_wr) begin
+      reshi <= per_din_msk;
+    end else if (result_clr) begin
+      reshi <= 16'h0000;
+    end else if (result_wr) begin
+      reshi <= reshi_nxt;
+    end
   end
 `endif
 
@@ -283,9 +315,13 @@ module pu_msp430_multiplier (
   wire [ 1:0] sumext_s_nxt;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) sumext_s <= 2'b00;
-    else if (op2_wr) sumext_s <= 2'b00;
-    else if (result_wr) sumext_s <= sumext_s_nxt;
+    if (puc_rst) begin
+      sumext_s <= 2'b00;
+    end else if (op2_wr) begin
+      sumext_s <= 2'b00;
+    end else if (result_wr) begin
+      sumext_s <= sumext_s_nxt;
+    end
   end
 
   wire [15:0] sumext_nxt = {{14{sumext_s_nxt[1]}}, sumext_s_nxt};
@@ -316,13 +352,19 @@ module pu_msp430_multiplier (
   reg sign_sel;
 `ifdef CLOCK_GATING
   always @(posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst) sign_sel <= 1'b0;
-    else sign_sel <= reg_wr[OP1_MPYS] | reg_wr[OP1_MACS];
+    if (puc_rst) begin
+      sign_sel <= 1'b0;
+    end else begin
+      sign_sel <= reg_wr[OP1_MPYS] | reg_wr[OP1_MACS];
+    end
   end
 `else
   always @(posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst) sign_sel <= 1'b0;
-    else if (op1_wr) sign_sel <= reg_wr[OP1_MPYS] | reg_wr[OP1_MACS];
+    if (puc_rst) begin
+      sign_sel <= 1'b0;
+    end else if (op1_wr) begin
+      sign_sel <= reg_wr[OP1_MPYS] | reg_wr[OP1_MACS];
+    end
   end
 `endif
 
@@ -330,13 +372,19 @@ module pu_msp430_multiplier (
   reg acc_sel;
 `ifdef CLOCK_GATING
   always @(posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst) acc_sel <= 1'b0;
-    else acc_sel <= reg_wr[OP1_MAC] | reg_wr[OP1_MACS];
+    if (puc_rst) begin
+      acc_sel <= 1'b0;
+    end else begin
+      acc_sel <= reg_wr[OP1_MAC] | reg_wr[OP1_MACS];
+    end
   end
 `else
   always @(posedge mclk_op1 or posedge puc_rst) begin
-    if (puc_rst) acc_sel <= 1'b0;
-    else if (op1_wr) acc_sel <= reg_wr[OP1_MAC] | reg_wr[OP1_MACS];
+    if (puc_rst) begin
+      acc_sel <= 1'b0;
+    end else if (op1_wr) begin
+      acc_sel <= reg_wr[OP1_MAC] | reg_wr[OP1_MACS];
+    end
   end
 `endif
 
@@ -353,8 +401,11 @@ module pu_msp430_multiplier (
   // Detect start of a multiplication
   reg cycle;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cycle <= 1'b0;
-    else cycle <= op2_wr;
+    if (puc_rst) begin
+      cycle <= 1'b0;
+    end else begin
+      cycle <= op2_wr;
+    end
   end
 
   assign result_wr = cycle;
@@ -385,8 +436,11 @@ module pu_msp430_multiplier (
   // Detect start of a multiplication
   reg [1:0] cycle;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cycle <= 2'b00;
-    else cycle <= {cycle[0], op2_wr};
+    if (puc_rst) begin
+      cycle <= 2'b00;
+    end else begin
+      cycle <= {cycle[0], op2_wr};
+    end
   end
 
   assign result_wr = |cycle;

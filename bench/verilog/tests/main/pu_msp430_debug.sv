@@ -73,6 +73,7 @@ module pu_msp430_debug (
   // This function simply concatenates two strings together, ignorning the NULL
   // at the end of string2.
   // The specified number of space will be inserted between string1 and string2
+`ifdef VXL  // no +:
   function [64*8-1:0] myFormat;
 
     input [32*8-1:0] string1;
@@ -82,8 +83,18 @@ module pu_msp430_debug (
     integer i, j;
     begin
       myFormat = 0;
-`ifdef VXL  // no +:
+    end
+  endfunction
 `else
+  function [64*8-1:0] myFormat;
+
+    input [32*8-1:0] string1;
+    input [32*8-1:0] string2;
+    input [3:0] space;
+
+    integer i, j;
+    begin
+      myFormat = 0;
       j = 0;
       for (i = 0; i < 32; i = i + 1) begin  // Copy string2
         myFormat[8*i +: 8] = string2[8*i +: 8];
@@ -92,15 +103,18 @@ module pu_msp430_debug (
         end  
       end
 
-      for (i = 0; i < space; i = i + 1)  // Add spaces
-      myFormat[8*(j+i) +: 8] = " ";
+      for (i = 0; i < space; i = i + 1) begin  // Add spaces
+        myFormat[8*(j+i) +: 8] = " ";
+      end
+
       j = j + space;
 
-      for (i = 0; i < 32; i = i + 1)  // Copy string1
-      myFormat[8*(j+i) +: 8] = string1[8*i +: 8];
-`endif
+      for (i = 0; i < 32; i = i + 1) begin  // Copy string1
+        myFormat[8*(j+i) +: 8] = string1[8*i +: 8];
+      end
     end
   endfunction
+`endif
 
   //=============================================================================
   // 2) CONNECTIONS TO MSP430 CORE INTERNALS
