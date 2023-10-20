@@ -166,13 +166,19 @@ module pu_msp430_watchdog (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_wdtctl or posedge puc_rst) begin
-    if (puc_rst) wdtctl <= 8'h00;
-    else wdtctl <= per_din[7:0] & WDTCTL_MASK;
+    if (puc_rst) begin
+      wdtctl <= 8'h00;
+    end else begin
+      wdtctl <= per_din[7:0] & WDTCTL_MASK;
+    end
   end
 `else
   always @(posedge mclk_wdtctl or posedge puc_rst) begin
-    if (puc_rst) wdtctl <= 8'h00;
-    else if (wdtctl_wr) wdtctl <= per_din[7:0] & WDTCTL_MASK;
+    if (puc_rst) begin
+      wdtctl <= 8'h00;
+    end else if (wdtctl_wr) begin
+      wdtctl <= per_din[7:0] & WDTCTL_MASK;
+    end
   end
 `endif
 
@@ -258,8 +264,11 @@ module pu_msp430_watchdog (
   reg  wdtcnt_clr_toggle;
   wire wdtcnt_clr_detect = (wdtctl_wr & per_din[3]);
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) wdtcnt_clr_toggle <= 1'b0;
-    else if (wdtcnt_clr_detect) wdtcnt_clr_toggle <= ~wdtcnt_clr_toggle;
+    if (puc_rst) begin
+      wdtcnt_clr_toggle <= 1'b0;
+    end else if (wdtcnt_clr_detect) begin
+      wdtcnt_clr_toggle <= ~wdtcnt_clr_toggle;
+    end
   end
 
   // Synchronization
@@ -274,8 +283,11 @@ module pu_msp430_watchdog (
   // Edge detection
   reg wdtcnt_clr_sync_dly;
   always @(posedge wdt_clk or posedge wdt_rst) begin
-    if (wdt_rst) wdtcnt_clr_sync_dly <= 1'b0;
-    else wdtcnt_clr_sync_dly <= wdtcnt_clr_sync;
+    if (wdt_rst) begin
+      wdtcnt_clr_sync_dly <= 1'b0;
+    end else begin
+      wdtcnt_clr_sync_dly <= wdtcnt_clr_sync;
+    end
   end
 
   wire wdtqn_edge;
@@ -313,15 +325,23 @@ module pu_msp430_watchdog (
 
 `ifdef CLOCK_GATING
   always @(posedge wdt_clk_cnt or posedge wdt_rst) begin
-    if (wdt_rst) wdtcnt <= 16'h0000;
-    else if (wdtcnt_clr) wdtcnt <= 16'h0000;
-    else wdtcnt <= wdtcnt_nxt;
+    if (wdt_rst) begin
+      wdtcnt <= 16'h0000;
+    end else if (wdtcnt_clr) begin
+      wdtcnt <= 16'h0000;
+    end else begin
+      wdtcnt <= wdtcnt_nxt;
+    end
   end
 `else
   always @(posedge wdt_clk_cnt or posedge wdt_rst) begin
-    if (wdt_rst) wdtcnt <= 16'h0000;
-    else if (wdtcnt_clr) wdtcnt <= 16'h0000;
-    else if (wdtcnt_incr) wdtcnt <= wdtcnt_nxt;
+    if (wdt_rst) begin
+      wdtcnt <= 16'h0000;
+    end else if (wdtcnt_clr) begin
+      wdtcnt <= 16'h0000;
+    end else begin
+      wdtcnt <= wdtcnt_nxt;
+    end
   end
 `endif
 
@@ -365,8 +385,11 @@ module pu_msp430_watchdog (
   // Toggle bit for the transmition to the MCLK domain
   reg wdt_evt_toggle;
   always @(posedge wdt_clk_cnt or posedge wdt_rst) begin
-    if (wdt_rst) wdt_evt_toggle <= 1'b0;
-    else if (wdtqn_edge) wdt_evt_toggle <= ~wdt_evt_toggle;
+    if (wdt_rst) begin
+      wdt_evt_toggle <= 1'b0;
+    end else if (wdtqn_edge) begin
+      wdt_evt_toggle <= ~wdt_evt_toggle;
+    end
   end
 
   // Synchronize in the MCLK domain
@@ -381,8 +404,11 @@ module pu_msp430_watchdog (
   // Delay for edge detection of the toggle bit
   reg wdt_evt_toggle_sync_dly;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) wdt_evt_toggle_sync_dly <= 1'b0;
-    else wdt_evt_toggle_sync_dly <= wdt_evt_toggle_sync;
+    if (puc_rst) begin
+      wdt_evt_toggle_sync_dly <= 1'b0;
+    end else begin
+      wdt_evt_toggle_sync_dly <= wdt_evt_toggle_sync;
+    end
   end
 
   wire wdtifg_evt = (wdt_evt_toggle_sync_dly ^ wdt_evt_toggle_sync) | wdtpw_error;
@@ -394,15 +420,21 @@ module pu_msp430_watchdog (
   reg  wdtifg_clr_reg;
   wire wdtifg_clr;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) wdtifg_clr_reg <= 1'b1;
-    else wdtifg_clr_reg <= wdtifg_clr;
+    if (puc_rst) begin
+      wdtifg_clr_reg <= 1'b1;
+    end else begin
+      wdtifg_clr_reg <= wdtifg_clr;
+    end
   end
 
   // Set wakeup when the watchdog event is detected (glitch free)
   reg wdtqn_edge_reg;
   always @(posedge wdt_clk_cnt or posedge wdt_rst) begin
-    if (wdt_rst) wdtqn_edge_reg <= 1'b0;
-    else wdtqn_edge_reg <= wdtqn_edge;
+    if (wdt_rst) begin
+      wdtqn_edge_reg <= 1'b0;
+    end else begin
+      wdtqn_edge_reg <= wdtqn_edge;
+    end
   end
 
   // Watchdog wakeup cell
@@ -421,8 +453,11 @@ module pu_msp430_watchdog (
   //     - in reset mode (always)
   reg wdt_wkup_en;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) wdt_wkup_en <= 1'b0;
-    else wdt_wkup_en <= ~wdtctl[7] & (~wdttmsel | (wdttmsel & wdtie));
+    if (puc_rst) begin
+      wdt_wkup_en <= 1'b0;
+    end else begin
+      wdt_wkup_en <= ~wdtctl[7] & (~wdttmsel | (wdttmsel & wdtie));
+    end
   end
 
   // Make wakeup when not enabled
@@ -438,9 +473,13 @@ module pu_msp430_watchdog (
   assign wdtifg_clr = (wdtifg_irq_clr & wdttmsel) | wdtifg_sw_clr;
 
   always @(posedge mclk or posedge por) begin
-    if (por) wdtifg <= 1'b0;
-    else if (wdtifg_set) wdtifg <= 1'b1;
-    else if (wdtifg_clr) wdtifg <= 1'b0;
+    if (por) begin
+      wdtifg <= 1'b0;
+    end else if (wdtifg_set) begin
+      wdtifg <= 1'b1;
+    end else if (wdtifg_clr) begin
+      wdtifg <= 1'b0;
+    end
   end
 
   // Watchdog interrupt generation
@@ -450,8 +489,11 @@ module pu_msp430_watchdog (
   // Watchdog reset generation
   //-----------------------------
   always @(posedge mclk or posedge por) begin
-    if (por) wdt_reset <= 1'b0;
-    else wdt_reset <= wdtpw_error | (wdtifg_set & ~wdttmsel);
+    if (por) begin
+      wdt_reset <= 1'b0;
+    end else begin
+      wdt_reset <= wdtpw_error | (wdtifg_set & ~wdttmsel);
+    end
   end
 
   //=============================================================================
@@ -474,9 +516,13 @@ module pu_msp430_watchdog (
   wire [15:0] wdtcnt_nxt = wdtcnt + 16'h0001;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) wdtcnt <= 16'h0000;
-    else if (wdtcnt_clr) wdtcnt <= 16'h0000;
-    else if (wdtcnt_incr) wdtcnt <= wdtcnt_nxt;
+    if (puc_rst) begin
+      wdtcnt <= 16'h0000;
+    end else if (wdtcnt_clr) begin
+      wdtcnt <= 16'h0000;
+    end else if (wdtcnt_incr) begin
+      wdtcnt <= wdtcnt_nxt;
+    end
   end
 
   // Interval selection mux
@@ -503,9 +549,13 @@ module pu_msp430_watchdog (
   wire wdtifg_clr = (wdtifg_irq_clr & wdttmsel) | wdtifg_sw_clr;
 
   always @(posedge mclk or posedge por) begin
-    if (por) wdtifg <= 1'b0;
-    else if (wdtifg_set) wdtifg <= 1'b1;
-    else if (wdtifg_clr) wdtifg <= 1'b0;
+    if (por) begin
+      wdtifg <= 1'b0;
+    end else if (wdtifg_set) begin
+      wdtifg <= 1'b1;
+    end else if (wdtifg_clr) begin
+      wdtifg <= 1'b0;
+    end
   end
 
   // Watchdog interrupt generation
@@ -516,8 +566,11 @@ module pu_msp430_watchdog (
   // Watchdog reset generation
   //-----------------------------
   always @(posedge mclk or posedge por) begin
-    if (por) wdt_reset <= 1'b0;
-    else wdt_reset <= wdtpw_error | (wdtifg_set & ~wdttmsel);
+    if (por) begin
+      wdt_reset <= 1'b0;
+    end else begin
+      wdt_reset <= wdtpw_error | (wdtifg_set & ~wdttmsel);
+    end
   end
 `endif
 endmodule  // pu_msp430_watchdog

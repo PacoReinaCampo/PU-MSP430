@@ -251,8 +251,11 @@ module pu_msp430_gpio #(
   wire [7:0] p1out_nxt = P1OUT[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p1out <= 8'h00;
-    else if (p1out_wr) p1out <= p1out_nxt & P1_EN_MSK;
+    if (puc_rst) begin
+      p1out <= 8'h00;
+    end else if (p1out_wr) begin
+      p1out <= p1out_nxt & P1_EN_MSK;
+    end
   end
 
   assign p1_dout = p1out;
@@ -264,8 +267,11 @@ module pu_msp430_gpio #(
   wire [7:0] p1dir_nxt = P1DIR[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p1dir <= 8'h00;
-    else if (p1dir_wr) p1dir <= p1dir_nxt & P1_EN_MSK;
+    if (puc_rst) begin
+      p1dir <= 8'h00;
+    end else if (p1dir_wr) begin
+      p1dir <= p1dir_nxt & P1_EN_MSK;
+    end
   end
 
   assign p1_dout_en = p1dir;
@@ -278,9 +284,13 @@ module pu_msp430_gpio #(
   wire [7:0] p1ifg_set;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p1ifg <= 8'h00;
-    else if (p1ifg_wr) p1ifg <= (p1ifg_nxt | p1ifg_set) & P1_EN_MSK;
-    else p1ifg <= (p1ifg | p1ifg_set) & P1_EN_MSK;
+    if (puc_rst) begin
+      p1ifg <= 8'h00;
+    end else if (p1ifg_wr) begin
+      p1ifg <= (p1ifg_nxt | p1ifg_set) & P1_EN_MSK;
+    end else begin
+      p1ifg <= (p1ifg | p1ifg_set) & P1_EN_MSK;
+    end
   end
 
   // P1IES Register
@@ -291,8 +301,11 @@ module pu_msp430_gpio #(
   wire [7:0] p1ies_nxt = P1IES[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p1ies <= 8'h00;
-    else if (p1ies_wr) p1ies <= p1ies_nxt & P1_EN_MSK;
+    if (puc_rst) begin
+      p1ies <= 8'h00;
+    end else if (p1ies_wr) begin
+      p1ies <= p1ies_nxt & P1_EN_MSK;
+    end
   end
 
   // P1IE Register
@@ -303,8 +316,11 @@ module pu_msp430_gpio #(
   wire [7:0] p1ie_nxt = P1IE[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p1ie <= 8'h00;
-    else if (p1ie_wr) p1ie <= p1ie_nxt & P1_EN_MSK;
+    if (puc_rst) begin
+      p1ie <= 8'h00;
+    end else if (p1ie_wr) begin
+      p1ie <= p1ie_nxt & P1_EN_MSK;
+    end
   end
 
   // P1SEL Register
@@ -315,8 +331,11 @@ module pu_msp430_gpio #(
   wire [7:0] p1sel_nxt = P1SEL[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p1sel <= 8'h00;
-    else if (p1sel_wr) p1sel <= p1sel_nxt & P1_EN_MSK;
+    if (puc_rst) begin
+      p1sel <= 8'h00;
+    end else if (p1sel_wr) begin
+      p1sel <= p1sel_nxt & P1_EN_MSK;
+    end
   end
 
   assign p1_sel = p1sel;
@@ -382,8 +401,11 @@ module pu_msp430_gpio #(
   wire [7:0] p2out_nxt = P2OUT[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p2out <= 8'h00;
-    else if (p2out_wr) p2out <= p2out_nxt & P2_EN_MSK;
+    if (puc_rst) begin
+      p2out <= 8'h00;
+    end else if (p2out_wr) begin
+      p2out <= p2out_nxt & P2_EN_MSK;
+    end
   end
 
   assign p2_dout = p2out;
@@ -396,8 +418,11 @@ module pu_msp430_gpio #(
   wire [7:0] p2dir_nxt = P2DIR[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p2dir <= 8'h00;
-    else if (p2dir_wr) p2dir <= p2dir_nxt & P2_EN_MSK;
+    if (puc_rst) begin
+      p2dir <= 8'h00;
+    end else if (p2dir_wr) begin
+      p2dir <= p2dir_nxt & P2_EN_MSK;
+    end
   end
 
   assign p2_dout_en = p2dir;
@@ -411,9 +436,13 @@ module pu_msp430_gpio #(
   wire [7:0] p2ifg_set;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p2ifg <= 8'h00;
-    else if (p2ifg_wr) p2ifg <= (p2ifg_nxt | p2ifg_set) & P2_EN_MSK;
-    else p2ifg <= (p2ifg | p2ifg_set) & P2_EN_MSK;
+    if (puc_rst) begin
+      p2ifg <= 8'h00;
+    end else if (p2ifg_wr) begin
+      p2ifg <= (p2ifg_nxt | p2ifg_set) & P2_EN_MSK;
+    end else begin
+      p2ifg <= (p2ifg | p2ifg_set) & P2_EN_MSK;
+    end
   end
 
   // P2IES Register
@@ -424,8 +453,11 @@ module pu_msp430_gpio #(
   wire [7:0] p2ies_nxt = P2IES[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p2ies <= 8'h00;
-    else if (p2ies_wr) p2ies <= p2ies_nxt & P2_EN_MSK;
+    if (puc_rst) begin
+      p2ies <= 8'h00;
+    end else if (p2ies_wr) begin
+      p2ies <= p2ies_nxt & P2_EN_MSK;
+    end
   end
 
   // P2IE Register
@@ -436,8 +468,11 @@ module pu_msp430_gpio #(
   wire [7:0] p2ie_nxt = P2IE[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p2ie <= 8'h00;
-    else if (p2ie_wr) p2ie <= p2ie_nxt & P2_EN_MSK;
+    if (puc_rst) begin
+      p2ie <= 8'h00;
+    end else if (p2ie_wr) begin
+      p2ie <= p2ie_nxt & P2_EN_MSK;
+    end
   end
 
   // P2SEL Register
@@ -448,8 +483,11 @@ module pu_msp430_gpio #(
   wire [7:0] p2sel_nxt = P2SEL[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p2sel <= 8'h00;
-    else if (p2sel_wr) p2sel <= p2sel_nxt & P2_EN_MSK;
+    if (puc_rst) begin
+      p2sel <= 8'h00;
+    end else if (p2sel_wr) begin
+      p2sel <= p2sel_nxt & P2_EN_MSK;
+    end
   end
 
   assign p2_sel = p2sel;
@@ -515,8 +553,11 @@ module pu_msp430_gpio #(
   wire [7:0] p3out_nxt = P3OUT[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p3out <= 8'h00;
-    else if (p3out_wr) p3out <= p3out_nxt & P3_EN_MSK;
+    if (puc_rst) begin
+      p3out <= 8'h00;
+    end else if (p3out_wr) begin
+      p3out <= p3out_nxt & P3_EN_MSK;
+    end
   end
 
   assign p3_dout = p3out;
@@ -529,8 +570,11 @@ module pu_msp430_gpio #(
   wire [7:0] p3dir_nxt = P3DIR[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p3dir <= 8'h00;
-    else if (p3dir_wr) p3dir <= p3dir_nxt & P3_EN_MSK;
+    if (puc_rst) begin
+      p3dir <= 8'h00;
+    end else if (p3dir_wr) begin
+      p3dir <= p3dir_nxt & P3_EN_MSK;
+    end
   end
 
   assign p3_dout_en = p3dir;
@@ -543,8 +587,11 @@ module pu_msp430_gpio #(
   wire [7:0] p3sel_nxt = P3SEL[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p3sel <= 8'h00;
-    else if (p3sel_wr) p3sel <= p3sel_nxt & P3_EN_MSK;
+    if (puc_rst) begin
+      p3sel <= 8'h00;
+    end else if (p3sel_wr) begin
+      p3sel <= p3sel_nxt & P3_EN_MSK;
+    end
   end
 
   assign p3_sel = p3sel;
@@ -610,8 +657,11 @@ module pu_msp430_gpio #(
   wire [7:0] p4out_nxt = P4OUT[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p4out <= 8'h00;
-    else if (p4out_wr) p4out <= p4out_nxt & P4_EN_MSK;
+    if (puc_rst) begin
+      p4out <= 8'h00;
+    end else if (p4out_wr) begin
+      p4out <= p4out_nxt & P4_EN_MSK;
+    end
   end
 
   assign p4_dout = p4out;
@@ -624,8 +674,11 @@ module pu_msp430_gpio #(
   wire [7:0] p4dir_nxt = P4DIR[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p4dir <= 8'h00;
-    else if (p4dir_wr) p4dir <= p4dir_nxt & P4_EN_MSK;
+    if (puc_rst) begin
+      p4dir <= 8'h00;
+    end else if (p4dir_wr) begin
+      p4dir <= p4dir_nxt & P4_EN_MSK;
+    end
   end
 
   assign p4_dout_en = p4dir;
@@ -638,8 +691,11 @@ module pu_msp430_gpio #(
   wire [7:0] p4sel_nxt = P4SEL[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p4sel <= 8'h00;
-    else if (p4sel_wr) p4sel <= p4sel_nxt & P4_EN_MSK;
+    if (puc_rst) begin
+      p4sel <= 8'h00;
+    end else if (p4sel_wr) begin
+      p4sel <= p4sel_nxt & P4_EN_MSK;
+    end
   end
 
   assign p4_sel = p4sel;
@@ -705,8 +761,11 @@ module pu_msp430_gpio #(
   wire [7:0] p5out_nxt = P5OUT[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p5out <= 8'h00;
-    else if (p5out_wr) p5out <= p5out_nxt & P5_EN_MSK;
+    if (puc_rst) begin
+      p5out <= 8'h00;
+    end else if (p5out_wr) begin
+      p5out <= p5out_nxt & P5_EN_MSK;
+    end
   end
 
   assign p5_dout = p5out;
@@ -719,8 +778,11 @@ module pu_msp430_gpio #(
   wire [7:0] p5dir_nxt = P5DIR[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p5dir <= 8'h00;
-    else if (p5dir_wr) p5dir <= p5dir_nxt & P5_EN_MSK;
+    if (puc_rst) begin
+      p5dir <= 8'h00;
+    end else if (p5dir_wr) begin
+      p5dir <= p5dir_nxt & P5_EN_MSK;
+    end
   end
 
   assign p5_dout_en = p5dir;
@@ -733,8 +795,11 @@ module pu_msp430_gpio #(
   wire [7:0] p5sel_nxt = P5SEL[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p5sel <= 8'h00;
-    else if (p5sel_wr) p5sel <= p5sel_nxt & P5_EN_MSK;
+    if (puc_rst) begin
+      p5sel <= 8'h00;
+    end else if (p5sel_wr) begin
+      p5sel <= p5sel_nxt & P5_EN_MSK;
+    end
   end
 
   assign p5_sel = p5sel;
@@ -800,8 +865,11 @@ module pu_msp430_gpio #(
   wire [7:0] p6out_nxt = P6OUT[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p6out <= 8'h00;
-    else if (p6out_wr) p6out <= p6out_nxt & P6_EN_MSK;
+    if (puc_rst) begin
+      p6out <= 8'h00;
+    end else if (p6out_wr) begin
+      p6out <= p6out_nxt & P6_EN_MSK;
+    end
   end
 
   assign p6_dout = p6out;
@@ -814,8 +882,11 @@ module pu_msp430_gpio #(
   wire [7:0] p6dir_nxt = P6DIR[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p6dir <= 8'h00;
-    else if (p6dir_wr) p6dir <= p6dir_nxt & P6_EN_MSK;
+    if (puc_rst) begin
+      p6dir <= 8'h00;
+    end else if (p6dir_wr) begin
+      p6dir <= p6dir_nxt & P6_EN_MSK;
+    end
   end
 
   assign p6_dout_en = p6dir;
@@ -828,8 +899,11 @@ module pu_msp430_gpio #(
   wire [7:0] p6sel_nxt = P6SEL[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p6sel <= 8'h00;
-    else if (p6sel_wr) p6sel <= p6sel_nxt & P6_EN_MSK;
+    if (puc_rst) begin
+      p6sel <= 8'h00;
+    end else if (p6sel_wr) begin
+      p6sel <= p6sel_nxt & P6_EN_MSK;
+    end
   end
 
   assign p6_sel = p6sel;
@@ -844,8 +918,11 @@ module pu_msp430_gpio #(
   // Delay input
   reg [7:0] p1in_dly;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p1in_dly <= 8'h00;
-    else p1in_dly <= p1in & P1_EN_MSK;
+    if (puc_rst) begin
+      p1in_dly <= 8'h00;
+    end else begin
+      p1in_dly <= p1in & P1_EN_MSK;
+    end
   end
 
   // Edge detection
@@ -871,8 +948,11 @@ module pu_msp430_gpio #(
   // Delay input
   reg [7:0] p2in_dly;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) p2in_dly <= 8'h00;
-    else p2in_dly <= p2in & P2_EN_MSK;
+    if (puc_rst) begin
+      p2in_dly <= 8'h00;
+    end else begin
+      p2in_dly <= p2in & P2_EN_MSK;
+    end
   end
 
   // Edge detection

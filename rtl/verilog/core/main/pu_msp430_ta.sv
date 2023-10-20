@@ -157,9 +157,13 @@ module pu_msp430_ta (
   wire taifg_clr;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) tactl <= 10'h000;
-    else if (tactl_wr) tactl <= ((per_din[9:0] & 10'h3f3) | {9'h000, taifg_set}) & {9'h1ff, ~taifg_clr};
-    else tactl <= (tactl | {9'h000, taifg_set}) & {9'h1ff, ~taifg_clr};
+    if (puc_rst) begin
+      tactl <= 10'h000;
+    end else if (tactl_wr) begin
+      tactl <= ((per_din[9:0] & 10'h3f3) | {9'h000, taifg_set}) & {9'h1ff, ~taifg_clr};
+    end else begin
+      tactl <= (tactl | {9'h000, taifg_set}) & {9'h1ff, ~taifg_clr};
+    end
   end
 
   // TAR Register
@@ -174,10 +178,15 @@ module pu_msp430_ta (
   wire [15:0] tar_nxt = tar_clr ? 16'h0000 : (tar + tar_add);
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) tar <= 16'h0000;
-    else if (tar_wr) tar <= per_din;
-    else if (taclr) tar <= 16'h0000;
-    else if (tar_clk & ~dbg_freeze) tar <= tar_nxt;
+    if (puc_rst) begin
+      tar <= 16'h0000;
+    end else if (tar_wr) begin
+      tar <= per_din;
+    end else if (taclr) begin
+      tar <= 16'h0000;
+    end else if (tar_clk & ~dbg_freeze) begin
+      tar <= tar_nxt;
+    end
   end
 
   // TACCTL0 Register
@@ -189,9 +198,13 @@ module pu_msp430_ta (
   wire        cov0_set;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) tacctl0 <= 16'h0000;
-    else if (tacctl0_wr) tacctl0 <= ((per_din & 16'hf9f7) | {14'h0000, cov0_set, ccifg0_set}) & {15'h7fff, ~irq_ta0_acc};
-    else tacctl0 <= (tacctl0 | {14'h0000, cov0_set, ccifg0_set}) & {15'h7fff, ~irq_ta0_acc};
+    if (puc_rst) begin
+      tacctl0 <= 16'h0000;
+    end else if (tacctl0_wr) begin
+      tacctl0 <= ((per_din & 16'hf9f7) | {14'h0000, cov0_set, ccifg0_set}) & {15'h7fff, ~irq_ta0_acc};
+    end else begin
+      tacctl0 <= (tacctl0 | {14'h0000, cov0_set, ccifg0_set}) & {15'h7fff, ~irq_ta0_acc};
+    end
   end
 
   wire        cci0;
@@ -204,9 +217,13 @@ module pu_msp430_ta (
   wire        cci0_cap;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) taccr0 <= 16'h0000;
-    else if (taccr0_wr) taccr0 <= per_din;
-    else if (cci0_cap) taccr0 <= tar;
+    if (puc_rst) begin
+      taccr0 <= 16'h0000;
+    end else if (taccr0_wr) begin
+      taccr0 <= per_din;
+    end else if (cci0_cap) begin
+      taccr0 <= tar;
+    end
   end
 
   // TACCTL1 Register
@@ -219,9 +236,13 @@ module pu_msp430_ta (
   wire        cov1_set;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) tacctl1 <= 16'h0000;
-    else if (tacctl1_wr) tacctl1 <= ((per_din & 16'hf9f7) | {14'h0000, cov1_set, ccifg1_set}) & {15'h7fff, ~ccifg1_clr};
-    else tacctl1 <= (tacctl1 | {14'h0000, cov1_set, ccifg1_set}) & {15'h7fff, ~ccifg1_clr};
+    if (puc_rst) begin
+      tacctl1 <= 16'h0000;
+    end else if (tacctl1_wr) begin
+      tacctl1 <= ((per_din & 16'hf9f7) | {14'h0000, cov1_set, ccifg1_set}) & {15'h7fff, ~ccifg1_clr};
+    end else begin
+      tacctl1 <= (tacctl1 | {14'h0000, cov1_set, ccifg1_set}) & {15'h7fff, ~ccifg1_clr};
+    end
   end
 
   wire        cci1;
@@ -236,9 +257,13 @@ module pu_msp430_ta (
   wire        cci1_cap;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) taccr1 <= 16'h0000;
-    else if (taccr1_wr) taccr1 <= per_din;
-    else if (cci1_cap) taccr1 <= tar;
+    if (puc_rst) begin
+      taccr1 <= 16'h0000;
+    end else if (taccr1_wr) begin
+      taccr1 <= per_din;
+    end else if (cci1_cap) begin
+      taccr1 <= tar;
+    end
   end
 
   // TACCTL2 Register
@@ -251,9 +276,13 @@ module pu_msp430_ta (
   wire        cov2_set;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) tacctl2 <= 16'h0000;
-    else if (tacctl2_wr) tacctl2 <= ((per_din & 16'hf9f7) | {14'h0000, cov2_set, ccifg2_set}) & {15'h7fff, ~ccifg2_clr};
-    else tacctl2 <= (tacctl2 | {14'h0000, cov2_set, ccifg2_set}) & {15'h7fff, ~ccifg2_clr};
+    if (puc_rst) begin
+      tacctl2 <= 16'h0000;
+    end else if (tacctl2_wr) begin
+      tacctl2 <= ((per_din & 16'hf9f7) | {14'h0000, cov2_set, ccifg2_set}) & {15'h7fff, ~ccifg2_clr};
+    end else begin
+      tacctl2 <= (tacctl2 | {14'h0000, cov2_set, ccifg2_set}) & {15'h7fff, ~ccifg2_clr};
+    end
   end
 
   wire        cci2;
@@ -268,9 +297,13 @@ module pu_msp430_ta (
   wire        cci2_cap;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) taccr2 <= 16'h0000;
-    else if (taccr2_wr) taccr2 <= per_din;
-    else if (cci2_cap) taccr2 <= tar;
+    if (puc_rst) begin
+      taccr2 <= 16'h0000;
+    end else if (taccr2_wr) begin
+      taccr2 <= per_din;
+    end else if (cci2_cap) begin
+      taccr2 <= tar;
+    end
   end
 
   // TAIV Register
@@ -328,8 +361,11 @@ module pu_msp430_ta (
   reg taclk_dly;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) taclk_dly <= 1'b0;
-    else taclk_dly <= taclk_s;
+    if (puc_rst) begin
+      taclk_dly <= 1'b0;
+    end else begin
+      taclk_dly <= taclk_s;
+    end
   end
 
   wire taclk_en = taclk_s & ~taclk_dly;
@@ -337,8 +373,11 @@ module pu_msp430_ta (
   reg  inclk_dly;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) inclk_dly <= 1'b0;
-    else inclk_dly <= inclk_s;
+    if (puc_rst) begin
+      inclk_dly <= 1'b0;
+    end else begin
+      inclk_dly <= inclk_s;
+    end
   end
 
   wire       inclk_en = inclk_s & ~inclk_dly;
@@ -355,9 +394,13 @@ module pu_msp430_ta (
   assign tar_clk = sel_clk & ((tactl[`TAIDx] == 2'b00) ? 1'b1 : (tactl[`TAIDx] == 2'b01) ? clk_div[0] : (tactl[`TAIDx] == 2'b10) ? &clk_div[1:0] : &clk_div[2:0]);
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) clk_div <= 3'h0;
-    else if (tar_clk | taclr) clk_div <= 3'h0;
-    else if ((tactl[`TAMCx] != 2'b00) & sel_clk) clk_div <= clk_div + 3'h1;
+    if (puc_rst) begin
+      clk_div <= 3'h0;
+    end else if (tar_clk | taclr) begin
+      clk_div <= 3'h0;
+    end else if ((tactl[`TAMCx] != 2'b00) & sel_clk) begin
+      clk_div <= clk_div + 3'h1;
+    end
   end
 
   // Time counter control signals
@@ -369,12 +412,19 @@ module pu_msp430_ta (
 
   reg tar_dir;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) tar_dir <= 1'b0;
-    else if (taclr) tar_dir <= 1'b0;
-    else if (tactl[`TAMCx] == 2'b11) begin
-      if (tar_clk & (tar == 16'h0001)) tar_dir <= 1'b0;
-      else if (tar >= taccr0) tar_dir <= 1'b1;
-    end else tar_dir <= 1'b0;
+    if (puc_rst) begin
+      tar_dir <= 1'b0;
+    end else if (taclr) begin
+      tar_dir <= 1'b0;
+    end else if (tactl[`TAMCx] == 2'b11) begin
+      if (tar_clk & (tar == 16'h0001)) begin
+        tar_dir <= 1'b0;
+      end else if (tar >= taccr0) begin
+        tar_dir <= 1'b1;
+      end
+    end else begin
+      tar_dir <= 1'b0;
+    end
   end
 
   assign tar_dec = tar_dir | ((tactl[`TAMCx] == 2'b11) & (tar >= taccr0));
@@ -444,18 +494,27 @@ module pu_msp430_ta (
   //------------------
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) scci0 <= 1'b0;
-    else if (tar_clk & equ0) scci0 <= cci0_s;
+    if (puc_rst) begin
+      scci0 <= 1'b0;
+    end else if (tar_clk & equ0) begin
+      scci0 <= cci0_s;
+    end
   end
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) scci1 <= 1'b0;
-    else if (tar_clk & equ1) scci1 <= cci1_s;
+    if (puc_rst) begin
+      scci1 <= 1'b0;
+    end else if (tar_clk & equ1) begin
+      scci1 <= cci1_s;
+    end
   end
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) scci2 <= 1'b0;
-    else if (tar_clk & equ2) scci2 <= cci2_s;
+    if (puc_rst) begin
+      scci2 <= 1'b0;
+    end else if (tar_clk & equ2) begin
+      scci2 <= cci2_s;
+    end
   end
 
   // Capture mode
@@ -477,41 +536,62 @@ module pu_msp430_ta (
 
   reg  cci0_evt_s;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cci0_evt_s <= 1'b0;
-    else if (tar_clk) cci0_evt_s <= 1'b0;
-    else if (cci0_evt) cci0_evt_s <= 1'b1;
+    if (puc_rst) begin
+      cci0_evt_s <= 1'b0;
+    end else if (tar_clk) begin
+      cci0_evt_s <= 1'b0;
+    end else if (cci0_evt) begin
+      cci0_evt_s <= 1'b1;
+    end
   end
 
   reg cci1_evt_s;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cci1_evt_s <= 1'b0;
-    else if (tar_clk) cci1_evt_s <= 1'b0;
-    else if (cci1_evt) cci1_evt_s <= 1'b1;
+    if (puc_rst) begin
+      cci1_evt_s <= 1'b0;
+    end else if (tar_clk) begin
+      cci1_evt_s <= 1'b0;
+    end else if (cci1_evt) begin
+      cci1_evt_s <= 1'b1;
+    end
   end
 
   reg cci2_evt_s;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cci2_evt_s <= 1'b0;
-    else if (tar_clk) cci2_evt_s <= 1'b0;
-    else if (cci2_evt) cci2_evt_s <= 1'b1;
+    if (puc_rst) begin
+      cci2_evt_s <= 1'b0;
+    end else if (tar_clk) begin
+      cci2_evt_s <= 1'b0;
+    end else if (cci2_evt) begin
+      cci2_evt_s <= 1'b1;
+    end
   end
 
   reg cci0_sync;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cci0_sync <= 1'b0;
-    else cci0_sync <= (tar_clk & cci0_evt_s) | (tar_clk & cci0_evt & ~cci0_evt_s);
+    if (puc_rst) begin
+      cci0_sync <= 1'b0;
+    end else begin
+      cci0_sync <= (tar_clk & cci0_evt_s) | (tar_clk & cci0_evt & ~cci0_evt_s);
+    end
   end
 
   reg cci1_sync;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cci1_sync <= 1'b0;
-    else cci1_sync <= (tar_clk & cci1_evt_s) | (tar_clk & cci1_evt & ~cci1_evt_s);
+    if (puc_rst) begin
+      cci1_sync <= 1'b0;
+    end else begin
+      cci1_sync <= (tar_clk & cci1_evt_s) | (tar_clk & cci1_evt & ~cci1_evt_s);
+    end
   end
 
   reg cci2_sync;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cci2_sync <= 1'b0;
-    else cci2_sync <= (tar_clk & cci2_evt_s) | (tar_clk & cci2_evt & ~cci2_evt_s);
+    if (puc_rst) begin
+      cci2_sync <= 1'b0;
+    end else begin
+      cci2_sync <= (tar_clk & cci2_evt_s) | (tar_clk & cci2_evt & ~cci2_evt_s);
+    end
   end
 
   // Generate final capture command
@@ -527,24 +607,36 @@ module pu_msp430_ta (
   reg  cap0_taken;
   wire cap0_taken_clr = reg_rd[TACCR0] | (tacctl0_wr & tacctl0[`TACOV] & ~per_din[`TACOV]);
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cap0_taken <= 1'b0;
-    else if (cci0_cap) cap0_taken <= 1'b1;
-    else if (cap0_taken_clr) cap0_taken <= 1'b0;
+    if (puc_rst) begin
+      cap0_taken <= 1'b0;
+    end else if (cci0_cap) begin
+      cap0_taken <= 1'b1;
+    end else if (cap0_taken_clr) begin
+      cap0_taken <= 1'b0;
+    end
   end
 
   reg  cap1_taken;
   wire cap1_taken_clr = reg_rd[TACCR1] | (tacctl1_wr & tacctl1[`TACOV] & ~per_din[`TACOV]);
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cap1_taken <= 1'b0;
-    else if (cci1_cap) cap1_taken <= 1'b1;
-    else if (cap1_taken_clr) cap1_taken <= 1'b0;
+    if (puc_rst) begin
+      cap1_taken <= 1'b0;
+    end else if (cci1_cap) begin
+      cap1_taken <= 1'b1;
+    end else if (cap1_taken_clr) begin
+      cap1_taken <= 1'b0;
+    end
   end
   reg  cap2_taken;
   wire cap2_taken_clr = reg_rd[TACCR2] | (tacctl2_wr & tacctl2[`TACOV] & ~per_din[`TACOV]);
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) cap2_taken <= 1'b0;
-    else if (cci2_cap) cap2_taken <= 1'b1;
-    else if (cap2_taken_clr) cap2_taken <= 1'b0;
+    if (puc_rst) begin
+      cap2_taken <= 1'b0;
+    end else if (cci2_cap) begin
+      cap2_taken <= 1'b1;
+    end else if (cap2_taken_clr) begin
+      cap2_taken <= 1'b0;
+    end
   end
 
   assign cov0_set = cap0_taken & cci0_cap & ~reg_rd[TACCR0];
@@ -580,9 +672,13 @@ module pu_msp430_ta (
                                                        ta_out0_mode7;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) ta_out0 <= 1'b0;
-    else if ((tacctl0[`TAOUTMODx] == 3'b001) & taclr) ta_out0 <= 1'b0;
-    else if (tar_clk) ta_out0 <= ta_out0_nxt;
+    if (puc_rst) begin
+      ta_out0 <= 1'b0;
+    end else if ((tacctl0[`TAOUTMODx] == 3'b001) & taclr) begin
+      ta_out0 <= 1'b0;
+    end else if (tar_clk) begin
+      ta_out0 <= ta_out0_nxt;
+    end
   end
 
   assign ta_out0_en = ~tacctl0[`TACAP];
@@ -612,9 +708,13 @@ module pu_msp430_ta (
                                                        ta_out1_mode7;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) ta_out1 <= 1'b0;
-    else if ((tacctl1[`TAOUTMODx] == 3'b001) & taclr) ta_out1 <= 1'b0;
-    else if (tar_clk) ta_out1 <= ta_out1_nxt;
+    if (puc_rst) begin
+      ta_out1 <= 1'b0;
+    end else if ((tacctl1[`TAOUTMODx] == 3'b001) & taclr) begin
+      ta_out1 <= 1'b0;
+    end else if (tar_clk) begin
+      ta_out1 <= ta_out1_nxt;
+    end
   end
 
   assign ta_out1_en = ~tacctl1[`TACAP];
@@ -644,9 +744,13 @@ module pu_msp430_ta (
                                                        ta_out2_mode7;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) ta_out2 <= 1'b0;
-    else if ((tacctl2[`TAOUTMODx] == 3'b001) & taclr) ta_out2 <= 1'b0;
-    else if (tar_clk) ta_out2 <= ta_out2_nxt;
+    if (puc_rst) begin
+      ta_out2 <= 1'b0;
+    end else if ((tacctl2[`TAOUTMODx] == 3'b001) & taclr) begin
+      ta_out2 <= 1'b0;
+    end else if (tar_clk) begin
+      ta_out2 <= ta_out2_nxt;
+    end
   end
 
   assign ta_out2_en = ~tacctl2[`TACAP];
