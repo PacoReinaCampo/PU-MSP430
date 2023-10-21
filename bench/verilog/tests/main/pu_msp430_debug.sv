@@ -95,12 +95,12 @@ module pu_msp430_debug (
     integer i, j;
     begin
       myFormat = 0;
-      j = 0;
+      j        = 0;
       for (i = 0; i < 32; i = i + 1) begin  // Copy string2
         myFormat[8*i +: 8] = string2[8*i +: 8];
         if ((string2[8*i +: 8] == 0) && (j == 0)) begin
           j = i;
-        end  
+        end
       end
 
       for (i = 0; i < space; i = i + 1) begin  // Add spaces

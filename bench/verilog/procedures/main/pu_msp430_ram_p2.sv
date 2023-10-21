@@ -82,4 +82,3 @@ module pu_msp430_ram_p2 (
     .ram_wenb (~web)    // RAM write enable (low active) (Port B)
   );
 endmodule  // pu_msp430_ram_p2
-

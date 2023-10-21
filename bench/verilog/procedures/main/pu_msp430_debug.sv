@@ -87,7 +87,7 @@ module pu_msp430_debug (
     integer i, j;
     begin
       myFormat = 0;
-      j = 0;
+      j        = 0;
       for (i = 0; i < 32; i = i + 1) begin  // Copy string2
         myFormat[8*i +: 8] = string2[8*i +: 8];
         if ((string2[8*i +: 8] == 0) && (j == 0)) begin
@@ -204,7 +204,7 @@ module pu_msp430_debug (
       inst_number <= 0;
     end else if (decode) begin
       inst_number <= inst_number + 1;
-    end  
+    end
   end
 
   always @(posedge mclk or posedge puc_rst) begin
@@ -341,7 +341,7 @@ module pu_msp430_debug (
       inst_src = "";
     end else if (inst_type == "JUMP") begin
       inst_src = "";
-    end else if ((inst_type == "SIG-OP") || (inst_type == "TWO-OP"))begin
+    end else if ((inst_type == "SIG-OP") || (inst_type == "TWO-OP")) begin
       case (src_reg)
         4'b0000: inst_src = "r0";
         4'b0001: inst_src = "r1";
@@ -476,17 +476,17 @@ module pu_msp430_debug (
 
     if (inst_type == "TWO-OP") begin
       inst_full = myFormat(inst_full, ",", 0);
-    end  
+    end
 
     inst_full = myFormat(inst_full, inst_ad, 1);
 
     if (opcode == 16'h4303) begin
       inst_full = "NOP";
-    end  
+    end
 
     if (opcode == `DBG_SWBRK_OP) begin
       inst_full = "SBREAK";
-    end  
+    end
   end
 
   // Instruction program counter
@@ -497,6 +497,6 @@ module pu_msp430_debug (
       inst_pc <= 16'h0000;
     end else if (decode) begin
       inst_pc <= pc;
-    end  
+    end
   end
 endmodule  // pu_msp430_debug

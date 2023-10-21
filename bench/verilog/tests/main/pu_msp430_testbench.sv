@@ -83,9 +83,7 @@ module pu_msp430_testbench;
 
   wire                  nodiv_smclk;
 
-  //
   // Wire & Register definition
-  //------------------------------
 
   // Data Memory interface
   wire    [`DMEM_MSB:0] dmem_addr;
@@ -247,9 +245,7 @@ module pu_msp430_testbench;
   integer               error;
   reg                   stimulus_done;
 
-  //
   // Include files
-  //------------------------------
 
   // CPU & Memory registers
   `include "pu_msp430_registers.sv"
@@ -264,23 +260,21 @@ module pu_msp430_testbench;
   // Verilog stimulus
   `include "stimulus.sv"
 
-  //
   // Initialize ROM
-  //------------------------------
   initial begin
     #10 $readmemh("./pmem.mem", pmem_0.mem);
   end
 
-  //
   // Generate Clock & Reset
-  //------------------------------
   initial begin
     dco_clk          = 1'b0;
     dco_local_enable = 1'b0;
     forever begin
       #25;  // 20 MHz
       dco_local_enable = (dco_enable === 1) ? dco_enable : (dco_wkup === 1);
-      if (dco_local_enable) dco_clk = ~dco_clk;
+      if (dco_local_enable) begin
+        dco_clk = ~dco_clk;
+      end
     end
   end
 
@@ -290,7 +284,9 @@ module pu_msp430_testbench;
     forever begin
       #763;  // 655 kHz
       lfxt_local_enable = (lfxt_enable === 1) ? lfxt_enable : (lfxt_wkup === 1);
-      if (lfxt_local_enable) lfxt_clk = ~lfxt_clk;
+      if (lfxt_local_enable) begin
+        lfxt_clk = ~lfxt_clk;
+      end
     end
   end
 
@@ -345,10 +341,7 @@ module pu_msp430_testbench;
     scan_mode               = 1'b0;
   end
 
-  //
   // Program Memory
-  //----------------------------------
-
   pu_msp430_ram #(`PMEM_MSB, `PMEM_SIZE) pmem_0 (
     // OUTPUTs
     .ram_dout(pmem_dout),  // Program Memory data output
@@ -361,10 +354,7 @@ module pu_msp430_testbench;
     .ram_wen (pmem_wen)    // Program Memory write enable (low active)
   );
 
-  //
   // Data Memory
-  //----------------------------------
-
   pu_msp430_ram #(`DMEM_MSB, `DMEM_SIZE) dmem_0 (
     // OUTPUTs
     .ram_dout(dmem_dout),  // Data Memory data output
@@ -377,10 +367,7 @@ module pu_msp430_testbench;
     .ram_wen (dmem_wen)    // Data Memory write enable (low active)
   );
 
-  //
   // openMSP430 Instance
-  //----------------------------------
-
   pu_msp430_core dut (
     // OUTPUTs
     .r0 (r0),
@@ -462,10 +449,7 @@ module pu_msp430_testbench;
     .wkup             (|wkup_in)           // ASIC ONLY: System Wake-up (asynchronous)
   );
 
-  //
   // Digital I/O
-  //----------------------------------
-
   pu_msp430_gpio gpio (
     // OUTPUTs
     .irq_port1 (irq_port1),     // Port 1 interrupt
@@ -507,10 +491,7 @@ module pu_msp430_testbench;
     .puc_rst (puc_rst)    // Main system reset
   );
 
-  //
   // Timers
-  //----------------------------------
-
   pu_msp430_ta ta (
     // OUTPUTs
     .irq_ta0   (irq_ta0),          // Timer A interrupt: TACCR0
@@ -546,9 +527,7 @@ module pu_msp430_testbench;
     .taclk      (taclk)                // TACLK external timer clock (SLOW)
   );
 
-  //
   // Simple full duplex UART (8N1 protocol)
-  //----------------------------------------
   pu_msp430_uart uart (
     // OUTPUTs
     .irq_uart_rx(irq_uart_rx),    // UART receive interrupt
@@ -567,10 +546,7 @@ module pu_msp430_testbench;
     .uart_rxd(uart_rxd)   // UART Data Receive (RXD)
   );
 
-  //
   // Peripheral templates
-  //----------------------------------
-
   pu_msp430_template08 template08 (
     // OUTPUTs
     .per_dout(per_dout_temp_8b),  // Peripheral data output
@@ -599,17 +575,10 @@ module pu_msp430_testbench;
     .puc_rst (puc_rst)    // Main system reset
   );
 
-  //
   // Combine peripheral data bus
-  //----------------------------------
-
   assign per_dout = per_dout_dio | per_dout_timerA | per_dout_uart | per_dout_temp_8b | per_dout_temp_16b;
 
-
-  //
   // Map peripheral interrupts & wakeups
-  //----------------------------------------
-
   assign irq_in = irq | {1'b0,  // Vector 13  (0xFFFA)
     1'b0,  // Vector 12  (0xFFF8)
     1'b0,  // Vector 11  (0xFFF6)
@@ -640,17 +609,13 @@ module pu_msp430_testbench;
     1'b0,  // Vector  1  (0xFFE2)
     1'b0};  // Vector  0  (0xFFE0)
 
-  //
   // I2C serial debug interface
-  //----------------------------------
 
   // I2C Bus
-  //.........................
   pullup dbg_scl_inst (dbg_scl);
   pullup dbg_sda_inst (dbg_sda);
 
   // I2C Slave (openMSP430)
-  //.........................
   pu_msp430_io_cell scl_slave_inst (
     .pad        (dbg_scl),        // I/O pad
     .data_in    (dbg_scl_slave),  // Input
@@ -665,8 +630,7 @@ module pu_msp430_testbench;
     .data_out   (1'b0)                 // Output
   );
 
-  // I2C Master (Debugger)
-  //.........................
+  // I2C Master (Debugger)¡
   pu_msp430_io_cell scl_master_inst (
     .pad        (dbg_scl),          // I/O pad
     .data_in    (),                 // Input
@@ -681,9 +645,7 @@ module pu_msp430_testbench;
     .data_out   (1'b0)                  // Output
   );
 
-  //
   // Debug utility signals
-  //----------------------------------------
   pu_msp430_debug debug (
     // OUTPUTs
     .e_state    (e_state),      // Execution state
@@ -699,9 +661,7 @@ module pu_msp430_testbench;
     .puc_rst(puc_rst)  // Main system reset
   );
 
-  //
   // Generate Waveform
-  //----------------------------------------
   initial begin
 `ifdef NODUMP
 `else
@@ -720,54 +680,46 @@ module pu_msp430_testbench;
 `endif
   end
 
-  //
   // End of simulation
-  //----------------------------------------
+  initial begin  // Timeout
+`ifdef NO_TIMEOUT
+`else
+`ifdef VERY_LONG_TIMEOUT
+    #500000000;
+`else
+`ifdef LONG_TIMEOUT
+    #5000000;
+`else
+    #500000;
+`endif
+`endif
+    $display(" ===============================================");
+    $display("|               SIMULATION FAILED               |");
+    $display("|              (simulation Timeout)             |");
+    $display(" ===============================================");
+    $finish;
+`endif
+  end
 
-  initial  // Timeout
-    begin
-  `ifdef NO_TIMEOUT
-  `else
-  `ifdef VERY_LONG_TIMEOUT
-      #500000000;
-  `else
-  `ifdef LONG_TIMEOUT
-      #5000000;
-  `else
-      #500000;
-  `endif
-  `endif
-      $display(" ===============================================");
+  initial begin  // Normal end of test
+    @(negedge stimulus_done);
+    wait (inst_pc == 'hffff);
+
+    $display(" ===============================================");
+    if (error != 0) begin
       $display("|               SIMULATION FAILED               |");
-      $display("|              (simulation Timeout)             |");
-      $display(" ===============================================");
-      $finish;
-  `endif
+      $display("|     (some verilog stimulus checks failed)     |");
+    end else if (~stimulus_done) begin
+      $display("|               SIMULATION FAILED               |");
+      $display("|     (the verilog stimulus didn't complete)    |");
+    end else begin
+      $display("|               SIMULATION PASSED               |");
     end
+    $display(" ===============================================");
+    $finish;
+  end
 
-  initial  // Normal end of test
-    begin
-      @(negedge stimulus_done);
-      wait (inst_pc == 'hffff);
-
-      $display(" ===============================================");
-      if (error != 0) begin
-        $display("|               SIMULATION FAILED               |");
-        $display("|     (some verilog stimulus checks failed)     |");
-      end else if (~stimulus_done) begin
-        $display("|               SIMULATION FAILED               |");
-        $display("|     (the verilog stimulus didn't complete)    |");
-      end else begin
-        $display("|               SIMULATION PASSED               |");
-      end
-      $display(" ===============================================");
-      $finish;
-    end
-
-  //
   // Tasks Definition
-  //------------------------------
-
   task tb_error;
     input [65*8:0] error_string;
     begin

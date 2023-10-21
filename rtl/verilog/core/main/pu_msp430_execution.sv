@@ -313,15 +313,23 @@ module pu_msp430_execution (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_mdb_out_nxt or posedge puc_rst) begin
-    if (puc_rst) mdb_out_nxt <= 16'h0000;
-    else if (e_state == `E_DST_RD) mdb_out_nxt <= pc_nxt;
-    else mdb_out_nxt <= alu_out;
+    if (puc_rst) begin
+      mdb_out_nxt <= 16'h0000;
+    end else if (e_state == `E_DST_RD) begin
+      mdb_out_nxt <= pc_nxt;
+    end else begin
+      mdb_out_nxt <= alu_out;
+    end
   end
 `else
   always @(posedge mclk_mdb_out_nxt or posedge puc_rst) begin
-    if (puc_rst) mdb_out_nxt <= 16'h0000;
-    else if (e_state == `E_DST_RD) mdb_out_nxt <= pc_nxt;
-    else if ((e_state == `E_EXEC & ~inst_so[`CALL]) | (e_state == `E_IRQ_0) | (e_state == `E_IRQ_2)) mdb_out_nxt <= alu_out;
+    if (puc_rst) begin
+      mdb_out_nxt <= 16'h0000;
+    end else if (e_state == `E_DST_RD) begin
+      mdb_out_nxt <= pc_nxt;
+    end else if ((e_state == `E_EXEC & ~inst_so[`CALL]) | (e_state == `E_IRQ_0) | (e_state == `E_IRQ_2)) begin
+      mdb_out_nxt <= alu_out;
+    end
   end
 `endif
 
@@ -331,8 +339,11 @@ module pu_msp430_execution (
   reg mab_lsb;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) mab_lsb <= 1'b0;
-    else if (mb_en) mab_lsb <= alu_out_add[0];
+    if (puc_rst) begin
+      mab_lsb <= 1'b0;
+    end else if (mb_en) begin
+      mab_lsb <= alu_out_add[0];
+    end
   end
 
   assign mdb_in_bw = ~inst_bw ? mdb_in : mab_lsb ? {2{mdb_in[15:8]}} : mdb_in;
@@ -341,16 +352,23 @@ module pu_msp430_execution (
   reg mdb_in_buf_en;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) mdb_in_buf_en <= 1'b0;
-    else mdb_in_buf_en <= (e_state == `E_SRC_RD);
+    if (puc_rst) begin
+      mdb_in_buf_en <= 1'b0;
+    end else begin
+      mdb_in_buf_en <= (e_state == `E_SRC_RD);
+    end
   end
 
   reg mdb_in_buf_valid;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) mdb_in_buf_valid <= 1'b0;
-    else if (e_state == `E_EXEC) mdb_in_buf_valid <= 1'b0;
-    else if (mdb_in_buf_en) mdb_in_buf_valid <= 1'b1;
+    if (puc_rst) begin
+      mdb_in_buf_valid <= 1'b0;
+    end else if (e_state == `E_EXEC) begin
+      mdb_in_buf_valid <= 1'b0;
+    end else if (mdb_in_buf_en) begin
+      mdb_in_buf_valid <= 1'b1;
+    end
   end
 
   reg [15:0] mdb_in_buf;
@@ -370,13 +388,19 @@ module pu_msp430_execution (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_mdb_in_buf or posedge puc_rst) begin
-    if (puc_rst) mdb_in_buf <= 16'h0000;
-    else mdb_in_buf <= mdb_in_bw;
+    if (puc_rst) begin
+      mdb_in_buf <= 16'h0000;
+    end else begin
+      mdb_in_buf <= mdb_in_bw;
+    end
   end
 `else
   always @(posedge mclk_mdb_in_buf or posedge puc_rst) begin
-    if (puc_rst) mdb_in_buf <= 16'h0000;
-    else if (mdb_in_buf_en) mdb_in_buf <= mdb_in_bw;
+    if (puc_rst) begin
+      mdb_in_buf <= 16'h0000;
+    end else if (mdb_in_buf_en) begin
+      mdb_in_buf <= mdb_in_bw;
+    end
   end
 `endif
 

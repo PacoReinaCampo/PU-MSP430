@@ -236,7 +236,7 @@ task dbg_i2c_tx16;
     dbg_i2c_ack_rd;
     if (is_last) begin
       dbg_i2c_stop;  // STOP CONDITION
-    end  
+    end
   end
 endtask
 

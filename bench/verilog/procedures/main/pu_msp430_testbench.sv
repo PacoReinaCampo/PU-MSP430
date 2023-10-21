@@ -46,9 +46,7 @@
 
 module pu_msp430_testbench;
 
-  //
   // Wire & Register definition
-  //------------------------------
 
   // Clock & Reset
   reg                   CLK_40MHz;
@@ -206,9 +204,7 @@ module pu_msp430_testbench;
 
   wire                  dco_clk;
 
-  //
   // Include files
-  //------------------------------
 
   // CPU & Memory registers
   `include "pu_msp430_registers_omsp0.sv"
@@ -217,10 +213,7 @@ module pu_msp430_testbench;
   // Verilog stimulus
   `include "stimulus.sv"
 
-  //
   // Initialize Program Memory
-  //------------------------------
-
   initial begin
     // Read memory file
     #10 $readmemh("./pmem.mem", pmem);
@@ -231,9 +224,7 @@ module pu_msp430_testbench;
     end
   end
 
-  //
   // Generate Clock & Reset
-  //------------------------------
   initial begin
     CLK_40MHz = 1'b0;
     forever #12.5 CLK_40MHz <= ~CLK_40MHz;  // 40 MHz
@@ -245,9 +236,7 @@ module pu_msp430_testbench;
     #600 USER_RESET = 1'b0;
   end
 
-  //
   // Global initialization
-  //------------------------------
   initial begin
     error         = 0;
     stimulus_done = 1;
@@ -259,10 +248,7 @@ module pu_msp430_testbench;
     PMOD1_P4      = 1'b1;
   end
 
-  //
   // openMSP430 FPGA Instance
-  //----------------------------------
-
   pu_msp430_soc dut (
 
     // CORE 0
@@ -390,46 +376,33 @@ module pu_msp430_testbench;
 
     .dco_clk(dco_clk),
 
-    //----------------------------------------------
     // User Reset Push Button
-    //----------------------------------------------
     .USER_RESET(USER_RESET),
 
-    //----------------------------------------------
     // TI CDCE913 Triple-Output PLL Clock Chip
-    //   Y1: 40 MHz, USER_CLOCK can be used as
-    //              external configuration clock
+    //   Y1: 40 MHz, USER_CLOCK can be used as external configuration clock
     //   Y2: 66.667 MHz
     //   Y3: 100 MHz 
-    //----------------------------------------------
     .USER_CLOCK(CLK_40MHz),
 
-    //----------------------------------------------
     // User DIP Switch x4
-    //----------------------------------------------
     .GPIO_DIP1(SW1),
     .GPIO_DIP2(SW2),
     .GPIO_DIP3(SW3),
     .GPIO_DIP4(SW4),
 
-    //----------------------------------------------
     // User LEDs			
-    //----------------------------------------------
     .GPIO_LED1(LED1),
     .GPIO_LED2(LED2),
     .GPIO_LED3(LED3),
     .GPIO_LED4(LED4),
 
-    //----------------------------------------------
     // Silicon Labs CP2102 USB-to-UART Bridge Chip
-    //----------------------------------------------
     .USB_RS232_RXD(UART_RXD),
     .USB_RS232_TXD(UART_TXD),
 
-    //----------------------------------------------
     // Peripheral Modules (PMODs) and GPIO
     //     https://www.digilentinc.com/PMODs
-    //----------------------------------------------
 
     // Connector J5
     .PMOD1_P3(PMOD1_P3),  // Serial Debug Interface TX
@@ -491,7 +464,6 @@ module pu_msp430_testbench;
   );
 
   // Debug utility signals
-  //----------------------------------------
   pu_msp430_debug debug_omsp0 (
 
     // OUTPUTs
@@ -522,9 +494,7 @@ module pu_msp430_testbench;
     .core_select(1'b1)  // Core selection
   );
 
-  //
   // Generate Waveform
-  //----------------------------------------
   initial begin
 `ifdef VPD_FILE
     $vcdplusfile("pu_msp430_testbench.vpd");
@@ -540,10 +510,7 @@ module pu_msp430_testbench;
 `endif
   end
 
-  //
   // End of simulation
-  //----------------------------------------
-
   initial begin  // Timeout
     #500000;
     $display(" ===============================================");
@@ -568,10 +535,7 @@ module pu_msp430_testbench;
     $finish;
   end
 
-  //
   // Tasks Definition
-  //------------------------------
-
   task tb_error;
     input [65*8:0] error_string;
     begin

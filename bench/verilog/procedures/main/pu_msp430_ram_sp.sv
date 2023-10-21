@@ -70,7 +70,7 @@ module pu_msp430_ram_sp #(
         mem[ram_addr] <= {ram_din[15:8], mem_val[7:0]};
       end else if (ram_wen == 2'b10) begin
         mem[ram_addr] <= {mem_val[15:8], ram_din[7:0]};
-      end  
+      end
       ram_addr_reg <= ram_addr;
     end
   end
