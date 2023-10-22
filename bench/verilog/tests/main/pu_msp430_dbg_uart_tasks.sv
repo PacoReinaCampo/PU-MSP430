@@ -80,9 +80,7 @@ parameter DBG_RD = 8'h00;
 // Synchronization value
 parameter DBG_SYNC = 8'h80;
 
-//----------------------------------------------------------------------------
 // UART COMMUNICATION DATA RATE CONFIGURATION
-//----------------------------------------------------------------------------
 // If the auto synchronization mode is set, then the communication speed
 // is configured by the testbench.
 // If not, the values from the openMSP430.inc file are taken over.
@@ -93,9 +91,7 @@ integer UART_PERIOD = 1000000000 / UART_BAUD;
 integer UART_PERIOD = `DBG_UART_CNT;
 `endif
 
-//----------------------------------------------------------------------------
 // Receive UART frame from CPU Debug interface (8N1)
-//----------------------------------------------------------------------------
 
 task dbg_uart_rx;
   output [7:0] dbg_rxbuf;
@@ -140,9 +136,7 @@ task dbg_uart_rx8;
   end
 endtask
 
-//----------------------------------------------------------------------------
 // Transmit UART frame to CPU Debug interface (8N1)
-//----------------------------------------------------------------------------
 task dbg_uart_tx;
   input [7:0] txbuf;
 
@@ -182,9 +176,7 @@ end
 
 assign dbg_uart_rxd = dbg_uart_rxd_sel ? dbg_uart_rxd_dly : dbg_uart_rxd_pre;
 
-//----------------------------------------------------------------------------
 // Write to Debug register
-//----------------------------------------------------------------------------
 task dbg_uart_wr;
   input [7:0] dbg_reg;
   input [15:0] dbg_data;
@@ -198,9 +190,7 @@ task dbg_uart_wr;
   end
 endtask
 
-//----------------------------------------------------------------------------
 // Read Debug register
-//----------------------------------------------------------------------------
 task dbg_uart_rd;
   input [7:0] dbg_reg;
 
@@ -219,9 +209,7 @@ task dbg_uart_rd;
   end
 endtask
 
-//----------------------------------------------------------------------------
 // Send synchronization frame
-//----------------------------------------------------------------------------
 task dbg_uart_sync;
   begin
     dbg_uart_tx(DBG_SYNC);

@@ -94,9 +94,9 @@ module pu_msp430_gpio #(
   input        puc_rst    // Main system reset
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  PARAMETER DECLARATION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Masks
   localparam P1_EN_MSK = {8{P1_EN[0]}};
@@ -134,9 +134,9 @@ module pu_msp430_gpio #(
   P5OUT_D = (BASE_REG << P5OUT), P5DIR_D = (BASE_REG << P5DIR), P5SEL_D = (BASE_REG << P5SEL), P6IN_D = (BASE_REG << P6IN),  // Port 6
   P6OUT_D = (BASE_REG << P6OUT), P6DIR_D = (BASE_REG << P6DIR), P6SEL_D = (BASE_REG << P6SEL);
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Local register selection
   wire reg_sel = per_en & (per_addr[13:DEC_WD-1] == BASE_ADDR[14:DEC_WD]);
@@ -186,12 +186,11 @@ module pu_msp430_gpio #(
   wire [DEC_SZ-1:0] reg_lo_wr = reg_dec & {DEC_SZ{reg_lo_write}};
   wire [DEC_SZ-1:0] reg_rd = reg_dec & {DEC_SZ{reg_read}};
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3) REGISTERS
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // P1IN Register
-  //---------------
   wire [7:0] p1in;
 
   pu_msp430_sync_cell sync_cell_p1in_0 (
@@ -244,7 +243,6 @@ module pu_msp430_gpio #(
   );
 
   // P1OUT Register
-  //----------------
   reg  [7:0] p1out;
 
   wire       p1out_wr = P1OUT[0] ? reg_hi_wr[P1OUT] : reg_lo_wr[P1OUT];
@@ -261,7 +259,6 @@ module pu_msp430_gpio #(
   assign p1_dout = p1out;
 
   // P1DIR Register
-  //----------------
 
   wire       p1dir_wr = P1DIR[0] ? reg_hi_wr[P1DIR] : reg_lo_wr[P1DIR];
   wire [7:0] p1dir_nxt = P1DIR[0] ? per_din[15:8] : per_din[7:0];
@@ -277,7 +274,6 @@ module pu_msp430_gpio #(
   assign p1_dout_en = p1dir;
 
   // P1IFG Register
-  //----------------
 
   wire       p1ifg_wr = P1IFG[0] ? reg_hi_wr[P1IFG] : reg_lo_wr[P1IFG];
   wire [7:0] p1ifg_nxt = P1IFG[0] ? per_din[15:8] : per_din[7:0];
@@ -294,7 +290,6 @@ module pu_msp430_gpio #(
   end
 
   // P1IES Register
-  //----------------
   reg  [7:0] p1ies;
 
   wire       p1ies_wr = P1IES[0] ? reg_hi_wr[P1IES] : reg_lo_wr[P1IES];
@@ -309,7 +304,6 @@ module pu_msp430_gpio #(
   end
 
   // P1IE Register
-  //----------------
   reg  [7:0] p1ie;
 
   wire       p1ie_wr = P1IE[0] ? reg_hi_wr[P1IE] : reg_lo_wr[P1IE];
@@ -324,7 +318,6 @@ module pu_msp430_gpio #(
   end
 
   // P1SEL Register
-  //----------------
   reg  [7:0] p1sel;
 
   wire       p1sel_wr = P1SEL[0] ? reg_hi_wr[P1SEL] : reg_lo_wr[P1SEL];
@@ -341,7 +334,6 @@ module pu_msp430_gpio #(
   assign p1_sel = p1sel;
 
   // P2IN Register
-  //---------------
   wire [7:0] p2in;
 
   pu_msp430_sync_cell sync_cell_p2in_0 (
@@ -394,7 +386,6 @@ module pu_msp430_gpio #(
   );
 
   // P2OUT Register
-  //----------------
   reg  [7:0] p2out;
 
   wire       p2out_wr = P2OUT[0] ? reg_hi_wr[P2OUT] : reg_lo_wr[P2OUT];
@@ -411,7 +402,6 @@ module pu_msp430_gpio #(
   assign p2_dout = p2out;
 
   // P2DIR Register
-  //----------------
   reg  [7:0] p2dir;
 
   wire       p2dir_wr = P2DIR[0] ? reg_hi_wr[P2DIR] : reg_lo_wr[P2DIR];
@@ -428,7 +418,6 @@ module pu_msp430_gpio #(
   assign p2_dout_en = p2dir;
 
   // P2IFG Register
-  //----------------
   reg  [7:0] p2ifg;
 
   wire       p2ifg_wr = P2IFG[0] ? reg_hi_wr[P2IFG] : reg_lo_wr[P2IFG];
@@ -446,7 +435,6 @@ module pu_msp430_gpio #(
   end
 
   // P2IES Register
-  //----------------
   reg  [7:0] p2ies;
 
   wire       p2ies_wr = P2IES[0] ? reg_hi_wr[P2IES] : reg_lo_wr[P2IES];
@@ -461,7 +449,6 @@ module pu_msp430_gpio #(
   end
 
   // P2IE Register
-  //----------------
   reg  [7:0] p2ie;
 
   wire       p2ie_wr = P2IE[0] ? reg_hi_wr[P2IE] : reg_lo_wr[P2IE];
@@ -476,7 +463,6 @@ module pu_msp430_gpio #(
   end
 
   // P2SEL Register
-  //----------------
   reg  [7:0] p2sel;
 
   wire       p2sel_wr = P2SEL[0] ? reg_hi_wr[P2SEL] : reg_lo_wr[P2SEL];
@@ -493,7 +479,6 @@ module pu_msp430_gpio #(
   assign p2_sel = p2sel;
 
   // P3IN Register
-  //---------------
   wire [7:0] p3in;
 
   pu_msp430_sync_cell sync_cell_p3in_0 (
@@ -546,7 +531,6 @@ module pu_msp430_gpio #(
   );
 
   // P3OUT Register
-  //----------------
   reg  [7:0] p3out;
 
   wire       p3out_wr = P3OUT[0] ? reg_hi_wr[P3OUT] : reg_lo_wr[P3OUT];
@@ -563,7 +547,6 @@ module pu_msp430_gpio #(
   assign p3_dout = p3out;
 
   // P3DIR Register
-  //----------------
   reg  [7:0] p3dir;
 
   wire       p3dir_wr = P3DIR[0] ? reg_hi_wr[P3DIR] : reg_lo_wr[P3DIR];
@@ -580,7 +563,6 @@ module pu_msp430_gpio #(
   assign p3_dout_en = p3dir;
 
   // P3SEL Register
-  //----------------
   reg  [7:0] p3sel;
 
   wire       p3sel_wr = P3SEL[0] ? reg_hi_wr[P3SEL] : reg_lo_wr[P3SEL];
@@ -597,7 +579,6 @@ module pu_msp430_gpio #(
   assign p3_sel = p3sel;
 
   // P4IN Register
-  //---------------
   wire [7:0] p4in;
 
   pu_msp430_sync_cell sync_cell_p4in_0 (
@@ -650,7 +631,6 @@ module pu_msp430_gpio #(
   );
 
   // P4OUT Register
-  //----------------
   reg  [7:0] p4out;
 
   wire       p4out_wr = P4OUT[0] ? reg_hi_wr[P4OUT] : reg_lo_wr[P4OUT];
@@ -667,7 +647,6 @@ module pu_msp430_gpio #(
   assign p4_dout = p4out;
 
   // P4DIR Register
-  //----------------
   reg  [7:0] p4dir;
 
   wire       p4dir_wr = P4DIR[0] ? reg_hi_wr[P4DIR] : reg_lo_wr[P4DIR];
@@ -684,7 +663,6 @@ module pu_msp430_gpio #(
   assign p4_dout_en = p4dir;
 
   // P4SEL Register
-  //----------------
   reg  [7:0] p4sel;
 
   wire       p4sel_wr = P4SEL[0] ? reg_hi_wr[P4SEL] : reg_lo_wr[P4SEL];
@@ -701,7 +679,6 @@ module pu_msp430_gpio #(
   assign p4_sel = p4sel;
 
   // P5IN Register
-  //---------------
   wire [7:0] p5in;
 
   pu_msp430_sync_cell sync_cell_p5in_0 (
@@ -754,7 +731,6 @@ module pu_msp430_gpio #(
   );
 
   // P5OUT Register
-  //----------------
   reg  [7:0] p5out;
 
   wire       p5out_wr = P5OUT[0] ? reg_hi_wr[P5OUT] : reg_lo_wr[P5OUT];
@@ -771,7 +747,6 @@ module pu_msp430_gpio #(
   assign p5_dout = p5out;
 
   // P5DIR Register
-  //----------------
   reg  [7:0] p5dir;
 
   wire       p5dir_wr = P5DIR[0] ? reg_hi_wr[P5DIR] : reg_lo_wr[P5DIR];
@@ -788,7 +763,6 @@ module pu_msp430_gpio #(
   assign p5_dout_en = p5dir;
 
   // P5SEL Register
-  //----------------
   reg  [7:0] p5sel;
 
   wire       p5sel_wr = P5SEL[0] ? reg_hi_wr[P5SEL] : reg_lo_wr[P5SEL];
@@ -805,7 +779,6 @@ module pu_msp430_gpio #(
   assign p5_sel = p5sel;
 
   // P6IN Register
-  //---------------
   wire [7:0] p6in;
 
   pu_msp430_sync_cell sync_cell_p6in_0 (
@@ -858,7 +831,6 @@ module pu_msp430_gpio #(
   );
 
   // P6OUT Register
-  //----------------
   reg  [7:0] p6out;
 
   wire       p6out_wr = P6OUT[0] ? reg_hi_wr[P6OUT] : reg_lo_wr[P6OUT];
@@ -875,7 +847,6 @@ module pu_msp430_gpio #(
   assign p6_dout = p6out;
 
   // P6DIR Register
-  //----------------
   reg  [7:0] p6dir;
 
   wire       p6dir_wr = P6DIR[0] ? reg_hi_wr[P6DIR] : reg_lo_wr[P6DIR];
@@ -892,7 +863,6 @@ module pu_msp430_gpio #(
   assign p6_dout_en = p6dir;
 
   // P6SEL Register
-  //----------------
   reg  [7:0] p6sel;
 
   wire       p6sel_wr = P6SEL[0] ? reg_hi_wr[P6SEL] : reg_lo_wr[P6SEL];
@@ -908,12 +878,11 @@ module pu_msp430_gpio #(
 
   assign p6_sel = p6sel;
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 4) INTERRUPT GENERATION
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Port 1 interrupt
-  //------------------
 
   // Delay input
   reg [7:0] p1in_dly;
@@ -943,7 +912,6 @@ module pu_msp430_gpio #(
   assign irq_port1 = |(p1ie & p1ifg) & P1_EN[0];
 
   // Port 1 interrupt
-  //------------------
 
   // Delay input
   reg [7:0] p2in_dly;
@@ -972,9 +940,9 @@ module pu_msp430_gpio #(
   // Generate CPU interrupt
   assign irq_port2 = |(p2ie & p2ifg) & P2_EN[0];
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 5) DATA OUTPUT GENERATION
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Data output mux
   wire [15:0] p1in_rd = {8'h00, (p1in & {8{reg_rd[P1IN]}})} << (8 & {4{P1IN[0]}});

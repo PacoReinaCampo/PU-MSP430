@@ -40,7 +40,6 @@
  */
 
 // Data Memory cells
-//======================
 
 wire [15:0] omsp0_mem200 = ram_d1_omsp0.sp.mem[0];
 wire [15:0] omsp0_mem202 = ram_d1_omsp0.sp.mem[1];
@@ -109,7 +108,6 @@ wire [15:0] omsp0_mem27E = ram_d1_omsp0.sp.mem[63];
 wire [15:0] omsp0_mem280 = ram_d1_omsp0.sp.mem[64];
 
 // Program Memory cells
-//======================
 reg [15:0] pmem[0:8191];
 
 // Interrupt vectors

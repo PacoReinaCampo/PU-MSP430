@@ -86,9 +86,9 @@ module pu_msp430_ta (
   input        taclk         // TACLK external timer clock (SLOW)
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  PARAMETER DECLARATION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Register base address (must be aligned to decoder bit width)
   parameter [14:0] BASE_ADDR = 15'h0100;
@@ -114,9 +114,9 @@ module pu_msp430_ta (
                          TACCR2_D   = (BASE_REG << TACCR2),
                          TAIV_D     = (BASE_REG << TAIV);
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Local register selection
   wire reg_sel = per_en & (per_addr[13:DEC_WD-1] == BASE_ADDR[14:DEC_WD]);
@@ -143,12 +143,11 @@ module pu_msp430_ta (
   wire [DEC_SZ-1:0] reg_wr = reg_dec & {512{reg_write}};
   wire [DEC_SZ-1:0] reg_rd = reg_dec & {512{reg_read}};
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3) REGISTERS
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // TACTL Register
-  //-----------------   
   reg [9:0] tactl;
 
   wire tactl_wr = reg_wr[TACTL];
@@ -167,7 +166,6 @@ module pu_msp430_ta (
   end
 
   // TAR Register
-  //-----------------
   wire        tar_wr = reg_wr[TAR];
 
   wire        tar_clk;
@@ -190,7 +188,6 @@ module pu_msp430_ta (
   end
 
   // TACCTL0 Register
-  //------------------   
   reg  [15:0] tacctl0;
 
   wire        tacctl0_wr = reg_wr[TACCTL0];
@@ -212,7 +209,6 @@ module pu_msp430_ta (
   wire [15:0] tacctl0_full = tacctl0 | {5'h00, scci0, 6'h00, cci0, 3'h0};
 
   // TACCR0 Register
-  //------------------
   wire        taccr0_wr = reg_wr[TACCR0];
   wire        cci0_cap;
 
@@ -227,7 +223,6 @@ module pu_msp430_ta (
   end
 
   // TACCTL1 Register
-  //------------------   
   reg  [15:0] tacctl1;
 
   wire        tacctl1_wr = reg_wr[TACCTL1];
@@ -250,7 +245,6 @@ module pu_msp430_ta (
   wire [15:0] tacctl1_full = tacctl1 | {5'h00, scci1, 6'h00, cci1, 3'h0};
 
   // TACCR1 Register
-  //------------------   
   reg  [15:0] taccr1;
 
   wire        taccr1_wr = reg_wr[TACCR1];
@@ -267,7 +261,6 @@ module pu_msp430_ta (
   end
 
   // TACCTL2 Register
-  //------------------   
   reg  [15:0] tacctl2;
 
   wire        tacctl2_wr = reg_wr[TACCTL2];
@@ -290,7 +283,6 @@ module pu_msp430_ta (
   wire [15:0] tacctl2_full = tacctl2 | {5'h00, scci2, 6'h00, cci2, 3'h0};
 
   // TACCR2 Register
-  //------------------   
   reg  [15:0] taccr2;
 
   wire        taccr2_wr = reg_wr[TACCR2];
@@ -307,7 +299,6 @@ module pu_msp430_ta (
   end
 
   // TAIV Register
-  //------------------   
 
   wire [3:0] taiv = (tacctl1[`TACCIFG] & tacctl1[`TACCIE]) ? 4'h2 : (tacctl2[`TACCIFG] & tacctl2[`TACCIE]) ? 4'h4 : (tactl[`TAIFG] & tactl[`TAIE]) ? 4'hA : 4'h0;
 
@@ -315,9 +306,9 @@ module pu_msp430_ta (
   assign ccifg2_clr = (reg_rd[TAIV] | reg_wr[TAIV]) & (taiv == 4'h4);
   assign taifg_clr  = (reg_rd[TAIV] | reg_wr[TAIV]) & (taiv == 4'hA);
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 4) DATA OUTPUT GENERATION
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Data output mux
   wire [15:0] tactl_rd = {6'h00, tactl} & {16{reg_rd[TACTL]}};
@@ -332,12 +323,11 @@ module pu_msp430_ta (
 
   assign per_dout = tactl_rd | tar_rd | tacctl0_rd | taccr0_rd | tacctl1_rd | taccr1_rd | tacctl2_rd | taccr2_rd | taiv_rd;
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 5) Timer A counter control
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Clock input synchronization (TACLK & INCLK)
-  //-----------------------------------------------------------
   wire taclk_s;
   wire inclk_s;
 
@@ -356,7 +346,6 @@ module pu_msp430_ta (
   );
 
   // Clock edge detection (TACLK & INCLK)
-  //-----------------------------------------------------------
 
   reg taclk_dly;
 
@@ -383,12 +372,10 @@ module pu_msp430_ta (
   wire       inclk_en = inclk_s & ~inclk_dly;
 
   // Timer clock input mux
-  //-----------------------------------------------------------
 
   wire       sel_clk = (tactl[`TASSELx] == 2'b00) ? taclk_en : (tactl[`TASSELx] == 2'b01) ? aclk_en : (tactl[`TASSELx] == 2'b10) ? smclk_en : inclk_en;
 
   // Generate update pluse for the counter (<=> divided clock)
-  //-----------------------------------------------------------
   reg  [2:0] clk_div;
 
   assign tar_clk = sel_clk & ((tactl[`TAIDx] == 2'b00) ? 1'b1 : (tactl[`TAIDx] == 2'b01) ? clk_div[0] : (tactl[`TAIDx] == 2'b10) ? &clk_div[1:0] : &clk_div[2:0]);
@@ -404,7 +391,6 @@ module pu_msp430_ta (
   end
 
   // Time counter control signals
-  //-----------------------------------------------------------
 
   assign tar_clr = ((tactl[`TAMCx] == 2'b01) & (tar >= taccr0)) | ((tactl[`TAMCx] == 2'b11) & (taccr0 == 16'h0000));
 
@@ -429,20 +415,19 @@ module pu_msp430_ta (
 
   assign tar_dec = tar_dir | ((tactl[`TAMCx] == 2'b11) & (tar >= taccr0));
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 6) Timer A comparator
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   wire equ0 = (tar_nxt == taccr0) & (tar != taccr0);
   wire equ1 = (tar_nxt == taccr1) & (tar != taccr1);
   wire equ2 = (tar_nxt == taccr2) & (tar != taccr2);
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 7) Timer A capture logic
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Input selection
-  //------------------
   assign cci0 = (tacctl0[`TACCISx] == 2'b00) ? ta_cci0a : (tacctl0[`TACCISx] == 2'b01) ? ta_cci0b : (tacctl0[`TACCISx] == 2'b10) ? 1'b0 : 1'b1;
 
   assign cci1 = (tacctl1[`TACCISx] == 2'b00) ? ta_cci1a : (tacctl1[`TACCISx] == 2'b01) ? ta_cci1b : (tacctl1[`TACCISx] == 2'b10) ? 1'b0 : 1'b1;
@@ -491,7 +476,6 @@ module pu_msp430_ta (
   end
 
   // Generate SCCIx
-  //------------------
 
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst) begin
@@ -518,7 +502,6 @@ module pu_msp430_ta (
   end
 
   // Capture mode
-  //------------------
   wire cci0_evt = (tacctl0[`TACMx] == 2'b00) ? 1'b0 : (tacctl0[`TACMx] == 2'b01) ? (cci0_s & ~cci0_dly) :  // Rising edge
  (tacctl0[`TACMx] == 2'b10) ? (~cci0_s & cci0_dly) :  // Falling edge
  (cci0_s ^ cci0_dly);  // Both edges
@@ -532,7 +515,6 @@ module pu_msp430_ta (
  (cci2_s ^ cci2_dly);  // Both edges
 
   // Event Synchronization
-  //-----------------------
 
   reg  cci0_evt_s;
   always @(posedge mclk or posedge puc_rst) begin
@@ -595,14 +577,12 @@ module pu_msp430_ta (
   end
 
   // Generate final capture command
-  //-----------------------------------
 
   assign cci0_cap = tacctl0[`TASCS] ? cci0_sync : cci0_evt;
   assign cci1_cap = tacctl1[`TASCS] ? cci1_sync : cci1_evt;
   assign cci2_cap = tacctl2[`TASCS] ? cci2_sync : cci2_evt;
 
   // Generate capture overflow flag
-  //-----------------------------------
 
   reg  cap0_taken;
   wire cap0_taken_clr = reg_rd[TACCR0] | (tacctl0_wr & tacctl0[`TACOV] & ~per_din[`TACOV]);
@@ -643,24 +623,19 @@ module pu_msp430_ta (
   assign cov1_set = cap1_taken & cci1_cap & ~reg_rd[TACCR1];
   assign cov2_set = cap2_taken & cci2_cap & ~reg_rd[TACCR2];
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 8) Timer A output unit
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Output unit 0
-  //-------------------
   wire ta_out0_mode0 = tacctl0[`TAOUT];  // Output
   wire ta_out0_mode1 = equ0 ? 1'b1 : ta_out0;  // Set
-  wire ta_out0_mode2 = equ0 ? ~ta_out0 :  // Toggle/Reset
-  equ0 ? 1'b0 : ta_out0;
-  wire ta_out0_mode3 = equ0 ? 1'b1 :  // Set/Reset
-  equ0 ? 1'b0 : ta_out0;
+  wire ta_out0_mode2 = equ0 ? ~ta_out0 : equ0 ? 1'b0 : ta_out0;  // Toggle/Reset
+  wire ta_out0_mode3 = equ0 ? 1'b1 : equ0 ? 1'b0 : ta_out0;  // Set/Reset
   wire ta_out0_mode4 = equ0 ? ~ta_out0 : ta_out0;  // Toggle
   wire ta_out0_mode5 = equ0 ? 1'b0 : ta_out0;  // Reset
-  wire ta_out0_mode6 = equ0 ? ~ta_out0 :  // Toggle/Set
-  equ0 ? 1'b1 : ta_out0;
-  wire ta_out0_mode7 = equ0 ? 1'b0 :  // Reset/Set
-  equ0 ? 1'b1 : ta_out0;
+  wire ta_out0_mode6 = equ0 ? ~ta_out0 : equ0 ? 1'b1 : ta_out0;  // Toggle/Set
+  wire ta_out0_mode7 = equ0 ? 1'b0 : equ0 ? 1'b1 : ta_out0;  // Reset/Set
 
   wire ta_out0_nxt   = (tacctl0[`TAOUTMODx]==3'b000) ? ta_out0_mode0 :
                        (tacctl0[`TAOUTMODx]==3'b001) ? ta_out0_mode1 :
@@ -684,19 +659,14 @@ module pu_msp430_ta (
   assign ta_out0_en = ~tacctl0[`TACAP];
 
   // Output unit 1
-  //-------------------
   wire ta_out1_mode0 = tacctl1[`TAOUT];  // Output
   wire ta_out1_mode1 = equ1 ? 1'b1 : ta_out1;  // Set
-  wire ta_out1_mode2 = equ1 ? ~ta_out1 :  // Toggle/Reset
-  equ0 ? 1'b0 : ta_out1;
-  wire ta_out1_mode3 = equ1 ? 1'b1 :  // Set/Reset
-  equ0 ? 1'b0 : ta_out1;
+  wire ta_out1_mode2 = equ1 ? ~ta_out1 : equ0 ? 1'b0 : ta_out1;  // Toggle/Reset
+  wire ta_out1_mode3 = equ1 ? 1'b1 : equ0 ? 1'b0 : ta_out1;  // Set/Reset
   wire ta_out1_mode4 = equ1 ? ~ta_out1 : ta_out1;  // Toggle
   wire ta_out1_mode5 = equ1 ? 1'b0 : ta_out1;  // Reset
-  wire ta_out1_mode6 = equ1 ? ~ta_out1 :  // Toggle/Set
-  equ0 ? 1'b1 : ta_out1;
-  wire ta_out1_mode7 = equ1 ? 1'b0 :  // Reset/Set
-  equ0 ? 1'b1 : ta_out1;
+  wire ta_out1_mode6 = equ1 ? ~ta_out1 : equ0 ? 1'b1 : ta_out1;  // Toggle/Set
+  wire ta_out1_mode7 = equ1 ? 1'b0 : equ0 ? 1'b1 : ta_out1;  // Reset/Set
 
   wire ta_out1_nxt   = (tacctl1[`TAOUTMODx]==3'b000) ? ta_out1_mode0 :
                        (tacctl1[`TAOUTMODx]==3'b001) ? ta_out1_mode1 :
@@ -720,19 +690,14 @@ module pu_msp430_ta (
   assign ta_out1_en = ~tacctl1[`TACAP];
 
   // Output unit 2
-  //-------------------
   wire ta_out2_mode0 = tacctl2[`TAOUT];  // Output
   wire ta_out2_mode1 = equ2 ? 1'b1 : ta_out2;  // Set
-  wire ta_out2_mode2 = equ2 ? ~ta_out2 :  // Toggle/Reset
-  equ0 ? 1'b0 : ta_out2;
-  wire ta_out2_mode3 = equ2 ? 1'b1 :  // Set/Reset
-  equ0 ? 1'b0 : ta_out2;
+  wire ta_out2_mode2 = equ2 ? ~ta_out2 : equ0 ? 1'b0 : ta_out2;  // Toggle/Reset
+  wire ta_out2_mode3 = equ2 ? 1'b1 : equ0 ? 1'b0 : ta_out2;  // Set/Reset
   wire ta_out2_mode4 = equ2 ? ~ta_out2 : ta_out2;  // Toggle
   wire ta_out2_mode5 = equ2 ? 1'b0 : ta_out2;  // Reset
-  wire ta_out2_mode6 = equ2 ? ~ta_out2 :  // Toggle/Set
-  equ0 ? 1'b1 : ta_out2;
-  wire ta_out2_mode7 = equ2 ? 1'b0 :  // Reset/Set
-  equ0 ? 1'b1 : ta_out2;
+  wire ta_out2_mode6 = equ2 ? ~ta_out2 : equ0 ? 1'b1 : ta_out2;  // Toggle/Set
+  wire ta_out2_mode7 = equ2 ? 1'b0 : equ0 ? 1'b1 : ta_out2;  // Reset/Set
 
   wire ta_out2_nxt   = (tacctl2[`TAOUTMODx]==3'b000) ? ta_out2_mode0 :
                        (tacctl2[`TAOUTMODx]==3'b001) ? ta_out2_mode1 :
@@ -755,9 +720,9 @@ module pu_msp430_ta (
 
   assign ta_out2_en = ~tacctl2[`TACAP];
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 9) Timer A interrupt generation
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   assign taifg_set  = tar_clk & (((tactl[`TAMCx] == 2'b01) & (tar == taccr0)) | ((tactl[`TAMCx] == 2'b10) & (tar == 16'hffff)) | ((tactl[`TAMCx] == 2'b11) & (tar_nxt == 16'h0000) & tar_dec));
 

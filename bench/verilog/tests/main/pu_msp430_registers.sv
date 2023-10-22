@@ -47,7 +47,6 @@
  */
 
 // RAM cells
-//======================
 
 wire [15:0] mem200 = dmem_0.mem[0];
 wire [15:0] mem202 = dmem_0.mem[1];
@@ -115,7 +114,6 @@ wire [15:0] mem27C = dmem_0.mem[62];
 wire [15:0] mem27E = dmem_0.mem[63];
 
 // Interrupt vectors
-//======================
 
 wire [15:0] irq_vect_15 = pmem_0.mem[(`PMEM_SIZE>>1)-1];  // RESET Vector
 wire [15:0] irq_vect_14 = pmem_0.mem[(`PMEM_SIZE>>1)-2];  // NMI
@@ -135,7 +133,6 @@ wire [15:0] irq_vect_01 = pmem_0.mem[(`PMEM_SIZE>>1)-15];  // IRQ  1
 wire [15:0] irq_vect_00 = pmem_0.mem[(`PMEM_SIZE>>1)-16];  // IRQ  0
 
 // CPU ID
-//======================
 
 wire [2:0] dbg_cpu_version = `CPU_VERSION;
 `ifdef ASIC

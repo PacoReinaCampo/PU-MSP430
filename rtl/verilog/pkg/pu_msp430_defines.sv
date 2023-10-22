@@ -662,7 +662,6 @@
 
 //
 // STATES, REGISTER FIELDS, ...
-//======================================
 
 // Instructions type
 `define INST_SO  0
@@ -810,7 +809,6 @@
 
 //
 // DEBUG INTERFACE EXTRA CONFIGURATION
-//======================================
 
 // Debug interface: CPU version
 `define CPU_VERSION   3'h2
@@ -871,16 +869,13 @@ CONFIGURATION ERROR: I2C OR UART DEBUG INTERFACE SHOULD BE ENABLED
 
 //
 // MULTIPLIER CONFIGURATION
-//======================================
 
 // If uncommented, the following define selects
 // the 16x16 multiplier (1 cycle) instead of the
 // default 16x8 multplier (2 cycles)
 //`define MPY_16x16
 
-//----------------------------------------------------------------------------
 // TIMER A CONFIGURATION
-//----------------------------------------------------------------------------
 
 //==========================================================================//
 //==========================================================================//
@@ -913,9 +908,7 @@ CONFIGURATION ERROR: I2C OR UART DEBUG INTERFACE SHOULD BE ENABLED
 `define TACOV       1
 `define TACCIFG     0
   
-//======================================
 // CONFIGURATION CHECKS
-//======================================
 
 `ifdef  IRQ_16
   `ifdef  IRQ_32

@@ -50,9 +50,7 @@ module pu_msp430_ram_d1 (
   output [         15:0] douta
 );
 
-  //============
   // RAM
-  //============
 
   pu_msp430_ram_sp #(
     .ADDR_MSB(`DMEM_MSB - 1),

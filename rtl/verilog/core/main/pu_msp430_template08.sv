@@ -59,9 +59,9 @@ module pu_msp430_template08 (
   input        puc_rst    // Main system reset
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  PARAMETER DECLARATION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Register base address (must be aligned to decoder bit width)
   parameter [14:0] BASE_ADDR = 15'h0090;
@@ -79,9 +79,9 @@ module pu_msp430_template08 (
   // Register one-hot decoder
   parameter [DEC_SZ-1:0] CNTRL1_D = (BASE_REG << CNTRL1), CNTRL2_D = (BASE_REG << CNTRL2), CNTRL3_D = (BASE_REG << CNTRL3), CNTRL4_D = (BASE_REG << CNTRL4);
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Local register selection
   wire              reg_sel = per_en & (per_addr[13:DEC_WD-1] == BASE_ADDR[14:DEC_WD]);
@@ -102,12 +102,11 @@ module pu_msp430_template08 (
   wire [DEC_SZ-1:0] reg_lo_wr = reg_dec & {DEC_SZ{reg_lo_write}};
   wire [DEC_SZ-1:0] reg_rd = reg_dec & {DEC_SZ{reg_read}};
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3) REGISTERS
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // CNTRL1 Register
-  //-----------------
   reg  [       7:0] cntrl1;
 
   wire              cntrl1_wr = CNTRL1[0] ? reg_hi_wr[CNTRL1] : reg_lo_wr[CNTRL1];
@@ -122,7 +121,6 @@ module pu_msp430_template08 (
   end
 
   // CNTRL2 Register
-  //-----------------
   reg  [7:0] cntrl2;
 
   wire       cntrl2_wr = CNTRL2[0] ? reg_hi_wr[CNTRL2] : reg_lo_wr[CNTRL2];
@@ -137,7 +135,6 @@ module pu_msp430_template08 (
   end
 
   // CNTRL3 Register
-  //-----------------
   reg  [7:0] cntrl3;
 
   wire       cntrl3_wr = CNTRL3[0] ? reg_hi_wr[CNTRL3] : reg_lo_wr[CNTRL3];
@@ -152,7 +149,6 @@ module pu_msp430_template08 (
   end
 
   // CNTRL4 Register
-  //-----------------
   reg  [7:0] cntrl4;
 
   wire       cntrl4_wr = CNTRL4[0] ? reg_hi_wr[CNTRL4] : reg_lo_wr[CNTRL4];
@@ -166,9 +162,9 @@ module pu_msp430_template08 (
     end
   end
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 4) DATA OUTPUT GENERATION
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Data output mux
   wire [15:0] cntrl1_rd = {8'h00, (cntrl1 & {8{reg_rd[CNTRL1]}})} << (8 & {4{CNTRL1[0]}});

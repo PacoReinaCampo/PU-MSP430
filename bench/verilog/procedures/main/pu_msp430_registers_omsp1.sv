@@ -40,7 +40,6 @@
  */
 
 // Data Memory cells
-//======================
 
 wire [15:0] omsp1_mem200 = ram_d1_omsp1.sp.mem[0];
 wire [15:0] omsp1_mem202 = ram_d1_omsp1.sp.mem[1];

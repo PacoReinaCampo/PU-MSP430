@@ -110,9 +110,9 @@ module pu_msp430_execution (
   input        scan_enable    // Scan enable (active during scan shifting)
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  INTERNAL WIRES/REGISTERS/PARAMETERS DECLARATION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   wire [15:0] alu_out;
   wire [15:0] alu_out_add;
@@ -127,9 +127,9 @@ module pu_msp430_execution (
   wire [3:0] status;
 
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER FILE
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   wire reg_dest_wr = ((e_state == `E_EXEC) & ((inst_type[`INST_TO] & inst_ad[`DIR] & ~inst_alu[`EXEC_NO_WR]) | (inst_type[`INST_SO] & inst_as[`DIR] & ~(inst_so[`PUSH] | inst_so[`CALL] | inst_so[`RETI])) | inst_type[`INST_JMP])) | dbg_reg_wr;
 
@@ -200,9 +200,9 @@ module pu_msp430_execution (
     .scan_enable (scan_enable)   // Scan enable (active during scan shifting)
   );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3)  SOURCE OPERAND MUXING
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // inst_as[`DIR]    : Register direct.   -> Source is in register
   // inst_as[`IDX]    : Register indexed.  -> Source is in memory, address is register+offset
   // inst_as[`INDIR]  : Register indirect.
@@ -224,9 +224,9 @@ module pu_msp430_execution (
 
   assign op_src = src_reg_src_sel ? reg_src : src_reg_dest_sel ? reg_dest : src_mdb_in_val_sel ? mdb_in_val : src_inst_dext_sel ? inst_dext : src_inst_sext_sel ? inst_sext : 16'h0000;
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 4)  DESTINATION OPERAND MUXING
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // inst_ad[`DIR]    : Register direct.
   // inst_ad[`IDX]    : Register indexed.
   // inst_ad[`SYMB]   : Symbolic (operand is in memory at address PC+x).
@@ -250,9 +250,9 @@ module pu_msp430_execution (
 
   assign op_dst = dbg_halt_st ? dbg_mem_dout : dst_inst_sext_sel ? inst_sext : dst_mdb_in_bw_sel ? mdb_in_bw : dst_reg_dest_sel ? reg_dest : dst_fffe_sel ? 16'hfffe : 16'h0000;
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 5)  ALU
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   wire exec_cycle = (e_state == `E_EXEC);
 
@@ -276,9 +276,9 @@ module pu_msp430_execution (
     .status     (status)        // R2 Status {V,N,Z,C}
   );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 6)  MEMORY INTERFACE
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Detect memory read/write access
   wire       mb_rd_det = ((e_state == `E_SRC_RD) & ~inst_as[`IMM]) | ((e_state == `E_EXEC) & inst_so[`RETI]) | ((e_state == `E_DST_RD) & ~inst_type[`INST_SO] & ~inst_mov);

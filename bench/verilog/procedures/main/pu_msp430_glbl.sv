@@ -54,7 +54,7 @@ module pu_msp430_glbl ();
   reg  GTS_int;
   reg  PRLD_int;
 
-  //--------   JTAG Globals --------------
+  // JTAG Globals
   wire JTAG_TDO_GLBL;
   wire JTAG_TCK_GLBL;
   wire JTAG_TDI_GLBL;

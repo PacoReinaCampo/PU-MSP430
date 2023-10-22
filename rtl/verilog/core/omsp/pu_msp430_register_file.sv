@@ -101,9 +101,9 @@ module pu_msp430_register_file (
   input        scan_enable    // Scan enable (active during scan shifting)
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  AUTOINCREMENT UNIT
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   wire [15:0] inst_src_in;
   wire [15:0] incr_op = (inst_bw & ~inst_src_in[1]) ? 16'h0001 : 16'h0002;
@@ -111,17 +111,15 @@ module pu_msp430_register_file (
 
   wire [15:0] reg_dest_val_in = inst_bw ? {8'h00, reg_dest_val[7:0]} : reg_dest_val;
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2)  SPECIAL REGISTERS (R1/R2/R3)
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Source input selection mask (for interrupt support)
-  //-----------------------------------------------------
 
   assign inst_src_in = reg_sr_clr ? 16'h0004 : inst_src;
 
   // R0: Program counter
-  //---------------------
 
   assign r0          = pc;
 
@@ -174,10 +172,10 @@ module pu_msp430_register_file (
 `endif
 
   // R2: Status register
-  //---------------------
   wire r2_wr = (inst_dest[2] & reg_dest_wr) | reg_sr_wr;
 
-`ifdef CLOCK_GATING  //      -- WITH CLOCK GATING --
+// WITH CLOCK GATING
+`ifdef CLOCK_GATING
   wire       r2_c = alu_stat_wr[0] ? alu_stat[0] : reg_dest_val_in[0];  // C
 
   wire       r2_z = alu_stat_wr[1] ? alu_stat[1] : reg_dest_val_in[1];  // Z
@@ -197,7 +195,8 @@ module pu_msp430_register_file (
     .enable     (r2_en),
     .scan_enable(scan_enable)
   );
-`else  //      -- WITHOUT CLOCK GATING --
+ // WITHOUT CLOCK GATING
+`else
   wire       r2_c = alu_stat_wr[0] ? alu_stat[0] : r2_wr ? reg_dest_val_in[0] : r2[0];  // C
 
   wire       r2_z = alu_stat_wr[1] ? alu_stat[1] : r2_wr ? reg_dest_val_in[1] : r2[1];  // Z
@@ -260,7 +259,6 @@ module pu_msp430_register_file (
 
 
   // R3: Constant generator
-  //-------------------------------------------------------------
   // Note: the auto-increment feature is not implemented for R3
   //       because the @R3+ addressing mode is used for constant
   //       generation (#-1).
@@ -298,12 +296,11 @@ module pu_msp430_register_file (
   end
 `endif
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 4)  GENERAL PURPOSE REGISTERS (R4...R15)
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // R4
-  //------------
   wire r4_wr = inst_dest[4] & reg_dest_wr;
   wire r4_inc = inst_src_in[4] & reg_incr;
 
@@ -344,7 +341,6 @@ module pu_msp430_register_file (
 `endif
 
   // R5
-  //------------
   wire r5_wr = inst_dest[5] & reg_dest_wr;
   wire r5_inc = inst_src_in[5] & reg_incr;
 
@@ -385,7 +381,6 @@ module pu_msp430_register_file (
 `endif
 
   // R6
-  //------------
   wire r6_wr = inst_dest[6] & reg_dest_wr;
   wire r6_inc = inst_src_in[6] & reg_incr;
 
@@ -426,7 +421,6 @@ module pu_msp430_register_file (
 `endif
 
   // R7
-  //------------
   wire r7_wr = inst_dest[7] & reg_dest_wr;
   wire r7_inc = inst_src_in[7] & reg_incr;
 
@@ -467,7 +461,6 @@ module pu_msp430_register_file (
 `endif
 
   // R8
-  //------------
   wire r8_wr = inst_dest[8] & reg_dest_wr;
   wire r8_inc = inst_src_in[8] & reg_incr;
 
@@ -508,7 +501,6 @@ module pu_msp430_register_file (
 `endif
 
   // R9
-  //------------
   wire r9_wr = inst_dest[9] & reg_dest_wr;
   wire r9_inc = inst_src_in[9] & reg_incr;
 
@@ -549,7 +541,6 @@ module pu_msp430_register_file (
 `endif
 
   // R10
-  //------------
   wire r10_wr = inst_dest[10] & reg_dest_wr;
   wire r10_inc = inst_src_in[10] & reg_incr;
 
@@ -590,7 +581,6 @@ module pu_msp430_register_file (
 `endif
 
   // R11
-  //------------
   wire r11_wr = inst_dest[11] & reg_dest_wr;
   wire r11_inc = inst_src_in[11] & reg_incr;
 
@@ -631,7 +621,6 @@ module pu_msp430_register_file (
 `endif
 
   // R12
-  //------------
   wire r12_wr = inst_dest[12] & reg_dest_wr;
   wire r12_inc = inst_src_in[12] & reg_incr;
 
@@ -672,7 +661,6 @@ module pu_msp430_register_file (
 `endif
 
   // R13
-  //------------
   wire r13_wr = inst_dest[13] & reg_dest_wr;
   wire r13_inc = inst_src_in[13] & reg_incr;
 
@@ -713,7 +701,6 @@ module pu_msp430_register_file (
 `endif
 
   // R14
-  //------------
   wire r14_wr = inst_dest[14] & reg_dest_wr;
   wire r14_inc = inst_src_in[14] & reg_incr;
 
@@ -754,7 +741,6 @@ module pu_msp430_register_file (
 `endif
 
   // R15
-  //------------
   wire r15_wr = inst_dest[15] & reg_dest_wr;
   wire r15_inc = inst_src_in[15] & reg_incr;
 
@@ -794,9 +780,9 @@ module pu_msp430_register_file (
   end
 `endif
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 5)  READ MUX
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   assign reg_src  = (r0      & {16{inst_src_in[0]}})   | 
                     (r1      & {16{inst_src_in[1]}})   | 

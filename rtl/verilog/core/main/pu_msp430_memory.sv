@@ -90,12 +90,11 @@ module pu_msp430_memory (
   input        scan_enable    // Scan enable (active during scan shifting)
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  DECODER
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // RAM Interface
-  //------------------
 
   // Execution unit access
   wire        eu_dmem_cen = ~(eu_mb_en & (eu_mab >= (`DMEM_BASE >> 1)) & (eu_mab < ((`DMEM_BASE + `DMEM_SIZE) >> 1)));
@@ -112,7 +111,6 @@ module pu_msp430_memory (
   assign dmem_din  = ~dbg_dmem_cen ? dbg_mem_dout : eu_mdb_out;
 
   // ROM Interface
-  //------------------
   parameter PMEM_OFFSET = (16'hFFFF - `PMEM_SIZE + 1);
 
   // Execution unit access (only read access are accepted)
@@ -136,7 +134,6 @@ module pu_msp430_memory (
   assign fe_pmem_wait = (~fe_pmem_cen & ~eu_pmem_cen);
 
   // Peripherals
-  //--------------------
   wire dbg_per_en = dbg_mem_en & (dbg_mem_addr[15:1] < (`PER_SIZE >> 1));
   wire eu_per_en = eu_mb_en & (eu_mab < (`PER_SIZE >> 1));
 
@@ -158,7 +155,6 @@ module pu_msp430_memory (
   end
 
   // Frontend data Mux
-  //---------------------------------
   // Whenever the frontend doesn't access the ROM,  backup the data
 
   // Detect whenever the data should be backuped and restored
@@ -224,7 +220,6 @@ module pu_msp430_memory (
   assign fe_mdb_in = pmem_dout_bckup_sel ? pmem_dout_bckup : pmem_dout;
 
   // Execution-Unit data Mux
-  //---------------------------------
 
   // Select between peripherals, RAM and ROM
   reg [1:0] eu_mdb_in_sel;
@@ -241,7 +236,6 @@ module pu_msp430_memory (
   assign eu_mdb_in = eu_mdb_in_sel[1] ? pmem_dout : eu_mdb_in_sel[0] ? per_dout_val : dmem_dout;
 
   // Debug interface  data Mux
-  //---------------------------------
 
   // Select between peripherals, RAM and ROM
 `ifdef DBG_EN

@@ -55,7 +55,6 @@ module pu_msp430_ram_sp #(
 );
 
   // RAM
-  //============
 
   reg  [      15:0] mem                     [0:(MEM_SIZE/2)-1];
   reg  [ADDR_MSB:0] ram_addr_reg;

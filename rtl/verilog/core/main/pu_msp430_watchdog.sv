@@ -81,9 +81,9 @@ module pu_msp430_watchdog (
   input        wdtifg_sw_set    // Watchdog-timer interrupt flag software set
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  PARAMETER DECLARATION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Register base address (must be aligned to decoder bit width)
   parameter [14:0] BASE_ADDR = 15'h0120;
@@ -101,9 +101,9 @@ module pu_msp430_watchdog (
   // Register one-hot decoder
   parameter [DEC_SZ-1:0] WDTCTL_D = (BASE_REG << WDTCTL);
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Local register selection
   wire              reg_sel = per_en & (per_addr[13:DEC_WD-1] == BASE_ADDR[14:DEC_WD]);
@@ -122,12 +122,11 @@ module pu_msp430_watchdog (
   wire [DEC_SZ-1:0] reg_wr = reg_dec & {DEC_SZ{reg_write}};
   wire [DEC_SZ-1:0] reg_rd = reg_dec & {DEC_SZ{reg_read}};
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3) REGISTERS
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // WDTCTL Register
-  //-----------------
   // WDTNMI is not implemented and therefore masked
 
   reg  [       7:0] wdtctl;
@@ -186,9 +185,9 @@ module pu_msp430_watchdog (
   wire wdttmsel = wdtctl[4];
   assign wdtnmies = wdtctl[6];
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 4) DATA OUTPUT GENERATION
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
 `ifdef NMI
   parameter [7:0] WDTNMI_RD_MASK = 8'h20;
@@ -210,13 +209,12 @@ module pu_msp430_watchdog (
   wire [15:0] wdtctl_rd = {8'h69, wdtctl | WDTCTL_RD_MASK} & {16{reg_rd[WDTCTL]}};
   assign per_dout = wdtctl_rd;
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 5)  WATCHDOG TIMER (ASIC IMPLEMENTATION)
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 `ifdef ASIC_CLOCKING
 
   // Watchdog clock source selection
-  //---------------------------------
   wire wdt_clk;
 
 `ifdef WATCHDOG_MUX
@@ -237,7 +235,6 @@ module pu_msp430_watchdog (
 `endif
 
   // Reset synchronizer for the watchdog local clock domain
-  //--------------------------------------------------------
 
   wire wdt_rst_noscan;
   wire wdt_rst;
@@ -258,7 +255,6 @@ module pu_msp430_watchdog (
   );
 
   // Watchog counter clear (synchronization)
-  //-----------------------------------------
 
   // Toggle bit whenever the watchog needs to be cleared
   reg  wdtcnt_clr_toggle;
@@ -294,7 +290,6 @@ module pu_msp430_watchdog (
   wire wdtcnt_clr = (wdtcnt_clr_sync ^ wdtcnt_clr_sync_dly) | wdtqn_edge;
 
   // Watchog counter increment (synchronization)
-  //----------------------------------------------
   wire wdtcnt_incr;
 
   pu_msp430_sync_cell sync_cell_wdtcnt_incr (
@@ -305,7 +300,6 @@ module pu_msp430_watchdog (
   );
 
   // Watchdog 16 bit counter
-  //--------------------------
   reg  [15:0] wdtcnt;
 
   wire [15:0] wdtcnt_nxt = wdtcnt + 16'h0001;
@@ -350,7 +344,6 @@ module pu_msp430_watchdog (
   // a full bus synchronizer as it won't hurt
   // if we get a wrong WDTISx value for a
   // single clock cycle)
-  //--------------------------------------------
   reg [1:0] wdtisx_s;
   reg [1:0] wdtisx_ss;
   always @(posedge wdt_clk_cnt or posedge wdt_rst) begin
@@ -364,7 +357,6 @@ module pu_msp430_watchdog (
   end
 
   // Interval selection mux
-  //--------------------------
   reg wdtqn;
 
   always @(wdtisx_ss or wdtcnt_nxt) begin
@@ -377,7 +369,6 @@ module pu_msp430_watchdog (
   end
 
   // Watchdog event detection
-  //-----------------------------
 
   // Interval end detection
   assign wdtqn_edge = (wdtqn & wdtcnt_incr);
@@ -414,7 +405,6 @@ module pu_msp430_watchdog (
   wire wdtifg_evt = (wdt_evt_toggle_sync_dly ^ wdt_evt_toggle_sync) | wdtpw_error;
 
   // Watchdog wakeup generation
-  //-------------------------------------------------------------
 
   // Clear wakeup when the watchdog flag is cleared (glitch free)
   reg  wdtifg_clr_reg;
@@ -468,7 +458,6 @@ module pu_msp430_watchdog (
   );
 
   // Watchdog interrupt flag
-  //------------------------------
   wire wdtifg_set = wdtifg_evt | wdtifg_sw_set;
   assign wdtifg_clr = (wdtifg_irq_clr & wdttmsel) | wdtifg_sw_clr;
 
@@ -483,11 +472,9 @@ module pu_msp430_watchdog (
   end
 
   // Watchdog interrupt generation
-  //---------------------------------
   assign wdt_irq = wdttmsel & wdtifg & wdtie;
 
   // Watchdog reset generation
-  //-----------------------------
   always @(posedge mclk or posedge por) begin
     if (por) begin
       wdt_reset <= 1'b0;
@@ -496,17 +483,15 @@ module pu_msp430_watchdog (
     end
   end
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 6)  WATCHDOG TIMER (FPGA IMPLEMENTATION)
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 `else
 
   // Watchdog clock source selection
-  //---------------------------------
   wire        clk_src_en = wdtctl[2] ? aclk_en : smclk_en;
 
   // Watchdog 16 bit counter
-  //--------------------------
   reg  [15:0] wdtcnt;
 
   wire        wdtifg_evt;
@@ -526,7 +511,6 @@ module pu_msp430_watchdog (
   end
 
   // Interval selection mux
-  //--------------------------
   reg wdtqn;
 
   always @(wdtctl or wdtcnt_nxt) begin
@@ -539,12 +523,10 @@ module pu_msp430_watchdog (
   end
 
   // Watchdog event detection
-  //-----------------------------
 
   assign wdtifg_evt = (wdtqn & wdtcnt_incr) | wdtpw_error;
 
   // Watchdog interrupt flag
-  //------------------------------
   wire wdtifg_set = wdtifg_evt | wdtifg_sw_set;
   wire wdtifg_clr = (wdtifg_irq_clr & wdttmsel) | wdtifg_sw_clr;
 
@@ -559,12 +541,10 @@ module pu_msp430_watchdog (
   end
 
   // Watchdog interrupt generation
-  //---------------------------------
   assign wdt_irq  = wdttmsel & wdtifg & wdtie;
   assign wdt_wkup = 1'b0;
 
   // Watchdog reset generation
-  //-----------------------------
   always @(posedge mclk or posedge por) begin
     if (por) begin
       wdt_reset <= 1'b0;

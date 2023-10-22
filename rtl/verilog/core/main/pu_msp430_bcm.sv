@@ -95,9 +95,9 @@ module pu_msp430_bcm (
   input        wdt_reset       // Watchdog-timer reset
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  WIRES & PARAMETER DECLARATION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Register base address (must be aligned to decoder bit width)
   parameter [14:0] BASE_ADDR = 15'h0050;
@@ -119,9 +119,9 @@ module pu_msp430_bcm (
   wire              nodiv_mclk;
   wire              nodiv_mclk_n;
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Local register selection
   wire              reg_sel = per_en & (per_addr[13:DEC_WD-1] == BASE_ADDR[14:DEC_WD]);
@@ -142,12 +142,11 @@ module pu_msp430_bcm (
   wire [DEC_SZ-1:0] reg_lo_wr = reg_dec & {DEC_SZ{reg_lo_write}};
   wire [DEC_SZ-1:0] reg_rd = reg_dec & {DEC_SZ{reg_read}};
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3) REGISTERS
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // BCSCTL1 Register
-  //--------------
   reg  [       7:0] bcsctl1;
   wire              bcsctl1_wr = BCSCTL1[0] ? reg_hi_wr[BCSCTL1] : reg_lo_wr[BCSCTL1];
   wire [       7:0] bcsctl1_nxt = BCSCTL1[0] ? per_din[15:8] : per_din[7:0];
@@ -168,7 +167,6 @@ module pu_msp430_bcm (
   end
 
   // BCSCTL2 Register
-  //--------------
   reg  [7:0] bcsctl2;
   wire       bcsctl2_wr = BCSCTL2[0] ? reg_hi_wr[BCSCTL2] : reg_lo_wr[BCSCTL2];
   wire [7:0] bcsctl2_nxt = BCSCTL2[0] ? per_din[15:8] : per_din[7:0];
@@ -204,9 +202,9 @@ module pu_msp430_bcm (
     else if (bcsctl2_wr) bcsctl2 <= bcsctl2_nxt & (sels_mask | divsx_mask | selmx_mask | divmx_mask);  // Mask unused bits
   end
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 4) DATA OUTPUT GENERATION
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Data output mux
   wire [15:0] bcsctl1_rd = {8'h00, (bcsctl1 & {8{reg_rd[BCSCTL1]}})} << (8 & {4{BCSCTL1[0]}});
@@ -214,9 +212,9 @@ module pu_msp430_bcm (
 
   assign per_dout = bcsctl1_rd | bcsctl2_rd;
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 5)  DCO_CLK / LFXT_CLK INTERFACES (WAKEUP, ENABLE, ...)
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
 `ifdef ASIC_CLOCKING
   wire cpuoff_and_mclk_enable;
@@ -228,9 +226,7 @@ module pu_msp430_bcm (
   );
 `endif
 
-  //-----------------------------------------------------------
   // 5.1) HIGH SPEED SYSTEM CLOCK GENERATOR (DCO_CLK)
-  //-----------------------------------------------------------
   // Note1: switching off the DCO osillator is only
   //        supported in ASIC mode with SCG0 low power mode
   //
@@ -362,12 +358,9 @@ module pu_msp430_bcm (
   assign dco_wkup   = 1'b1;
 `endif
 
-  //-----------------------------------------------------------
   // 5.2) LOW FREQUENCY CRYSTAL CLOCK GENERATOR (LFXT_CLK)
-  //-----------------------------------------------------------
 
   // ASIC MODE
-  //------------------------------------------------
   // Note: unlike the original MSP430 specification,
   //       we allow to switch off the LFXT even
   //       if it is selected by MCLK or SMCLK.
@@ -487,7 +480,6 @@ module pu_msp430_bcm (
 `endif
 
   // FPGA MODE
-  //---------------------------------------
   // Synchronize LFXT_CLK & edge detection
 `else
 
@@ -512,20 +504,17 @@ module pu_msp430_bcm (
   assign lfxt_wkup   = 1'b0;
 `endif
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 6)  CLOCK GENERATION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
-  //-----------------------------------------------------------
   // 6.1) GLOBAL CPU ENABLE
-  //-----------------------------------------------------------
   // ACLK and SMCLK are directly switched-off
   // with the cpu_en pin (after synchronization).
   // MCLK will be switched off once the CPU reaches
   // its IDLE state (through the mclk_enable signal)
 
   // Synchronize CPU_EN signal to the MCLK domain
-  //----------------------------------------------
 `ifdef SYNC_CPU_EN
   pu_msp430_sync_cell sync_cell_cpu_en (
     .data_out(cpu_en_s),
@@ -545,7 +534,6 @@ module pu_msp430_bcm (
 `endif
 
   // Synchronize CPU_EN signal to the ACLK domain
-  //----------------------------------------------
 `ifdef LFXT_DOMAIN
   wire cpu_en_aux_s;
 
@@ -560,7 +548,6 @@ module pu_msp430_bcm (
 `endif
 
   // Synchronize CPU_EN signal to the SMCLK domain
-  //----------------------------------------------
   // Note: the synchronizer is only required if there is a SMCLK_MUX
 `ifdef ASIC_CLOCKING
 `ifdef SMCLK_MUX
@@ -576,12 +563,9 @@ module pu_msp430_bcm (
 `endif
 `endif
 
-  //-----------------------------------------------------------
   // 6.2) MCLK GENERATION
-  //-----------------------------------------------------------
 
   // Clock MUX
-  //----------------------------
 `ifdef MCLK_MUX
   pu_msp430_clock_mux clock_mux_mclk (
     .clk_out  (nodiv_mclk),
@@ -597,7 +581,6 @@ module pu_msp430_bcm (
   assign nodiv_mclk_n = ~nodiv_mclk;
 
   // Wakeup synchronizer
-  //----------------------------
   wire mclk_wkup_s;
 
 `ifdef CPUOFF_EN
@@ -612,7 +595,6 @@ module pu_msp430_bcm (
 `endif
 
   // Clock Divider
-  //----------------------------
   // No need for extra synchronizer as bcsctl2
   // comes from the same clock domain.
 
@@ -636,7 +618,6 @@ module pu_msp430_bcm (
 `endif
 
   // Generate main system clock
-  //----------------------------
 `ifdef MCLK_CGATE
 
   pu_msp430_clock_gate clock_gate_mclk (
@@ -649,12 +630,9 @@ module pu_msp430_bcm (
   assign mclk = nodiv_mclk;
 `endif
 
-  //-----------------------------------------------------------
   // 6.3) ACLK GENERATION
-  //-----------------------------------------------------------
 
   // ASIC MODE
-  //----------------------------
 `ifdef ASIC_CLOCKING
 
 `ifdef ACLK_DIVIDER
@@ -743,7 +721,6 @@ module pu_msp430_bcm (
   assign aclk_en = 1'b1;
 
   // FPGA MODE
-  //----------------------------
 `else
   reg        aclk_en;
   reg  [2:0] aclk_div;
@@ -762,12 +739,9 @@ module pu_msp430_bcm (
   assign aclk = mclk;
 `endif
 
-  //-----------------------------------------------------------
   // 6.4) SMCLK GENERATION
-  //-----------------------------------------------------------
 
   // Clock MUX
-  //----------------------------
 `ifdef SMCLK_MUX
   pu_msp430_clock_mux clock_mux_smclk (
     .clk_out  (nodiv_smclk),
@@ -782,7 +756,6 @@ module pu_msp430_bcm (
 `endif
 
   // ASIC MODE
-  //----------------------------
 `ifdef ASIC_CLOCKING
 `ifdef SMCLK_MUX
 
@@ -845,7 +818,6 @@ module pu_msp430_bcm (
 `endif
 
   // Clock Divider
-  //----------------------------
 `ifdef SMCLK_DIVIDER
 
   reg [2:0] smclk_div;
@@ -865,7 +837,6 @@ module pu_msp430_bcm (
 `endif
 
   // Generate sub-system clock
-  //----------------------------
 `ifdef SMCLK_CGATE
   pu_msp430_clock_gate clock_gate_smclk (
     .gclk       (smclk),
@@ -880,7 +851,6 @@ module pu_msp430_bcm (
   assign smclk_en = 1'b1;
 
   // FPGA MODE
-  //----------------------------
 `else
   reg        smclk_en;
   reg  [2:0] smclk_div;
@@ -902,12 +872,9 @@ module pu_msp430_bcm (
   wire smclk = mclk;
 `endif
 
-  //-----------------------------------------------------------
   // 6.5) DEBUG INTERFACE CLOCK GENERATION (DBG_CLK)
-  //-----------------------------------------------------------
 
   // Synchronize DBG_EN signal to MCLK domain
-  //------------------------------------------
 `ifdef DBG_EN
 `ifdef SYNC_DBG_EN
   wire dbg_en_n_s;
@@ -930,7 +897,6 @@ module pu_msp430_bcm (
 `endif
 
   // Serial Debug Interface Clock gate
-  //------------------------------------------------
 `ifdef DBG_EN
 `ifdef ASIC_CLOCKING
   pu_msp430_clock_gate clock_gate_dbg_clk (
@@ -946,9 +912,9 @@ module pu_msp430_bcm (
   assign dbg_clk = 1'b0;
 `endif
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 7)  RESET GENERATION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   //
   // Whenever the reset pin (reset_n) is deasserted, the internal resets of the
   // openMSP430 will be released in the following order:
@@ -961,7 +927,6 @@ module pu_msp430_bcm (
   //
 
   // Generate synchronized POR to MCLK domain
-  //------------------------------------------
 
   // Asynchronous reset source
   assign por_a = !reset_n;
@@ -987,7 +952,6 @@ module pu_msp430_bcm (
 `endif
 
   // Generate synchronized reset for the SDI
-  //------------------------------------------
 `ifdef DBG_EN
 
   // Reset Generation
@@ -1016,7 +980,6 @@ module pu_msp430_bcm (
 `endif
 
   // Generate main system reset (PUC_RST)
-  //--------------------------------------
   wire puc_noscan_n;
   wire puc_a_scan;
 

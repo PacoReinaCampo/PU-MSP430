@@ -65,9 +65,9 @@ module pu_msp430_multiplier (
   input        scan_enable  // Scan enable (active during scan shifting)
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  PARAMETER/REGISTERS & WIRE DECLARATION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Register base address (must be aligned to decoder bit width)
   parameter [14:0] BASE_ADDR = 15'h0130;
@@ -97,9 +97,9 @@ module pu_msp430_multiplier (
   wire result_clr;
   wire early_read;
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Local register selection
   wire reg_sel = per_en & (per_addr[13:DEC_WD-1] == BASE_ADDR[14:DEC_WD]);
@@ -128,12 +128,11 @@ module pu_msp430_multiplier (
   // Masked input data for byte access
   wire [15:0] per_din_msk = per_din & {{8{per_we[1]}}, 8'hff};
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3) REGISTERS
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // OP1 Register
-  //-----------------   
   reg [15:0] op1;
 
   wire op1_wr = reg_wr[OP1_MPY] | reg_wr[OP1_MPYS] | reg_wr[OP1_MAC] | reg_wr[OP1_MACS];
@@ -172,7 +171,6 @@ module pu_msp430_multiplier (
   wire [15:0] op1_rd = op1;
 
   // OP2 Register
-  //-----------------   
   reg  [15:0] op2;
 
   wire        op2_wr = reg_wr[OP2];
@@ -211,7 +209,6 @@ module pu_msp430_multiplier (
   wire [15:0] op2_rd = op2;
 
   // RESLO Register
-  //-----------------   
   reg  [15:0] reslo;
 
   wire [15:0] reslo_nxt;
@@ -260,7 +257,6 @@ module pu_msp430_multiplier (
   wire [15:0] reslo_rd = early_read ? reslo_nxt : reslo;
 
   // RESHI Register
-  //-----------------   
   reg  [15:0] reshi;
 
   wire [15:0] reshi_nxt;
@@ -309,7 +305,6 @@ module pu_msp430_multiplier (
   wire [15:0] reshi_rd = early_read ? reshi_nxt : reshi;
 
   // SUMEXT Register
-  //-----------------   
   reg  [ 1:0] sumext_s;
 
   wire [ 1:0] sumext_s_nxt;
@@ -328,9 +323,9 @@ module pu_msp430_multiplier (
   wire [15:0] sumext = {{14{sumext_s[1]}}, sumext_s};
   wire [15:0] sumext_rd = early_read ? sumext_nxt : sumext;
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 4) DATA OUTPUT GENERATION
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Data output mux
   wire [15:0] op1_mux = op1_rd & {16{reg_rd[OP1_MPY] | reg_rd[OP1_MPYS] | reg_rd[OP1_MAC] | reg_rd[OP1_MACS]}};
@@ -341,12 +336,11 @@ module pu_msp430_multiplier (
 
   assign per_dout = op1_mux | op2_mux | reslo_mux | reshi_mux | sumext_mux;
 
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 5) HARDWARE MULTIPLIER FUNCTIONAL LOGIC
-  //============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Multiplier configuration
-  //--------------------------
 
   // Detect signed mode
   reg sign_sel;
@@ -395,7 +389,6 @@ module pu_msp430_multiplier (
   wire [31:0] result = {reshi, reslo};
 
   // 16x16 Multiplier (result computed in 1 clock cycle)
-  //-----------------------------------------------------
 `ifdef MPY_16x16
 
   // Detect start of a multiplication
@@ -430,7 +423,6 @@ module pu_msp430_multiplier (
   assign early_read   = 1'b0;
 
   // 16x8 Multiplier (result computed in 2 clock cycles)
-  //-----------------------------------------------------
 `else
 
   // Detect start of a multiplication

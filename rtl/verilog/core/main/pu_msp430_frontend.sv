@@ -106,9 +106,9 @@ module pu_msp430_frontend (
   input               wkup           // System Wake-up (asynchronous)
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  UTILITY FUNCTIONS
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // 64 bits one-hot decoder
   function [63:0] one_hot64;
@@ -147,13 +147,12 @@ module pu_msp430_frontend (
     end
   endfunction
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2)  PARAMETER DEFINITIONS
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   //
   // 2.1) Instruction State machine definitons
-  //-------------------------------------------
 
   parameter I_IRQ_FETCH = `I_IRQ_FETCH;
   parameter I_IRQ_DONE = `I_IRQ_DONE;
@@ -164,7 +163,6 @@ module pu_msp430_frontend (
 
   //
   // 2.2) Execution State machine definitons
-  //-------------------------------------------
 
   parameter E_IRQ_0 = `E_IRQ_0;
   parameter E_IRQ_1 = `E_IRQ_1;
@@ -181,9 +179,9 @@ module pu_msp430_frontend (
   parameter E_JUMP = `E_JUMP;
   parameter E_IDLE = `E_IDLE;
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3)  FRONTEND STATE MACHINE
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // The wire "conv" is used as state bits to calculate the next response
   reg  [ 2:0] i_state_nxt;
@@ -232,13 +230,12 @@ module pu_msp430_frontend (
     else dbg_halt_st <= cpu_halt_cmd & (i_state_nxt == I_IDLE);
   end
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 4)  INTERRUPT HANDLING & SYSTEM WAKEUP
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   //
   // 4.1) INTERRUPT HANDLING
-  //-----------------------------------------
 
   // Detect reset interrupt
   always @(posedge mclk or posedge puc_rst) begin
@@ -298,7 +295,6 @@ module pu_msp430_frontend (
 
   //
   // 4.2) SYSTEM WAKEUP
-  //-----------------------------------------
 `ifdef CPUOFF_EN
 
   // Generate the main system clock enable signal
@@ -331,13 +327,12 @@ module pu_msp430_frontend (
   assign mclk_enable = 1'b1;
 `endif
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 5)  FETCH INSTRUCTION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   //
   // 5.1) PROGRAM COUNTER & MEMORY INTERFACE
-  //-----------------------------------------
 
   // Program counter
 
@@ -379,7 +374,6 @@ module pu_msp430_frontend (
 
   //
   // 5.2) INSTRUCTION REGISTER
-  //--------------------------------
 
   // Instruction register
   assign ir    = mdb_in;
@@ -461,9 +455,9 @@ module pu_msp430_frontend (
   // Destination extension word is ready
   wire inst_dext_rdy = (((i_state == I_EXT1) & ~is_sext) | (i_state == I_EXT2));
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 6)  DECODE INSTRUCTION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
 `ifdef CLOCK_GATING
   wire mclk_decode;
@@ -480,7 +474,6 @@ module pu_msp430_frontend (
 
   //
   // 6.1) OPCODE: INSTRUCTION TYPE
-  //----------------------------------------
   // Instructions type is encoded in a one hot fashion as following:
   //
   // 3'b001: Single-operand arithmetic
@@ -503,7 +496,6 @@ module pu_msp430_frontend (
 
   //
   // 6.2) OPCODE: SINGLE-OPERAND ARITHMETIC
-  //----------------------------------------
   // Instructions are encoded in a one hot fashion as following:
   //
   // 8'b00000001: RRC
@@ -531,7 +523,6 @@ module pu_msp430_frontend (
 
   //
   // 6.3) OPCODE: CONDITIONAL JUMP
-  //--------------------------------
   // Instructions are encoded in a one hot fashion as following:
   //
   // 8'b00000001: JNE/JNZ
@@ -561,7 +552,6 @@ module pu_msp430_frontend (
 
   //
   // 6.4) OPCODE: TWO-OPERAND ARITHMETIC
-  //-------------------------------------
   // Instructions are encoded in a one hot fashion as following:
   //
   // 12'b000000000001: MOV
@@ -594,7 +584,6 @@ module pu_msp430_frontend (
 
   //
   // 6.5) SOURCE AND DESTINATION REGISTERS
-  //---------------------------------------
 
   // Destination register
   reg [3:0] inst_dest_bin;
@@ -632,7 +621,6 @@ module pu_msp430_frontend (
 
   //
   // 6.6) SOURCE ADDRESSING MODES
-  //--------------------------------
   // Source addressing modes are encoded in a one hot fashion as following:
   //
   // 13'b0000000000001: Register direct.
@@ -717,7 +705,6 @@ module pu_msp430_frontend (
 
   //
   // 6.7) DESTINATION ADDRESSING MODES
-  //-----------------------------------
   // Destination addressing modes are encoded in a one hot fashion as following:
   //
   // 8'b00000001: Register direct.
@@ -762,7 +749,6 @@ module pu_msp430_frontend (
 
   //
   // 6.8) REMAINING INSTRUCTION DECODING
-  //-------------------------------------
 
   // Operation size
   always @(posedge mclk or posedge puc_rst) begin
@@ -785,14 +771,13 @@ module pu_msp430_frontend (
   end
 `endif
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 7)  EXECUTION-UNIT STATE MACHINE
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // State machine registers
 
   // State machine control signals
-  //--------------------------------
 
   wire src_acalc_pre = inst_as_nxt[`IDX] | inst_as_nxt[`SYMB] | inst_as_nxt[`ABS];
   wire src_rd_pre = inst_as_nxt[`INDIR] | inst_as_nxt[`INDIR_I] | inst_as_nxt[`IMM] | inst_so_nxt[`RETI];
@@ -839,7 +824,6 @@ module pu_msp430_frontend (
   wire [3:0] e_first_state = ~dbg_halt_st & inst_so_nxt[`IRQ] ? E_IRQ_0 : cpu_halt_cmd | (i_state == I_IDLE) ? E_IDLE : cpuoff ? E_IDLE : src_acalc_pre ? E_SRC_AD : src_rd_pre ? E_SRC_RD : dst_acalc_pre ? E_DST_AD : dst_rd_pre ? E_DST_RD : E_EXEC;
 
   // State machine
-  //--------------------------------
 
   // States Transitions
   always @(e_state or dst_acalc or dst_rd or inst_sext_rdy or inst_dext_rdy or exec_dext_rdy or exec_jmp or exec_dst_wr or e_first_state or exec_src_wr) begin
@@ -877,17 +861,15 @@ module pu_msp430_frontend (
   end
 
   // Frontend State machine control signals
-  //----------------------------------------
 
   assign exec_done = exec_jmp ? (e_state == E_JUMP) : exec_dst_wr ? (e_state == E_DST_WR) : exec_src_wr ? (e_state == E_SRC_WR) : (e_state == E_EXEC);
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 8)  EXECUTION-UNIT STATE FRONTEND
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   //
   // 8.1) ALU FRONTEND SIGNALS
-  //-------------------------------------
   //
   // 12'b000000000001: Enable ALU source inverter
   // 12'b000000000010: Enable Incrementer

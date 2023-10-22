@@ -72,12 +72,11 @@ module pu_msp430_dbg_uart (
   input        mem_bw          // Burst byte width
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1)  UART RECEIVE LINE SYNCHRONIZTION & FILTERING
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Synchronize RXD input
-  //--------------------------------
 `ifdef SYNC_DBG_UART_RXD
 
   wire uart_rxd_n;
@@ -95,7 +94,6 @@ module pu_msp430_dbg_uart (
 `endif
 
   // RXD input buffer
-  //--------------------------------
   reg [1:0] rxd_buf;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
@@ -107,7 +105,6 @@ module pu_msp430_dbg_uart (
   end
 
   // Majority decision
-  //------------------------
   reg  rxd_maj;
 
   wire rxd_maj_nxt = (uart_rxd & rxd_buf[0]) | (uart_rxd & rxd_buf[1]) | (rxd_buf[0] & rxd_buf[1]);
@@ -125,12 +122,11 @@ module pu_msp430_dbg_uart (
   wire        rxd_re = ~rxd_maj & rxd_maj_nxt;
   wire        rxd_edge = rxd_maj ^ rxd_maj_nxt;
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2)  UART STATE MACHINE
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Receive state
-  //------------------------
   reg  [ 2:0] uart_state;
   reg  [ 2:0] uart_state_nxt;
 
@@ -177,9 +173,9 @@ module pu_msp430_dbg_uart (
   wire rx_active = (uart_state == RX_DATA1) | (uart_state == RX_DATA2) | (uart_state == RX_CMD);
   wire tx_active = (uart_state == TX_DATA1) | (uart_state == TX_DATA2);
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3)  UART SYNCHRONIZATION
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // After DBG_RST, the host needs to fist send a synchronization character (0x80)
   // If this feature doesn't work properly, it is possible to disable it by
   // commenting the DBG_UART_AUTO_SYNC define in the openMSP430.inc file.
@@ -215,12 +211,11 @@ module pu_msp430_dbg_uart (
   wire [`DBG_UART_XFER_CNT_W-1:0] bit_cnt_max = `DBG_UART_CNT;
 `endif
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 4)  UART RECEIVE / TRANSMIT
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Transfer counter
-  //------------------------
   reg  [                     3:0] xfer_bit;
   reg  [`DBG_UART_XFER_CNT_W-1:0] xfer_cnt;
 
@@ -254,7 +249,6 @@ module pu_msp430_dbg_uart (
   end
 
   // Receive/Transmit buffer
-  //-------------------------
   assign xfer_buf_nxt = {rxd_s, xfer_buf[19:1]};
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
@@ -268,7 +262,6 @@ module pu_msp430_dbg_uart (
   end
 
   // Generate TXD output
-  //------------------------
   always @(posedge dbg_clk or posedge dbg_rst) begin
     if (dbg_rst) begin
       dbg_uart_txd <= 1'b1;
@@ -277,9 +270,9 @@ module pu_msp430_dbg_uart (
     end
   end
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 5) INTERFACE TO DEBUG REGISTERS
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
     if (dbg_rst) begin

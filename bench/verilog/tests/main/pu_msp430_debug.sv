@@ -66,9 +66,9 @@ module pu_msp430_debug (
   input puc_rst  // Main system reset
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1) ASCII FORMATING FUNCTIONS
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // This function simply concatenates two strings together, ignorning the NULL
   // at the end of string2.
@@ -116,9 +116,9 @@ module pu_msp430_debug (
   endfunction
 `endif
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2) CONNECTIONS TO MSP430 CORE INTERNALS
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   wire [ 2:0] i_state_bin = pu_msp430_testbench.i_state_bin;
   wire [ 3:0] e_state_bin = pu_msp430_testbench.e_state_bin;
@@ -129,12 +129,11 @@ module pu_msp430_debug (
   wire [ 3:0] irq_num = pu_msp430_testbench.irq_num;
   wire [15:0] pc = pu_msp430_testbench.pc;
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3) GENERATE DEBUG SIGNALS
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Instruction fetch state
-  //=========================
   always @(i_state_bin) begin
     case (i_state_bin)
       3'h0:    i_state = "IRQ_FETCH";
@@ -148,7 +147,6 @@ module pu_msp430_debug (
   end
 
   // Execution state
-  //=========================
   always @(e_state_bin) begin
     case (e_state_bin)
       4'h2:    e_state = "IRQ_0";
@@ -170,7 +168,6 @@ module pu_msp430_debug (
   end
 
   // Count instruction number & cycles
-  //====================================
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst) begin
       inst_number <= 0;
@@ -190,7 +187,6 @@ module pu_msp430_debug (
   end
 
   // Decode instruction
-  //====================================
 
   // Buffer opcode
   reg [15:0] opcode;
@@ -445,7 +441,6 @@ module pu_msp430_debug (
   end
 
   // Currently executed instruction
-  //================================
   assign inst_short = inst_name;
 
   always @(inst_type or inst_name or inst_bw or inst_as or inst_ad) begin
@@ -468,7 +463,6 @@ module pu_msp430_debug (
   end
 
   // Instruction program counter
-  //================================
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst) begin
       inst_pc <= 16'h0000;

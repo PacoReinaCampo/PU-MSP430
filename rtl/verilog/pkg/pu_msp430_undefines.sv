@@ -46,9 +46,7 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-//----------------------------------------------------------------------------
 // BASIC SYSTEM CONFIGURATION
-//----------------------------------------------------------------------------
 
 // Program Memory sizes
 `ifdef PMEM_SIZE_CUSTOM
@@ -152,9 +150,7 @@
 `endif
 
 
-//----------------------------------------------------------------------------
 // ADVANCED SYSTEM CONFIGURATION (FOR EXPERIENCED USERS)
-//----------------------------------------------------------------------------
 
 // Custom user version number
 `ifdef USER_VERSION
@@ -225,9 +221,7 @@
 `endif
 
 
-//----------------------------------------------------------------------------
 // EXPERT SYSTEM CONFIGURATION ( !!!! EXPERTS ONLY !!!! )
-//----------------------------------------------------------------------------
 
 // Serial Debug interface protocol
 `ifdef DBG_UART
@@ -275,9 +269,7 @@
 `endif
 
 
-//----------------------------------------------------------------------------
 // ASIC SYSTEM CONFIGURATION ( !!!! EXPERTS ONLY !!!! )
-//----------------------------------------------------------------------------
 
 // ASIC/FPGA-like clocking
 `ifdef ASIC_CLOCKING
@@ -737,7 +729,6 @@
 
 //
 // DEBUG INTERFACE EXTRA CONFIGURATION
-//======================================
 
 // Debug interface: CPU version
 `ifdef CPU_VERSION
@@ -782,15 +773,12 @@
 
 //
 // MULTIPLIER CONFIGURATION
-//======================================
 
 `ifdef MPY_16x16
 `undef MPY_16x16
 `endif
 
-//----------------------------------------------------------------------------
 // TIMER A CONFIGURATION
-//----------------------------------------------------------------------------
 
 // Timer A: TACTL Control Register
 `ifdef TASSELx

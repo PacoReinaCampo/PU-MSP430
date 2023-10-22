@@ -58,9 +58,9 @@ module pu_msp430_debug (
   input core_select  // Core selection
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 1) ASCII FORMATING FUNCTIONS
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // This function simply concatenates two strings together, ignorning the NULL
   // at the end of string2.
@@ -108,13 +108,11 @@ module pu_msp430_debug (
   endfunction
 `endif
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 2) CONNECTIONS TO MSP430 CORE INTERNALS
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
-  //-------------------------
   // CPU 0
-  //-------------------------
   wire [ 2:0] omsp0_i_state_bin = pu_msp430_testbench.omsp0_i_state_bin;
   wire [ 3:0] omsp0_e_state_bin = pu_msp430_testbench.omsp0_e_state_bin;
 
@@ -127,9 +125,7 @@ module pu_msp430_debug (
   wire        omsp0_mclk = pu_msp430_testbench.omsp0_mclk;
   wire        omsp0_puc_rst = pu_msp430_testbench.omsp0_puc_rst;
 
-  //-------------------------
   // CPU 1
-  //-------------------------
   wire [ 2:0] omsp1_i_state_bin = pu_msp430_testbench.omsp1_i_state_bin;
   wire [ 3:0] omsp1_e_state_bin = pu_msp430_testbench.omsp1_e_state_bin;
 
@@ -142,9 +138,7 @@ module pu_msp430_debug (
   wire        omsp1_mclk = pu_msp430_testbench.omsp1_mclk;
   wire        omsp1_puc_rst = pu_msp430_testbench.omsp1_puc_rst;
 
-  //-------------------------
   // CPU Selection
-  //-------------------------
   wire [ 2:0] i_state_bin = core_select ? omsp1_i_state_bin : omsp0_i_state_bin;
   wire [ 3:0] e_state_bin = core_select ? omsp1_e_state_bin : omsp0_e_state_bin;
 
@@ -157,12 +151,11 @@ module pu_msp430_debug (
   wire        mclk = core_select ? omsp1_mclk : omsp0_mclk;
   wire        puc_rst = core_select ? omsp1_puc_rst : omsp0_puc_rst;
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // 3) GENERATE DEBUG SIGNALS
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Instruction fetch state
-  //=========================
   always @(i_state_bin) begin
     case (i_state_bin)
       3'h0:    i_state = "IRQ_FETCH";
@@ -176,7 +169,7 @@ module pu_msp430_debug (
   end
 
   // Execution state
-  //=========================
+
   always @(e_state_bin) begin
     case (e_state_bin)
       4'h2:    e_state = "IRQ_0";
@@ -198,7 +191,6 @@ module pu_msp430_debug (
   end
 
   // Count instruction number & cycles
-  //====================================
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst) begin
       inst_number <= 0;
@@ -218,7 +210,6 @@ module pu_msp430_debug (
   end
 
   // Decode instruction
-  //====================================
 
   // Buffer opcode
   reg [15:0] opcode;
@@ -466,7 +457,6 @@ module pu_msp430_debug (
   end
 
   // Currently executed instruction
-  //================================
 
   assign inst_short = inst_name;
 
@@ -490,7 +480,6 @@ module pu_msp430_debug (
   end
 
   // Instruction program counter
-  //================================
 
   always @(posedge mclk or posedge puc_rst) begin
     if (puc_rst) begin

@@ -57,9 +57,7 @@ module pu_msp430_ram_p2 (
   output [       15:0] doutb
 );
 
-  //============
   // RAM
-  //============
 
   pu_msp430_ram_dp #(
     .ADDR_MSB(`PMEM_MSB),

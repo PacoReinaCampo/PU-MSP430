@@ -56,9 +56,9 @@ module pu_msp430_clock_gate (
   input scan_enable  // Scan enable (active during scan shifting)
 );
 
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
   // CLOCK GATE: LATCH + AND
-  //=============================================================================
+  //////////////////////////////////////////////////////////////////////////////
 
   // Enable clock gate during scan shift
   // (the gate itself is checked with the scan capture cycle)
