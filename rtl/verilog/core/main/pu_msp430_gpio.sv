@@ -113,26 +113,72 @@ module pu_msp430_gpio #(
   localparam DEC_WD = 6;
 
   // Register addresses offset
-  localparam [DEC_WD-1:0] P1IN = 'h20,  // Port 1
-  P1OUT = 'h21, P1DIR = 'h22, P1IFG = 'h23, P1IES = 'h24, P1IE = 'h25, P1SEL = 'h26, P2IN = 'h28,  // Port 2
-  P2OUT = 'h29, P2DIR = 'h2A, P2IFG = 'h2B, P2IES = 'h2C, P2IE = 'h2D, P2SEL = 'h2E, P3IN = 'h18,  // Port 3
-  P3OUT = 'h19, P3DIR = 'h1A, P3SEL = 'h1B, P4IN = 'h1C,  // Port 4
-  P4OUT = 'h1D, P4DIR = 'h1E, P4SEL = 'h1F, P5IN = 'h30,  // Port 5
-  P5OUT = 'h31, P5DIR = 'h32, P5SEL = 'h33, P6IN = 'h34,  // Port 6
-  P6OUT = 'h35, P6DIR = 'h36, P6SEL = 'h37;
+  localparam [DEC_WD-1:0] P1IN = 'h20;  // Port 1
+  localparam [DEC_WD-1:0] P1OUT = 'h21;
+  localparam [DEC_WD-1:0] P1DIR = 'h22;
+  localparam [DEC_WD-1:0] P1IFG = 'h23;
+  localparam [DEC_WD-1:0] P1IES = 'h24;
+  localparam [DEC_WD-1:0] P1IE = 'h25;
+  localparam [DEC_WD-1:0] P1SEL = 'h26;
+  localparam [DEC_WD-1:0] P2IN = 'h28;
+  localparam [DEC_WD-1:0] P2OUT = 'h29;  // Port 2
+  localparam [DEC_WD-1:0] P2DIR = 'h2A;
+  localparam [DEC_WD-1:0] P2IFG = 'h2B;
+  localparam [DEC_WD-1:0] P2IES = 'h2C;
+  localparam [DEC_WD-1:0] P2IE = 'h2D;
+  localparam [DEC_WD-1:0] P2SEL = 'h2E;
+  localparam [DEC_WD-1:0] P3IN = 'h18;
+  localparam [DEC_WD-1:0] P3OUT = 'h19;  // Port 3
+  localparam [DEC_WD-1:0] P3DIR = 'h1A;
+  localparam [DEC_WD-1:0] P3SEL = 'h1B;
+  localparam [DEC_WD-1:0] P4IN = 'h1C;
+  localparam [DEC_WD-1:0] P4OUT = 'h1D;  // Port 4
+  localparam [DEC_WD-1:0] P4DIR = 'h1E;
+  localparam [DEC_WD-1:0] P4SEL = 'h1F;
+  localparam [DEC_WD-1:0] P5IN = 'h30;
+  localparam [DEC_WD-1:0] P5OUT = 'h31;  // Port 5
+  localparam [DEC_WD-1:0] P5DIR = 'h32;
+  localparam [DEC_WD-1:0] P5SEL = 'h33;
+  localparam [DEC_WD-1:0] P6IN = 'h34;
+  localparam [DEC_WD-1:0] P6OUT = 'h35;  // Port 6
+  localparam [DEC_WD-1:0] P6DIR = 'h36;
+  localparam [DEC_WD-1:0] P6SEL = 'h37;
 
   // Register one-hot decoder utilities
   localparam DEC_SZ = (1 << DEC_WD);
   localparam [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
-  localparam [DEC_SZ-1:0] P1IN_D = (BASE_REG << P1IN),  // Port 1
-  P1OUT_D = (BASE_REG << P1OUT), P1DIR_D = (BASE_REG << P1DIR), P1IFG_D = (BASE_REG << P1IFG), P1IES_D = (BASE_REG << P1IES), P1IE_D = (BASE_REG << P1IE), P1SEL_D = (BASE_REG << P1SEL), P2IN_D = (BASE_REG << P2IN),  // Port 2
-  P2OUT_D = (BASE_REG << P2OUT), P2DIR_D = (BASE_REG << P2DIR), P2IFG_D = (BASE_REG << P2IFG), P2IES_D = (BASE_REG << P2IES), P2IE_D = (BASE_REG << P2IE), P2SEL_D = (BASE_REG << P2SEL), P3IN_D = (BASE_REG << P3IN),  // Port 3
-  P3OUT_D = (BASE_REG << P3OUT), P3DIR_D = (BASE_REG << P3DIR), P3SEL_D = (BASE_REG << P3SEL), P4IN_D = (BASE_REG << P4IN),  // Port 4
-  P4OUT_D = (BASE_REG << P4OUT), P4DIR_D = (BASE_REG << P4DIR), P4SEL_D = (BASE_REG << P4SEL), P5IN_D = (BASE_REG << P5IN),  // Port 5
-  P5OUT_D = (BASE_REG << P5OUT), P5DIR_D = (BASE_REG << P5DIR), P5SEL_D = (BASE_REG << P5SEL), P6IN_D = (BASE_REG << P6IN),  // Port 6
-  P6OUT_D = (BASE_REG << P6OUT), P6DIR_D = (BASE_REG << P6DIR), P6SEL_D = (BASE_REG << P6SEL);
+  localparam [DEC_SZ-1:0] P1IN_D = (BASE_REG << P1IN);
+  localparam [DEC_SZ-1:0] P1OUT_D = (BASE_REG << P1OUT);  // Port 1
+  localparam [DEC_SZ-1:0] P1DIR_D = (BASE_REG << P1DIR);
+  localparam [DEC_SZ-1:0] P1IFG_D = (BASE_REG << P1IFG);
+  localparam [DEC_SZ-1:0] P1IES_D = (BASE_REG << P1IES);
+  localparam [DEC_SZ-1:0] P1IE_D = (BASE_REG << P1IE);
+  localparam [DEC_SZ-1:0] P1SEL_D = (BASE_REG << P1SEL);
+  localparam [DEC_SZ-1:0] P2IN_D = (BASE_REG << P2IN);
+  localparam [DEC_SZ-1:0] P2OUT_D = (BASE_REG << P2OUT);  // Port 2
+  localparam [DEC_SZ-1:0] P2DIR_D = (BASE_REG << P2DIR);
+  localparam [DEC_SZ-1:0] P2IFG_D = (BASE_REG << P2IFG);
+  localparam [DEC_SZ-1:0] P2IES_D = (BASE_REG << P2IES);
+  localparam [DEC_SZ-1:0] P2IE_D = (BASE_REG << P2IE);
+  localparam [DEC_SZ-1:0] P2SEL_D = (BASE_REG << P2SEL);
+  localparam [DEC_SZ-1:0] P3IN_D = (BASE_REG << P3IN);
+  localparam [DEC_SZ-1:0] P3OUT_D = (BASE_REG << P3OUT);  // Port 3
+  localparam [DEC_SZ-1:0] P3DIR_D = (BASE_REG << P3DIR);
+  localparam [DEC_SZ-1:0] P3SEL_D = (BASE_REG << P3SEL);
+  localparam [DEC_SZ-1:0] P4IN_D = (BASE_REG << P4IN);
+  localparam [DEC_SZ-1:0] P4OUT_D = (BASE_REG << P4OUT);  // Port 4
+  localparam [DEC_SZ-1:0] P4DIR_D = (BASE_REG << P4DIR);
+  localparam [DEC_SZ-1:0] P4SEL_D = (BASE_REG << P4SEL);
+  localparam [DEC_SZ-1:0] P5IN_D = (BASE_REG << P5IN);
+  localparam [DEC_SZ-1:0] P5OUT_D = (BASE_REG << P5OUT);  // Port 5
+  localparam [DEC_SZ-1:0] P5DIR_D = (BASE_REG << P5DIR);
+  localparam [DEC_SZ-1:0] P5SEL_D = (BASE_REG << P5SEL);
+  localparam [DEC_SZ-1:0] P6IN_D = (BASE_REG << P6IN);
+  localparam [DEC_SZ-1:0] P6OUT_D = (BASE_REG << P6OUT);  // Port 6
+  localparam [DEC_SZ-1:0] P6DIR_D = (BASE_REG << P6DIR);
+  localparam [DEC_SZ-1:0] P6SEL_D = (BASE_REG << P6SEL);
 
   //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER

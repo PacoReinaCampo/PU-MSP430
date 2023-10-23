@@ -75,14 +75,20 @@ module pu_msp430_dac #(
   localparam DEC_WD = 3;
 
   // Register addresses offset
-  localparam [DEC_WD-1:0] DAC_VAL = 'h0, DAC_STAT = 'h2, CNTRL1 = 'h4, CNTRL2 = 'h6;
+  localparam [DEC_WD-1:0] DAC_VAL = 'h0;
+  localparam [DEC_WD-1:0] DAC_STAT = 'h2;
+  localparam [DEC_WD-1:0] CNTRL1 = 'h4;
+  localparam [DEC_WD-1:0] CNTRL2 = 'h6;
 
   // Register one-hot decoder utilities
   localparam DEC_SZ = 2 ** DEC_WD;
   localparam [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
-  localparam [DEC_SZ-1:0] DAC_VAL_D = (BASE_REG << DAC_VAL), DAC_STAT_D = (BASE_REG << DAC_STAT), CNTRL1_D = (BASE_REG << CNTRL1), CNTRL2_D = (BASE_REG << CNTRL2);
+  localparam [DEC_SZ-1:0] DAC_VAL_D = (BASE_REG << DAC_VAL);
+  localparam [DEC_SZ-1:0] DAC_STAT_D = (BASE_REG << DAC_STAT);
+  localparam [DEC_SZ-1:0] CNTRL1_D = (BASE_REG << CNTRL1);
+  localparam [DEC_SZ-1:0] CNTRL2_D = (BASE_REG << CNTRL2);
 
   //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER

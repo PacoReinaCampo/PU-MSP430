@@ -174,7 +174,7 @@ module pu_msp430_register_file (
   // R2: Status register
   wire r2_wr = (inst_dest[2] & reg_dest_wr) | reg_sr_wr;
 
-// WITH CLOCK GATING
+  // WITH CLOCK GATING
 `ifdef CLOCK_GATING
   wire       r2_c = alu_stat_wr[0] ? alu_stat[0] : reg_dest_val_in[0];  // C
 
@@ -195,7 +195,7 @@ module pu_msp430_register_file (
     .enable     (r2_en),
     .scan_enable(scan_enable)
   );
- // WITHOUT CLOCK GATING
+  // WITHOUT CLOCK GATING
 `else
   wire       r2_c = alu_stat_wr[0] ? alu_stat[0] : r2_wr ? reg_dest_val_in[0] : r2[0];  // C
 

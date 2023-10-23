@@ -88,14 +88,22 @@ module pu_msp430_sfr (
   parameter DEC_WD = 4;
 
   // Register addresses offset
-  parameter [DEC_WD-1:0] IE1 = 'h0, IFG1 = 'h2, CPU_ID_LO = 'h4, CPU_ID_HI = 'h6, CPU_NR = 'h8;
+  parameter [DEC_WD-1:0] IE1 = 'h0;
+  parameter [DEC_WD-1:0] IFG1 = 'h2;
+  parameter [DEC_WD-1:0] CPU_ID_LO = 'h4;
+  parameter [DEC_WD-1:0] CPU_ID_HI = 'h6;
+  parameter [DEC_WD-1:0] CPU_NR = 'h8;
 
   // Register one-hot decoder utilities
   parameter DEC_SZ = (1 << DEC_WD);
   parameter [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
-  parameter [DEC_SZ-1:0] IE1_D = (BASE_REG << IE1), IFG1_D = (BASE_REG << IFG1), CPU_ID_LO_D = (BASE_REG << CPU_ID_LO), CPU_ID_HI_D = (BASE_REG << CPU_ID_HI), CPU_NR_D = (BASE_REG << CPU_NR);
+  parameter [DEC_SZ-1:0] IE1_D = (BASE_REG << IE1);
+  parameter [DEC_SZ-1:0] IFG1_D = (BASE_REG << IFG1);
+  parameter [DEC_SZ-1:0] CPU_ID_LO_D = (BASE_REG << CPU_ID_LO);
+  parameter [DEC_SZ-1:0] CPU_ID_HI_D = (BASE_REG << CPU_ID_HI);
+  parameter [DEC_SZ-1:0] CPU_NR_D = (BASE_REG << CPU_NR);
 
   //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER

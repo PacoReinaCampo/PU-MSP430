@@ -75,14 +75,24 @@ module pu_msp430_uart (
   parameter DEC_WD = 3;
 
   // Register addresses offset
-  parameter [DEC_WD-1:0] CTRL = 'h0, STATUS = 'h1, BAUD_LO = 'h2, BAUD_HI = 'h3, DATA_TX = 'h4, DATA_RX = 'h5;
+  parameter [DEC_WD-1:0] CTRL = 'h0;
+  parameter [DEC_WD-1:0] STATUS = 'h1;
+  parameter [DEC_WD-1:0] BAUD_LO = 'h2;
+  parameter [DEC_WD-1:0] BAUD_HI = 'h3;
+  parameter [DEC_WD-1:0] DATA_TX = 'h4;
+  parameter [DEC_WD-1:0] DATA_RX = 'h5;
 
   // Register one-hot decoder utilities
   parameter DEC_SZ = (1 << DEC_WD);
   parameter [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
-  parameter [DEC_SZ-1:0] CTRL_D = (BASE_REG << CTRL), STATUS_D = (BASE_REG << STATUS), BAUD_LO_D = (BASE_REG << BAUD_LO), BAUD_HI_D = (BASE_REG << BAUD_HI), DATA_TX_D = (BASE_REG << DATA_TX), DATA_RX_D = (BASE_REG << DATA_RX);
+  parameter [DEC_SZ-1:0] CTRL_D = (BASE_REG << CTRL);
+  parameter [DEC_SZ-1:0] STATUS_D = (BASE_REG << STATUS);
+  parameter [DEC_SZ-1:0] BAUD_LO_D = (BASE_REG << BAUD_LO);
+  parameter [DEC_SZ-1:0] BAUD_HI_D = (BASE_REG << BAUD_HI);
+  parameter [DEC_SZ-1:0] DATA_TX_D = (BASE_REG << DATA_TX);
+  parameter [DEC_SZ-1:0] DATA_RX_D = (BASE_REG << DATA_RX);
 
   //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER
@@ -117,15 +127,17 @@ module pu_msp430_uart (
   //////////////////////////////////////////////////////////////////////////////
 
   // CTRL Register
-  //-----------------
   reg [7:0] ctrl;
 
   wire ctrl_wr = CTRL[0] ? reg_hi_wr[CTRL] : reg_lo_wr[CTRL];
   wire [7:0] ctrl_nxt = CTRL[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) ctrl <= 8'h00;
-    else if (ctrl_wr) ctrl <= ctrl_nxt & 8'h73;
+    if (puc_rst) begin
+      ctrl <= 8'h00;
+    end else if (ctrl_wr) begin
+      ctrl <= ctrl_nxt & 8'h73;
+    end
   end
 
   wire       ctrl_ien_tx_empty = ctrl[7];
@@ -136,7 +148,6 @@ module pu_msp430_uart (
   wire       ctrl_en = ctrl[0];
 
   // STATUS Register
-  //-----------------
   wire [7:0] status;
   reg        status_tx_empty_pnd;
   reg        status_tx_pnd;
@@ -159,78 +170,102 @@ module pu_msp430_uart (
   wire       status_rx_pnd_set;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) status_tx_empty_pnd <= 1'b0;
-    else if (status_tx_empty_pnd_set) status_tx_empty_pnd <= 1'b1;
-    else if (status_tx_empty_pnd_clr) status_tx_empty_pnd <= 1'b0;
+    if (puc_rst) begin
+      status_tx_empty_pnd <= 1'b0;
+    end else if (status_tx_empty_pnd_set) begin
+      status_tx_empty_pnd <= 1'b1;
+    end else if (status_tx_empty_pnd_clr) begin
+      status_tx_empty_pnd <= 1'b0;
+    end
   end
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) status_tx_pnd <= 1'b0;
-    else if (status_tx_pnd_set) status_tx_pnd <= 1'b1;
-    else if (status_tx_pnd_clr) status_tx_pnd <= 1'b0;
+    if (puc_rst) begin
+      status_tx_pnd <= 1'b0;
+    end else if (status_tx_pnd_set) begin
+      status_tx_pnd <= 1'b1;
+    end else if (status_tx_pnd_clr) begin
+      status_tx_pnd <= 1'b0;
+    end
   end
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) status_rx_ovflw_pnd <= 1'b0;
-    else if (status_rx_ovflw_pnd_set) status_rx_ovflw_pnd <= 1'b1;
-    else if (status_rx_ovflw_pnd_clr) status_rx_ovflw_pnd <= 1'b0;
+    if (puc_rst) begin
+      status_rx_ovflw_pnd <= 1'b0;
+    end else if (status_rx_ovflw_pnd_set) begin
+      status_rx_ovflw_pnd <= 1'b1;
+    end else if (status_rx_ovflw_pnd_clr) begin
+      status_rx_ovflw_pnd <= 1'b0;
+    end
   end
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) status_rx_pnd <= 1'b0;
-    else if (status_rx_pnd_set) status_rx_pnd <= 1'b1;
-    else if (status_rx_pnd_clr) status_rx_pnd <= 1'b0;
+    if (puc_rst) begin
+      status_rx_pnd <= 1'b0;
+    end else if (status_rx_pnd_set) begin
+      status_rx_pnd <= 1'b1;
+    end else if (status_rx_pnd_clr) begin
+      status_rx_pnd <= 1'b0;
+    end
   end
 
   assign status = {status_tx_empty_pnd, status_tx_pnd, status_rx_ovflw_pnd, status_rx_pnd, status_tx_full, status_tx_busy, 1'b0, status_rx_busy};
 
   // BAUD_LO Register
-  //-----------------
   reg  [7:0] baud_lo;
 
   wire       baud_lo_wr = BAUD_LO[0] ? reg_hi_wr[BAUD_LO] : reg_lo_wr[BAUD_LO];
   wire [7:0] baud_lo_nxt = BAUD_LO[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) baud_lo <= 8'h00;
-    else if (baud_lo_wr) baud_lo <= baud_lo_nxt;
+    if (puc_rst) begin
+      baud_lo <= 8'h00;
+    end else if (baud_lo_wr) begin
+      baud_lo <= baud_lo_nxt;
+    end
   end
 
   // BAUD_HI Register
-  //-----------------
   reg  [7:0] baud_hi;
 
   wire       baud_hi_wr = BAUD_HI[0] ? reg_hi_wr[BAUD_HI] : reg_lo_wr[BAUD_HI];
   wire [7:0] baud_hi_nxt = BAUD_HI[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) baud_hi <= 8'h00;
-    else if (baud_hi_wr) baud_hi <= baud_hi_nxt;
+    if (puc_rst) begin
+      baud_hi <= 8'h00;
+    end else if (baud_hi_wr) begin
+      baud_hi <= baud_hi_nxt;
+    end
   end
 
   wire [15:0] baudrate = {baud_hi, baud_lo};
 
   // DATA_TX Register
-  //-----------------
   reg  [ 7:0] data_tx;
 
   wire        data_tx_wr = DATA_TX[0] ? reg_hi_wr[DATA_TX] : reg_lo_wr[DATA_TX];
   wire [ 7:0] data_tx_nxt = DATA_TX[0] ? per_din[15:8] : per_din[7:0];
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) data_tx <= 8'h00;
-    else if (data_tx_wr) data_tx <= data_tx_nxt;
+    if (puc_rst) begin
+      data_tx <= 8'h00;
+    end else if (data_tx_wr) begin
+      data_tx <= data_tx_nxt;
+    end
   end
 
   // DATA_RX Register
-  //-----------------
   reg [7:0] data_rx;
 
   reg [7:0] rxfer_buf;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) data_rx <= 8'h00;
-    else if (status_rx_pnd_set) data_rx <= rxfer_buf;
+    if (puc_rst) begin
+      data_rx <= 8'h00;
+    end else if (status_rx_pnd_set) begin
+      data_rx <= rxfer_buf;
+    end
   end
 
   //////////////////////////////////////////////////////////////////////////////
@@ -258,7 +293,6 @@ module pu_msp430_uart (
   //////////////////////////////////////////////////////////////////////////////
 
   // Synchronize RXD input
-  //--------------------------------
   wire uart_rxd_sync_n;
 
   pu_msp430_sync_cell sync_cell_uart_rxd (
@@ -271,23 +305,27 @@ module pu_msp430_uart (
   wire       uart_rxd_sync = ~uart_rxd_sync_n;
 
   // RXD input buffer
-  //--------------------------------
   reg  [1:0] rxd_buf;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) rxd_buf <= 2'h3;
-    else rxd_buf <= {rxd_buf[0], uart_rxd_sync};
+    if (puc_rst) begin
+      rxd_buf <= 2'h3;
+    end else begin
+      rxd_buf <= {rxd_buf[0], uart_rxd_sync};
+    end
   end
 
   // Majority decision
-  //------------------------
   reg        rxd_maj;
 
   wire [1:0] rxd_maj_cnt = {1'b0, uart_rxd_sync} + {1'b0, rxd_buf[0]} + {1'b0, rxd_buf[1]};
   wire       rxd_maj_nxt = (rxd_maj_cnt >= 2'b10);
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) rxd_maj <= 1'b1;
-    else rxd_maj <= rxd_maj_nxt;
+    if (puc_rst) begin
+      rxd_maj <= 1'b1;
+    end else begin
+      rxd_maj <= rxd_maj_nxt;
+    end
   end
 
   wire        rxd_s = rxd_maj;
@@ -298,7 +336,6 @@ module pu_msp430_uart (
   //////////////////////////////////////////////////////////////////////////////
 
   // RX Transfer counter
-  //------------------------
   reg  [ 3:0] rxfer_bit;
   reg  [15:0] rxfer_cnt;
 
@@ -307,46 +344,63 @@ module pu_msp430_uart (
   wire        rxfer_done = (rxfer_bit == 4'ha);
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) rxfer_bit <= 4'h0;
-    else if (~ctrl_en) rxfer_bit <= 4'h0;
-    else if (rxfer_start) rxfer_bit <= 4'h1;
-    else if (uclk_en) begin
-      if (rxfer_done) rxfer_bit <= 4'h0;
-      else if (rxfer_bit_inc) rxfer_bit <= rxfer_bit + 4'h1;
+    if (puc_rst) begin
+      rxfer_bit <= 4'h0;
+    end else if (~ctrl_en) begin
+      rxfer_bit <= 4'h0;
+    end else if (rxfer_start) begin
+      rxfer_bit <= 4'h1;
+    end else if (uclk_en) begin
+      if (rxfer_done) begin
+        rxfer_bit <= 4'h0;
+      end else if (rxfer_bit_inc) begin
+        rxfer_bit <= rxfer_bit + 4'h1;
+      end
     end
   end
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) rxfer_cnt <= {16{1'b0}};
-    else if (~ctrl_en) rxfer_cnt <= {16{1'b0}};
-    else if (rxfer_start) rxfer_cnt <= {1'b0, baudrate[15:1]};
-    else if (uclk_en) begin
-      if (rxfer_bit_inc) rxfer_cnt <= baudrate;
-      else if (|rxfer_cnt) rxfer_cnt <= rxfer_cnt + {16{1'b1}};
+    if (puc_rst) begin
+      rxfer_cnt <= {16{1'b0}};
+    end else if (~ctrl_en) begin
+      rxfer_cnt <= {16{1'b0}};
+    end else if (rxfer_start) begin
+      rxfer_cnt <= {1'b0, baudrate[15:1]};
+    end else if (uclk_en) begin
+      if (rxfer_bit_inc) begin
+        rxfer_cnt <= baudrate;
+      end else if (|rxfer_cnt) begin
+        rxfer_cnt <= rxfer_cnt + {16{1'b1}};
+      end
     end
   end
 
   // Receive buffer
-  //-------------------------
   wire [7:0] rxfer_buf_nxt = {rxd_s, rxfer_buf[7:1]};
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) rxfer_buf <= 8'h00;
-    else if (~ctrl_en) rxfer_buf <= 8'h00;
-    else if (uclk_en) begin
-      if (rxfer_bit_inc) rxfer_buf <= rxfer_buf_nxt;
+    if (puc_rst) begin
+      rxfer_buf <= 8'h00;
+    end else if (~ctrl_en) begin
+      rxfer_buf <= 8'h00;
+    end else if (uclk_en) begin
+      if (rxfer_bit_inc) begin
+        rxfer_buf <= rxfer_buf_nxt;
+      end
     end
   end
 
   // Status flags
-  //-------------------------
 
   // Edge detection required for the case when
   // the transmit base clock is SMCLK
   reg rxfer_done_dly;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) rxfer_done_dly <= 1'b0;
-    else rxfer_done_dly <= rxfer_done;
+    if (puc_rst) begin
+      rxfer_done_dly <= 1'b0;
+    end else begin
+      rxfer_done_dly <= rxfer_done;
+    end
   end
 
   assign status_rx_pnd_set       = rxfer_done & ~rxfer_done_dly;
@@ -358,18 +412,20 @@ module pu_msp430_uart (
   //////////////////////////////////////////////////////////////////////////////
 
   // TX Transfer start detection
-  //-----------------------------
   reg  txfer_triggered;
   wire txfer_start;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) txfer_triggered <= 1'b0;
-    else if (data_tx_wr) txfer_triggered <= 1'b1;
-    else if (txfer_start) txfer_triggered <= 1'b0;
+    if (puc_rst) begin
+      txfer_triggered <= 1'b0;
+    end else if (data_tx_wr) begin
+      txfer_triggered <= 1'b1;
+    end else if (txfer_start) begin
+      txfer_triggered <= 1'b0;
+    end
   end
 
   // TX Transfer counter
-  //------------------------
   reg [ 3:0] txfer_bit;
   reg [15:0] txfer_cnt;
 
@@ -378,51 +434,69 @@ module pu_msp430_uart (
   wire txfer_done = (txfer_bit == 4'hb);
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) txfer_bit <= 4'h0;
-    else if (~ctrl_en) txfer_bit <= 4'h0;
-    else if (txfer_start) txfer_bit <= 4'h1;
-    else if (uclk_en) begin
-      if (txfer_done) txfer_bit <= 4'h0;
-      else if (txfer_bit_inc) txfer_bit <= txfer_bit + 4'h1;
+    if (puc_rst) begin
+      txfer_bit <= 4'h0;
+    end else if (~ctrl_en) begin
+      txfer_bit <= 4'h0;
+    end else if (txfer_start) begin
+      txfer_bit <= 4'h1;
+    end else if (uclk_en) begin
+      if (txfer_done) begin
+        txfer_bit <= 4'h0;
+      end else if (txfer_bit_inc) begin
+        txfer_bit <= txfer_bit + 4'h1;
+      end
     end
   end
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) txfer_cnt <= {16{1'b0}};
-    else if (~ctrl_en) txfer_cnt <= {16{1'b0}};
-    else if (txfer_start) txfer_cnt <= baudrate;
-    else if (uclk_en) begin
-      if (txfer_bit_inc) txfer_cnt <= baudrate;
-      else if (|txfer_cnt) txfer_cnt <= txfer_cnt + {16{1'b1}};
+    if (puc_rst) begin
+      txfer_cnt <= {16{1'b0}};
+    end else if (~ctrl_en) begin
+      txfer_cnt <= {16{1'b0}};
+    end else if (txfer_start) begin
+      txfer_cnt <= baudrate;
+    end else if (uclk_en) begin
+      if (txfer_bit_inc) begin
+        txfer_cnt <= baudrate;
+      end else if (|txfer_cnt) begin
+        txfer_cnt <= txfer_cnt + {16{1'b1}};
+      end
     end
   end
 
   // Transmit buffer
-  //-------------------------
   reg  [8:0] txfer_buf;
 
   wire [8:0] txfer_buf_nxt = {1'b1, txfer_buf[8:1]};
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) txfer_buf <= 9'h1ff;
-    else if (~ctrl_en) txfer_buf <= 9'h1ff;
-    else if (txfer_start) txfer_buf <= {data_tx, 1'b0};
-    else if (uclk_en) begin
-      if (txfer_bit_inc) txfer_buf <= txfer_buf_nxt;
+    if (puc_rst) begin
+      txfer_buf <= 9'h1ff;
+    end else if (~ctrl_en) begin
+      txfer_buf <= 9'h1ff;
+    end else if (txfer_start) begin
+      txfer_buf <= {data_tx, 1'b0};
+    end else if (uclk_en) begin
+      if (txfer_bit_inc) begin
+        txfer_buf <= txfer_buf_nxt;
+      end
     end
   end
 
   assign uart_txd = txfer_buf[0];
 
   // Status flags
-  //-------------------------
 
   // Edge detection required for the case when
   // the transmit base clock is SMCLK
   reg txfer_done_dly;
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) txfer_done_dly <= 1'b0;
-    else txfer_done_dly <= txfer_done;
+    if (puc_rst) begin
+      txfer_done_dly <= 1'b0;
+    end else begin
+      txfer_done_dly <= txfer_done;
+    end
   end
 
   assign status_tx_pnd_set       = txfer_done & ~txfer_done_dly;
@@ -442,4 +516,3 @@ module pu_msp430_uart (
   // a byte or when the tranmit buffer is empty (i.e. nothing left to transmit)
   assign irq_uart_tx             = (status_tx_pnd & ctrl_ien_tx) | (status_tx_empty_pnd & ctrl_ien_tx_empty);
 endmodule  // pu_msp430_uart
-

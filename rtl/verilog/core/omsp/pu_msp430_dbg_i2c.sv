@@ -233,19 +233,28 @@ module pu_msp430_dbg_i2c (
   // State transition
   always @(i2c_state or i2c_init or shift_rx_done or i2c_addr_not_valid or shift_tx_done or scl_fe or shift_buf or sda_in) begin
     case (i2c_state)
-      RX_ADDR: i2c_state_nxt = i2c_init ? RX_ADDR : ~shift_rx_done ? RX_ADDR : i2c_addr_not_valid ? RX_ADDR : RX_ADDR_ACK;
-
-      RX_ADDR_ACK: i2c_state_nxt = i2c_init ? RX_ADDR : ~scl_fe ? RX_ADDR_ACK : shift_buf[0] ? TX_DATA : RX_DATA;
-
-      RX_DATA: i2c_state_nxt = i2c_init ? RX_ADDR : ~shift_rx_done ? RX_DATA : RX_DATA_ACK;
-
-      RX_DATA_ACK: i2c_state_nxt = i2c_init ? RX_ADDR : ~scl_fe ? RX_DATA_ACK : RX_DATA;
-
-      TX_DATA: i2c_state_nxt = i2c_init ? RX_ADDR : ~shift_tx_done ? TX_DATA : TX_DATA_ACK;
-
-      TX_DATA_ACK: i2c_state_nxt = i2c_init ? RX_ADDR : ~scl_fe ? TX_DATA_ACK : ~sda_in ? TX_DATA : RX_ADDR;
+      RX_ADDR: begin
+        i2c_state_nxt = i2c_init ? RX_ADDR : ~shift_rx_done ? RX_ADDR : i2c_addr_not_valid ? RX_ADDR : RX_ADDR_ACK;
+      end
+      RX_ADDR_ACK: begin
+        i2c_state_nxt = i2c_init ? RX_ADDR : ~scl_fe ? RX_ADDR_ACK : shift_buf[0] ? TX_DATA : RX_DATA;
+      end
+      RX_DATA: begin
+        i2c_state_nxt = i2c_init ? RX_ADDR : ~shift_rx_done ? RX_DATA : RX_DATA_ACK;
+      end
+      RX_DATA_ACK: begin
+        i2c_state_nxt = i2c_init ? RX_ADDR : ~scl_fe ? RX_DATA_ACK : RX_DATA;
+      end
+      TX_DATA: begin
+        i2c_state_nxt = i2c_init ? RX_ADDR : ~shift_tx_done ? TX_DATA : TX_DATA_ACK;
+      end
+      TX_DATA_ACK: begin
+        i2c_state_nxt = i2c_init ? RX_ADDR : ~scl_fe ? TX_DATA_ACK : ~sda_in ? TX_DATA : RX_ADDR;
+      end
       // pragma coverage off
-      default:     i2c_state_nxt = RX_ADDR;
+      default: begin
+        i2c_state_nxt = RX_ADDR;
+      end
       // pragma coverage on
     endcase
   end
@@ -336,17 +345,25 @@ module pu_msp430_dbg_i2c (
   // State transition
   always @(dbg_state or shift_rx_data_done or shift_tx_data_done or shift_buf or dbg_bw or mem_burst_wr or mem_burst_rd or mem_burst or mem_burst_end or mem_bw) begin
     case (dbg_state)
-      RX_CMD: dbg_state_nxt = mem_burst_wr ? RX_BYTE_LO : mem_burst_rd ? TX_BYTE_LO : ~shift_rx_data_done ? RX_CMD : shift_buf[7] ? RX_BYTE_LO : TX_BYTE_LO;
-
-      RX_BYTE_LO: dbg_state_nxt = (mem_burst & mem_burst_end) ? RX_CMD : ~shift_rx_data_done ? RX_BYTE_LO : (mem_burst & ~mem_burst_end) ? (mem_bw ? RX_BYTE_LO : RX_BYTE_HI) : dbg_bw ? RX_CMD : RX_BYTE_HI;
-
-      RX_BYTE_HI: dbg_state_nxt = ~shift_rx_data_done ? RX_BYTE_HI : (mem_burst & ~mem_burst_end) ? RX_BYTE_LO : RX_CMD;
-
-      TX_BYTE_LO: dbg_state_nxt = ~shift_tx_data_done ? TX_BYTE_LO : (mem_burst & mem_bw) ? TX_BYTE_LO : (mem_burst & ~mem_bw) ? TX_BYTE_HI : ~dbg_bw ? TX_BYTE_HI : RX_CMD;
-
-      TX_BYTE_HI: dbg_state_nxt = ~shift_tx_data_done ? TX_BYTE_HI : mem_burst ? TX_BYTE_LO : RX_CMD;
+      RX_CMD: begin
+        dbg_state_nxt = mem_burst_wr ? RX_BYTE_LO : mem_burst_rd ? TX_BYTE_LO : ~shift_rx_data_done ? RX_CMD : shift_buf[7] ? RX_BYTE_LO : TX_BYTE_LO;
+      end
+      RX_BYTE_LO: begin
+        dbg_state_nxt = (mem_burst & mem_burst_end) ? RX_CMD : ~shift_rx_data_done ? RX_BYTE_LO : (mem_burst & ~mem_burst_end) ? (mem_bw ? RX_BYTE_LO : RX_BYTE_HI) : dbg_bw ? RX_CMD : RX_BYTE_HI;
+      end
+      RX_BYTE_HI: begin
+        dbg_state_nxt = ~shift_rx_data_done ? RX_BYTE_HI : (mem_burst & ~mem_burst_end) ? RX_BYTE_LO : RX_CMD;
+      end
+      TX_BYTE_LO: begin
+        dbg_state_nxt = ~shift_tx_data_done ? TX_BYTE_LO : (mem_burst & mem_bw) ? TX_BYTE_LO : (mem_burst & ~mem_bw) ? TX_BYTE_HI : ~dbg_bw ? TX_BYTE_HI : RX_CMD;
+      end
+      TX_BYTE_HI: begin
+        dbg_state_nxt = ~shift_tx_data_done ? TX_BYTE_HI : mem_burst ? TX_BYTE_LO : RX_CMD;
+      end
       // pragma coverage off
-      default:    dbg_state_nxt = RX_CMD;
+      default: begin
+        dbg_state_nxt = RX_CMD;
+      end
       // pragma coverage on
     endcase
   end

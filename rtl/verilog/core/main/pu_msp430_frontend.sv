@@ -143,7 +143,11 @@ module pu_msp430_frontend (
     integer ii;
     begin
       get_irq_num = 6'h3f;
-      for (ii = 62; ii >= 0; ii = ii - 1) if (&get_irq_num & irq_all[ii]) get_irq_num = ii[5:0];
+      for (ii = 62; ii >= 0; ii = ii - 1) begin
+        if (&get_irq_num & irq_all[ii]) begin
+          get_irq_num = ii[5:0];
+        end
+      end
     end
   endfunction
 
@@ -215,8 +219,11 @@ module pu_msp430_frontend (
 
   // State machine
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) i_state <= I_IRQ_FETCH;
-    else i_state <= i_state_nxt;
+    if (puc_rst) begin
+      i_state <= I_IRQ_FETCH;
+    end else begin
+      i_state <= i_state_nxt;
+    end
   end
 
   // Utility signals
@@ -226,8 +233,11 @@ module pu_msp430_frontend (
 
   // Debug interface cpu status
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) dbg_halt_st <= 1'b0;
-    else dbg_halt_st <= cpu_halt_cmd & (i_state_nxt == I_IDLE);
+    if (puc_rst) begin
+      dbg_halt_st <= 1'b0;
+    end else begin
+      dbg_halt_st <= cpu_halt_cmd & (i_state_nxt == I_IDLE);
+    end
   end
 
   //////////////////////////////////////////////////////////////////////////////
@@ -239,8 +249,11 @@ module pu_msp430_frontend (
 
   // Detect reset interrupt
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) inst_irq_rst <= 1'b1;
-    else if (exec_done) inst_irq_rst <= 1'b0;
+    if (puc_rst) begin
+      inst_irq_rst <= 1'b1;
+    end else if (exec_done) begin
+      inst_irq_rst <= 1'b0;
+    end
   end
 
   //  Detect other interrupts
@@ -275,13 +288,19 @@ module pu_msp430_frontend (
   // Select highest priority IRQ
 `ifdef CLOCK_GATING
   always @(posedge mclk_irq_num or posedge puc_rst) begin
-    if (puc_rst) irq_num <= 6'h3f;
-    else irq_num <= get_irq_num(irq_all);
+    if (puc_rst) begin
+      irq_num <= 6'h3f;
+    end else begin
+      irq_num <= get_irq_num(irq_all);
+    end
   end
 `else
   always @(posedge mclk_irq_num or posedge puc_rst) begin
-    if (puc_rst) irq_num <= 6'h3f;
-    else if (irq_detect) irq_num <= get_irq_num(irq_all);
+    if (puc_rst) begin
+      irq_num <= 6'h3f;
+    end else if (irq_detect) begin
+      irq_num <= get_irq_num(irq_all);
+    end
   end
 `endif
 
@@ -356,16 +375,22 @@ module pu_msp430_frontend (
 `endif
 
   always @(posedge mclk_pc or posedge puc_rst) begin
-    if (puc_rst) pc <= 16'h0000;
-    else pc <= pc_nxt;
+    if (puc_rst) begin
+      pc <= 16'h0000;
+    end else begin
+      pc <= pc_nxt;
+    end
   end
 
   // Check if ROM has been busy in order to retry ROM access
   reg pmem_busy;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) pmem_busy <= 1'b0;
-    else pmem_busy <= fe_pmem_wait;
+    if (puc_rst) begin
+      pmem_busy <= 1'b0;
+    end else begin
+      pmem_busy <= fe_pmem_wait;
+    end
   end
 
   // Memory interface
@@ -406,17 +431,27 @@ module pu_msp430_frontend (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_inst_sext or posedge puc_rst) begin
-    if (puc_rst) inst_sext <= 16'h0000;
-    else if (decode & is_const) inst_sext <= sconst_nxt;
-    else if (decode & inst_type_nxt[`INST_JMP]) inst_sext <= {{5{ir[9]}}, ir[9:0], 1'b0};
-    else inst_sext <= ext_nxt;
+    if (puc_rst) begin
+      inst_sext <= 16'h0000;
+    end else if (decode & is_const) begin
+      inst_sext <= sconst_nxt;
+    end else if (decode & inst_type_nxt[`INST_JMP]) begin
+      inst_sext <= {{5{ir[9]}}, ir[9:0], 1'b0};
+    end else begin
+      inst_sext <= ext_nxt;
+    end
   end
 `else
   always @(posedge mclk_inst_sext or posedge puc_rst) begin
-    if (puc_rst) inst_sext <= 16'h0000;
-    else if (decode & is_const) inst_sext <= sconst_nxt;
-    else if (decode & inst_type_nxt[`INST_JMP]) inst_sext <= {{5{ir[9]}}, ir[9:0], 1'b0};
-    else if ((i_state == I_EXT1) & is_sext) inst_sext <= ext_nxt;
+    if (puc_rst) begin
+      inst_sext <= 16'h0000;
+    end else if (decode & is_const) begin
+      inst_sext <= sconst_nxt;
+    end else if (decode & inst_type_nxt[`INST_JMP]) begin
+      inst_sext <= {{5{ir[9]}}, ir[9:0], 1'b0};
+    end else if ((i_state == I_EXT1) & is_sext) begin
+      inst_sext <= ext_nxt;
+    end
   end
 `endif
 
@@ -440,15 +475,23 @@ module pu_msp430_frontend (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_inst_dext or posedge puc_rst) begin
-    if (puc_rst) inst_dext <= 16'h0000;
-    else if ((i_state == I_EXT1) & ~is_sext) inst_dext <= ext_nxt;
-    else inst_dext <= ext_nxt;
+    if (puc_rst) begin
+      inst_dext <= 16'h0000;
+    end else if ((i_state == I_EXT1) & ~is_sext) begin
+      inst_dext <= ext_nxt;
+    end else begin
+      inst_dext <= ext_nxt;
+    end
   end
 `else
   always @(posedge mclk_inst_dext or posedge puc_rst) begin
-    if (puc_rst) inst_dext <= 16'h0000;
-    else if ((i_state == I_EXT1) & ~is_sext) inst_dext <= ext_nxt;
-    else if (i_state == I_EXT2) inst_dext <= ext_nxt;
+    if (puc_rst) begin
+      inst_dext <= 16'h0000;
+    end else if ((i_state == I_EXT1) & ~is_sext) begin
+      inst_dext <= ext_nxt;
+    end else if (i_state == I_EXT2) begin
+      inst_dext <= ext_nxt;
+    end
   end
 `endif
 
@@ -484,13 +527,19 @@ module pu_msp430_frontend (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_type <= 3'b000;
-    else inst_type <= inst_type_nxt;
+    if (puc_rst) begin
+      inst_type <= 3'b000;
+    end else begin
+      inst_type <= inst_type_nxt;
+    end
   end
 `else
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_type <= 3'b000;
-    else if (decode) inst_type <= inst_type_nxt;
+    if (puc_rst) begin
+      inst_type <= 3'b000;
+    end else if (decode) begin
+      inst_type <= inst_type_nxt;
+    end
   end
 `endif
 
@@ -511,13 +560,19 @@ module pu_msp430_frontend (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_so <= 8'h00;
-    else inst_so <= inst_so_nxt;
+    if (puc_rst) begin
+      inst_so <= 8'h00;
+    end else begin
+      inst_so <= inst_so_nxt;
+    end
   end
 `else
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_so <= 8'h00;
-    else if (decode) inst_so <= inst_so_nxt;
+    if (puc_rst) begin
+      inst_so <= 8'h00;
+    end else if (decode) begin
+      inst_so <= inst_so_nxt;
+    end
   end
 `endif
 
@@ -538,13 +593,19 @@ module pu_msp430_frontend (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_jmp_bin <= 3'h0;
-    else inst_jmp_bin <= ir[12:10];
+    if (puc_rst) begin
+      inst_jmp_bin <= 3'h0;
+    end else begin
+      inst_jmp_bin <= ir[12:10];
+    end
   end
 `else
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_jmp_bin <= 3'h0;
-    else if (decode) inst_jmp_bin <= ir[12:10];
+    if (puc_rst) begin
+      inst_jmp_bin <= 3'h0;
+    end else if (decode) begin
+      inst_jmp_bin <= ir[12:10];
+    end
   end
 `endif
 
@@ -572,13 +633,19 @@ module pu_msp430_frontend (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_mov <= 1'b0;
-    else inst_mov <= inst_to_nxt[`MOV];
+    if (puc_rst) begin
+      inst_mov <= 1'b0;
+    end else begin
+      inst_mov <= inst_to_nxt[`MOV];
+    end
   end
 `else
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_mov <= 1'b0;
-    else if (decode) inst_mov <= inst_to_nxt[`MOV];
+    if (puc_rst) begin
+      inst_mov <= 1'b0;
+    end else if (decode) begin
+      inst_mov <= inst_to_nxt[`MOV];
+    end
   end
 `endif
 
@@ -590,13 +657,19 @@ module pu_msp430_frontend (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_dest_bin <= 4'h0;
-    else inst_dest_bin <= ir[3:0];
+    if (puc_rst) begin
+      inst_dest_bin <= 4'h0;
+    end else begin
+      inst_dest_bin <= ir[3:0];
+    end
   end
 `else
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_dest_bin <= 4'h0;
-    else if (decode) inst_dest_bin <= ir[3:0];
+    if (puc_rst) begin
+      inst_dest_bin <= 4'h0;
+    end else if (decode) begin
+      inst_dest_bin <= ir[3:0];
+    end
   end
 `endif
 
@@ -607,13 +680,19 @@ module pu_msp430_frontend (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_src_bin <= 4'h0;
-    else inst_src_bin <= ir[11:8];
+    if (puc_rst) begin
+      inst_src_bin <= 4'h0;
+    end else begin
+      inst_src_bin <= ir[11:8];
+    end
   end
 `else
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_src_bin <= 4'h0;
-    else if (decode) inst_src_bin <= ir[11:8];
+    if (puc_rst) begin
+      inst_src_bin <= 4'h0;
+    end else if (decode) begin
+      inst_src_bin <= ir[11:8];
+    end
   end
 `endif
 
@@ -642,48 +721,56 @@ module pu_msp430_frontend (
   wire [ 3:0] src_reg = inst_type_nxt[`INST_SO] ? ir[3:0] : ir[11:8];
 
   always @(src_reg or ir or inst_type_nxt) begin
-    if (inst_type_nxt[`INST_JMP]) inst_as_nxt = 13'b0000000000001;
-    else if (src_reg == 4'h3)  // Addressing mode using R3
+    if (inst_type_nxt[`INST_JMP]) begin
+      inst_as_nxt = 13'b0000000000001;
+    end else if (src_reg == 4'h3) begin  // Addressing mode using R3
       case (ir[5:4])
         2'b11:   inst_as_nxt = 13'b1000000000000;
         2'b10:   inst_as_nxt = 13'b0100000000000;
         2'b01:   inst_as_nxt = 13'b0010000000000;
         default: inst_as_nxt = 13'b0001000000000;
       endcase
-    else if (src_reg == 4'h2)  // Addressing mode using R2
+    end else if (src_reg == 4'h2) begin  // Addressing mode using R2
       case (ir[5:4])
         2'b11:   inst_as_nxt = 13'b0000100000000;
         2'b10:   inst_as_nxt = 13'b0000010000000;
         2'b01:   inst_as_nxt = 13'b0000001000000;
         default: inst_as_nxt = 13'b0000000000001;
       endcase
-    else if (src_reg == 4'h0)  // Addressing mode using R0
+    end else if (src_reg == 4'h0) begin  // Addressing mode using R0
       case (ir[5:4])
         2'b11:   inst_as_nxt = 13'b0000000100000;
         2'b10:   inst_as_nxt = 13'b0000000000100;
         2'b01:   inst_as_nxt = 13'b0000000010000;
         default: inst_as_nxt = 13'b0000000000001;
       endcase
-    else  // General Addressing mode
+    end else begin  // General Addressing mode
       case (ir[5:4])
         2'b11:   inst_as_nxt = 13'b0000000001000;
         2'b10:   inst_as_nxt = 13'b0000000000100;
         2'b01:   inst_as_nxt = 13'b0000000000010;
         default: inst_as_nxt = 13'b0000000000001;
       endcase
+    end
   end
 
   assign is_const = |inst_as_nxt[12:7];
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_as <= 8'h00;
-    else inst_as <= {is_const, inst_as_nxt[6:0]};
+    if (puc_rst) begin
+      inst_as <= 8'h00;
+    end else begin
+      inst_as <= {is_const, inst_as_nxt[6:0]};
+    end
   end
 `else
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_as <= 8'h00;
-    else if (decode) inst_as <= {is_const, inst_as_nxt[6:0]};
+    if (puc_rst) begin
+      inst_as <= 8'h00;
+    end else if (decode) begin
+      inst_as <= {is_const, inst_as_nxt[6:0]};
+    end
   end
 `endif
 
@@ -694,13 +781,21 @@ module pu_msp430_frontend (
   // 13'b0100000000000: Constant 2.
   // 13'b1000000000000: Constant -1.
   always @(inst_as_nxt) begin
-    if (inst_as_nxt[7]) sconst_nxt = 16'h0004;
-    else if (inst_as_nxt[8]) sconst_nxt = 16'h0008;
-    else if (inst_as_nxt[9]) sconst_nxt = 16'h0000;
-    else if (inst_as_nxt[10]) sconst_nxt = 16'h0001;
-    else if (inst_as_nxt[11]) sconst_nxt = 16'h0002;
-    else if (inst_as_nxt[12]) sconst_nxt = 16'hffff;
-    else sconst_nxt = 16'h0000;
+    if (inst_as_nxt[7]) begin
+      sconst_nxt = 16'h0004;
+    end else if (inst_as_nxt[8]) begin
+      sconst_nxt = 16'h0008;
+    end else if (inst_as_nxt[9]) begin
+      sconst_nxt = 16'h0000;
+    end else if (inst_as_nxt[10]) begin
+      sconst_nxt = 16'h0001;
+    end else if (inst_as_nxt[11]) begin
+      sconst_nxt = 16'h0002;
+    end else if (inst_as_nxt[12]) begin
+      sconst_nxt = 16'hffff;
+    end else begin
+      sconst_nxt = 16'h0000;
+    end
   end
 
   //
@@ -717,33 +812,41 @@ module pu_msp430_frontend (
   wire [3:0] dest_reg = ir[3:0];
 
   always @(dest_reg or ir or inst_type_nxt) begin
-    if (~inst_type_nxt[`INST_TO]) inst_ad_nxt = 8'b00000000;
-    else if (dest_reg == 4'h2)  // Addressing mode using R2
+    if (~inst_type_nxt[`INST_TO]) begin
+      inst_ad_nxt = 8'b00000000;
+    end else if (dest_reg == 4'h2) begin  // Addressing mode using R2
       case (ir[7])
         1'b1:    inst_ad_nxt = 8'b01000000;
         default: inst_ad_nxt = 8'b00000001;
       endcase
-    else if (dest_reg == 4'h0)  // Addressing mode using R0
+    end else if (dest_reg == 4'h0) begin  // Addressing mode using R0
       case (ir[7])
         1'b1:    inst_ad_nxt = 8'b00010000;
         default: inst_ad_nxt = 8'b00000001;
       endcase
-    else  // General Addressing mode
+    end else begin  // General Addressing mode
       case (ir[7])
         1'b1:    inst_ad_nxt = 8'b00000010;
         default: inst_ad_nxt = 8'b00000001;
       endcase
+    end
   end
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_ad <= 8'h00;
-    else inst_ad <= inst_ad_nxt;
+    if (puc_rst) begin
+      inst_ad <= 8'h00;
+    end else begin
+      inst_ad <= inst_ad_nxt;
+    end
   end
 `else
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_ad <= 8'h00;
-    else if (decode) inst_ad <= inst_ad_nxt;
+    if (puc_rst) begin
+      inst_ad <= 8'h00;
+    end else if (decode) begin
+      inst_ad <= inst_ad_nxt;
+    end
   end
 `endif
 
@@ -752,8 +855,11 @@ module pu_msp430_frontend (
 
   // Operation size
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) inst_bw <= 1'b0;
-    else if (decode) inst_bw <= ir[6] & ~inst_type_nxt[`INST_JMP] & ~irq_detect & ~cpu_halt_cmd;
+    if (puc_rst) begin
+      inst_bw <= 1'b0;
+    end else if (decode) begin
+      inst_bw <= ir[6] & ~inst_type_nxt[`INST_JMP] & ~irq_detect & ~cpu_halt_cmd;
+    end
   end
 
   // Extended instruction size
@@ -761,13 +867,19 @@ module pu_msp430_frontend (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_sz <= 2'b00;
-    else inst_sz <= inst_sz_nxt;
+    if (puc_rst) begin
+      inst_sz <= 2'b00;
+    end else begin
+      inst_sz <= inst_sz_nxt;
+    end
   end
 `else
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_sz <= 2'b00;
-    else if (decode) inst_sz <= inst_sz_nxt;
+    if (puc_rst) begin
+      inst_sz <= 2'b00;
+    end else if (decode) begin
+      inst_sz <= inst_sz_nxt;
+    end
   end
 `endif
 
@@ -791,33 +903,49 @@ module pu_msp430_frontend (
   reg  exec_jmp;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) exec_jmp <= 1'b0;
-    else if (inst_branch & decode) exec_jmp <= 1'b1;
-    else if (e_state == E_JUMP) exec_jmp <= 1'b0;
+    if (puc_rst) begin
+      exec_jmp <= 1'b0;
+    end else if (inst_branch & decode) begin
+      exec_jmp <= 1'b1;
+    end else if (e_state == E_JUMP) begin
+      exec_jmp <= 1'b0;
+    end
   end
 
   reg exec_dst_wr;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) exec_dst_wr <= 1'b0;
-    else if (e_state == E_DST_RD) exec_dst_wr <= 1'b1;
-    else if (e_state == E_DST_WR) exec_dst_wr <= 1'b0;
+    if (puc_rst) begin
+      exec_dst_wr <= 1'b0;
+    end else if (e_state == E_DST_RD) begin
+      exec_dst_wr <= 1'b1;
+    end else if (e_state == E_DST_WR) begin
+      exec_dst_wr <= 1'b0;
+    end
   end
 
   reg exec_src_wr;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) exec_src_wr <= 1'b0;
-    else if (inst_type[`INST_SO] & (e_state == E_SRC_RD)) exec_src_wr <= 1'b1;
-    else if ((e_state == E_SRC_WR) || (e_state == E_DST_WR)) exec_src_wr <= 1'b0;
+    if (puc_rst) begin
+      exec_src_wr <= 1'b0;
+    end else if (inst_type[`INST_SO] & (e_state == E_SRC_RD)) begin
+      exec_src_wr <= 1'b1;
+    end else if ((e_state == E_SRC_WR) || (e_state == E_DST_WR)) begin
+      exec_src_wr <= 1'b0;
+    end
   end
 
   reg exec_dext_rdy;
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) exec_dext_rdy <= 1'b0;
-    else if (e_state == E_DST_RD) exec_dext_rdy <= 1'b0;
-    else if (inst_dext_rdy) exec_dext_rdy <= 1'b1;
+    if (puc_rst) begin
+      exec_dext_rdy <= 1'b0;
+    end else if (e_state == E_DST_RD) begin
+      exec_dext_rdy <= 1'b0;
+    end else if (inst_dext_rdy) begin
+      exec_dext_rdy <= 1'b1;
+    end
   end
 
   // Execution first state
@@ -856,8 +984,11 @@ module pu_msp430_frontend (
 
   // State machine
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) e_state <= E_IRQ_1;
-    else e_state <= e_state_nxt;
+    if (puc_rst) begin
+      e_state <= E_IRQ_1;
+    end else begin
+      e_state <= e_state_nxt;
+    end
   end
 
   // Frontend State machine control signals
@@ -919,13 +1050,19 @@ module pu_msp430_frontend (
 
 `ifdef CLOCK_GATING
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_alu <= 12'h000;
-    else inst_alu <= inst_alu_nxt;
+    if (puc_rst) begin
+      inst_alu <= 12'h000;
+    end else begin
+      inst_alu <= inst_alu_nxt;
+    end
   end
 `else
   always @(posedge mclk_decode or posedge puc_rst) begin
-    if (puc_rst) inst_alu <= 12'h000;
-    else if (decode) inst_alu <= inst_alu_nxt;
+    if (puc_rst) begin
+      inst_alu <= 12'h000;
+    end else if (decode) begin
+      inst_alu <= inst_alu_nxt;
+    end
   end
 `endif
 endmodule  // pu_msp430_frontend

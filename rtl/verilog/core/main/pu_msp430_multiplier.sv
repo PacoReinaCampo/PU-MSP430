@@ -76,21 +76,28 @@ module pu_msp430_multiplier (
   parameter DEC_WD = 4;
 
   // Register addresses offset
-  parameter [DEC_WD-1:0] OP1_MPY = 'h0, OP1_MPYS = 'h2, OP1_MAC = 'h4, OP1_MACS = 'h6, OP2 = 'h8, RESLO = 'hA, RESHI = 'hC, SUMEXT = 'hE;
+  parameter [DEC_WD-1:0] OP1_MPY = 'h0;
+  parameter [DEC_WD-1:0] OP1_MPYS = 'h2;
+  parameter [DEC_WD-1:0] OP1_MAC = 'h4;
+  parameter [DEC_WD-1:0] OP1_MACS = 'h6;
+  parameter [DEC_WD-1:0] OP2 = 'h8;
+  parameter [DEC_WD-1:0] RESLO = 'hA;
+  parameter [DEC_WD-1:0] RESHI = 'hC;
+  parameter [DEC_WD-1:0] SUMEXT = 'hE;
 
   // Register one-hot decoder utilities
   parameter DEC_SZ = (1 << DEC_WD);
   parameter [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
-  parameter [DEC_SZ-1:0] OP1_MPY_D   = (BASE_REG << OP1_MPY),
-                         OP1_MPYS_D  = (BASE_REG << OP1_MPYS),
-                         OP1_MAC_D   = (BASE_REG << OP1_MAC),
-                         OP1_MACS_D  = (BASE_REG << OP1_MACS),
-                         OP2_D       = (BASE_REG << OP2),
-                         RESLO_D     = (BASE_REG << RESLO),
-                         RESHI_D     = (BASE_REG << RESHI),
-                         SUMEXT_D    = (BASE_REG << SUMEXT);
+  parameter [DEC_SZ-1:0] OP1_MPY_D   = (BASE_REG << OP1_MPY);
+  parameter [DEC_SZ-1:0] OP1_MPYS_D  = (BASE_REG << OP1_MPYS);
+  parameter [DEC_SZ-1:0] OP1_MAC_D   = (BASE_REG << OP1_MAC);
+  parameter [DEC_SZ-1:0] OP1_MACS_D  = (BASE_REG << OP1_MACS);
+  parameter [DEC_SZ-1:0] OP2_D       = (BASE_REG << OP2);
+  parameter [DEC_SZ-1:0] RESLO_D     = (BASE_REG << RESLO);
+  parameter [DEC_SZ-1:0] RESHI_D     = (BASE_REG << RESHI);
+  parameter [DEC_SZ-1:0] SUMEXT_D    = (BASE_REG << SUMEXT);
 
   // Wire pre-declarations
   wire result_wr;

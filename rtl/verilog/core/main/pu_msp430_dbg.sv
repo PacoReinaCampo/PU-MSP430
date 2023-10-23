@@ -288,13 +288,19 @@ module pu_msp430_dbg (
 
 `ifdef DBG_RST_BRK_EN
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) cpu_ctl <= 4'h6;
-    else if (cpu_ctl_wr) cpu_ctl <= dbg_din[6:3];
+    if (dbg_rst) begin
+      cpu_ctl <= 4'h6;
+    end else if (cpu_ctl_wr) begin
+      cpu_ctl <= dbg_din[6:3];
+    end
   end
 `else
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) cpu_ctl <= 4'h2;
-    else if (cpu_ctl_wr) cpu_ctl <= dbg_din[6:3];
+    if (dbg_rst) begin
+      cpu_ctl <= 4'h2;
+    end else if (cpu_ctl_wr) begin
+      cpu_ctl <= dbg_din[6:3];
+    end
   end
 `endif
 
@@ -316,9 +322,13 @@ module pu_msp430_dbg (
   wire [3:2] cpu_stat_clr = ~dbg_din[3:2];
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) cpu_stat <= 2'b00;
-    else if (cpu_stat_wr) cpu_stat <= ((cpu_stat & cpu_stat_clr) | cpu_stat_set);
-    else cpu_stat <= (cpu_stat | cpu_stat_set);
+    if (dbg_rst) begin
+      cpu_stat <= 2'b00;
+    end else if (cpu_stat_wr) begin
+      cpu_stat <= ((cpu_stat & cpu_stat_clr) | cpu_stat_set);
+    end else begin
+      cpu_stat <= (cpu_stat | cpu_stat_set);
+    end
   end
 
   wire [7:0] cpu_stat_full = {brk3_pnd, brk2_pnd, brk1_pnd, brk0_pnd, cpu_stat, 1'b0, dbg_halt_st};
@@ -350,16 +360,22 @@ module pu_msp430_dbg (
   wire       mem_ctl_wr = reg_wr[MEM_CTL];
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) mem_ctl <= 3'h0;
-    else if (mem_ctl_wr) mem_ctl <= dbg_din[3:1];
+    if (dbg_rst) begin
+      mem_ctl <= 3'h0;
+    end else if (mem_ctl_wr) begin
+      mem_ctl <= dbg_din[3:1];
+    end
   end
 
   wire [7:0] mem_ctl_full = {4'b0000, mem_ctl, 1'b0};
 
   reg        mem_start;
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) mem_start <= 1'b0;
-    else mem_start <= mem_ctl_wr & dbg_din[0];
+    if (dbg_rst) begin
+      mem_start <= 1'b0;
+    end else begin
+      mem_start <= mem_ctl_wr & dbg_din[0];
+    end
   end
 
   wire        mem_bw = mem_ctl[3];
@@ -374,10 +390,15 @@ module pu_msp430_dbg (
   wire [15:0] dbg_mem_din_bw = ~mem_bw ? dbg_mem_din : mem_addr[0] ? {8'h00, dbg_mem_din[15:8]} : {8'h00, dbg_mem_din[7:0]};
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) mem_data <= 16'h0000;
-    else if (mem_data_wr) mem_data <= dbg_din;
-    else if (dbg_reg_rd) mem_data <= dbg_reg_din;
-    else if (dbg_mem_rd_dly) mem_data <= dbg_mem_din_bw;
+    if (dbg_rst) begin
+      mem_data <= 16'h0000;
+    end else if (mem_data_wr) begin
+      mem_data <= dbg_din;
+    end else if (dbg_reg_rd) begin
+      mem_data <= dbg_reg_din;
+    end else if (dbg_mem_rd_dly) begin
+      mem_data <= dbg_mem_din_bw;
+    end
   end
 
   // MEM_ADDR Register
@@ -390,9 +411,13 @@ module pu_msp430_dbg (
   wire [15:0] mem_addr_inc = (mem_cnt == 16'h0000) ? 16'h0000 : (mem_burst & dbg_mem_acc & ~mem_bw) ? 16'h0002 : (mem_burst & (dbg_mem_acc | dbg_reg_acc)) ? 16'h0001 : 16'h0000;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) mem_addr <= 16'h0000;
-    else if (mem_addr_wr) mem_addr <= dbg_din;
-    else mem_addr <= mem_addr + mem_addr_inc;
+    if (dbg_rst) begin
+      mem_addr <= 16'h0000;
+    end else if (mem_addr_wr) begin
+      mem_addr <= dbg_din;
+    end else begin
+      mem_addr <= mem_addr + mem_addr_inc;
+    end
   end
 
   // MEM_CNT Register
@@ -402,9 +427,13 @@ module pu_msp430_dbg (
   wire [15:0] mem_cnt_dec = (mem_cnt == 16'h0000) ? 16'h0000 : (mem_burst & (dbg_mem_acc | dbg_reg_acc)) ? 16'hffff : 16'h0000;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) mem_cnt <= 16'h0000;
-    else if (mem_cnt_wr) mem_cnt <= dbg_din;
-    else mem_cnt <= mem_cnt + mem_cnt_dec;
+    if (dbg_rst) begin
+      mem_cnt <= 16'h0000;
+    end else if (mem_cnt_wr) begin
+      mem_cnt <= dbg_din;
+    end else begin
+      mem_cnt <= mem_cnt + mem_cnt_dec;
+    end
   end
 
   //////////////////////////////////////////////////////////////////////////////
@@ -553,9 +582,13 @@ module pu_msp430_dbg (
 
   // Tell UART/I2C interface that the data is ready to be read
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_rd_rdy <= 1'b0;
-    else if (mem_burst | mem_burst_rd) dbg_rd_rdy <= (dbg_reg_rd | dbg_mem_rd_dly);
-    else dbg_rd_rdy <= dbg_rd;
+    if (dbg_rst) begin
+      dbg_rd_rdy <= 1'b0;
+    end else if (mem_burst | mem_burst_rd) begin
+      dbg_rd_rdy <= (dbg_reg_rd | dbg_mem_rd_dly);
+    end else begin
+      dbg_rd_rdy <= dbg_rd;
+    end
   end
 
   //////////////////////////////////////////////////////////////////////////////
@@ -577,9 +610,13 @@ module pu_msp430_dbg (
   // Single step
   reg [1:0] inc_step;
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) inc_step <= 2'b00;
-    else if (istep) inc_step <= 2'b11;
-    else inc_step <= {inc_step[0], 1'b0};
+    if (dbg_rst) begin
+      inc_step <= 2'b00;
+    end else if (istep) begin
+      inc_step <= 2'b11;
+    end else begin
+      inc_step <= {inc_step[0], 1'b0};
+    end
   end
 
   // Run / Halt
@@ -592,9 +629,13 @@ module pu_msp430_dbg (
   wire halt_flag_set = halt_cpu | halt_rst | dbg_swbrk | mem_halt_cpu | brk0_halt | brk1_halt | brk2_halt | brk3_halt;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) halt_flag <= 1'b0;
-    else if (halt_flag_clr) halt_flag <= 1'b0;
-    else if (halt_flag_set) halt_flag <= 1'b1;
+    if (dbg_rst) begin
+      halt_flag <= 1'b0;
+    end else if (halt_flag_clr) begin
+      halt_flag <= 1'b0;
+    end else if (halt_flag_set) begin
+      halt_flag <= 1'b1;
+    end
   end
 
   assign dbg_halt_cmd = (halt_flag | halt_flag_set) & ~inc_step[1];
@@ -610,9 +651,13 @@ module pu_msp430_dbg (
 
   // Detect when burst is on going
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) mem_burst <= 1'b0;
-    else if (mem_burst_start) mem_burst <= 1'b1;
-    else if (mem_burst_end) mem_burst <= 1'b0;
+    if (dbg_rst) begin
+      mem_burst <= 1'b0;
+    end else if (mem_burst_start) begin
+      mem_burst <= 1'b1;
+    end else if (mem_burst_end) begin
+      mem_burst <= 1'b0;
+    end
   end
 
   // Control signals for UART/I2C interface
@@ -623,8 +668,11 @@ module pu_msp430_dbg (
   reg mem_startb;
 
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) mem_startb <= 1'b0;
-    else mem_startb <= (mem_burst & (dbg_wr | dbg_rd)) | mem_burst_rd;
+    if (dbg_rst) begin
+      mem_startb <= 1'b0;
+    end else begin
+      mem_startb <= (mem_burst & (dbg_wr | dbg_rd)) | mem_burst_rd;
+    end
   end
 
   // Combine single and burst memory start of sequence
@@ -655,8 +703,11 @@ module pu_msp430_dbg (
 
   // State machine
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) mem_state <= M_IDLE;
-    else mem_state <= mem_state_nxt;
+    if (dbg_rst) begin
+      mem_state <= M_IDLE;
+    end else begin
+      mem_state <= mem_state_nxt;
+    end
   end
 
   // Utility signals
@@ -679,8 +730,11 @@ module pu_msp430_dbg (
 
   // It takes one additional cycle to read from Memory as from registers
   always @(posedge dbg_clk or posedge dbg_rst) begin
-    if (dbg_rst) dbg_mem_rd_dly <= 1'b0;
-    else dbg_mem_rd_dly <= dbg_mem_rd;
+    if (dbg_rst) begin
+      dbg_mem_rd_dly <= 1'b0;
+    end else begin
+      dbg_mem_rd_dly <= dbg_mem_rd;
+    end
   end
 
   //////////////////////////////////////////////////////////////////////////////

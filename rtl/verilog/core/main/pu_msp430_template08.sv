@@ -70,14 +70,20 @@ module pu_msp430_template08 (
   parameter DEC_WD = 2;
 
   // Register addresses offset
-  parameter [DEC_WD-1:0] CNTRL1 = 'h0, CNTRL2 = 'h1, CNTRL3 = 'h2, CNTRL4 = 'h3;
+  parameter [DEC_WD-1:0] CNTRL1 = 'h0;
+  parameter [DEC_WD-1:0] CNTRL2 = 'h1;
+  parameter [DEC_WD-1:0] CNTRL3 = 'h2;
+  parameter [DEC_WD-1:0] CNTRL4 = 'h3;
 
   // Register one-hot decoder utilities
   parameter DEC_SZ = (1 << DEC_WD);
   parameter [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
-  parameter [DEC_SZ-1:0] CNTRL1_D = (BASE_REG << CNTRL1), CNTRL2_D = (BASE_REG << CNTRL2), CNTRL3_D = (BASE_REG << CNTRL3), CNTRL4_D = (BASE_REG << CNTRL4);
+  parameter [DEC_SZ-1:0] CNTRL1_D = (BASE_REG << CNTRL1);
+  parameter [DEC_SZ-1:0] CNTRL2_D = (BASE_REG << CNTRL2);
+  parameter [DEC_SZ-1:0] CNTRL3_D = (BASE_REG << CNTRL3);
+  parameter [DEC_SZ-1:0] CNTRL4_D = (BASE_REG << CNTRL4);
 
   //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER

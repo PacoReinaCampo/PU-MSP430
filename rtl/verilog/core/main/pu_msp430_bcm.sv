@@ -106,14 +106,16 @@ module pu_msp430_bcm (
   parameter DEC_WD = 4;
 
   // Register addresses offset
-  parameter [DEC_WD-1:0] BCSCTL1 = 'h7, BCSCTL2 = 'h8;
+  parameter [DEC_WD-1:0] BCSCTL1 = 'h7;
+  parameter [DEC_WD-1:0] BCSCTL2 = 'h8;
 
   // Register one-hot decoder utilities
   parameter DEC_SZ = (1 << DEC_WD);
   parameter [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
-  parameter [DEC_SZ-1:0] BCSCTL1_D = (BASE_REG << BCSCTL1), BCSCTL2_D = (BASE_REG << BCSCTL2);
+  parameter [DEC_SZ-1:0] BCSCTL1_D = (BASE_REG << BCSCTL1);
+  parameter [DEC_SZ-1:0] BCSCTL2_D = (BASE_REG << BCSCTL2);
 
   // Local wire declarations
   wire              nodiv_mclk;

@@ -97,22 +97,30 @@ module pu_msp430_ta (
   parameter DEC_WD = 7;
 
   // Register addresses offset
-  parameter [DEC_WD-1:0] TACTL = 'h60, TAR = 'h70, TACCTL0 = 'h62, TACCR0 = 'h72, TACCTL1 = 'h64, TACCR1 = 'h74, TACCTL2 = 'h66, TACCR2 = 'h76, TAIV = 'h2E;
+  parameter [DEC_WD-1:0] TACTL = 'h60;
+  parameter [DEC_WD-1:0] TAR = 'h70;
+  parameter [DEC_WD-1:0] TACCTL0 = 'h62;
+  parameter [DEC_WD-1:0] TACCR0 = 'h72;
+  parameter [DEC_WD-1:0] TACCTL1 = 'h64;
+  parameter [DEC_WD-1:0] TACCR1 = 'h74;
+  parameter [DEC_WD-1:0] TACCTL2 = 'h66;
+  parameter [DEC_WD-1:0] TACCR2 = 'h76;
+  parameter [DEC_WD-1:0] TAIV = 'h2E;
 
   // Register one-hot decoder utilities
   parameter DEC_SZ = (1 << DEC_WD);
   parameter [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
-  parameter [DEC_SZ-1:0] TACTL_D    = (BASE_REG << TACTL),
-                         TAR_D      = (BASE_REG << TAR),
-                         TACCTL0_D  = (BASE_REG << TACCTL0),
-                         TACCR0_D   = (BASE_REG << TACCR0),
-                         TACCTL1_D  = (BASE_REG << TACCTL1),
-                         TACCR1_D   = (BASE_REG << TACCR1),
-                         TACCTL2_D  = (BASE_REG << TACCTL2),
-                         TACCR2_D   = (BASE_REG << TACCR2),
-                         TAIV_D     = (BASE_REG << TAIV);
+  parameter [DEC_SZ-1:0] TACTL_D    = (BASE_REG << TACTL);
+  parameter [DEC_SZ-1:0] TAR_D      = (BASE_REG << TAR);
+  parameter [DEC_SZ-1:0] TACCTL0_D  = (BASE_REG << TACCTL0);
+  parameter [DEC_SZ-1:0] TACCR0_D   = (BASE_REG << TACCR0);
+  parameter [DEC_SZ-1:0] TACCTL1_D  = (BASE_REG << TACCTL1);
+  parameter [DEC_SZ-1:0] TACCR1_D   = (BASE_REG << TACCR1);
+  parameter [DEC_SZ-1:0] TACCTL2_D  = (BASE_REG << TACCTL2);
+  parameter [DEC_SZ-1:0] TACCR2_D   = (BASE_REG << TACCR2);
+  parameter [DEC_SZ-1:0] TAIV_D     = (BASE_REG << TAIV);
 
   //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER DECODER
