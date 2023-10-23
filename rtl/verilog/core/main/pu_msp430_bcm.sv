@@ -164,8 +164,11 @@ module pu_msp430_bcm (
 `endif
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) bcsctl1 <= 8'h00;
-    else if (bcsctl1_wr) bcsctl1 <= bcsctl1_nxt & divax_mask;  // Mask unused bits
+    if (puc_rst) begin
+      bcsctl1 <= 8'h00;
+    end else if (bcsctl1_wr) begin
+      bcsctl1 <= bcsctl1_nxt & divax_mask;  // Mask unused bits
+    end
   end
 
   // BCSCTL2 Register
@@ -200,8 +203,11 @@ module pu_msp430_bcm (
 `endif
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) bcsctl2 <= 8'h00;
-    else if (bcsctl2_wr) bcsctl2 <= bcsctl2_nxt & (sels_mask | divsx_mask | selmx_mask | divmx_mask);  // Mask unused bits
+    if (puc_rst) begin
+      bcsctl2 <= 8'h00;
+    end else if (bcsctl2_wr) begin
+      bcsctl2 <= bcsctl2_nxt & (sels_mask | divsx_mask | selmx_mask | divmx_mask);  // Mask unused bits
+    end
   end
 
   //////////////////////////////////////////////////////////////////////////////
@@ -231,7 +237,6 @@ module pu_msp430_bcm (
   // 5.1) HIGH SPEED SYSTEM CLOCK GENERATOR (DCO_CLK)
   // Note1: switching off the DCO osillator is only
   //        supported in ASIC mode with SCG0 low power mode
-  //
   // Note2: unlike the original MSP430 specification,
   //        we allow to switch off the DCO even
   //        if it is selected by MCLK or SMCLK.
@@ -245,7 +250,6 @@ module pu_msp430_bcm (
   //      - the cpu pin is disabled (in that case, wait for mclk_enable==0)
   //      - the debug interface is disabled
   //      - SCG0 is set (in that case, wait for the mclk_enable==0 if selected by SELMx)
-  //
   // Note that we make extensive use of the AND gate module in order
   // to prevent glitch propagation on the wakeup logic cone.
   wire cpu_enabled_with_dco;
@@ -284,8 +288,11 @@ module pu_msp430_bcm (
   reg dco_disable;
 
   always @(posedge nodiv_mclk_n or posedge por) begin
-    if (por) dco_disable <= 1'b1;
-    else dco_disable <= ~dco_enable_nxt;
+    if (por) begin
+      dco_disable <= 1'b1;
+    end else begin
+      dco_disable <= ~dco_enable_nxt;
+    end
   end
 
   // Note that a synchronizer is required if the MCLK mux is included
@@ -409,8 +416,11 @@ module pu_msp430_bcm (
   reg lfxt_disable;
 
   always @(posedge nodiv_mclk_n or posedge por) begin
-    if (por) lfxt_disable <= 1'b1;
-    else lfxt_disable <= ~lfxt_enable_nxt;
+    if (por) begin
+      lfxt_disable <= 1'b1;
+    end else begin
+      lfxt_disable <= ~lfxt_enable_nxt;
+    end
   end
 
   // Synchronize the OSCOFF control signal to the LFXT clock domain
@@ -497,8 +507,11 @@ module pu_msp430_bcm (
   reg lfxt_clk_dly;
 
   always @(posedge mclk or posedge por) begin
-    if (por) lfxt_clk_dly <= 1'b0;
-    else lfxt_clk_dly <= lfxt_clk_s;
+    if (por) begin
+      lfxt_clk_dly <= 1'b0;
+    end else begin
+      lfxt_clk_dly <= lfxt_clk_s;
+    end
   end
 
   wire lfxt_clk_en = (lfxt_clk_s & ~lfxt_clk_dly) & ~(oscoff & ~bcsctl2[`SELS]);
@@ -610,8 +623,11 @@ module pu_msp430_bcm (
   reg [2:0] mclk_div;
 
   always @(posedge nodiv_mclk or posedge puc_rst) begin
-    if (puc_rst) mclk_div <= 3'h0;
-    else if ((bcsctl2[`DIVMx] != 2'b00)) mclk_div <= mclk_div + 3'h1;
+    if (puc_rst) begin
+      mclk_div <= 3'h0;
+    end else if ((bcsctl2[`DIVMx] != 2'b00)) begin
+      mclk_div <= mclk_div + 3'h1;
+    end
   end
 
   wire mclk_div_en = mclk_active & ((bcsctl2[`DIVMx] == 2'b00) ? 1'b1 : (bcsctl2[`DIVMx] == 2'b01) ? mclk_div[0] : (bcsctl2[`DIVMx] == 2'b10) ? &mclk_div[1:0] : &mclk_div[2:0]);
@@ -699,8 +715,11 @@ module pu_msp430_bcm (
   reg [2:0] aclk_div;
 
   always @(posedge nodiv_aclk or posedge puc_lfxt_rst) begin
-    if (puc_lfxt_rst) aclk_div <= 3'h0;
-    else if ((divax_ss != 2'b00)) aclk_div <= aclk_div + 3'h1;
+    if (puc_lfxt_rst) begin
+      aclk_div <= 3'h0;
+    end else if ((divax_ss != 2'b00)) begin
+      aclk_div <= aclk_div + 3'h1;
+    end
   end
 
   wire aclk_div_en = cpu_en_aux_s & ~oscoff_s & ((divax_ss == 2'b00) ? 1'b1 : (divax_ss == 2'b01) ? aclk_div[0] : (divax_ss == 2'b10) ? &aclk_div[1:0] : &aclk_div[2:0]);
@@ -729,13 +748,19 @@ module pu_msp430_bcm (
   wire       aclk_en_nxt = lfxt_clk_en & ((bcsctl1[`DIVAx] == 2'b00) ? 1'b1 : (bcsctl1[`DIVAx] == 2'b01) ? aclk_div[0] : (bcsctl1[`DIVAx] == 2'b10) ? &aclk_div[1:0] : &aclk_div[2:0]);
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) aclk_div <= 3'h0;
-    else if ((bcsctl1[`DIVAx] != 2'b00) & lfxt_clk_en) aclk_div <= aclk_div + 3'h1;
+    if (puc_rst) begin
+      aclk_div <= 3'h0;
+    end else if ((bcsctl1[`DIVAx] != 2'b00) & lfxt_clk_en) begin
+      aclk_div <= aclk_div + 3'h1;
+    end
   end
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) aclk_en <= 1'b0;
-    else aclk_en <= aclk_en_nxt & cpu_en_s;
+    if (puc_rst) begin
+      aclk_en <= 1'b0;
+    end else begin
+      aclk_en <= aclk_en_nxt & cpu_en_s;
+    end
   end
 
   assign aclk = mclk;
@@ -825,8 +850,11 @@ module pu_msp430_bcm (
   reg [2:0] smclk_div;
 
   always @(posedge nodiv_smclk or posedge puc_sm_rst) begin
-    if (puc_sm_rst) smclk_div <= 3'h0;
-    else if ((divsx_ss != 2'b00)) smclk_div <= smclk_div + 3'h1;
+    if (puc_sm_rst) begin
+      smclk_div <= 3'h0;
+    end else if ((divsx_ss != 2'b00)) begin
+      smclk_div <= smclk_div + 3'h1;
+    end
   end
 
   wire smclk_div_en = cpu_en_sm_s & ~scg1_s & ((divsx_ss == 2'b00) ? 1'b1 : (divsx_ss == 2'b01) ? smclk_div[0] : (divsx_ss == 2'b10) ? &smclk_div[1:0] : &smclk_div[2:0]);
@@ -862,13 +890,19 @@ module pu_msp430_bcm (
   wire       smclk_en_nxt = smclk_in & ((bcsctl2[`DIVSx] == 2'b00) ? 1'b1 : (bcsctl2[`DIVSx] == 2'b01) ? smclk_div[0] : (bcsctl2[`DIVSx] == 2'b10) ? &smclk_div[1:0] : &smclk_div[2:0]);
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) smclk_en <= 1'b0;
-    else smclk_en <= smclk_en_nxt & cpu_en_s;
+    if (puc_rst) begin
+      smclk_en <= 1'b0;
+    end else begin
+      smclk_en <= smclk_en_nxt & cpu_en_s;
+    end
   end
 
   always @(posedge mclk or posedge puc_rst) begin
-    if (puc_rst) smclk_div <= 3'h0;
-    else if ((bcsctl2[`DIVSx] != 2'b00) & smclk_in) smclk_div <= smclk_div + 3'h1;
+    if (puc_rst) begin
+      smclk_div <= 3'h0;
+    end else if ((bcsctl2[`DIVSx] != 2'b00) & smclk_in) begin
+      smclk_div <= smclk_div + 3'h1;
+    end
   end
 
   wire smclk = mclk;
@@ -917,13 +951,11 @@ module pu_msp430_bcm (
   //////////////////////////////////////////////////////////////////////////////
   // 7)  RESET GENERATION
   //////////////////////////////////////////////////////////////////////////////
-  //
   // Whenever the reset pin (reset_n) is deasserted, the internal resets of the
   // openMSP430 will be released in the following order:
   //                1- POR
   //                2- DBG_RST (if the sdi interface is enabled, i.e. dbg_en=1)
   //                3- PUC
-  //
   // Note: releasing the DBG_RST before PUC is particularly important in order
   //       to allow the sdi interface to halt the cpu immediately after a PUC.
   //
@@ -960,8 +992,11 @@ module pu_msp430_bcm (
   reg dbg_rst_noscan;
 
   always @(posedge mclk or posedge por) begin
-    if (por) dbg_rst_noscan <= 1'b1;
-    else dbg_rst_noscan <= dbg_rst_nxt;
+    if (por) begin
+      dbg_rst_noscan <= 1'b1;
+    end else begin
+      dbg_rst_noscan <= dbg_rst_nxt;
+    end
   end
 
   // Scan Reset Mux
@@ -989,11 +1024,15 @@ module pu_msp430_bcm (
   wire puc_a = por | wdt_reset;
 
   // Synchronous PUC reset
-  wire puc_s = dbg_cpu_reset |  // With the debug interface command
- (dbg_en_s & dbg_rst_noscan & ~puc_noscan_n);  // Sequencing making sure PUC is released
-                                               // after DBG_RST if the debug interface is
-                                               // enabled at power-on-reset time
-                                               // Scan Reset Mux
+
+  // With the debug interface command
+  // Sequencing making sure PUC is released
+  // after DBG_RST if the debug interface is
+  // enabled at power-on-reset time
+  // Scan Reset Mux
+
+  wire puc_s = dbg_cpu_reset | (dbg_en_s & dbg_rst_noscan & ~puc_noscan_n);
+
 `ifdef ASIC
   pu_msp430_scan_mux scan_mux_puc_rst_a (
     .scan_mode   (scan_mode),

@@ -90,14 +90,14 @@ module pu_msp430_multiplier (
   parameter [DEC_SZ-1:0] BASE_REG = {{DEC_SZ - 1{1'b0}}, 1'b1};
 
   // Register one-hot decoder
-  parameter [DEC_SZ-1:0] OP1_MPY_D   = (BASE_REG << OP1_MPY);
-  parameter [DEC_SZ-1:0] OP1_MPYS_D  = (BASE_REG << OP1_MPYS);
-  parameter [DEC_SZ-1:0] OP1_MAC_D   = (BASE_REG << OP1_MAC);
-  parameter [DEC_SZ-1:0] OP1_MACS_D  = (BASE_REG << OP1_MACS);
-  parameter [DEC_SZ-1:0] OP2_D       = (BASE_REG << OP2);
-  parameter [DEC_SZ-1:0] RESLO_D     = (BASE_REG << RESLO);
-  parameter [DEC_SZ-1:0] RESHI_D     = (BASE_REG << RESHI);
-  parameter [DEC_SZ-1:0] SUMEXT_D    = (BASE_REG << SUMEXT);
+  parameter [DEC_SZ-1:0] OP1_MPY_D = (BASE_REG << OP1_MPY);
+  parameter [DEC_SZ-1:0] OP1_MPYS_D = (BASE_REG << OP1_MPYS);
+  parameter [DEC_SZ-1:0] OP1_MAC_D = (BASE_REG << OP1_MAC);
+  parameter [DEC_SZ-1:0] OP1_MACS_D = (BASE_REG << OP1_MACS);
+  parameter [DEC_SZ-1:0] OP2_D = (BASE_REG << OP2);
+  parameter [DEC_SZ-1:0] RESLO_D = (BASE_REG << RESLO);
+  parameter [DEC_SZ-1:0] RESHI_D = (BASE_REG << RESHI);
+  parameter [DEC_SZ-1:0] SUMEXT_D = (BASE_REG << SUMEXT);
 
   // Wire pre-declarations
   wire result_wr;

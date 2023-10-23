@@ -155,7 +155,6 @@ module pu_msp430_frontend (
   // 2)  PARAMETER DEFINITIONS
   //////////////////////////////////////////////////////////////////////////////
 
-  //
   // 2.1) Instruction State machine definitons
 
   parameter I_IRQ_FETCH = `I_IRQ_FETCH;
@@ -165,7 +164,6 @@ module pu_msp430_frontend (
   parameter I_EXT2 = `I_EXT2;  // 2nd Extension word
   parameter I_IDLE = `I_IDLE;  // CPU is in IDLE mode
 
-  //
   // 2.2) Execution State machine definitons
 
   parameter E_IRQ_0 = `E_IRQ_0;
@@ -244,7 +242,6 @@ module pu_msp430_frontend (
   // 4)  INTERRUPT HANDLING & SYSTEM WAKEUP
   //////////////////////////////////////////////////////////////////////////////
 
-  //
   // 4.1) INTERRUPT HANDLING
 
   // Detect reset interrupt
@@ -312,7 +309,6 @@ module pu_msp430_frontend (
   assign irq_acc = irq_acc_all[61:64-`IRQ_NR];
   assign nmi_acc = irq_acc_all[62];
 
-  //
   // 4.2) SYSTEM WAKEUP
 `ifdef CPUOFF_EN
 
@@ -350,7 +346,6 @@ module pu_msp430_frontend (
   // 5)  FETCH INSTRUCTION
   //////////////////////////////////////////////////////////////////////////////
 
-  //
   // 5.1) PROGRAM COUNTER & MEMORY INTERFACE
 
   // Program counter
@@ -397,7 +392,6 @@ module pu_msp430_frontend (
   assign mab   = pc_nxt;
   assign mb_en = fetch | pc_sw_wr | (i_state == I_IRQ_FETCH) | pmem_busy | (dbg_halt_st & ~cpu_halt_cmd);
 
-  //
   // 5.2) INSTRUCTION REGISTER
 
   // Instruction register
@@ -515,10 +509,8 @@ module pu_msp430_frontend (
   wire mclk_decode = mclk;
 `endif
 
-  //
   // 6.1) OPCODE: INSTRUCTION TYPE
   // Instructions type is encoded in a one hot fashion as following:
-  //
   // 3'b001: Single-operand arithmetic
   // 3'b010: Conditional jump
   // 3'b100: Two-operand arithmetic
@@ -543,10 +535,8 @@ module pu_msp430_frontend (
   end
 `endif
 
-  //
   // 6.2) OPCODE: SINGLE-OPERAND ARITHMETIC
   // Instructions are encoded in a one hot fashion as following:
-  //
   // 8'b00000001: RRC
   // 8'b00000010: SWPB
   // 8'b00000100: RRA
@@ -576,10 +566,8 @@ module pu_msp430_frontend (
   end
 `endif
 
-  //
   // 6.3) OPCODE: CONDITIONAL JUMP
   // Instructions are encoded in a one hot fashion as following:
-  //
   // 8'b00000001: JNE/JNZ
   // 8'b00000010: JEQ/JZ
   // 8'b00000100: JNC/JLO
@@ -611,10 +599,8 @@ module pu_msp430_frontend (
 
   assign inst_jmp = one_hot8(inst_jmp_bin) & {8{inst_type[`INST_JMP]}};
 
-  //
   // 6.4) OPCODE: TWO-OPERAND ARITHMETIC
   // Instructions are encoded in a one hot fashion as following:
-  //
   // 12'b000000000001: MOV
   // 12'b000000000010: ADD
   // 12'b000000000100: ADDC
@@ -649,7 +635,6 @@ module pu_msp430_frontend (
   end
 `endif
 
-  //
   // 6.5) SOURCE AND DESTINATION REGISTERS
 
   // Destination register
@@ -698,10 +683,8 @@ module pu_msp430_frontend (
 
   assign inst_src = inst_type[`INST_TO] ? one_hot16(inst_src_bin) : inst_so[`RETI] ? 16'h0002 : inst_so[`IRQ] ? 16'h0001 : inst_type[`INST_SO] ? one_hot16(inst_dest_bin) : 16'h0000;
 
-  //
   // 6.6) SOURCE ADDRESSING MODES
   // Source addressing modes are encoded in a one hot fashion as following:
-  //
   // 13'b0000000000001: Register direct.
   // 13'b0000000000010: Register indexed.
   // 13'b0000000000100: Register indirect.
@@ -798,10 +781,8 @@ module pu_msp430_frontend (
     end
   end
 
-  //
   // 6.7) DESTINATION ADDRESSING MODES
   // Destination addressing modes are encoded in a one hot fashion as following:
-  //
   // 8'b00000001: Register direct.
   // 8'b00000010: Register indexed.
   // 8'b00010000: Symbolic (operand is in memory at address PC+x).
@@ -850,7 +831,6 @@ module pu_msp430_frontend (
   end
 `endif
 
-  //
   // 6.8) REMAINING INSTRUCTION DECODING
 
   // Operation size
@@ -999,9 +979,7 @@ module pu_msp430_frontend (
   // 8)  EXECUTION-UNIT STATE FRONTEND
   //////////////////////////////////////////////////////////////////////////////
 
-  //
   // 8.1) ALU FRONTEND SIGNALS
-  //
   // 12'b000000000001: Enable ALU source inverter
   // 12'b000000000010: Enable Incrementer
   // 12'b000000000100: Enable Incrementer on carry bit

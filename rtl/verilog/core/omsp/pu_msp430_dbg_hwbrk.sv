@@ -91,22 +91,17 @@ module pu_msp430_dbg_hwbrk (
   //////////////////////////////////////////////////////////////////////////////
   //       7   6   5        4            3          2            1  0
   //        Reserved    RANGE_MODE    INST_EN    BREAK_EN    ACCESS_MODE
-  //
   // ACCESS_MODE: - 00 : Disabled
   //              - 01 : Detect read access
   //              - 10 : Detect write access
   //              - 11 : Detect read/write access
   //              NOTE: '10' & '11' modes are not supported on the instruction flow
-  //
   // BREAK_EN:    -  0 : Watchmode enable
   //              -  1 : Break enable
-  //
   // INST_EN:     -  0 : Checks are done on the execution unit (data flow)
   //              -  1 : Checks are done on the frontend (instruction flow)
-  //
   // RANGE_MODE:  -  0 : Address match on BRK_ADDR0 or BRK_ADDR1
   //              -  1 : Address match on BRK_ADDR0->BRK_ADDR1 range
-  //
   //////////////////////////////////////////////////////////////////////////////
   reg  [4:0] brk_ctl;
 

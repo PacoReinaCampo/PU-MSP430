@@ -97,7 +97,6 @@ module pu_msp430_alu (
   //////////////////////////////////////////////////////////////////////////////
   //   Mnemonic   S-Reg,   Operation                               Status bits
   //              D-Reg,                                            V  N  Z  C
-  //
   //   RRC         dst     C->MSB->...LSB->C                        *  *  *  *
   //   RRA         dst     MSB->MSB->...LSB->C                      0  *  *  *
   //   SWPB        dst     Swap bytes                               -  -  -  -
@@ -105,13 +104,11 @@ module pu_msp430_alu (
   //   PUSH        src     SP-2->SP, src->@SP                       -  -  -  -
   //   CALL        dst     SP-2->SP, PC+2->@SP, dst->PC             -  -  -  -
   //   RETI                TOS->SR, SP+2->SP, TOS->PC, SP+2->SP     *  *  *  *
-  //
   //////////////////////////////////////////////////////////////////////////////
   // TWO-OPERAND ARITHMETIC:
   //////////////////////////////////////////////////////////////////////////////
   //   Mnemonic   S-Reg,   Operation                               Status bits
   //              D-Reg,                                            V  N  Z  C
-  //
   //   MOV       src,dst    src            -> dst                   -  -  -  -
   //   ADD       src,dst    src +  dst     -> dst                   *  *  *  *
   //   ADDC      src,dst    src +  dst + C -> dst                   *  *  *  *
@@ -124,7 +121,6 @@ module pu_msp430_alu (
   //   BIS       src,dst    src |  dst     -> dst                   -  -  -  -
   //   XOR       src,dst    src ^  dst     -> dst                   *  *  *  *
   //   AND       src,dst    src &  dst     -> dst                   0  *  *  *
-  //
   //////////////////////////////////////////////////////////////////////////////
   // * the status bit is affected
   // - the status bit is not affected

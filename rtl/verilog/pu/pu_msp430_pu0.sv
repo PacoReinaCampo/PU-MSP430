@@ -266,7 +266,6 @@ module pu_msp430_pu0 (
   // 3)  OPENMSP430 PERIPHERALS
   //////////////////////////////////////////////////////////////////////////////
 
-  //
   // Digital I/O
 
   pu_msp430_gpio gpio_0 (
@@ -317,7 +316,6 @@ module pu_msp430_pu0 (
   assign p1_din[7:4] = 4'h0;
   assign p1_din[3:0] = switch;
 
-  //
   // Timer A
 
   pu_msp430_ta ta_0 (
@@ -355,7 +353,6 @@ module pu_msp430_pu0 (
     .taclk      (1'b0)         // TACLK external timer clock (SLOW)
   );
 
-  //
   // Hardware UART
 
   pu_msp430_uart uart_0 (
@@ -376,7 +373,6 @@ module pu_msp430_pu0 (
     .uart_rxd(uart_rxd)   // UART Data Receive (RXD)
   );
 
-  //
   // SPI Interface for the 16 bit DACs
 
   pu_msp430_dac #(
@@ -423,12 +419,10 @@ module pu_msp430_pu0 (
     .puc_rst (puc_rst)    // Main system reset
   );
 
-  //
   // Combine peripheral data buses
 
   assign per_dout = per_dout_gpio | per_dout_uart | per_dout_tA | per_dout_dac_x | per_dout_dac_y;
 
-  //
   // Assign interrupts
 
   assign nmi = 1'b0;

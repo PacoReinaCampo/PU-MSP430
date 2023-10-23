@@ -341,19 +341,14 @@ module pu_msp430_dbg (
   //////////////////////////////////////////////////////////////////////////////
   //       7     6     5     4          3        2         1       0
   //            Reserved               B/W    MEM/REG    RD/WR   START
-  //
   // START  :  -  0 : Do nothing.
   //           -  1 : Initiate memory transfer.
-  //
   // RD/WR  :  -  0 : Read access.
   //           -  1 : Write access.
-  //
   // MEM/REG:  -  0 : Memory access.
   //           -  1 : CPU Register access.
-  //
   // B/W    :  -  0 : 16 bit access.
   //           -  1 :  8 bit access (not valid for CPU Registers).
-  //
   //////////////////////////////////////////////////////////////////////////////
   reg  [3:1] mem_ctl;
 
