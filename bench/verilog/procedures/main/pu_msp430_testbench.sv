@@ -402,7 +402,7 @@ module pu_msp430_testbench;
     .USB_RS232_TXD(UART_TXD),
 
     // Peripheral Modules (PMODs) and GPIO
-    //     https://www.digilentinc.com/PMODs
+    //     https:// www.digilentinc.com/PMODs
 
     // Connector J5
     .PMOD1_P3(PMOD1_P3),  // Serial Debug Interface TX

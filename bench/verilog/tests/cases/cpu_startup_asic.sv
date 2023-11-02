@@ -416,7 +416,7 @@ initial begin
   if (dco_wkup !== 0) tb_error("====== 1/1/1 TEST 6 (simultaneous): DCO_WKUP    IS SET     =====");
   if (lfxt_enable !== 1) tb_error("====== 1/1/1 TEST 7 (simultaneous): LFXT_ENABLE IS CLEARED =====");
   if (lfxt_wkup !== 0) tb_error("====== 1/1/1 TEST 8 (simultaneous): LFXT_WKUP   IS SET     =====");
-  //if (inst_cnt    !== 0)   tb_error("====== 1/1/1 TEST 9 (simultaneous): CPU IS EXECUTING       =====");
+  // if (inst_cnt    !== 0)   tb_error("====== 1/1/1 TEST 9 (simultaneous): CPU IS EXECUTING       =====");
   dco_clk_cnt = 0;
   mclk_cnt    = 0;
   smclk_cnt   = 0;
@@ -490,7 +490,7 @@ initial begin
   if (dco_wkup !== 0) tb_error("====== 1/1/1 TEST 6 (sequence 2): DCO_WKUP    IS SET     =====");
   if (lfxt_enable !== 1) tb_error("====== 1/1/1 TEST 7 (sequence 2): LFXT_ENABLE IS CLEARED =====");
   if (lfxt_wkup !== 0) tb_error("====== 1/1/1 TEST 8 (sequence 2): LFXT_WKUP   IS SET     =====");
-  //if (inst_cnt    !== 0)   tb_error("====== 1/1/1 TEST 9 (sequence 2): CPU IS EXECUTING       =====");
+  // if (inst_cnt    !== 0)   tb_error("====== 1/1/1 TEST 9 (sequence 2): CPU IS EXECUTING       =====");
   dco_clk_cnt = 0;
   mclk_cnt    = 0;
   smclk_cnt   = 0;
@@ -526,7 +526,7 @@ initial begin
   if (dco_wkup !== 0) tb_error("====== 1/1/1 TEST 6 (sequence 3): DCO_WKUP    IS SET     =====");
   if (lfxt_enable !== 1) tb_error("====== 1/1/1 TEST 7 (sequence 3): LFXT_ENABLE IS CLEARED =====");
   if (lfxt_wkup !== 0) tb_error("====== 1/1/1 TEST 8 (sequence 3): LFXT_WKUP   IS SET     =====");
-  //if (inst_cnt    !== 0)   tb_error("====== 1/1/1 TEST 9 (sequence 3): CPU IS EXECUTING       =====");
+  // if (inst_cnt    !== 0)   tb_error("====== 1/1/1 TEST 9 (sequence 3): CPU IS EXECUTING       =====");
   dco_clk_cnt = 0;
   mclk_cnt    = 0;
   smclk_cnt   = 0;
@@ -563,7 +563,7 @@ initial begin
   if (dco_wkup !== 0) tb_error("====== 1/1/1 TEST 6 (sequence 4): DCO_WKUP    IS SET     =====");
   if (lfxt_enable !== 1) tb_error("====== 1/1/1 TEST 7 (sequence 4): LFXT_ENABLE IS CLEARED =====");
   if (lfxt_wkup !== 0) tb_error("====== 1/1/1 TEST 8 (sequence 4): LFXT_WKUP   IS SET     =====");
-  //if (inst_cnt    !== 0)   tb_error("====== 1/1/1 TEST 9 (sequence 4): CPU IS EXECUTING       =====");
+  // if (inst_cnt    !== 0)   tb_error("====== 1/1/1 TEST 9 (sequence 4): CPU IS EXECUTING       =====");
   dco_clk_cnt = 0;
   mclk_cnt    = 0;
   smclk_cnt   = 0;
@@ -599,7 +599,7 @@ initial begin
   if (dco_wkup !== 0) tb_error("====== 1/1/1 TEST 6 (sequence 5): DCO_WKUP    IS SET     =====");
   if (lfxt_enable !== 1) tb_error("====== 1/1/1 TEST 7 (sequence 5): LFXT_ENABLE IS CLEARED =====");
   if (lfxt_wkup !== 0) tb_error("====== 1/1/1 TEST 8 (sequence 5): LFXT_WKUP   IS SET     =====");
-  //if (inst_cnt    !== 0)   tb_error("====== 1/1/1 TEST 9 (sequence 5): CPU IS EXECUTING       =====");
+  // if (inst_cnt    !== 0)   tb_error("====== 1/1/1 TEST 9 (sequence 5): CPU IS EXECUTING       =====");
   dco_clk_cnt = 0;
   mclk_cnt    = 0;
   smclk_cnt   = 0;

@@ -42,7 +42,7 @@
 `include "pu_msp430_defines.sv"
 
 module pu_msp430_soc (
-  //CORE 0
+  // CORE 0
   // CPU registers
   output [15:0] omsp0_r0,
   output [15:0] omsp0_r1,
@@ -81,7 +81,7 @@ module pu_msp430_soc (
   output omsp0_mclk,
   output omsp0_puc_rst,
 
-  //CORE 1
+  // CORE 1
   // CPU registers
   output [15:0] omsp1_r0,
   output [15:0] omsp1_r1,
@@ -194,7 +194,7 @@ module pu_msp430_soc (
   output USB_RS232_TXD,
 
   // Peripheral Modules (PMODs) and GPIO
-  //     https://www.digilentinc.com/PMODs
+  //     https:// www.digilentinc.com/PMODs
 
   // Connector J5
   inout PMOD1_P3,
@@ -484,7 +484,7 @@ module pu_msp430_soc (
   assign USB_RS232_TXD        = omsp0_uart_txd;
 
   // Peripheral Modules (PMODs) and GPIO
-  //     https://www.digilentinc.com/PMODs
+  //     https:// www.digilentinc.com/PMODs
 
   assign omsp_dbg_i2c_sda_out = omsp0_dbg_i2c_sda_out & omsp1_dbg_i2c_sda_out;
 

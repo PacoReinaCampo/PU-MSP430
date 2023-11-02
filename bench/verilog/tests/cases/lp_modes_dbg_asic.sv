@@ -223,7 +223,7 @@ initial begin
   @(r15 == 16'h3001);
   // Until the SMCLK clock mux is implemented, force SMCLK to LFXT_CLK;
   force nodiv_smclk = lfxt_clk;
-  //force smclk       = lfxt_clk;
+  // force smclk       = lfxt_clk;
 
   #(100 * 50);
   dco_clk_cnt = 0;
