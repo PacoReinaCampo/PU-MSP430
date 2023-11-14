@@ -60,7 +60,7 @@ architecture rtl of pu_msp430_wakeup_cell is
   signal wkup_clk : std_logic;
 
 begin
-  --Scan stuff for the ASIC mode
+  -- Scan stuff for the ASIC mode
   asic_on : if (ASIC = '1') generate
     scan_mux_rst : pu_msp430_scan_mux
       port map (
@@ -82,7 +82,7 @@ begin
     wkup_clk <= wkup_event;
   end generate asic_off;
 
-  --Wakeup capture
+  -- Wakeup capture
   process (wkup_clk, wkup_rst)
   begin
     if (wkup_rst = '1') then

@@ -38,7 +38,6 @@
 -- Author(s):
 --   Olivier Girard <olgirard@gmail.com>
 --   Paco Reina Campo <pacoreinacampo@queenfield.tech>
---
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -146,13 +145,13 @@ architecture rtl of pu_msp430_debug is
   signal inst_full  : string(8 downto 0);
 
 begin
-  ----i_state_bin <= pu_msp430_testbench.i_state_bin;
-  ----e_state_bin <= pu_msp430_testbench.e_state_bin;
-  ----decode      <= pu_msp430_testbench.decode;
-  ----ir          <= pu_msp430_testbench.ir;
-  ----irq_detect  <= pu_msp430_testbench.irq_detect;
-  ----irq_num     <= pu_msp430_testbench.irq_num;
-  ----pc          <= pu_msp430_testbench.pc;
+  ---- i_state_bin <= pu_msp430_testbench.i_state_bin;
+  ---- e_state_bin <= pu_msp430_testbench.e_state_bin;
+  ---- decode      <= pu_msp430_testbench.decode;
+  ---- ir          <= pu_msp430_testbench.ir;
+  ---- irq_detect  <= pu_msp430_testbench.irq_detect;
+  ---- irq_num     <= pu_msp430_testbench.irq_num;
+  ---- pc          <= pu_msp430_testbench.pc;
 
   processing_0 : process (i_state_bin)
   begin
