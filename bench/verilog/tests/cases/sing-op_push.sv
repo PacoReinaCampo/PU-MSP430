@@ -1,38 +1,38 @@
-/*===========================================================================*/
-/* Copyright (C) 2001 Authors                                                */
-/*                                                                           */
-/* This source file may be used and distributed without restriction provided */
-/* that this copyright statement is not removed from the file and that any   */
-/* derivative work contains the original copyright notice and the associated */
-/* disclaimer.                                                               */
-/*                                                                           */
-/* This source file is free software; you can redistribute it and/or modify  */
-/* it under the terms of the GNU Lesser General Public License as published  */
-/* by the Free Software Foundation; either version 2.1 of the License, or    */
-/* (at your option) any later version.                                       */
-/*                                                                           */
-/* This source is distributed in the hope that it will be useful, but WITHOUT*/
-/* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or     */
-/* FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public       */
-/* License for more details.                                                 */
-/*                                                                           */
-/* You should have received a copy of the GNU Lesser General Public License  */
-/* along with this source; if not, write to the Free Software Foundation,    */
-/* Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA        */
-/*                                                                           */
-/*===========================================================================*/
-/*                 SINGLE-OPERAND ARITHMETIC: PUSH  INSTRUCTION              */
-/*---------------------------------------------------------------------------*/
-/* Test the PUSH instruction.                                                */
-/*                                                                           */
-/* Author(s):                                                                */
-/*             - Olivier Girard,    olgirard@gmail.com                       */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-/* $Rev: 111 $                                                                */
-/* $LastChangedBy: olivier.girard $                                          */
-/* $LastChangedDate: 2011-05-20 22:39:02 +0200 (Fri, 20 May 2011) $          */
-/*===========================================================================*/
+////////////////////////////////////////////////////////////////////////////////
+// Copyright (C) 2001 Authors                                               
+//                                                                          
+// This source file may be used and distributed without restriction provided
+// that this copyright statement is not removed from the file and that any  
+// derivative work contains the original copyright notice and the associated
+// disclaimer.                                                              
+//                                                                          
+// This source file is free software; you can redistribute it and/or modify 
+// it under the terms of the GNU Lesser General Public License as published 
+// by the Free Software Foundation; either version 2.1 of the License, or   
+// (at your option) any later version.                                      
+//                                                                          
+// This source is distributed in the hope that it will be useful, but WITHOUT
+// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or    
+// FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public      
+// License for more details.                                                
+//                                                                          
+// You should have received a copy of the GNU Lesser General Public License 
+// along with this source; if not, write to the Free Software Foundation,   
+// Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA       
+//                                                                          
+////////////////////////////////////////////////////////////////////////////////
+//                 SINGLE-OPERAND ARITHMETIC: PUSH  INSTRUCTION             
+////////////////////////////////////////////////////////////////////////////////
+// Test the PUSH instruction.                                               
+//                                                                          
+// Author(s):                                                               
+//             - Olivier Girard,    olgirard@gmail.com                      
+//                                                                          
+////////////////////////////////////////////////////////////////////////////////
+// $Rev: 111 $                                                               
+// $LastChangedBy: olivier.girard $                                         
+// $LastChangedDate: 2011-05-20 22:39:02 +0200 (Fri, 20 May 2011) $         
+////////////////////////////////////////////////////////////////////////////////
 
 initial begin
   $display(" ===============================================");
@@ -41,7 +41,7 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-  /* -------------- TEST INSTRUCTION IN WORD MODE ------------------- */
+  // -------------- TEST INSTRUCTION IN WORD MODE -------------------
 
   // Initialization
   @(r15 == 16'h1000);
@@ -220,7 +220,7 @@ initial begin
   if (mem230 !== 16'h0000) tb_error("====== PUSH (#N mode): @0x0230 value =====");
 
 
-  /* -------------- TEST INSTRUCTION IN BYTE MODE ------------------- */
+  // -------------- TEST INSTRUCTION IN BYTE MODE -------------------
 
   // Initialization
   @(r15 == 16'h8000);
@@ -398,7 +398,7 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== PUSH.B (#N mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH.B (#N mode): @0x0230 value =====");
 
-  /* -------------- TEST INSTRUCTION WITH SR AS ARGUMENT ------------------- */
+  // -------------- TEST INSTRUCTION WITH SR AS ARGUMENT -------------------
 
   // Addressing mode: SR
   @(r15 == 16'hF100);
@@ -495,7 +495,7 @@ initial begin
   if (mem228 !== 16'h0000) tb_error("====== PUSH @SR : @0x0228 value =====");
 
 
-  /* -------------- TEST POP INSTRUCTION WITH SR AS ARGUMENT ------------------- */
+  // -------------- TEST POP INSTRUCTION WITH SR AS ARGUMENT -------------------
 
   // Addressing mode: x(SR)
   @(r15 == 16'hF500);

@@ -13,38 +13,36 @@
 //              Processing Unit                                               //
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
-
-/* Copyright (c) 2015-2016 by the author(s)
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the authors nor the names of its contributors
- *       may be used to endorse or promote products derived from this software
- *       without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
- * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
- * THE POSSIBILITY OF SUCH DAMAGE
- *
- * =============================================================================
- * Author(s):
- *   Olivier Girard <olgirard@gmail.com>
- *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
- */
+// Copyright (c) 2015-2016 by the author(s)
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+//     * Redistributions of source code must retain the above copyright
+//       notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above copyright
+//       notice, this list of conditions and the following disclaimer in the
+//       documentation and/or other materials provided with the distribution.
+//     * Neither the name of the authors nor the names of its contributors
+//       may be used to endorse or promote products derived from this software
+//       without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+// AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+// IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+// ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+// LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+// OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+// SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+// INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+// CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+// ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF
+// THE POSSIBILITY OF SUCH DAMAGE
+//
+////////////////////////////////////////////////////////////////////////////////
+// Author(s):
+//   Olivier Girard <olgirard@gmail.com>
+//   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 `ifdef OMSP_NO_INCLUDE
 `else
@@ -198,7 +196,6 @@ module msp430_synthesis #(
     .ram_wen     (pmem_wen)            // Program Memory write enable (low active)
   );
 
-  //
   // Data Memory
   //----------------------------------
 
@@ -214,7 +211,6 @@ module msp430_synthesis #(
     .ram_wen     (dmem_wen)            // Data Memory write enable (low active)
   );
 
-  //
   // openMSP430 Instance
   //----------------------------------
 
@@ -300,7 +296,6 @@ module msp430_synthesis #(
     .r15               ()
   );
 
-  //
   // Digital I/O
   //----------------------------------
 
@@ -345,7 +340,6 @@ module msp430_synthesis #(
     .puc_rst      (puc_rst)            // Main system reset
   );
 
-  //
   // Timers
   //----------------------------------
 
@@ -384,7 +378,6 @@ module msp430_synthesis #(
     .taclk        (taclk)              // TACLK external timer clock (SLOW)
   );
 
-  //
   // Simple full duplex UART (8N1 protocol)
   //----------------------------------------
   pu_msp430_uart uart (
@@ -405,7 +398,6 @@ module msp430_synthesis #(
     .uart_rxd     (uart_rxd)       // UART Data Receive (RXD)
   );
 
-  //
   // Peripheral templates
   //----------------------------------
 
@@ -437,7 +429,6 @@ module msp430_synthesis #(
     .puc_rst      (puc_rst)            // Main system reset
   );
 
-  //
   // Combine peripheral data bus
   //----------------------------------
 
@@ -448,7 +439,6 @@ module msp430_synthesis #(
                     per_dout_temp_16b;
 
 
-  //
   // Map peripheral interrupts & wakeups
   //----------------------------------------
 
