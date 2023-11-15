@@ -418,12 +418,16 @@ module pu_msp430_debug (
           inst_as = myFormat("@", inst_src, 0);
           inst_as = myFormat(inst_as, "+", 0);
         end
-        2'b10:   inst_as = myFormat("@", inst_src, 0);
+        2'b10: begin
+          inst_as = myFormat("@", inst_src, 0);
+        end
         2'b01: begin
           inst_as = myFormat("x(", inst_src, 0);
           inst_as = myFormat(inst_as, ")", 0);
         end
-        default: inst_as = inst_src;
+        default: begin
+          inst_as = inst_src;
+        end
       endcase
     end
   end
@@ -449,7 +453,9 @@ module pu_msp430_debug (
           inst_ad = myFormat("x(", inst_dst, 0);
           inst_ad = myFormat(inst_ad, ")", 0);
         end
-        default: inst_ad = inst_dst;
+        default: begin
+          inst_ad = inst_dst;
+        end
       endcase
     end
   end
