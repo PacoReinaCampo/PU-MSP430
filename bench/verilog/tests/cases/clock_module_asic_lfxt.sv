@@ -70,7 +70,6 @@ initial begin
   if (lfxt_clk_counter !== 40) tb_error("====== CLOCK GENERATOR: TEST 2 =====");
   if (r10 !== 0) tb_error("====== CLOCK GENERATOR: TEST 3 =====");
 
-
   //--------------------------------------------------------
   // Make sure the CPU stops and LFXT oscillator too
   //--------------------------------------------------------
@@ -83,7 +82,6 @@ initial begin
   if (lfxt_clk_counter !== 0) tb_error("====== CLOCK GENERATOR: TEST 5 =====");
   if (r10 !== 0) tb_error("====== CLOCK GENERATOR: TEST 6 =====");
   #10000;
-
 
   //--------------------------------------------------------
   // Generate IRQ and make sure CPU re-runs with LFXT_CLK
@@ -105,7 +103,6 @@ initial begin
   if (mclk_counter !== 40) tb_error("====== CLOCK GENERATOR: TEST 7 =====");
   if (lfxt_clk_counter !== 40) tb_error("====== CLOCK GENERATOR: TEST 8 =====");
   if (r10 !== 16'h5678) tb_error("====== CLOCK GENERATOR: TEST 9 =====");
-
 
 `else
   $display(" ===============================================");

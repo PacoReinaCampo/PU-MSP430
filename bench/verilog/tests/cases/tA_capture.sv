@@ -38,7 +38,6 @@
 integer my_counter;
 always @(posedge mclk) my_counter <= my_counter + 1;
 
-
 initial begin
   $display(" ===============================================");
   $display("|                 START SIMULATION              |");
@@ -130,7 +129,6 @@ initial begin
   if (mem202 !== 16'h3008) tb_error("====== TIMER_A INPUT MUX: COMPARATOR 0 - VDD =====");
   if (mem204 !== 16'h3008) tb_error("====== TIMER_A INPUT MUX: COMPARATOR 0 - VDD =====");
 
-
   // --------- Comparator 1 ----------
   @(mem200 === 16'h0011);
   ta_cci0a = 1'b0;
@@ -203,7 +201,6 @@ initial begin
   @(mem200 === 16'h001C);
   if (mem202 !== 16'h3008) tb_error("====== TIMER_A INPUT MUX: COMPARATOR 1 - VDD =====");
   if (mem204 !== 16'h3008) tb_error("====== TIMER_A INPUT MUX: COMPARATOR 1 - VDD =====");
-
 
   // --------- Comparator 2 ----------
   @(mem200 === 16'h0021);
@@ -284,7 +281,6 @@ initial begin
   ta_cci2a = 1'b0;
   ta_cci2b = 1'b0;
 
-
   // TIMER A TEST:  CAPTURE, EDGE SELECTION AND INTERRUPT
   //--------------------------------------------------------
   @(r15 === 16'h1000);
@@ -338,7 +334,6 @@ initial begin
   if (mem202 !== 16'h1234) tb_error("====== TIMER_A CAPTURE, EDGE SELECTION AND INTERRUPT COMPARATOR 0: RISING/FALLING EDGE 3 =====");
   if (mem204 !== 16'h1234) tb_error("====== TIMER_A CAPTURE, EDGE SELECTION AND INTERRUPT COMPARATOR 0: RISING/FALLING EDGE 4 =====");
 
-
   // --------- comparator 1 ----------
   @(mem200 === 16'h0001);
   ta_cci1a = 1'b1;
@@ -387,7 +382,6 @@ initial begin
   @(mem200 === 16'h000C);
   if (mem202 !== 16'h1234) tb_error("====== TIMER_A CAPTURE, EDGE SELECTION AND INTERRUPT COMPARATOR 1: RISING/FALLING EDGE 3 =====");
   if (mem204 !== 16'h1234) tb_error("====== TIMER_A CAPTURE, EDGE SELECTION AND INTERRUPT COMPARATOR 1: RISING/FALLING EDGE 4 =====");
-
 
   // --------- comparator 2 ----------
   @(mem200 === 16'h0001);
@@ -438,7 +432,6 @@ initial begin
   if (mem202 !== 16'h1234) tb_error("====== TIMER_A CAPTURE, EDGE SELECTION AND INTERRUPT COMPARATOR 2: RISING/FALLING EDGE 3 =====");
   if (mem204 !== 16'h1234) tb_error("====== TIMER_A CAPTURE, EDGE SELECTION AND INTERRUPT COMPARATOR 2: RISING/FALLING EDGE 4 =====");
 
-
   // TIMER A TEST:  CAPTURE OVERFLOW
   //--------------------------------------------------------
   @(r15 === 16'h2000);
@@ -460,7 +453,6 @@ initial begin
   if (mem202 !== 16'hC008) tb_error("====== TIMER_A CAPTURE OVERFLOW: COMPARATOR 0 =====");
   if (mem204 !== 16'hC000) tb_error("====== TIMER_A CAPTURE OVERFLOW: COMPARATOR 0 =====");
 
-
   // --------- Comparator 1 ----------
   @(mem200 === 16'h0001);
   ta_cci1a = 1'b1;
@@ -478,7 +470,6 @@ initial begin
   if (mem202 !== 16'hC008) tb_error("====== TIMER_A CAPTURE OVERFLOW: COMPARATOR 1 =====");
   if (mem204 !== 16'hC000) tb_error("====== TIMER_A CAPTURE OVERFLOW: COMPARATOR 1 =====");
 
-
   // --------- Comparator 2 ----------
   @(mem200 === 16'h0001);
   ta_cci2a = 1'b1;
@@ -495,7 +486,6 @@ initial begin
   @(mem200 === 16'h0006);
   if (mem202 !== 16'hC008) tb_error("====== TIMER_A CAPTURE OVERFLOW: COMPARATOR 2 =====");
   if (mem204 !== 16'hC000) tb_error("====== TIMER_A CAPTURE OVERFLOW: COMPARATOR 2 =====");
-
 
 `endif
 

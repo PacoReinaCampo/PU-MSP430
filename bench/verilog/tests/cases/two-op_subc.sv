@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // SUBC (WORD MODE)
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -49,14 +48,12 @@ initial begin
   if (r5 !== 16'h5554) tb_error("====== SUBC without Carry =====");
   if (r6 !== 16'h4444) tb_error("====== SUBC with Carry =====");
 
-
   // SUBC.B (BYTE MODE)
   //--------------------------------------------------------
   @(r15 == 16'h2000);
 
   if (r5 !== 16'h0054) tb_error("====== SUBC.B  without Carry =====");
   if (r6 !== 16'h0044) tb_error("====== SUBC.B  with Carry =====");
-
 
   // SUBC (WORD MODE): Check Flags
   //--------------------------------------------------------
@@ -81,7 +78,6 @@ initial begin
   if (r2 !== 16'h0101) tb_error("====== SUBC FLAG: Flag   check error: V=1, N=0, Z=0, C=1 =====");
   if (r5 !== 16'h00ff) tb_error("====== SUBC FLAG: Result check error: V=1, N=0, Z=0, C=1 =====");
 
-
   // SUBC.B (BYTE MODE): Check Flags
   //--------------------------------------------------------
 
@@ -104,7 +100,6 @@ initial begin
   @(r15 == 16'h4004);
   if (r2 !== 16'h0101) tb_error("====== SUBC.B FLAG: Flag   check error: V=1, N=0, Z=0, C=1 =====");
   if (r5 !== 16'h000a) tb_error("====== SUBC.B FLAG: Result check error: V=1, N=0, Z=0, C=1 =====");
-
 
   stimulus_done = 1;
 end

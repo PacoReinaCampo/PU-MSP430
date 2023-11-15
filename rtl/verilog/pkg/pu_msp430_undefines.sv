@@ -147,7 +147,6 @@
 `undef DBG_EN
 `endif
 
-
 // ADVANCED SYSTEM CONFIGURATION (FOR EXPERIENCED USERS)
 
 // Custom user version number
@@ -218,7 +217,6 @@
 `undef DBG_RST_BRK_EN
 `endif
 
-
 // EXPERT SYSTEM CONFIGURATION ( !!!! EXPERTS ONLY !!!! )
 
 // Serial Debug interface protocol
@@ -265,7 +263,6 @@
 `ifdef ASIC
 `undef ASIC
 `endif
-
 
 // ASIC SYSTEM CONFIGURATION ( !!!! EXPERTS ONLY !!!! )
 
@@ -336,7 +333,6 @@
 `ifdef OSCOFF_EN
 `undef OSCOFF_EN
 `endif
-
 
 //==========================================================================//
 //==========================================================================//

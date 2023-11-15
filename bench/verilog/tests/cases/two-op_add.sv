@@ -58,7 +58,6 @@ initial begin
   if (r14 !== 16'h0000) tb_error("R14 reset value");
   if (r15 !== 16'h0000) tb_error("R15 reset value");
 
-
   // Make sure initialization worked fine
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -77,7 +76,6 @@ initial begin
   if (r13 !== 16'hdddd) tb_error("R13 initialization");
   if (r14 !== 16'heeee) tb_error("R14 initialization");
 
-
   // ADD: Check when source is Rn
   //--------------------------------------------------------
   @(r15 == 16'h2000);
@@ -88,7 +86,6 @@ initial begin
   if (mem212 !== 16'h9abc) tb_error("====== ADD Rn EDE   =====");
   if (mem214 !== 16'h6789) tb_error("====== ADD Rn &EDE  =====");
 
-
   // ADD: Check when source is @Rn
   //--------------------------------------------------------
   @(r15 == 16'h3000);
@@ -98,7 +95,6 @@ initial begin
   if (mem210 !== 16'h6666) tb_error("====== ADD @Rn x(Rm) =====");
   if (mem212 !== 16'hed2e) tb_error("====== ADD @Rn EDE   =====");
   if (mem214 !== 16'h4653) tb_error("====== ADD @Rn &EDE  =====");
-
 
   // ADD: Check when source is @Rn+
   //--------------------------------------------------------
@@ -128,7 +124,6 @@ initial begin
   if (mem210 !== 16'h5d50) tb_error("====== ADD #N  EDE   =====");
   if (mem206 !== 16'h6ea1) tb_error("====== ADD #N  &EDE  =====");
 
-
   // ADD: Check when source is x(Rn)
   //--------------------------------------------------------
   @(r15 == 16'h6000);
@@ -138,7 +133,6 @@ initial begin
   if (mem214 !== 16'h5776) tb_error("====== ADD x(Rn) x(Rm) =====");
   if (mem220 !== 16'h937b) tb_error("====== ADD x(Rn) EDE   =====");
   if (mem208 !== 16'hace4) tb_error("====== ADD x(Rn) &EDE  =====");
-
 
   // ADD: Check when source is EDE
   //--------------------------------------------------------
@@ -150,7 +144,6 @@ initial begin
   if (mem216 !== 16'hb933) tb_error("====== ADD EDE EDE   =====");
   if (mem212 !== 16'h2ab2) tb_error("====== ADD EDE &EDE  =====");
 
-
   // ADD: Check when source is &EDE
   //--------------------------------------------------------
   @(r15 == 16'h8000);
@@ -160,7 +153,6 @@ initial begin
   if (mem214 !== 16'h82d1) tb_error("====== ADD &EDE x(Rm) =====");
   if (mem218 !== 16'hca4e) tb_error("====== ADD &EDE EDE   =====");
   if (mem202 !== 16'h1338) tb_error("====== ADD &EDE &EDE  =====");
-
 
   // ADD: Check when source is CONST
   //--------------------------------------------------------
@@ -195,7 +187,6 @@ initial begin
   if (mem236 !== 16'h777b) tb_error("====== ADD #+4 &EDE  =====");
   if (mem238 !== 16'h8890) tb_error("====== ADD #+8 &EDE  =====");
   if (mem23A !== 16'h9998) tb_error("====== ADD #-1 &EDE  =====");
-
 
   // ADD: Check Flags
   //--------------------------------------------------------
@@ -232,7 +223,6 @@ initial begin
   //    #
   @(r15 == 16'hB000);
 
-
   if (mem250 !== 16'haa44) tb_error("====== ADD.B #+0 &EDE =====");
   if (mem252 !== 16'haa56) tb_error("====== ADD.B #+1 &EDE =====");
   if (mem254 !== 16'haa68) tb_error("====== ADD.B #+2 &EDE =====");
@@ -245,7 +235,6 @@ initial begin
   if (mem262 !== 16'he155) tb_error("====== ADD.B #+4 &EDE =====");
   if (mem264 !== 16'hf655) tb_error("====== ADD.B #+8 &EDE =====");
   if (mem266 !== 16'h3255) tb_error("====== ADD.B #-1 &EDE =====");
-
 
   // ADD.B: Check Flags
   //--------------------------------------------------------

@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // XOR (WORD MODE)
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -49,14 +48,12 @@ initial begin
   if (r5 !== 16'hbbbb) tb_error("====== XOR Test =====");
   if (r6 !== 16'hcccc) tb_error("====== XOR Test =====");
 
-
   // XOR.B (BYTE MODE)
   //--------------------------------------------------------
   @(r15 == 16'h2000);
 
   if (r5 !== 16'h00bb) tb_error("====== XOR.B Test =====");
   if (r6 !== 16'h00cc) tb_error("====== XOR.B Test =====");
-
 
   // XOR (WORD MODE): Check Flags
   //--------------------------------------------------------
@@ -81,7 +78,6 @@ initial begin
   if (r2 !== 16'h0102) tb_error("====== XOR FLAG: Flag   check error: V=1, N=0, Z=1, C=0 =====");
   if (r5 !== 16'h0000) tb_error("====== XOR FLAG: Result check error: V=1, N=0, Z=1, C=0 =====");
 
-
   // XOR.B (BYTE MODE): Check Flags
   //--------------------------------------------------------
 
@@ -104,7 +100,6 @@ initial begin
   @(r15 == 16'h4004);
   if (r2 !== 16'h0102) tb_error("====== XOR FLAG: Flag   check error: V=1, N=0, Z=1, C=0 =====");
   if (r5 !== 16'h0000) tb_error("====== XOR FLAG: Result check error: V=1, N=0, Z=1, C=0 =====");
-
 
   stimulus_done = 1;
 end

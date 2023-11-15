@@ -170,7 +170,6 @@ initial begin
     end
   end
 
-
   //--------------------------------------------------------
   // TRY LONGEST POSSIBLE SYNCHRONIZATION FRAME
   //--------------------------------------------------------
@@ -191,7 +190,6 @@ initial begin
   dbg_uart_rxd_pre = 1'b1;
 
   repeat (100) @(posedge mclk);
-
 
   //--------------------------------------------------------
   // END OF TEST

@@ -88,7 +88,6 @@ initial begin
   if (r5_counter !== 8) tb_error("====== WATCHDOG TEST INTERVAL MODE /64 - SMCLK - TEST 8 =====");
 `endif
 
-
   // WATCHDOG TEST INTERVAL MODE /64 - ACLK == LFXTCLK/1
   //--------------------------------------------------------
 

@@ -63,7 +63,6 @@ initial begin
   if (mem206 !== 16'h8040) tb_error("====== RISING EDGE TEST: P1IFG != 0x8040 =====");
   test_step = 1;
 
-
   @(r15 == (`PER_SIZE + 16'h0010)) p1_din = 8'h7f;
   @(r15 == (`PER_SIZE + 16'h0011)) p1_din = 8'h3f;
   @(r15 == (`PER_SIZE + 16'h0012)) p1_din = 8'h1f;
@@ -79,7 +78,6 @@ initial begin
   if (mem216 !== 16'h0000) tb_error("====== RISING EDGE TEST: P1IFG != 0x0000 =====");
   test_step = 2;
 
-
   @(r15 == (`PER_SIZE + 16'h0020)) p1_din = 8'h01;
   @(r15 == (`PER_SIZE + 16'h0021)) p1_din = 8'h03;
   @(r15 == (`PER_SIZE + 16'h0022)) p1_din = 8'h07;
@@ -94,7 +92,6 @@ initial begin
   if (mem224 !== 16'h3f1f) tb_error("====== RISING EDGE TEST: P1IFG != 0x3f1f =====");
   if (mem226 !== 16'hff7f) tb_error("====== RISING EDGE TEST: P1IFG != 0xff7f =====");
   test_step = 3;
-
 
   @(r15 == (`PER_SIZE + 16'h0030)) p1_din = 8'h7f;
   @(r15 == (`PER_SIZE + 16'h0031)) p1_din = 8'h3f;
@@ -141,7 +138,6 @@ initial begin
   if (mem256 !== 16'hfffe) tb_error("====== FALLING EDGE TEST: P1IFG != 0xfffe =====");
   test_step = 6;
 
-
   // PORT 2: TEST INTERRUPT FLAGS
   //--------------------------------------------------------
 
@@ -160,7 +156,6 @@ initial begin
   if (mem206 !== 16'h8040) tb_error("====== RISING EDGE TEST: P2IFG != 0x8040 =====");
   test_step = 7;
 
-
   @(r15 == (`PER_SIZE + 16'h0010)) p2_din = 8'h7f;
   @(r15 == (`PER_SIZE + 16'h0011)) p2_din = 8'h3f;
   @(r15 == (`PER_SIZE + 16'h0012)) p2_din = 8'h1f;
@@ -176,7 +171,6 @@ initial begin
   if (mem216 !== 16'h0000) tb_error("====== RISING EDGE TEST: P2IFG != 0x0000 =====");
   test_step = 8;
 
-
   @(r15 == (`PER_SIZE + 16'h0020)) p2_din = 8'h01;
   @(r15 == (`PER_SIZE + 16'h0021)) p2_din = 8'h03;
   @(r15 == (`PER_SIZE + 16'h0022)) p2_din = 8'h07;
@@ -191,7 +185,6 @@ initial begin
   if (mem224 !== 16'h3f1f) tb_error("====== RISING EDGE TEST: P2IFG != 0x3f1f =====");
   if (mem226 !== 16'hff7f) tb_error("====== RISING EDGE TEST: P2IFG != 0xff7f =====");
   test_step = 9;
-
 
   @(r15 == (`PER_SIZE + 16'h0030)) p2_din = 8'h7f;
   @(r15 == (`PER_SIZE + 16'h0031)) p2_din = 8'h3f;
@@ -238,7 +231,6 @@ initial begin
   if (mem256 !== 16'hfffe) tb_error("====== FALLING EDGE TEST: P2IFG != 0xfffe =====");
   test_step = 12;
 
-
   // PORT 1: TEST INTERRUPT VECTOR
   //--------------------------------------------------------
 
@@ -249,7 +241,6 @@ initial begin
   if (mem206 !== 16'h8040) tb_error("====== INTERRUPT VECTOR TEST: P1IFG != 0x8040 =====");
   test_step = 13;
 
-
   // PORT 2: TEST INTERRUPT VECTOR
   //--------------------------------------------------------
 
@@ -259,7 +250,6 @@ initial begin
   if (mem214 !== 16'h2010) tb_error("====== INTERRUPT VECTOR TEST: P2IFG != 0x2010 =====");
   if (mem216 !== 16'h8040) tb_error("====== INTERRUPT VECTOR TEST: P2IFG != 0x8040 =====");
   test_step     = 14;
-
 
   stimulus_done = 1;
 end

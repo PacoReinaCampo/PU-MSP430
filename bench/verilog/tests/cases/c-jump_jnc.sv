@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // TEST JUMP FORWARD AND BACKWARD
   @(r15 == 16'h1000);
   if (r4 !== 16'h1234) tb_error("====== JNC (jump forward 1) =====");
@@ -81,7 +80,6 @@ initial begin
   if (r4 !== 16'h1234) tb_error("====== JNC ({V,N,Z,C}=4'b1110) ==");
   @(r15 == 16'h200F);
   if (r4 !== 16'h0000) tb_error("====== JNC ({V,N,Z,C}=4'b1111) ==");
-
 
   stimulus_done = 1;
 end

@@ -64,7 +64,6 @@ module pu_msp430_and_gate (
   //    Make sure that synthesis doesn't ungroup this module. As an alternative,
   // a standard cell from the library could also be directly instanciated here
   // (don't forget the "dont_touch" attribute)
-  //
   //////////////////////////////////////////////////////////////////////////////
   // 2)  AND GATE
   //////////////////////////////////////////////////////////////////////////////

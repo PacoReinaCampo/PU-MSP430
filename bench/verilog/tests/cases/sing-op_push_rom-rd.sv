@@ -65,7 +65,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== RAM Initialization (@0x0232 value) =====");
   if (mem230 !== 16'h0000) tb_error("====== RAM Initialization (@0x0230 value) =====");
 
-
   // Addressing mode: @Rn
   @(r15 == 16'h2000);
   if (r1 !== (`PER_SIZE + 16'h004E)) tb_error("====== PUSH (@Rn mode): SP value      =====");
@@ -86,7 +85,6 @@ initial begin
   if (mem234 !== 16'h0000) tb_error("====== PUSH (@Rn mode): @0x0234 value =====");
   if (mem232 !== 16'h0000) tb_error("====== PUSH (@Rn mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (@Rn mode): @0x0230 value =====");
-
 
   // Addressing mode: @Rn+
   @(r15 == 16'h3000);
@@ -109,7 +107,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== PUSH (@Rn+ mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (@Rn+ mode): @0x0230 value =====");
 
-
   // Addressing mode: X(Rn)
   @(r15 == 16'h4000);
   if (r1 !== (`PER_SIZE + 16'h0046)) tb_error("====== PUSH (X(Rn) mode): SP value      =====");
@@ -130,7 +127,6 @@ initial begin
   if (mem234 !== 16'h0000) tb_error("====== PUSH (X(Rn) mode): @0x0234 value =====");
   if (mem232 !== 16'h0000) tb_error("====== PUSH (X(Rn) mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (X(Rn) mode): @0x0230 value =====");
-
 
   // Addressing mode: EDE
   @(r15 == 16'h5000);
@@ -153,7 +149,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== PUSH (EDE mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (EDE mode): @0x0230 value =====");
 
-
   // Addressing mode: &EDE
   @(r15 == 16'h6000);
   if (r1 !== (`PER_SIZE + 16'h003E)) tb_error("====== PUSH (&EDE mode): SP value      =====");
@@ -174,7 +169,6 @@ initial begin
   if (mem234 !== 16'h0000) tb_error("====== PUSH (&EDE mode): @0x0234 value =====");
   if (mem232 !== 16'h0000) tb_error("====== PUSH (&EDE mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (&EDE mode): @0x0230 value =====");
-
 
 
 

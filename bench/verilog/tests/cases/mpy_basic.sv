@@ -38,7 +38,6 @@
 // $LastChangedDate: 2009-08-04 23:44:12 +0200 (Tue, 04 Aug 2009) $         
 ////////////////////////////////////////////////////////////////////////////////
 
-
 initial begin
   $display(" ===============================================");
   $display("|                 START SIMULATION              |");
@@ -46,7 +45,6 @@ initial begin
 `ifdef MULTIPLYING
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
-
 
   // UNSIGNED MULTIPLICATION
   //--------------------------------------------------------
@@ -148,7 +146,6 @@ initial begin
 
   $display("Signed Multiplication test completed (MPYS mode)");
 
-
   // UNSIGNED MULTIPLY ACCUMULATE
   //--------------------------------------------------------
 
@@ -198,7 +195,6 @@ initial begin
   if (r12 !== 16'h0001) tb_error("====== UNSIGNED MULTIPLY ACCUMULATE: SUMEXT (9) =====");
 
   $display("Unsigned Multiply Accumulate test completed (MAC mode)");
-
 
   // SIGNED MULTIPLY ACCUMULATE
   //--------------------------------------------------------
@@ -250,7 +246,6 @@ initial begin
 
   $display("Signed Multiply Accumulate test completed (MACS mode)");
 
-
   // 16-BIT RD/WR ACCESS OPERANDS
   //--------------------------------------------------------
 
@@ -284,7 +279,6 @@ initial begin
 
   $display("16-BIT RD/WR Access operands test completed");
 
-
   // 8-BIT RD/WR ACCESS OPERANDS
   //--------------------------------------------------------
 
@@ -316,9 +310,7 @@ initial begin
   if (r10 !== 16'hcba9) tb_error("====== 8-BIT RD/WR ACCESS OPERANDS: RESHI    (1) =====");
   if (r11 !== 16'h00ba) tb_error("====== 8-BIT RD/WR ACCESS OPERANDS: RESHI    (2) =====");
 
-
   $display("8-BIT RD/WR Access operands test completed");
-
 
   stimulus_done = 1;
 `else

@@ -41,7 +41,6 @@ integer test_step;
 integer my_counter;
 always @(posedge mclk) my_counter <= my_counter + 1;
 
-
 initial begin
   $display(" ===============================================");
   $display("|                 START SIMULATION              |");
@@ -126,7 +125,6 @@ initial begin
   @(r15 === 16'h2000);
   test_step = 6;
 
-
   // TIMER A TEST:  UP MODE
   //--------------------------------------------------------
 
@@ -155,7 +153,6 @@ initial begin
   if (mem204 !== 16'h0003) tb_error("====== TIMER_A UP MODE: TACCR0 LATENCY ERROR =====");
   test_step = 10;
 
-
   // TIMER A TEST:  CONTINUOUS MODE
   //--------------------------------------------------------
 
@@ -163,7 +160,6 @@ initial begin
   @(negedge mclk) my_counter = 0;
   @(posedge irq_ta1) if (my_counter !== 32'h1C) tb_error("====== TIMER_A CONTINUOUS MODE: TIMING 1 - TAIFG interrupt =====");
   test_step = 11;
-
 
   // TIMER A TEST:  UP-DOWN MODE
   //--------------------------------------------------------

@@ -48,19 +48,16 @@ initial begin
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== SP  initialization =====");
   if (r5 !== 16'h0000) tb_error("====== R5  initialization  =====");
 
-
   // Addressing mode: Rn
   @(r15 == 16'h2000);
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (Rn mode): SP value      =====");
   if (r5 !== 16'h1234) tb_error("====== CALL (Rn mode): R5 value      =====");
-
 
   // Addressing mode: @Rn
   @(r15 == 16'h3000);
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (@Rn mode): SP value      =====");
   if (r4 !== (`PER_SIZE + 16'h0012)) tb_error("====== CALL (@Rn mode): R4 value      =====");
   if (r5 !== 16'h5678) tb_error("====== CALL (@Rn mode): R5 value      =====");
-
 
   // Addressing mode: @Rn+
   @(r15 == 16'h4000);
@@ -73,42 +70,34 @@ initial begin
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (#N mode): SP value      =====");
   if (r5 !== 16'habcd) tb_error("====== CALL (#N mode): R5 value      =====");
 
-
   // Addressing mode: X(Rn)
   @(r15 == 16'h6000);
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (X(Rn) mode): SP value      =====");
   if (r5 !== 16'hef01) tb_error("====== CALL (X(Rn) mode): R5 value      =====");
-
 
   // Addressing mode: EDE
   @(r15 == 16'h7000);
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (EDE mode): SP value      =====");
   if (r5 !== 16'h2345) tb_error("====== CALL (EDE mode): R5 value      =====");
 
-
   // Addressing mode: &EDE
   @(r15 == 16'h8000);
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (&EDE mode): SP value      =====");
   if (r5 !== 16'h6789) tb_error("====== CALL (&EDE mode): R5 value      =====");
 
-
   // -------------- TEST INSTRUCTION WITH SR AS ARGUMENT -------------------
-
 
   // Addressing mode: SR
   @(r15 == 16'h9000);
   //  --> not tested because it would require the cpu to execute from the data memory
 
-
   // Addressing mode: @SR
   @(r15 == 16'hA000);
   if (r5 !== 16'habcd) tb_error("====== CALL @SR  : R5 value      =====");
 
-
   // Addressing mode: @SR+
   @(r15 == 16'hB000);
   if (r5 !== 16'h159a) tb_error("====== CALL @SR+ : R5 value      =====");
-
 
   // Addressing mode: x(SR)
   @(r15 == 16'hC000);

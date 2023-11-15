@@ -35,10 +35,8 @@
 // $LastChangedDate: 2012-10-15 22:44:20 +0200 (Mon, 15 Oct 2012) $         
 ////////////////////////////////////////////////////////////////////////////////
 
-
 integer my_test;
 integer test_var;
-
 
 initial begin
   $display(" ===============================================");
@@ -56,7 +54,6 @@ initial begin
 `ifdef DBG_RST_BRK_EN
   dbg_uart_wr(CPU_CTL, 16'h0002);  // RUN
 `endif
-
 
   // STOP, FREEZE, ISTEP, RUN
   //--------------------------------------------------------
@@ -79,7 +76,6 @@ initial begin
   repeat (10) @(posedge mclk);
   if (dbg_freeze !== 1'b1) tb_error("====== STOP, FREEZE, ISTEP, RUN: FREEZE value - test 2 =====");
 
-
   test_var = r14;
   dbg_uart_wr(CPU_CTL, 16'h0004);  // ISTEP
   dbg_uart_wr(CPU_CTL, 16'h0004);  // ISTEP
@@ -94,7 +90,6 @@ initial begin
   repeat (12) @(posedge mclk);
   if (test_var !== (r14 + 3)) tb_error("====== STOP, FREEZE, ISTEP, RUN: ISTEP test 3 =====");
 
-
   test_var = inst_number;
   dbg_uart_wr(CPU_CTL, 16'h0002);  // RUN
   repeat (50) @(posedge mclk);
@@ -105,7 +100,6 @@ initial begin
 
   dbg_uart_rd(CPU_STAT);  // READ STATUS
   if (dbg_uart_buf !== 16'h0000) tb_error("====== STOP/RUN, ISTEP: HALT status - test 2 =====");
-
 
 
   // RESET / BREAK ON RESET
@@ -124,7 +118,6 @@ initial begin
   dbg_uart_wr(CPU_STAT, 16'h0004);  // CLEAR STATUS
   dbg_uart_rd(CPU_STAT);  // READ STATUS
   if (dbg_uart_buf !== 16'h0000) tb_error("====== RESET / BREAK ON RESET: RESET error- test 6 =====");
-
 
   test_var = r14;
   dbg_uart_wr(CPU_CTL, 16'h0060);  // RESET & BREAK ON RESET
@@ -148,7 +141,6 @@ initial begin
   dbg_uart_wr(CPU_CTL, 16'h0002);  // RUN
   dbg_uart_rd(CPU_STAT);  // READ STATUS
   if (dbg_uart_buf !== 16'h0000) tb_error("====== RESET / BREAK ON RESET: BREAK ON RESET error- test 8 =====");
-
 
   // SOFTWARE BREAKPOINT
   //--------------------------------------------------------
@@ -184,7 +176,6 @@ initial begin
   dbg_uart_rd(CPU_STAT);  // READ STATUS
   if (dbg_uart_buf !== 16'h0001) tb_error("====== SOFTWARE BREAKPOINT: test 7 =====");
 
-
   // Replace software breakpoint with a mov #4, r15 (opcode=0x422f)
   dbg_uart_wr(MEM_ADDR, ('h10000 - `PMEM_SIZE + 'h16));
   dbg_uart_wr(MEM_DATA, 16'h422f);
@@ -199,7 +190,6 @@ initial begin
   dbg_uart_wr(CPU_CTL, 16'h000A);
   repeat (20) @(posedge mclk);
   if (r15 !== 16'h0004) tb_error("====== SOFTWARE BREAKPOINT: test 8 =====");
-
 
   stimulus_done = 1;
 `else

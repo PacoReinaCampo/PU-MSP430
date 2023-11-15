@@ -51,7 +51,6 @@ initial begin
   if (mem204 !== 16'ha55a) tb_error("====== CNTRL3: @0x204 != 0xa55a =====");
   if (mem206 !== 16'haa55) tb_error("====== CNTRL4: @0x206 != 0xaa55 =====");
 
-
   stimulus_done = 1;
 end
 

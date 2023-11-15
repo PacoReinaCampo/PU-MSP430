@@ -37,7 +37,6 @@
 
 `define LONG_TIMEOUT
 
-
 integer dco_clk_counter;
 always @(negedge dco_clk) dco_clk_counter <= dco_clk_counter + 1;
 
@@ -85,7 +84,6 @@ initial begin
   if (dco_clk_counter !== 735) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /1) - TEST 1 =====");
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /1) - TEST 2 =====");
 
-
 `ifdef MCLK_DIVIDER
   // ------- Divider /2 ----------
   @(r15 === 16'h0002);
@@ -98,7 +96,6 @@ initial begin
   if (dco_clk_counter !== 735) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /2) - TEST 1 =====");
   if (mclk_counter !== 367) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /2) - TEST 2 =====");
 
-
   // ------- Divider /4 ----------
   @(r15 === 16'h0003);
   @(posedge mclk);
@@ -109,7 +106,6 @@ initial begin
   #1;
   if (dco_clk_counter !== 735) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /4) - TEST 1 =====");
   if (mclk_counter !== 183) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /4) - TEST 2 =====");
-
 
   // ------- Divider /8 ----------
   @(r15 === 16'h0004);
@@ -134,7 +130,6 @@ initial begin
   if (dco_clk_counter !== 735) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /2) - TEST 1 =====");
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /2) - TEST 2 =====");
 
-
   // ------- Divider /4 ----------
   @(r15 === 16'h0003);
   @(posedge dco_clk);
@@ -145,7 +140,6 @@ initial begin
   #1;
   if (dco_clk_counter !== 735) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /4) - TEST 1 =====");
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /4) - TEST 2 =====");
-
 
   // ------- Divider /8 ----------
   @(r15 === 16'h0004);
@@ -158,17 +152,14 @@ initial begin
   if (dco_clk_counter !== 735) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /8) - TEST 1 =====");
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: MCLK - DCO_CLK INPUT  (DIV /8) - TEST 2 =====");
 
-
 `endif
 
   @(r15 === 16'h1000);
-
 
   // MCLK GENERATION: SELECTING LFXT_CLK
   //--------------------------------------------------------
   // VERIFICATION DONE IN THE "CLOC_MODULE_ASIC_MCLK" PATTERN
   @(r15 === 16'h2000);
-
 
   // ACLK GENERATION
   //--------------------------------------------------------
@@ -195,7 +186,6 @@ initial begin
   if (aclk_counter !== 54) tb_error("====== CLOCK GENERATOR: ACLK (DIV /1) - TEST 2 =====");
 `endif
 
-
 `ifdef ACLK_DIVIDER
   // ------- Divider /2 ----------
   @(r15 === 16'h2002);
@@ -220,7 +210,6 @@ initial begin
   if (aclk_counter !== 27) tb_error("====== CLOCK GENERATOR: ACLK (DIV /2) - TEST 2 =====");
 `endif
 
-
   // ------- Divider /4 ----------
   @(r15 === 16'h2003);
 `ifdef LFXT_DOMAIN
@@ -241,7 +230,6 @@ initial begin
   if (dco_clk_counter !== 54) tb_error("====== CLOCK GENERATOR: ACLK (DIV /4) - TEST 1 =====");
   if (aclk_counter !== 14) tb_error("====== CLOCK GENERATOR: ACLK (DIV /4) - TEST 2 =====");
 `endif
-
 
   // ------- Divider /8 ----------
   @(r15 === 16'h2004);
@@ -288,7 +276,6 @@ initial begin
   if (aclk_counter !== 54) tb_error("====== CLOCK GENERATOR: ACLK (DIV /2) - TEST 2 =====");
 `endif
 
-
   // ------- Divider /4 ----------
   @(r15 === 16'h2003);
 `ifdef LFXT_DOMAIN
@@ -311,7 +298,6 @@ initial begin
   if (dco_clk_counter !== 54) tb_error("====== CLOCK GENERATOR: ACLK (DIV /4) - TEST 1 =====");
   if (aclk_counter !== 54) tb_error("====== CLOCK GENERATOR: ACLK (DIV /4) - TEST 2 =====");
 `endif
-
 
   // ------- Divider /8 ----------
   @(r15 === 16'h2004);
@@ -340,7 +326,6 @@ initial begin
 
   @(r15 === 16'h3000);
 
-
   // SMCLK GENERATION - DCO_CLK INPUT
   //--------------------------------------------------------
 
@@ -365,7 +350,6 @@ initial begin
   if (dco_clk_counter !== 600) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 1 =====");
   if (smclk_counter !== 300) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 2 =====");
 
-
   // ------- Divider /4 ----------
   @(r15 === 16'h3003);
   @(posedge dco_clk);
@@ -375,7 +359,6 @@ initial begin
   repeat (600) @(posedge dco_clk);
   if (dco_clk_counter !== 600) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 1 =====");
   if (smclk_counter !== 150) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 2 =====");
-
 
   // ------- Divider /8 ----------
   @(r15 === 16'h3004);
@@ -398,7 +381,6 @@ initial begin
   if (dco_clk_counter !== 600) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 1 =====");
   if (smclk_counter !== 600) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /2) - TEST 2 =====");
 
-
   // ------- Divider /4 ----------
   @(r15 === 16'h3003);
   @(posedge dco_clk);
@@ -408,7 +390,6 @@ initial begin
   repeat (600) @(posedge dco_clk);
   if (dco_clk_counter !== 600) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 1 =====");
   if (smclk_counter !== 600) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /4) - TEST 2 =====");
-
 
   // ------- Divider /8 ----------
   @(r15 === 16'h3004);
@@ -424,12 +405,10 @@ initial begin
 
   @(r15 === 16'h4000);
 
-
   // SMCLK GENERATION - LFXT_CLK INPUT
   //--------------------------------------------------------
   // VERIFICATION DONE IN THE "CLOC_MODULE_ASIC_SMCLK" PATTERN
   @(r15 === 16'h5000);
-
 
   // CPU ENABLE - CPU_EN INPUT / DBG ENABLE - DBG_EN INPUT
   //--------------------------------------------------------
@@ -468,7 +447,6 @@ initial begin
   if (mclk_counter == 0) tb_error("====== MCLK is not running (test 8) =====");
   if (aclk_counter == 0) tb_error("====== ACLK is not running (test 9) =====");
   if (smclk_counter == 0) tb_error("====== SMCLK is not running (test 10) =====");
-
 
   @(r15 === 16'h5002);
 `ifdef DBG_EN
@@ -519,7 +497,6 @@ initial begin
 
   @(r15 === 16'h6000);
 
-
   // RD/WR ACCESS TO REGISTERS
   //--------------------------------------------------------
 
@@ -567,7 +544,6 @@ initial begin
 
   if (r12 !== 16'h0000) tb_error("====== BCSCTL1 rd/wr access error (test 5) =====");
   if (r13 !== 16'h0000) tb_error("====== BCSCTL2 rd/wr access error (test 5) =====");
-
 
 `else
   $display(" ===============================================");

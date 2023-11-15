@@ -38,7 +38,6 @@
 integer my_counter;
 always @(posedge mclk) my_counter <= my_counter + 1;
 
-
 initial begin
   $display(" ===============================================");
   $display("|                 START SIMULATION              |");
@@ -63,7 +62,6 @@ initial begin
   @(mem200 === 16'h0002);
   if (ta_out0 !== 1'b0) tb_error("====== TIMER_A COMPARE 0: Output (mode 0) =====");
 
-
   // --------- Set          (mode 1) ----------
   @(mem200 === 16'h0003);
   @(tar === 16'h0014);
@@ -76,7 +74,6 @@ initial begin
   if (ta_out0 !== 1'b1) tb_error("====== TIMER_A COMPARE 0: Set (mode 1) =====");
   @(mem200 === 16'h0004);
   if (ta_out0 !== 1'b0) tb_error("====== TIMER_A COMPARE 0: Set (mode 1) =====");
-
 
   // --------- Toggle       (mode 4) ----------
   @(mem200 === 16'h0005);
@@ -89,7 +86,6 @@ initial begin
   @(tar === 16'h0015);
   if (ta_out0 !== 1'b0) tb_error("====== TIMER_A COMPARE 0: Toggle (mode 4) =====");
 
-
   // --------- Reset        (mode 5) ----------
   @(mem200 === 16'h0006);
   @(tar === 16'h0014);
@@ -101,7 +97,6 @@ initial begin
   @(tar === 16'h0015);
   if (ta_out0 !== 1'b0) tb_error("====== TIMER_A COMPARE 0: Reset (mode 5) =====");
 
-
   // TIMER A TEST:  COMPARATOR 1
   //--------------------------------------------------------
   @(r15 === 16'h1000);
@@ -111,7 +106,6 @@ initial begin
   if (ta_out1 !== 1'b1) tb_error("====== TIMER_A COMPARE 1: Output (mode 0) =====");
   @(mem200 === 16'h0002);
   if (ta_out1 !== 1'b0) tb_error("====== TIMER_A COMPARE 1: Output (mode 0) =====");
-
 
   // --------- Set          (mode 1) ----------
   @(mem200 === 16'h0003);
@@ -125,7 +119,6 @@ initial begin
   if (ta_out1 !== 1'b1) tb_error("====== TIMER_A COMPARE 1: Set (mode 1) =====");
   @(mem200 === 16'h0004);
   if (ta_out1 !== 1'b0) tb_error("====== TIMER_A COMPARE 1: Set (mode 1) =====");
-
 
   // --------- Toggle/Reset (mode 2) ----------
   @(mem200 === 16'h0005);
@@ -148,7 +141,6 @@ initial begin
   @(tar === 16'h0020);
   if (ta_out1 !== 1'b0) tb_error("====== TIMER_A COMPARE 1: Toggle/Reset (mode 2) =====");
 
-
   // --------- Set/Reset (mode 3) ----------
   @(mem200 === 16'h0007);
   @(tar === 16'h0014);
@@ -170,7 +162,6 @@ initial begin
   @(tar === 16'h0020);
   if (ta_out1 !== 1'b0) tb_error("====== TIMER_A COMPARE 1: Set/Reset (mode 3) =====");
 
-
   // --------- Toggle (mode 4) ----------
   @(mem200 === 16'h0009);
   @(tar === 16'h0014);
@@ -182,7 +173,6 @@ initial begin
   @(tar === 16'h0015);
   if (ta_out1 !== 1'b0) tb_error("====== TIMER_A COMPARE 1: Toggle (mode 4) =====");
 
-
   // --------- Reset  (mode 5) ----------
   @(mem200 === 16'h000A);
   @(tar === 16'h0014);
@@ -193,7 +183,6 @@ initial begin
   if (ta_out1 !== 1'b0) tb_error("====== TIMER_A COMPARE 1: Reset (mode 5) =====");
   @(tar === 16'h0015);
   if (ta_out1 !== 1'b0) tb_error("====== TIMER_A COMPARE 1: Reset (mode 5) =====");
-
 
   // --------- Toggle/Set (mode 6) ----------
   @(mem200 === 16'h000B);
@@ -215,7 +204,6 @@ initial begin
   if (ta_out1 !== 1'b0) tb_error("====== TIMER_A COMPARE 1: Toggle/Set (mode 6) =====");
   @(tar === 16'h0020);
   if (ta_out1 !== 1'b1) tb_error("====== TIMER_A COMPARE 1: Toggle/Set (mode 6) =====");
-
 
   // --------- Reset/Set (mode 7) ----------
   @(mem200 === 16'h000D);
@@ -238,7 +226,6 @@ initial begin
   @(tar === 16'h0020);
   if (ta_out1 !== 1'b1) tb_error("====== TIMER_A COMPARE 1: Reset/Set (mode 7) =====");
 
-
   // TIMER A TEST:  COMPARATOR 2
   //--------------------------------------------------------
   @(r15 === 16'h2000);
@@ -248,7 +235,6 @@ initial begin
   if (ta_out2 !== 1'b1) tb_error("====== TIMER_A COMPARE 2: Output (mode 0) =====");
   @(mem200 === 16'h0002);
   if (ta_out2 !== 1'b0) tb_error("====== TIMER_A COMPARE 2: Output (mode 0) =====");
-
 
   // --------- Set          (mode 1) ----------
   @(mem200 === 16'h0003);
@@ -262,7 +248,6 @@ initial begin
   if (ta_out2 !== 1'b1) tb_error("====== TIMER_A COMPARE 2: Set (mode 1) =====");
   @(mem200 === 16'h0004);
   if (ta_out2 !== 1'b0) tb_error("====== TIMER_A COMPARE 2: Set (mode 1) =====");
-
 
   // --------- Toggle/Reset (mode 2) ----------
   @(mem200 === 16'h0005);
@@ -285,7 +270,6 @@ initial begin
   @(tar === 16'h0020);
   if (ta_out2 !== 1'b0) tb_error("====== TIMER_A COMPARE 2: Toggle/Reset (mode 2) =====");
 
-
   // --------- Set/Reset (mode 3) ----------
   @(mem200 === 16'h0007);
   @(tar === 16'h0014);
@@ -307,7 +291,6 @@ initial begin
   @(tar === 16'h0020);
   if (ta_out2 !== 1'b0) tb_error("====== TIMER_A COMPARE 2: Set/Reset (mode 3) =====");
 
-
   // --------- Toggle (mode 4) ----------
   @(mem200 === 16'h0009);
   @(tar === 16'h0014);
@@ -319,7 +302,6 @@ initial begin
   @(tar === 16'h0015);
   if (ta_out2 !== 1'b0) tb_error("====== TIMER_A COMPARE 2: Toggle (mode 4) =====");
 
-
   // --------- Reset  (mode 5) ----------
   @(mem200 === 16'h000A);
   @(tar === 16'h0014);
@@ -330,7 +312,6 @@ initial begin
   if (ta_out2 !== 1'b0) tb_error("====== TIMER_A COMPARE 2: Reset (mode 5) =====");
   @(tar === 16'h0015);
   if (ta_out2 !== 1'b0) tb_error("====== TIMER_A COMPARE 2: Reset (mode 5) =====");
-
 
   // --------- Toggle/Set (mode 6) ----------
   @(mem200 === 16'h000B);
@@ -352,7 +333,6 @@ initial begin
   if (ta_out2 !== 1'b0) tb_error("====== TIMER_A COMPARE 2: Toggle/Set (mode 6) =====");
   @(tar === 16'h0020);
   if (ta_out2 !== 1'b1) tb_error("====== TIMER_A COMPARE 2: Toggle/Set (mode 6) =====");
-
 
   // --------- Reset/Set (mode 7) ----------
   @(mem200 === 16'h000D);

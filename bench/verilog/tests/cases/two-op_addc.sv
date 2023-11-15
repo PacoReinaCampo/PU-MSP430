@@ -50,7 +50,6 @@ initial begin
   if (r7 !== 16'h2221) tb_error("====== ADDC without Carry =====");
   if (r8 !== 16'h6666) tb_error("====== ADDC with Carry =====");
 
-
   // ADDC.B (BYTE MODE)
   //--------------------------------------------------------
   @(r15 == 16'h2000);
@@ -59,7 +58,6 @@ initial begin
   if (r6 !== 16'h00dd) tb_error("====== ADD.B  with Carry =====");
   if (r7 !== 16'h0021) tb_error("====== ADDC.B without Carry =====");
   if (r8 !== 16'h0066) tb_error("====== ADDC.B with Carry =====");
-
 
   // ADDC (WORD MODE): Check Flags
   //--------------------------------------------------------
@@ -88,7 +86,6 @@ initial begin
   if (r2 !== 16'h0101) tb_error("====== ADDC FLAG: Flag   check error: V=1, N=0, Z=0, C=1 =====");
   if (r5 !== 16'h7f00) tb_error("====== ADDC FLAG: Result check error: V=1, N=0, Z=0, C=1 =====");
 
-
   // ADDC.B (BYTE MODE): Check Flags
   //--------------------------------------------------------
 
@@ -115,7 +112,6 @@ initial begin
   @(r15 == 16'h4005);
   if (r2 !== 16'h0101) tb_error("====== ADDC.B FLAG: Flag   check error: V=1, N=0, Z=0, C=1 =====");
   if (r5 !== 16'h007f) tb_error("====== ADDC.B FLAG: Result check error: V=1, N=0, Z=0, C=1 =====");
-
 
   stimulus_done = 1;
 end

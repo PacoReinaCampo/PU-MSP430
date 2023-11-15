@@ -52,7 +52,6 @@ initial begin
   dbg_i2c_wr(CPU_CTL, 16'h0002);  // RUN
 `endif
 
-
   // HARDWARE BREAKPOINTS: INSTRUCTION FLOW (FRONTEND) - SINGLE ADDRESSES
   //----------------------------------------------------------------------
 
@@ -110,7 +109,6 @@ initial begin
   if (dbg_i2c_buf !== 16'h0001) tb_error("====== INSTRUCTION FLOW (FRONTEND) - SINGLE ADDRESSES: test 11 =====");
 
 
-
   // HARDWARE BREAKPOINTS: INSTRUCTION FLOW (FRONTEND) - ADDRESS RANGE
   //----------------------------------------------------------------------
   if (`HWBRK_RANGE) begin
@@ -140,7 +138,6 @@ initial begin
     if (dbg_i2c_buf !== 16'h0001) tb_error("====== INSTRUCTION FLOW (FRONTEND) - ADDRESS RANGE: test 5 =====");
   end
 
-
   // HARDWARE BREAKPOINTS: DATA FLOW (EXECUTION-UNIT) - SINGLE ADDRESSES - READ
   //----------------------------------------------------------------------------
 
@@ -149,7 +146,6 @@ initial begin
   dbg_i2c_wr(CPU_CTL, 16'h0020);
   dbg_i2c_wr(BRK0_STAT, 16'h00ff);
   dbg_i2c_wr(CPU_STAT, 16'h00ff);
-
 
   // CONFIGURE BREAKPOINT (ENABLED) & RUN
   dbg_i2c_wr(BRK0_ADDR0, (`PER_SIZE + 16'h0004));
@@ -199,7 +195,6 @@ initial begin
   dbg_i2c_rd(CPU_STAT);
   if (dbg_i2c_buf !== 16'h0001) tb_error("====== DATA FLOW (EXECUTION-UNIT) - SINGLE ADDRESSES - READ: test 15 =====");
 
-
   // HARDWARE BREAKPOINTS: DATA FLOW (EXECUTION-UNIT) - SINGLE ADDRESSES - WRITE
   //-----------------------------------------------------------------------------
 
@@ -208,7 +203,6 @@ initial begin
   dbg_i2c_wr(CPU_CTL, 16'h0020);
   dbg_i2c_wr(BRK0_STAT, 16'h00ff);
   dbg_i2c_wr(CPU_STAT, 16'h00ff);
-
 
   // CONFIGURE BREAKPOINT (ENABLED) & RUN
   dbg_i2c_wr(BRK0_ADDR0, (`PER_SIZE + 16'h0004));
@@ -288,7 +282,6 @@ initial begin
   dbg_i2c_rd(CPU_STAT);
   if (dbg_i2c_buf !== 16'h0001) tb_error("====== INSTRUCTION FLOW (FRONTEND) - SINGLE ADDRESSES - WRITE: test 25 =====");
 
-
   // HARDWARE BREAKPOINTS: DATA FLOW (EXECUTION-UNIT) - SINGLE ADDRESSES - READ/WRITE
   //----------------------------------------------------------------------------------
 
@@ -297,7 +290,6 @@ initial begin
   dbg_i2c_wr(CPU_CTL, 16'h0020);
   dbg_i2c_wr(BRK0_STAT, 16'h00ff);
   dbg_i2c_wr(CPU_STAT, 16'h00ff);
-
 
   // CONFIGURE BREAKPOINT (ENABLED) & RUN
   dbg_i2c_wr(BRK0_ADDR0, (`PER_SIZE + 16'h0004));
@@ -392,7 +384,6 @@ initial begin
   dbg_i2c_rd(CPU_STAT);
   if (dbg_i2c_buf !== 16'h0001) tb_error("====== INSTRUCTION FLOW (FRONTEND) - SINGLE ADDRESSES - READ/WRITE: test 30 =====");
 
-
   // HARDWARE BREAKPOINTS: DATA FLOW (EXECUTION-UNIT) - ADDRESS RANGE - READ
   //----------------------------------------------------------------------------
   if (`HWBRK_RANGE) begin
@@ -402,7 +393,6 @@ initial begin
     dbg_i2c_wr(CPU_CTL, 16'h0020);
     dbg_i2c_wr(BRK0_STAT, 16'h00ff);
     dbg_i2c_wr(CPU_STAT, 16'h00ff);
-
 
     // CONFIGURE BREAKPOINT (ENABLED) & RUN
     dbg_i2c_wr(BRK0_ADDR0, (`PER_SIZE + 16'h0001));
@@ -438,7 +428,6 @@ initial begin
     if (dbg_i2c_buf !== 16'h0001) tb_error("====== INSTRUCTION FLOW (FRONTEND) - ADDRESS RANGE - READ: test 10 =====");
   end
 
-
   // HARDWARE BREAKPOINTS: DATA FLOW (EXECUTION-UNIT) - ADDRESS RANGE - WRITE
   //-----------------------------------------------------------------------------
   if (`HWBRK_RANGE) begin
@@ -448,7 +437,6 @@ initial begin
     dbg_i2c_wr(CPU_CTL, 16'h0020);
     dbg_i2c_wr(BRK0_STAT, 16'h00ff);
     dbg_i2c_wr(CPU_STAT, 16'h00ff);
-
 
     // CONFIGURE BREAKPOINT (ENABLED) & RUN
     dbg_i2c_wr(BRK0_ADDR0, (`PER_SIZE + 16'h0001));
@@ -529,7 +517,6 @@ initial begin
     if (dbg_i2c_buf !== 16'h0001) tb_error("====== INSTRUCTION FLOW (FRONTEND) - ADDRESS RANGE - WRITE: test 25 =====");
   end
 
-
   // HARDWARE BREAKPOINTS: DATA FLOW (EXECUTION-UNIT) - ADDRESS RANGE - READ/WRITE
   //----------------------------------------------------------------------------------
   if (`HWBRK_RANGE) begin
@@ -539,7 +526,6 @@ initial begin
     dbg_i2c_wr(CPU_CTL, 16'h0020);
     dbg_i2c_wr(BRK0_STAT, 16'h00ff);
     dbg_i2c_wr(CPU_STAT, 16'h00ff);
-
 
     // CONFIGURE BREAKPOINT (ENABLED) & RUN
     dbg_i2c_wr(BRK0_ADDR0, (`PER_SIZE + 16'h0001));
@@ -640,7 +626,6 @@ initial begin
   dbg_i2c_wr(BRK0_CTL, 16'h0000);
   dbg_i2c_wr(CPU_CTL, 16'h0002);
   repeat (100) @(posedge mclk);
-
 
   stimulus_done = 1;
 `else

@@ -53,7 +53,6 @@ defparam dut.TOTAL_NR = 8'h34;
 
 integer ii;
 
-
 initial begin
   $display(" ===============================================");
   $display("|                 START SIMULATION              |");
@@ -165,7 +164,6 @@ initial begin
       default: if (dbg_i2c_buf !== 16'h0000) tb_error("READ 2 ERROR");
     endcase
   end
-
 
   dbg_i2c_wr(CPU_CTL, 16'h0002);
   repeat (10) @(posedge mclk);

@@ -76,7 +76,6 @@ always @(posedge watchdog_clock) watchdog_clock_cnt <= watchdog_clock_cnt + 1;
 
 always @(posedge dut.wdt_irq) watchdog_clock_cnt = 1'b0;
 
-
 integer ii;
 integer jj;
 
@@ -90,7 +89,6 @@ initial begin
   jj            = 0;
 
 `ifdef WATCHDOG
-
 
   // WATCHDOG TEST:  INTERVAL MODE /64
   //--------------------------------------------------------
@@ -185,7 +183,6 @@ initial begin
 
   @(r15 == 16'h5000);
   if (r7 !== 16'h0000) tb_error("====== WATCHDOG reset was not taken =====");
-
 
 `else
   $display(" ===============================================");

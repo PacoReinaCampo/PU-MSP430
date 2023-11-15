@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // AND (WORD MODE)
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -49,14 +48,12 @@ initial begin
   if (r5 !== 16'h1111) tb_error("====== AND Test =====");
   if (r6 !== 16'h4444) tb_error("====== AND Test =====");
 
-
   // AND.B (BYTE MODE)
   //--------------------------------------------------------
   @(r15 == 16'h2000);
 
   if (r5 !== 16'h0011) tb_error("====== AND.B Test =====");
   if (r6 !== 16'h0044) tb_error("====== AND.B Test =====");
-
 
   // AND (WORD MODE): Check Flags
   //--------------------------------------------------------
@@ -73,7 +70,6 @@ initial begin
   if (r2 !== 16'h0005) tb_error("====== AND FLAG: Flag   check error: V=0, N=1, Z=0, C=1 =====");
   if (r5 !== 16'h8111) tb_error("====== AND FLAG: Result check error: V=0, N=1, Z=0, C=1 =====");
 
-
   // AND.B (BYTE MODE): Check Flags
   //--------------------------------------------------------
 
@@ -88,7 +84,6 @@ initial begin
   @(r15 == 16'h4002);
   if (r2 !== 16'h0005) tb_error("====== AND.B FLAG: Flag   check error: V=0, N=1, Z=0, C=1 =====");
   if (r5 !== 16'h0081) tb_error("====== AND.B FLAG: Result check error: V=0, N=1, Z=0, C=1 =====");
-
 
   stimulus_done = 1;
 end

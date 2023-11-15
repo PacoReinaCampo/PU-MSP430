@@ -47,12 +47,10 @@ initial begin
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== SP  initialization =====");
   if (r5 !== 16'h0000) tb_error("====== R5  initialization  =====");
 
-
   // Addressing mode: @Rn
   @(r15 == 16'h2000);
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (@Rn mode): SP value      =====");
   if (r5 !== 16'h5678) tb_error("====== CALL (@Rn mode): R5 value      =====");
-
 
   // Addressing mode: @Rn+
   @(r15 == 16'h3000);
@@ -64,18 +62,15 @@ initial begin
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (X(Rn) mode): SP value      =====");
   if (r5 !== 16'hef01) tb_error("====== CALL (X(Rn) mode): R5 value      =====");
 
-
   // Addressing mode: EDE
   @(r15 == 16'h5000);
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (EDE mode): SP value      =====");
   if (r5 !== 16'h2345) tb_error("====== CALL (EDE mode): R5 value      =====");
 
-
   // Addressing mode: &EDE
   @(r15 == 16'h6000);
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== CALL (&EDE mode): SP value      =====");
   if (r5 !== 16'h6789) tb_error("====== CALL (&EDE mode): R5 value      =====");
-
 
   stimulus_done = 1;
 end

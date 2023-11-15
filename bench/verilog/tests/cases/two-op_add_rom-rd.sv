@@ -42,7 +42,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // Check when source is @Rn
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -52,7 +51,6 @@ initial begin
   if (mem210 !== 16'h6666) tb_error("====== ROM Read: ADD @Rn x(Rm) =====");
   if (mem212 !== 16'hed2e) tb_error("====== ROM Read: ADD @Rn EDE   =====");
   if (mem214 !== 16'h4653) tb_error("====== ROM Read: ADD @Rn &EDE  =====");
-
 
   // Check when source is @Rn+
   //--------------------------------------------------------
@@ -64,7 +62,6 @@ initial begin
   if (mem212 !== 16'h5073) tb_error("====== ROM Read: ADD @Rn+ EDE   =====");
   if (mem214 !== 16'h5776) tb_error("====== ROM Read: ADD @Rn+ &EDE  =====");
 
-
   // Check when source is x(Rn)
   //--------------------------------------------------------
   @(r15 == 16'h3000);
@@ -74,7 +71,6 @@ initial begin
   if (mem214 !== 16'h5776) tb_error("====== ROM Read: ADD x(Rn) x(Rm) =====");
   if (mem220 !== 16'h937b) tb_error("====== ROM Read: ADD x(Rn) EDE   =====");
   if (mem208 !== 16'hace4) tb_error("====== ROM Read: ADD x(Rn) &EDE  =====");
-
 
   // Check when source is EDE
   //--------------------------------------------------------
@@ -86,7 +82,6 @@ initial begin
   if (mem216 !== 16'hb933) tb_error("====== ROM Read: ADD EDE EDE   =====");
   if (mem212 !== 16'h2ab2) tb_error("====== ROM Read: ADD EDE &EDE  =====");
 
-
   // Check when source is &EDE
   //--------------------------------------------------------
   @(r15 == 16'h5000);
@@ -96,7 +91,6 @@ initial begin
   if (mem214 !== 16'h82d1) tb_error("====== ROM Read: ADD &EDE x(Rm) =====");
   if (mem218 !== 16'hca4e) tb_error("====== ROM Read: ADD &EDE EDE   =====");
   if (mem202 !== 16'h1338) tb_error("====== ROM Read: ADD &EDE &EDE  =====");
-
 
   stimulus_done = 1;
 end

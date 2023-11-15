@@ -76,7 +76,6 @@ always @(posedge mclk or posedge puc_rst)
 
 always @(wkup3_sync) irq[3] = wkup3_sync[1];
 
-
 initial begin
   $display(" ===============================================");
   $display("|                 START SIMULATION              |");
@@ -89,7 +88,6 @@ initial begin
 
   irq[3]        = 0;
   wkup[3]       = 0;
-
 
 `ifdef ASIC_CLOCKING
 
@@ -118,7 +116,6 @@ initial begin
   smclk_cnt   = 0;
   aclk_cnt    = 0;
   inst_cnt    = 0;
-
 
 
   // LPM0 ( CPUOFF )
@@ -234,7 +231,6 @@ initial begin
   smclk_cnt   = 0;
   aclk_cnt    = 0;
   inst_cnt    = 0;
-
 
   // LPM1 ( CPUOFF + SCG0 )
   //--------------------------------------------------------
@@ -353,7 +349,6 @@ initial begin
   smclk_cnt   = 0;
   aclk_cnt    = 0;
   inst_cnt    = 0;
-
 
   // LPM2 ( CPUOFF + SCG1 )
   //--------------------------------------------------------
@@ -478,7 +473,6 @@ initial begin
   aclk_cnt    = 0;
   inst_cnt    = 0;
 
-
   // LPM3 ( CPUOFF + SCG0 + SCG1 )
   //--------------------------------------------------------
 
@@ -601,7 +595,6 @@ initial begin
   smclk_cnt   = 0;
   aclk_cnt    = 0;
   inst_cnt    = 0;
-
 
   // LPM4 ( CPUOFF + SCG0 + SCG1 + OSCOFF)
   //--------------------------------------------------------
@@ -741,7 +734,6 @@ initial begin
   smclk_cnt   = 0;
   aclk_cnt    = 0;
   inst_cnt    = 0;
-
 
 
 `else

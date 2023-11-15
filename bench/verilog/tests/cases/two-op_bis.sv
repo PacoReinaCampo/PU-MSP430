@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // BIS (WORD MODE)
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -49,14 +48,12 @@ initial begin
   if (r5 !== 16'hbbbb) tb_error("====== BIS Test =====");
   if (r6 !== 16'hdddd) tb_error("====== BIS Test =====");
 
-
   // BIS.B (BYTE MODE)
   //--------------------------------------------------------
   @(r15 == 16'h2000);
 
   if (r5 !== 16'h0055) tb_error("====== BIS.B Test =====");
   if (r6 !== 16'h00aa) tb_error("====== BIS.B Test =====");
-
 
   // BIS (WORD MODE): Check Flags
   //--------------------------------------------------------
@@ -69,7 +66,6 @@ initial begin
   if (r2 !== 16'h0102) tb_error("====== BIS FLAG: Flag   check error =====");
   if (r5 !== 16'h0eee) tb_error("====== BIS FLAG: Result check error =====");
 
-
   // BIS.B (BYTE MODE): Check Flags
   //--------------------------------------------------------
 
@@ -80,7 +76,6 @@ initial begin
   @(r15 == 16'h4001);
   if (r2 !== 16'h0102) tb_error("====== BIS.B FLAG: Flag   check error =====");
   if (r5 !== 16'h000e) tb_error("====== BIS.B FLAG: Result check error =====");
-
 
   stimulus_done = 1;
 end

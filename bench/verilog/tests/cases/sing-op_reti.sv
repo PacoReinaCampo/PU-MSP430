@@ -60,14 +60,12 @@ initial begin
   if (r13 !== 16'h0000) tb_error("====== RESET Vector: R13 value  =====");
   if (r14 !== 16'h0000) tb_error("====== RESET Vector: R14 value  =====");
 
-
   // RETI Instruction test
   //--------------------------
   @(r15 == 16'h2000);
   if (r1 !== (`PER_SIZE + 16'h0052)) tb_error("====== RETI: SP value      =====");
   if (r2 !== 16'h010f) tb_error("====== RETI: SR value      =====");
   if (r5 !== 16'h1234) tb_error("====== RETI: R5 value      =====");
-
 
   // Test interruption 0
   //--------------------------
@@ -84,7 +82,6 @@ initial begin
   if (r7 !== 16'h0000) tb_error("====== IRQ  0: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ  0: R8 value      =====");
 
-
   // Test interruption 1
   //--------------------------
   @(r15 == 16'h4000);
@@ -99,7 +96,6 @@ initial begin
   if (r6 !== 16'h9abc) tb_error("====== IRQ  1: R6 value      =====");
   if (r7 !== 16'h0000) tb_error("====== IRQ  1: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ  1: R8 value      =====");
-
 
   // Test interruption 2
   //--------------------------
@@ -116,7 +112,6 @@ initial begin
   if (r7 !== 16'h0000) tb_error("====== IRQ  2: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ  2: R8 value      =====");
 
-
   // Test interruption 3
   //--------------------------
   @(r15 == 16'h6000);
@@ -131,7 +126,6 @@ initial begin
   if (r6 !== 16'h2345) tb_error("====== IRQ  3: R6 value      =====");
   if (r7 !== 16'h0000) tb_error("====== IRQ  3: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ  3: R8 value      =====");
-
 
   // Test interruption 4
   //--------------------------
@@ -148,7 +142,6 @@ initial begin
   if (r7 !== 16'h0000) tb_error("====== IRQ  4: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ  4: R8 value      =====");
 
-
   // Test interruption 5
   //--------------------------
   @(r15 == 16'h8000);
@@ -163,7 +156,6 @@ initial begin
   if (r6 !== 16'habcd) tb_error("====== IRQ  5: R6 value      =====");
   if (r7 !== 16'h0000) tb_error("====== IRQ  5: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ  5: R8 value      =====");
-
 
   // Test interruption 6
   //--------------------------
@@ -180,7 +172,6 @@ initial begin
   if (r7 !== 16'h0000) tb_error("====== IRQ  6: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ  6: R8 value      =====");
 
-
   // Test interruption 7
   //--------------------------
   @(r15 == 16'ha000);
@@ -195,7 +186,6 @@ initial begin
   if (r6 !== 16'h3456) tb_error("====== IRQ  7: R6 value      =====");
   if (r7 !== 16'h0000) tb_error("====== IRQ  7: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ  7: R8 value      =====");
-
 
   // Test interruption 8
   //--------------------------
@@ -212,7 +202,6 @@ initial begin
   if (r7 !== 16'h0000) tb_error("====== IRQ  8: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ  8: R8 value      =====");
 
-
   // Test interruption 9
   //--------------------------
   @(r15 == 16'hc000);
@@ -227,7 +216,6 @@ initial begin
   if (r6 !== 16'hbcde) tb_error("====== IRQ  9: R6 value      =====");
   if (r7 !== 16'h0000) tb_error("====== IRQ  9: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ  9: R8 value      =====");
-
 
   // Test interruption 10
   //--------------------------
@@ -244,7 +232,6 @@ initial begin
   if (r7 !== 16'h0000) tb_error("====== IRQ 10: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ 10: R8 value      =====");
 
-
   // Test interruption 11
   //--------------------------
   @(r15 == 16'he000);
@@ -259,7 +246,6 @@ initial begin
   if (r6 !== 16'h4567) tb_error("====== IRQ 11: R6 value      =====");
   if (r7 !== 16'h0000) tb_error("====== IRQ 11: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ 11: R8 value      =====");
-
 
   // Test interruption 12
   //--------------------------
@@ -276,7 +262,6 @@ initial begin
   if (r7 !== 16'h0000) tb_error("====== IRQ 12: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ 12: R8 value      =====");
 
-
   // Test interruption 13
   //--------------------------
   @(r15 == 16'hf100);
@@ -291,7 +276,6 @@ initial begin
   if (r6 !== 16'hcdef) tb_error("====== IRQ 13: R6 value      =====");
   if (r7 !== 16'h0000) tb_error("====== IRQ 13: R7 value      =====");
   if (r8 !== (`PER_SIZE + 16'h004e)) tb_error("====== IRQ 13: R8 value      =====");
-
 
   // Test interruption NMI:	 rising edge
   //--------------------------------------

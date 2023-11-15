@@ -79,7 +79,6 @@ initial begin
   repeat (20) @(posedge mclk);
   if (r6 !== 16'hcb54) tb_error("====== CPU REGISTERS (16b): Write R6 =====");
 
-
   // RD/WR ACCESS: RAM (16b)
   //--------------------------------------------------------
 
@@ -104,7 +103,6 @@ initial begin
   dbg_i2c_wr(MEM_CTL, 16'h0003);  // write register
   repeat (20) @(posedge mclk);
   if (mem212 !== 16'h8798) tb_error("====== RAM (16b): Write @0x212 =====");
-
 
   // RD/WR ACCESS: RAM (8b)
   //--------------------------------------------------------
@@ -131,7 +129,6 @@ initial begin
   repeat (20) @(posedge mclk);
   if (mem210 !== 16'hc4b3) tb_error("====== RAM (8b): Write @0x211 =====");
 
-
   // RD/WR ACCESS: ROM (16b)
   //--------------------------------------------------------
 
@@ -157,7 +154,6 @@ initial begin
   repeat (20) @(posedge mclk);
   if (irq_vect_01 !== 16'h8dea) tb_error("====== ROM (16b): Write @0xffe2 =====");
 
-
   // RD/WR ACCESS: ROM (8b)
   //--------------------------------------------------------
 
@@ -182,7 +178,6 @@ initial begin
   dbg_i2c_wr(MEM_CTL, 16'h000b);  // write register
   repeat (20) @(posedge mclk);
   if (irq_vect_00 !== 16'h2514) tb_error("====== ROM (8b): Write @0xffe1 =====");
-
 
   // RD/WR ACCESS: PERIPHERALS (16b)
   //--------------------------------------------------------
@@ -229,7 +224,6 @@ initial begin
   repeat (20) @(posedge mclk);
   if (dbg_i2c_buf !== 16'hbeef) tb_error("====== Peripheral (16b): Read @(DMEM_BASE-0x0070+0x0006) =====");
 
-
   // RD/WR ACCESS: PERIPHERAL (8b)
   //--------------------------------------------------------
 
@@ -256,7 +250,6 @@ initial begin
   dbg_i2c_wr(MEM_CTL, 16'h0009);  // read memory
   dbg_i2c_rd(MEM_DATA);  // read data
   if (dbg_i2c_buf !== 16'h00fa) tb_error("====== Peripheral (8b): Read @0x0023 =====");
-
 
   stimulus_done = 1;
 `else

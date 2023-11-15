@@ -38,7 +38,6 @@
 
 `define LONG_TIMEOUT
 
-
 integer dco_clk_cnt;
 always @(negedge dco_clk) dco_clk_cnt <= dco_clk_cnt + 1;
 
@@ -428,7 +427,6 @@ initial begin
   reset_n     = 0;
   #(100 * 50);
 
-
   //  ####  CPU_EN=1  ####  DBG_EN=1  ####  RESET_N=1  ####  SEQUENCE 1: RESET_N -> CPU_EN -> DBG_EN
   test_nr = 8;
 
@@ -464,7 +462,6 @@ initial begin
   dbg_en      = 0;
   reset_n     = 0;
   #(100 * 50);
-
 
   //  ####  CPU_EN=1  ####  DBG_EN=1  ####  RESET_N=1  ####  SEQUENCE 2: RESET_N -> DBG_EN -> CPU_EN
   test_nr = 9;
@@ -537,7 +534,6 @@ initial begin
   dbg_en      = 0;
   reset_n     = 0;
   #(100 * 50);
-
 
   //  ####  CPU_EN=1  ####  DBG_EN=1  ####  RESET_N=1  ####  SEQUENCE 4: DBG_EN -> CPU_EN -> RESET_N
   test_nr = 10;
@@ -643,7 +639,6 @@ initial begin
   inst_cnt    = 0;
 
   #(100 * 50);
-
 
 
 

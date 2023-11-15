@@ -121,7 +121,6 @@ initial begin
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R1): R15    - test 3 =====");
   if (mem202 !== 16'h1044) tb_error("====== Auto-increment (R1): @0x202 - test 3 =====");
 
-
   // Auto-increment: R2 (@R2+ addressing mode generated constant 8)
   //----------------------------------------------------------------
   @(mem200 == 16'h2000);
@@ -177,7 +176,6 @@ initial begin
   if (r14 !== 16'h0000) tb_error("====== Auto-increment (R2): R14    - test 3 =====");
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R2): R15    - test 3 =====");
   if (mem202 !== 16'h0008) tb_error("====== Auto-increment (R2): @0x202 - test 3 =====");
-
 
   // Auto-increment: R3
   //--------------------------------------------------------
@@ -235,7 +233,6 @@ initial begin
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R3): R15    - test 3 =====");
   if (mem202 !== 16'h00FF) tb_error("====== Auto-increment (R3): @0x202 - test 3 =====");
 
-
   // Auto-increment: R4
   //--------------------------------------------------------
   @(mem200 == 16'h4000);
@@ -291,7 +288,6 @@ initial begin
   if (r14 !== 16'h0000) tb_error("====== Auto-increment (R4): R14    - test 3 =====");
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R4): R15    - test 3 =====");
   if (mem202 !== 16'h0077) tb_error("====== Auto-increment (R4): @0x202 - test 3 =====");
-
 
   // Auto-increment: R5
   //--------------------------------------------------------
@@ -349,7 +345,6 @@ initial begin
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R5): R15    - test 3 =====");
   if (mem202 !== 16'h0099) tb_error("====== Auto-increment (R5): @0x202 - test 3 =====");
 
-
   // Auto-increment: R6
   //--------------------------------------------------------
   @(mem200 == 16'h6000);
@@ -405,7 +400,6 @@ initial begin
   if (r14 !== 16'h0000) tb_error("====== Auto-increment (R6): R14    - test 3 =====");
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R6): R15    - test 3 =====");
   if (mem202 !== 16'h00BB) tb_error("====== Auto-increment (R6): @0x202 - test 3 =====");
-
 
   // Auto-increment: R7
   //--------------------------------------------------------
@@ -463,7 +457,6 @@ initial begin
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R7): R15    - test 3 =====");
   if (mem202 !== 16'h00DD) tb_error("====== Auto-increment (R7): @0x202 - test 3 =====");
 
-
   // Auto-increment: R8
   //--------------------------------------------------------
   @(mem200 == 16'h8000);
@@ -519,7 +512,6 @@ initial begin
   if (r14 !== 16'h0000) tb_error("====== Auto-increment (R8): R14    - test 3 =====");
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R8): R15    - test 3 =====");
   if (mem202 !== 16'h00FF) tb_error("====== Auto-increment (R8): @0x202 - test 3 =====");
-
 
   // Auto-increment: R9
   //--------------------------------------------------------
@@ -577,7 +569,6 @@ initial begin
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R9): R15    - test 3 =====");
   if (mem202 !== 16'h0012) tb_error("====== Auto-increment (R9): @0x202 - test 3 =====");
 
-
   // Auto-increment: R10
   //--------------------------------------------------------
   @(mem200 == 16'hA000);
@@ -633,7 +624,6 @@ initial begin
   if (r14 !== 16'h0000) tb_error("====== Auto-increment (R10): R14    - test 3 =====");
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R10): R15    - test 3 =====");
   if (mem202 !== 16'h0034) tb_error("====== Auto-increment (R10): @0x202 - test 3 =====");
-
 
   // Auto-increment: R11
   //--------------------------------------------------------
@@ -691,7 +681,6 @@ initial begin
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R11): R15    - test 3 =====");
   if (mem202 !== 16'h0056) tb_error("====== Auto-increment (R11): @0x202 - test 3 =====");
 
-
   // Auto-increment: R12
   //--------------------------------------------------------
   @(mem200 == 16'hC000);
@@ -747,7 +736,6 @@ initial begin
   if (r14 !== 16'h0000) tb_error("====== Auto-increment (R12): R14    - test 3 =====");
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R12): R15    - test 3 =====");
   if (mem202 !== 16'h0078) tb_error("====== Auto-increment (R12): @0x202 - test 3 =====");
-
 
   // Auto-increment: R13
   //--------------------------------------------------------
@@ -805,7 +793,6 @@ initial begin
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R13): R15    - test 3 =====");
   if (mem202 !== 16'h009A) tb_error("====== Auto-increment (R13): @0x202 - test 3 =====");
 
-
   // Auto-increment: R14
   //--------------------------------------------------------
   @(mem200 == 16'hE000);
@@ -862,7 +849,6 @@ initial begin
   if (r15 !== 16'h0000) tb_error("====== Auto-increment (R14): R15    - test 3 =====");
   if (mem202 !== 16'h00BC) tb_error("====== Auto-increment (R14): @0x202 - test 3 =====");
 
-
   // Auto-increment: R15
   //--------------------------------------------------------
   @(mem200 == 16'hF000);
@@ -918,8 +904,6 @@ initial begin
   if (r14 !== 16'h0000) tb_error("====== Auto-increment (R15): R14    - test 3 =====");
   if (r15 !== (`DMEM_BASE + 16'h0022)) tb_error("====== Auto-increment (R15): R15    - test 3 =====");
   if (mem202 !== 16'h00DE) tb_error("====== Auto-increment (R15): @0x202 - test 3 =====");
-
-
 
 
 

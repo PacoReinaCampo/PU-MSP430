@@ -77,7 +77,6 @@ initial begin
   if (r12 !== 16'h0000) tb_error("====== NMI disabled: flag was not cleared    =====");
   if (r11 !== 16'h0000) tb_error("====== NMI disabled: flag is set             =====");
 
-
   // Test NMI rising edge
   //--------------------------
   @(r15 == 16'h2000);
@@ -117,7 +116,6 @@ initial begin
   nmi = 1'b0;
   #(4000);
   if (r6 !== 16'h0002) tb_error("====== NMI rising edge: NMI irq was taken with falling edge =====");
-
 
   // Test NMI falling edge
   //--------------------------
@@ -166,7 +164,6 @@ initial begin
   if (inst_cnt === 16'h0000) tb_error("====== NMI falling edge: CPU is not out of LPM4 =====");
   #(2000);
 
-
   // Test NMI nested from Maskable-IRQ
   //-----------------------------------
   @(r15 == 16'h4000);
@@ -188,7 +185,6 @@ initial begin
   if (r6 !== 16'h0001) tb_error("====== NMI nested: NMI irq was not taken =====");
   if (inst_cnt === 16'h0000) tb_error("====== NMI nested: CPU did not woke up   =====");
   if (r10 !== 16'h5679) tb_error("====== NMI nested: NMI was not nested from IRQ =====");
-
 
 `else
   $display(" ===============================================");

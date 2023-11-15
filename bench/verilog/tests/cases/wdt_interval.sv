@@ -113,7 +113,6 @@ initial begin
   if (r9 !== 16'h0000) tb_error("====== WATCHDOG RD/WR ACCESS: IFG1   != 0x00 =====");
 `endif
 
-
   // WATCHDOG TEST:  INTERVAL MODE /64
   //--------------------------------------------------------
 
@@ -167,7 +166,6 @@ initial begin
 
   $display("Interval mode /64 mode test completed...");
 
-
   // WATCHDOG TEST:  INTERVAL MODE /512
   //--------------------------------------------------------
 
@@ -182,7 +180,6 @@ initial begin
 
   $display("Interval mode /512 mode test completed...");
 
-
   // WATCHDOG TEST:  INTERVAL MODE /8192
   //--------------------------------------------------------
 
@@ -196,7 +193,6 @@ initial begin
 `endif
 
   $display("Interval mode /8192 mode test completed...");
-
 
   // WATCHDOG TEST:  INTERVAL MODE /32768
   //--------------------------------------------------------

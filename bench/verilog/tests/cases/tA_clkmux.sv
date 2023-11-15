@@ -38,7 +38,6 @@
 integer my_counter;
 always @(negedge mclk) my_counter <= my_counter + 1;
 
-
 // Generate TACLK as MCLK/3
 integer taclk_cnt;
 always @(posedge mclk or posedge puc_rst)
@@ -61,14 +60,12 @@ always @(inclk_cnt)
   if (inclk_cnt == 4) inclk = 1'b1;
   else inclk = 1'b0;
 
-
 initial begin
   $display(" ===============================================");
   $display("|                 START SIMULATION              |");
   $display(" ===============================================");
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
-
 
 `ifdef ASIC_CLOCKING
   $display(" ===============================================");
@@ -88,7 +85,6 @@ initial begin
   repeat (300) @(posedge mclk);
   if (tar !== 16'h0032) tb_error("====== TIMER A TEST:  INPUT MUX - TACLK =====");
 
-
   // TIMER A TEST:  INPUT MUX - ACLK
   //--------------------------------------------------------
   @(r15 === 16'h1000);
@@ -99,7 +95,6 @@ initial begin
   repeat (300) @(posedge mclk);
   if (tar !== 16'h0005) tb_error("====== TIMER A TEST:  INPUT MUX - ACLK =====");
 
-
   // TIMER A TEST:  INPUT MUX - SMCLK
   //--------------------------------------------------------
   @(r15 === 16'h2000);
@@ -109,7 +104,6 @@ initial begin
   my_counter = 0;
   repeat (300) @(posedge mclk);
   if (tar !== 16'h0013) tb_error("====== TIMER A TEST:  INPUT MUX - SMCLK =====");
-
 
   // TIMER A TEST:  INPUT MUX - INCLK
   //--------------------------------------------------------

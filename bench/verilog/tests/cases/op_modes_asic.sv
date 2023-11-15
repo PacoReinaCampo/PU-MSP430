@@ -69,7 +69,6 @@ always @(posedge mclk or posedge puc_rst)
 
 always @(wkup3_sync) irq[3] = wkup3_sync[1];
 
-
 initial begin
   $display(" ===============================================");
   $display("|                 START SIMULATION              |");
@@ -82,7 +81,6 @@ initial begin
 
   irq[3]        = 0;
   wkup[3]       = 0;
-
 
 `ifdef ASIC_CLOCKING
 
@@ -107,7 +105,6 @@ initial begin
 `endif
   smclk_cnt = 0;
 
-
   @(r15 == 16'h1003);  //---------- PORT2 IRQ TRIAL (EXITING POWER MODE) -------------//
   wkup[3] = 1'b1;
   @(posedge irq_acc[3]);
@@ -126,7 +123,6 @@ initial begin
   if (smclk_cnt !== 50) tb_error("====== SCG1 TEST 4: SMCLK IS STILL NOT RUNNING WHEN RETURNING FROM IRQ =====");
   smclk_cnt = 0;
 
-
   @(r15 == 16'h1005);
   repeat (10) @(posedge mclk);
   smclk_cnt = 0;
@@ -137,7 +133,6 @@ initial begin
   if (smclk_cnt !== 100) tb_error("====== SCG1 TEST 5: SMCLK IS STOPPED =====");
 `endif
   smclk_cnt = 0;
-
 
   @(r15 == 16'h1006);  //---------- PORT1 IRQ TRIAL (STAYING IN POWER MODE) -------------//
   wkup[2] = 1'b1;
@@ -161,14 +156,12 @@ initial begin
 `endif
   smclk_cnt = 0;
 
-
   @(r15 == 16'h1008);
   repeat (10) @(posedge mclk);
   smclk_cnt = 0;
   repeat (50) @(posedge mclk);
   if (smclk_cnt !== 50) tb_error("====== SCG1 TEST 8: SMCLK IS NOT RUNNING =====");
   smclk_cnt = 0;
-
 
   // OSCOFF  (<=> R2[5]): turn off LFXT1CLK
   //--------------------------------------------------------
@@ -194,7 +187,6 @@ initial begin
   if (aclk_cnt < 3) tb_error("====== OSCOFF TEST 2: ACLK IS STOPPED =====");
 `endif
   aclk_cnt = 0;
-
 
   @(r15 == 16'h2003);  //---------- PORT2 IRQ TRIAL (EXITING POWER MODE) -------------//
   wkup[3] = 1'b1;
@@ -222,7 +214,6 @@ initial begin
 `endif
   aclk_cnt = 0;
 
-
   @(r15 == 16'h2005);
   repeat (100) @(posedge mclk);
   aclk_cnt = 0;
@@ -233,7 +224,6 @@ initial begin
   if (aclk_cnt < 3) tb_error("====== OSCOFF TEST 5: ACLK IS STOPPED =====");
 `endif
   aclk_cnt = 0;
-
 
   @(r15 == 16'h2006);  //---------- PORT1 IRQ TRIAL (STAYING IN POWER MODE) -------------//
   wkup[2] = 1'b1;
@@ -261,7 +251,6 @@ initial begin
 `endif
   aclk_cnt = 0;
 
-
   @(r15 == 16'h2008);
   repeat (100) @(posedge mclk);
   aclk_cnt = 0;
@@ -272,7 +261,6 @@ initial begin
   if (aclk_cnt !== 100) tb_error("====== OSCOFF TEST 8: ACLK IS NOT RUNNING =====");
 `endif
   aclk_cnt = 0;
-
 
   // CPUOFF  (<=> R2[4]): turn off CPU
   //--------------------------------------------------------
@@ -306,7 +294,6 @@ initial begin
   repeat (80) @(negedge dco_clk);
   if (mclk_cnt !== 0) tb_error("====== CPUOFF TEST 4: CPU IS NOT STOPPED AFTER IRQ =====");
 
-
   //---------- PORT2 IRQ TRIAL (EXITING POWER MODE) -------------//
   wkup[3] = 1'b1;
   @(posedge irq_acc[3]);
@@ -325,14 +312,12 @@ initial begin
   if (mclk_cnt !== 80) tb_error("====== CPUOFF TEST 6: CPU IS NOT RUNNING AFTER IRQ =====");
 
 
-
   @(r15 == 16'h3003);
   repeat (10) @(posedge dco_clk);
   mclk_cnt = 0;
   repeat (80) @(posedge dco_clk);
   if (mclk_cnt !== 80) tb_error("====== CPUOFF TEST 7: CPU IS STILL NOT RUNNING WHEN RETURNING FROM IRQ =====");
   mclk_cnt = 0;
-
 
 
   // SCG0 (<=> R2[6]): turn off DCO oscillator
@@ -350,7 +335,6 @@ initial begin
   #(80 * 50);
   if (dco_clk_cnt !== 0) tb_error("====== SCG0 TEST 2: DCO IS NOT STOPPED =====");
 
-
   #(1 * 50);  //---------- PORT1 IRQ TRIAL (STAYING IN POWER MODE) -------------//
   wkup[2] = 1'b1;
   @(posedge irq_acc[2]);
@@ -366,7 +350,6 @@ initial begin
   dco_clk_cnt = 0;
   #(80 * 50);
   if (dco_clk_cnt !== 0) tb_error("====== SCG0 TEST 4: DCO IS NOT STOPPED AFTER IRQ =====");
-
 
   //---------- PORT2 IRQ TRIAL (EXITING POWER MODE) -------------//
   wkup[3] = 1'b1;
@@ -385,14 +368,12 @@ initial begin
   if (dco_clk_cnt !== 80) tb_error("====== SCG0 TEST 6: DCO IS NOT RUNNING AFTER IRQ =====");
 
 
-
   @(r15 == 16'h4003);
   #(10 * 50);
   dco_clk_cnt = 0;
   #(80 * 50);
   if (dco_clk_cnt !== 80) tb_error("====== SCG0 TEST 7: DCO IS STILL NOT RUNNING WHEN RETURNING FROM IRQ =====");
   dco_clk_cnt = 0;
-
 
 
 `else

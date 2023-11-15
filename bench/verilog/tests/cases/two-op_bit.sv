@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // BIT (WORD MODE)
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -49,14 +48,12 @@ initial begin
   if (r5 !== 16'h8888) tb_error("====== BIT Test =====");
   if (r6 !== 16'h9999) tb_error("====== BIT Test =====");
 
-
   // BIT.B (BYTE MODE)
   //--------------------------------------------------------
   @(r15 == 16'h2000);
 
   if (r5 !== 16'h8888) tb_error("====== BIT.B Test =====");
   if (r6 !== 16'h9999) tb_error("====== BIT.B Test =====");
-
 
   // BIT (WORD MODE): Check Flags
   //--------------------------------------------------------
@@ -73,7 +70,6 @@ initial begin
   if (r2 !== 16'h0002) tb_error("====== BIT FLAG: Flag   check error: V=0, N=0, Z=1, C=0 =====");
   if (r5 !== 16'h0555) tb_error("====== BIT FLAG: Result check error: V=0, N=0, Z=1, C=0 =====");
 
-
   // BIT.B (BYTE MODE): Check Flags
   //--------------------------------------------------------
 
@@ -88,7 +84,6 @@ initial begin
   @(r15 == 16'h4002);
   if (r2 !== 16'h0002) tb_error("====== BIT.B FLAG: Flag   check error: V=0, N=0, Z=1, C=0 =====");
   if (r5 !== 16'h77aa) tb_error("====== BIT.B FLAG: Result check error: V=0, N=0, Z=1, C=0 =====");
-
 
   stimulus_done = 1;
 end

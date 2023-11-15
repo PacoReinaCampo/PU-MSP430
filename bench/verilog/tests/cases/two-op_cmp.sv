@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // CMP (WORD MODE)
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -49,14 +48,12 @@ initial begin
   if (r5 !== 16'h8888) tb_error("====== CMP without Carry =====");
   if (r6 !== 16'h9999) tb_error("====== CMP with Carry =====");
 
-
   // CMP.B (BYTE MODE)
   //--------------------------------------------------------
   @(r15 == 16'h2000);
 
   if (r5 !== 16'h8888) tb_error("====== CMP.B  without Carry =====");
   if (r6 !== 16'h9999) tb_error("====== CMP.B  with Carry =====");
-
 
   // CMP (WORD MODE): Check Flags
   //--------------------------------------------------------
@@ -81,7 +78,6 @@ initial begin
   if (r2 !== 16'h0101) tb_error("====== CMP FLAG: Flag   check error: V=1, N=0, Z=0, C=1 =====");
   if (r5 !== 16'h8000) tb_error("====== CMP FLAG: Result check error: V=1, N=0, Z=0, C=1 =====");
 
-
   // CMP.B (BYTE MODE): Check Flags
   //--------------------------------------------------------
 
@@ -104,7 +100,6 @@ initial begin
   @(r15 == 16'h4004);
   if (r2 !== 16'h0101) tb_error("====== CMP.B FLAG: Flag   check error: V=1, N=0, Z=0, C=1 =====");
   if (r5 !== 16'h5480) tb_error("====== CMP.B FLAG: Result check error: V=1, N=0, Z=0, C=1 =====");
-
 
   stimulus_done = 1;
 end

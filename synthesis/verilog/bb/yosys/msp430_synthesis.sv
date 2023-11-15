@@ -438,7 +438,6 @@ module msp430_synthesis #(
                     per_dout_temp_8b   |
                     per_dout_temp_16b;
 
-
   // Map peripheral interrupts & wakeups
   //----------------------------------------
 

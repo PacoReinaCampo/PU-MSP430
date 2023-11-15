@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // DADD (WORD MODE)
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -49,14 +48,12 @@ initial begin
   if (r5 !== 16'h1237) tb_error("====== DADD without Carry =====");
   if (r6 !== 16'h7111) tb_error("====== DADD with Carry =====");
 
-
   // DADD.B (BYTE MODE)
   //--------------------------------------------------------
   @(r15 == 16'h2000);
 
   if (r5 !== 16'h0037) tb_error("====== DADD.B  without Carry =====");
   if (r6 !== 16'h0071) tb_error("====== DADD.B  with Carry =====");
-
 
   // DADD (WORD MODE): Check Flags
   //--------------------------------------------------------
@@ -77,7 +74,6 @@ initial begin
   if (r2 !== 16'h0104) tb_error("====== DADD FLAG: Flag   check error: V=1, N=1, Z=0, C=0 =====");
   if (r5 !== 16'h8002) tb_error("====== DADD FLAG: Result check error: V=1, N=1, Z=0, C=0 =====");
 
-
   // DADD.B (BYTE MODE): Check Flags
   //--------------------------------------------------------
 
@@ -96,7 +92,6 @@ initial begin
   @(r15 == 16'h4003);
   if (r2 !== 16'h0104) tb_error("====== DADD.B FLAG: Flag   check error: V=1, N=1, Z=0, C=0 =====");
   if (r5 !== 16'h0082) tb_error("====== DADD.B FLAG: Result check error: V=1, N=1, Z=0, C=0 =====");
-
 
   stimulus_done = 1;
 end

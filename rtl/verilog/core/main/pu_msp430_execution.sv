@@ -124,7 +124,6 @@ module pu_msp430_execution (
   wire [15:0] mdb_in_val;
   wire [3:0] status;
 
-
   //////////////////////////////////////////////////////////////////////////////
   // 2)  REGISTER FILE
   //////////////////////////////////////////////////////////////////////////////
@@ -145,7 +144,6 @@ module pu_msp430_execution (
   wire reg_incr = (exec_done & inst_as[`INDIR_I]) | ((e_state == `E_SRC_RD) & inst_so[`RETI]) | ((e_state == `E_EXEC) & inst_so[`RETI]);
 
   assign dbg_reg_din = reg_dest;
-
 
   pu_msp430_register_file register_file_0 (
 

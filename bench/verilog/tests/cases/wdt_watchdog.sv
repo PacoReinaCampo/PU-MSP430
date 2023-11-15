@@ -130,7 +130,6 @@ initial begin
 
   $display("Watchdog mode /64 mode test completed...");
 
-
   // WATCHDOG TEST:  INTERVAL MODE /512
   //--------------------------------------------------------
 
@@ -143,7 +142,6 @@ initial begin
 
   $display("Watchdog mode /512 mode test completed...");
 
-
   // WATCHDOG TEST:  INTERVAL MODE /8192
   //--------------------------------------------------------
 
@@ -155,7 +153,6 @@ initial begin
 `endif
 
   $display("Watchdog mode /8192 mode test completed...");
-
 
   // WATCHDOG TEST:  INTERVAL MODE /32768
   //--------------------------------------------------------

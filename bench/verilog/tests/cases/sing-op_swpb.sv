@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // Addressing mode: Rn
   @(r15 == 16'h1000);
   if (r4 !== 16'h2475) tb_error("====== SWPB (Rn mode): test 1 (result) =====");
@@ -49,7 +48,6 @@ initial begin
 
   if (r6 !== 16'hb61c) tb_error("====== SWPB (Rn mode): test 2 (result) =====");
   if (r7 !== 16'h0005) tb_error("====== SWPB (Rn mode): test 2 (C flag) =====");
-
 
   // Addressing mode: @Rn
   @(r15 == 16'h2000);
@@ -61,7 +59,6 @@ initial begin
   if (r6 !== (`PER_SIZE + 16'h0002)) tb_error("====== SWPB (@Rn mode): test 2 (address) =====");
   if (r7 !== 16'h0005) tb_error("====== SWPB (@Rn mode): test 2 (C flag)  =====");
 
-
   // Addressing mode: @Rn+
   @(r15 == 16'h3000);
   if (mem208 !== 16'h2475) tb_error("====== SWPB (@Rn+ mode): test 1 (result)  =====");
@@ -72,7 +69,6 @@ initial begin
   if (r6 !== (`PER_SIZE + 16'h000C)) tb_error("====== SWPB (@Rn+ mode): test 2 (address) =====");
   if (r7 !== 16'h0005) tb_error("====== SWPB (@Rn+ mode): test 2 (C flag)  =====");
 
-
   // Addressing mode: X(Rn)
   @(r15 == 16'h4000);
   if (mem210 !== 16'h2475) tb_error("====== SWPB (X(Rn) mode): test 1 (result)  =====");
@@ -80,7 +76,6 @@ initial begin
 
   if (mem212 !== 16'hb61c) tb_error("====== SWPB (X(Rn) mode): test 2 (result)  =====");
   if (r7 !== 16'h0005) tb_error("====== SWPB (X(Rn) mode): test 2 (C flag)  =====");
-
 
   // Addressing mode: EDE
   @(r15 == 16'h5000);
@@ -90,7 +85,6 @@ initial begin
   if (mem21A !== 16'hb61c) tb_error("====== SWPB (EDE mode): test 2 (result)  =====");
   if (r7 !== 16'h0005) tb_error("====== SWPB (EDE mode): test 2 (C flag)  =====");
 
-
   // Addressing mode: &EDE
   @(r15 == 16'h6000);
   if (mem220 !== 16'h2475) tb_error("====== SWPB (&EDE mode): test 1 (result)  =====");
@@ -98,7 +92,6 @@ initial begin
 
   if (mem222 !== 16'hb61c) tb_error("====== SWPB (&EDE mode): test 2 (result)  =====");
   if (r7 !== 16'h0005) tb_error("====== SWPB (&EDE mode): test 2 (C flag)  =====");
-
 
   stimulus_done = 1;
 end

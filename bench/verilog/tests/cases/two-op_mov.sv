@@ -58,7 +58,6 @@ initial begin
   if (r14 !== 16'h0000) tb_error("R14 reset value");
   if (r15 !== 16'h0000) tb_error("R15 reset value");
 
-
   // Make sure initialization worked fine
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -97,7 +96,6 @@ initial begin
   if (mem200 !== 16'hfedc) tb_error("====== MOV @Rn EDE   =====");
   if (mem204 !== 16'hf1d2) tb_error("====== MOV @Rn &EDE  =====");
 
-
   // MOV: Check when source is @Rn+
   //--------------------------------------------------------
   @(r15 == 16'h4000);
@@ -116,7 +114,6 @@ initial begin
   if (r9 !== (`PER_SIZE + 16'h0012)) tb_error("====== MOV @Rn+ &EDE  =====");
   if (mem214 !== 16'h1234) tb_error("====== MOV @Rn+ &EDE  =====");
 
-
   // MOV: Check when source is #N
   //--------------------------------------------------------
   @(r15 == 16'h5000);
@@ -126,7 +123,6 @@ initial begin
   if (mem230 !== 16'h5a5a) tb_error("====== MOV #N  x(Rm) =====");
   if (mem210 !== 16'h1a2b) tb_error("====== MOV #N  EDE   =====");
   if (mem206 !== 16'h3c4d) tb_error("====== MOV #N  &EDE  =====");
-
 
   // MOV: Check when source is x(Rn)
   //--------------------------------------------------------
@@ -148,7 +144,6 @@ initial begin
   if (mem216 !== 16'hb3a9) tb_error("====== MOV EDE EDE   =====");
   if (mem212 !== 16'h837a) tb_error("====== MOV EDE &EDE  =====");
 
-
   // MOV: Check when source is &EDE
   //--------------------------------------------------------
   @(r15 == 16'h8000);
@@ -158,7 +153,6 @@ initial begin
   if (mem214 !== 16'h481c) tb_error("====== MOV &EDE x(Rm) =====");
   if (mem218 !== 16'h5c1f) tb_error("====== MOV &EDE EDE   =====");
   if (mem202 !== 16'hc16e) tb_error("====== MOV &EDE &EDE  =====");
-
 
   // MOV: Check when source is CONST
   //--------------------------------------------------------
@@ -212,7 +206,6 @@ initial begin
   if (mem262 !== 16'h04dd) tb_error("====== MOV.B #+4 &EDE =====");
   if (mem264 !== 16'h08ee) tb_error("====== MOV.B #+8 &EDE =====");
   if (mem266 !== 16'hff33) tb_error("====== MOV.B #-1 &EDE =====");
-
 
   stimulus_done = 1;
 end

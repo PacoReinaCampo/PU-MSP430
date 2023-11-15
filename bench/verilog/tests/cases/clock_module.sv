@@ -75,7 +75,6 @@ initial begin
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: ACLK (DIV /1) =====");
   if (aclk_counter !== 24) tb_error("====== CLOCK GENERATOR: ACLK (DIV /1) =====");
 
-
   // ------- Divider /2 ----------
   @(r15 === 16'h0002);
   @(negedge aclk_en);
@@ -84,7 +83,6 @@ initial begin
   repeat (735) @(posedge mclk);
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: ACLK (DIV /2) =====");
   if (aclk_counter !== 12) tb_error("====== CLOCK GENERATOR: ACLK (DIV /2) =====");
-
 
   // ------- Divider /4 ----------
   @(r15 === 16'h0003);
@@ -95,7 +93,6 @@ initial begin
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: ACLK (DIV /4) =====");
   if (aclk_counter !== 6) tb_error("====== CLOCK GENERATOR: ACLK (DIV /4) =====");
 
-
   // ------- Divider /8 ----------
   @(r15 === 16'h0004);
   @(negedge aclk_en);
@@ -104,7 +101,6 @@ initial begin
   repeat (735) @(posedge mclk);
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: ACLK (DIV /8) =====");
   if (aclk_counter !== 3) tb_error("====== CLOCK GENERATOR: ACLK (DIV /8) =====");
-
 
   // SMCLK GENERATION - LFXT_CLK INPUT
   //--------------------------------------------------------
@@ -118,7 +114,6 @@ initial begin
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: SMCLK - LFXT_CLK INPUT (DIV /1) =====");
   if (smclk_counter !== 24) tb_error("====== CLOCK GENERATOR: SMCLK - LFXT_CLK INPUT (DIV /1) =====");
 
-
   // ------- Divider /2 ----------
   @(r15 === 16'h1002);
   @(negedge smclk_en);
@@ -127,7 +122,6 @@ initial begin
   repeat (735) @(posedge mclk);
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: SMCLK - LFXT_CLK INPUT (DIV /2) =====");
   if (smclk_counter !== 12) tb_error("====== CLOCK GENERATOR: SMCLK - LFXT_CLK INPUT (DIV /2) =====");
-
 
   // ------- Divider /4 ----------
   @(r15 === 16'h1003);
@@ -138,7 +132,6 @@ initial begin
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: SMCLK - LFXT_CLK INPUT (DIV /4) =====");
   if (smclk_counter !== 6) tb_error("====== CLOCK GENERATOR: SMCLK - LFXT_CLK INPUT (DIV /4) =====");
 
-
   // ------- Divider /8 ----------
   @(r15 === 16'h1004);
   @(negedge smclk_en);
@@ -147,7 +140,6 @@ initial begin
   repeat (735) @(posedge mclk);
   if (mclk_counter !== 735) tb_error("====== CLOCK GENERATOR: SMCLK - LFXT_CLK INPUT (DIV /8) =====");
   if (smclk_counter !== 3) tb_error("====== CLOCK GENERATOR: SMCLK - LFXT_CLK INPUT (DIV /8) =====");
-
 
   // SMCLK GENERATION - DCO_CLK INPUT
   //--------------------------------------------------------
@@ -169,7 +161,6 @@ initial begin
   if (mclk_counter !== 600) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /2) =====");
   if (smclk_counter !== 300) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /2) =====");
 
-
   // ------- Divider /4 ----------
   @(r15 === 16'h2003);
   @(negedge smclk_en);
@@ -179,7 +170,6 @@ initial begin
   if (mclk_counter !== 600) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /4) =====");
   if (smclk_counter !== 150) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /4) =====");
 
-
   // ------- Divider /8 ----------
   @(r15 === 16'h2004);
   @(negedge smclk_en);
@@ -188,7 +178,6 @@ initial begin
   repeat (600) @(posedge mclk);
   if (mclk_counter !== 600) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /8) =====");
   if (smclk_counter !== 75) tb_error("====== CLOCK GENERATOR: SMCLK - DCO_CLK INPUT (DIV /8) =====");
-
 
   // CPU ENABLE - CPU_EN INPUT
   //--------------------------------------------------------
@@ -216,7 +205,6 @@ initial begin
   if (aclk_counter == 0) tb_error("====== ACLK is not running (test 8) =====");
   if (smclk_counter == 0) tb_error("====== SMCLK is not running (test 9) =====");
   if (dbg_freeze == 1'b1) tb_error("====== DBG_FREEZE signal is active (test 10) =====");
-
 
   // RD/WR ACCESS TO REGISTERS
   //--------------------------------------------------------

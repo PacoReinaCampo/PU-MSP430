@@ -70,7 +70,6 @@ initial begin
 
   @(r15 === 16'h2001);
 
-
   //  READ/WRITE IFG1
   //------------------------------
   @(r15 === 16'h3000);
@@ -116,7 +115,6 @@ initial begin
 
   @(r15 === 16'h3006);
   if (r10 !== 16'h0000) tb_error("====== IFG1 incorrect (test 12) =====");
-
 
   //  READ/WRITE IE1
   //------------------------------
@@ -164,7 +162,6 @@ initial begin
   @(r15 === 16'h4006);
   if (r10 !== 16'h0000) tb_error("====== IE1 incorrect (test 12) =====");
 
-
   // READ/WRITE CPU_ID
   //------------------------------
   @(r15 === 16'h5000);
@@ -199,7 +196,6 @@ initial begin
   if (r10 !== dbg_id[15:0]) tb_error("====== CPU_ID_LO incorrect (test 5) =====");
   if (r11 !== dbg_id[31:16]) tb_error("====== CPU_ID_HI incorrect (test 6) =====");
 
-
   // READ/WRITE CPU_NR
   //------------------------------
   @(r15 === 16'h6000);
@@ -212,7 +208,6 @@ initial begin
 
   @(r15 === 16'h6003);
   if (r10 !== 16'h3412) tb_error("====== CPU_NR incorrect (test 3) =====");
-
 
 
   stimulus_done = 1;

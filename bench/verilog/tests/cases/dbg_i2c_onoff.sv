@@ -35,10 +35,8 @@
 // $LastChangedDate: 2011-02-24 21:37:57 +0100 (Thu, 24 Feb 2011) $         
 ////////////////////////////////////////////////////////////////////////////////
 
-
 integer test_nr;
 integer test_var;
-
 
 initial begin
   $display(" ===============================================");
@@ -68,7 +66,6 @@ initial begin
   if (r14 === 16'h0000) tb_error("====== CPU is stopped event though the debug interface is disabled - test 1 =====");
   test_var = r14;
 
-
   // Make sure that enabling the debug interface after the POR
   // don't stop the cpu
   //--------------------------------------------------------
@@ -77,7 +74,6 @@ initial begin
 
   repeat (300) @(posedge mclk);
   if (r14 === test_var[15:0]) tb_error("====== CPU is stopped when the debug interface is disabled after POR - test 2 =====");
-
 
   // Create POR with debug enable and observe the
   // behavior depending on the DBG_RST_BRK_EN define
@@ -105,7 +101,6 @@ initial begin
   if (dbg_i2c_buf !== 16'h0010) tb_error("====== CPU_CTL wrong reset value -  test 4 =====");
 `endif
 
-
   // Make sure that DBG_EN resets the debug interface
   //--------------------------------------------------------
   test_nr = 4;
@@ -121,9 +116,7 @@ initial begin
   dbg_i2c_rd(MEM_DATA);
   if (dbg_i2c_buf !== 16'haa55) tb_error("====== MEM_DATA write access failed - test 6 =====");
 
-
   test_var = r14;  // Backup the current register value
-
 
   @(posedge mclk);  // Resets the debug interface
   dbg_en = 1'b0;
@@ -143,7 +136,6 @@ initial begin
 `endif
   dbg_i2c_rd(MEM_DATA);
   if (dbg_i2c_buf !== 16'h0000) tb_error("====== MEM_DATA read access failed - test 9 =====");
-
 
   // Make sure that RESET_N resets the debug interface
   //--------------------------------------------------------
@@ -182,7 +174,6 @@ initial begin
 `endif
   dbg_i2c_rd(MEM_DATA);
   if (dbg_i2c_buf !== 16'h0000) tb_error("====== MEM_DATA read access failed - test 9 =====");
-
 
   // Let the CPU run
   dbg_i2c_wr(CPU_CTL, 16'h0002);

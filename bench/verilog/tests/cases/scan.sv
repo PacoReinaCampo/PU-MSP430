@@ -48,7 +48,6 @@ initial begin
   // Disable detection of the end of test
   force inst_pc = 16'h0000;
 
-
   //  SCAN MODE
   //------------------------------
 
@@ -119,7 +118,6 @@ initial begin
   repeat (20) @(posedge mclk);
 
   release inst_pc;
-
 
 
   stimulus_done = 1;

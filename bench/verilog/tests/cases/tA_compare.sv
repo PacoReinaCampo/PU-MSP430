@@ -38,7 +38,6 @@
 integer my_counter;
 always @(posedge mclk) my_counter <= my_counter + 1;
 
-
 initial begin
   $display(" ===============================================");
   $display("|                 START SIMULATION              |");
@@ -78,7 +77,6 @@ initial begin
   @(posedge irq_ta1);
   if (my_counter !== 32'h2) tb_error("====== TIMER_A COMPARE 0: UP MODE =====");
 
-
   @(mem200 === 16'h0002);  // Check Comparator 1
   @(posedge ta_out1);
   @(negedge mclk);
@@ -98,7 +96,6 @@ initial begin
   @(posedge ta_out0);
   if (my_counter !== 32'h20) tb_error("====== TIMER_A COMPARE 1: UP MODE =====");
 
-
   @(mem200 === 16'h0003);  // Check Comparator 2
   @(posedge ta_out2);
   @(negedge mclk);
@@ -117,7 +114,6 @@ initial begin
   my_counter = 0;
   @(posedge ta_out0);
   if (my_counter !== 32'h12) tb_error("====== TIMER_A COMPARE 2: UP MODE =====");
-
 
   // TIMER A TEST:  CONTINUOUS MODE
   //--------------------------------------------------------
@@ -145,7 +141,6 @@ initial begin
   repeat (10) @(negedge mclk);
   if (mem206 !== 16'h0004) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 1 =====");
 
-
   @(mem200 === 16'h0002);
   @(posedge irq_ta1);
   @(negedge mclk);
@@ -170,7 +165,6 @@ initial begin
   if (mem206 !== 16'h0004) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 2 =====");
 
 
-
   // TIMER A TEST:  UP-DOWN MODE
   //--------------------------------------------------------
 
@@ -191,7 +185,6 @@ initial begin
   if (my_counter !== 32'h1E0) tb_error("====== TIMER_A COMPARE 2: CONTINUOUS MODE - TEST 2 =====");
   @(negedge ta_out0);
   if (my_counter !== 32'h360) tb_error("====== TIMER_A COMPARE 0: CONTINUOUS MODE - TEST 2 =====");
-
 
   @(mem200 === 16'h0002);
   @(posedge irq_ta1);
@@ -230,7 +223,6 @@ initial begin
   if (mem206 !== 16'h000A) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 4 =====");
   @(posedge irq_ta0);
   if (my_counter !== 32'h360) tb_error("====== TIMER_A COMPARE: CONTINUOUS MODE - TEST 4 =====");
-
 
   // TIMER A TEST:  CCI INPUT LATCHING (SCCI)
   //--------------------------------------------------------

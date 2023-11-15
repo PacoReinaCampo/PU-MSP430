@@ -54,7 +54,6 @@ initial begin
   // Wait until software initialization is done
   if (r15 !== (`PER_SIZE + 16'h0000)) @(r15 == (`PER_SIZE + 16'h0000));
 
-
   dbg_i2c_wr(CPU_CTL, 16'h0001);  // HALT
   repeat (150) @(posedge mclk);
   r13_bkup  = r13;
@@ -72,7 +71,6 @@ initial begin
 
   // Make sure the program resumed execution when coming back from IRQ
   if (r13 === r13_bkup) tb_error("====== Program didn't properly resumed execution =====");
-
 
   p1_din[1]     = 1'b1;
   stimulus_done = 1;

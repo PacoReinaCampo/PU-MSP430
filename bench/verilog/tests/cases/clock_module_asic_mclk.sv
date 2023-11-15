@@ -143,7 +143,6 @@ initial begin
 `endif
 `endif
 
-
   //--------------------------------------------------------
   // SMCLK GENERATION - DCO_CLK INPUT
   //--------------------------------------------------------
@@ -199,7 +198,6 @@ initial begin
 `else
   if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 2: MCLK - DCO_CLK INPUT (DIV /8) - TEST 3 =====");
 `endif
-
 
   //--------------------------------------------------------
   // MCLK GENERATION - LFXT_CLK INPUT
@@ -285,7 +283,6 @@ initial begin
 `endif
 `endif
 
-
   //--------------------------------------------------------
   // SMCLK GENERATION - DCO_CLK INPUT
   //--------------------------------------------------------
@@ -341,7 +338,6 @@ initial begin
 `else
   if (dco_clk_counter !== 15) tb_error("====== CLOCK GENERATOR 4: MCLK - DCO_CLK INPUT (DIV /8) - TEST 3 =====");
 `endif
-
 
 `else
   $display(" ===============================================");

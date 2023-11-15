@@ -64,7 +64,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== RAM Initialization (@0x0232 value) =====");
   if (mem230 !== 16'h0000) tb_error("====== RAM Initialization (@0x0230 value) =====");
 
-
   // Addressing mode: Rn
   @(r15 == 16'h2000);
   if (r1 !== (`PER_SIZE + 16'h004E)) tb_error("====== PUSH (Rn mode): SP value      =====");
@@ -86,7 +85,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== PUSH (Rn mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (Rn mode): @0x0230 value =====");
 
-
   // Addressing mode: @Rn
   @(r15 == 16'h3000);
   if (r1 !== (`PER_SIZE + 16'h004A)) tb_error("====== PUSH (@Rn mode): SP value      =====");
@@ -107,7 +105,6 @@ initial begin
   if (mem234 !== 16'h0000) tb_error("====== PUSH (@Rn mode): @0x0234 value =====");
   if (mem232 !== 16'h0000) tb_error("====== PUSH (@Rn mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (@Rn mode): @0x0230 value =====");
-
 
   // Addressing mode: @Rn+
   @(r15 == 16'h4000);
@@ -131,7 +128,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== PUSH (@Rn+ mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (@Rn+ mode): @0x0230 value =====");
 
-
   // Addressing mode: X(Rn)
   @(r15 == 16'h5000);
   if (r1 !== (`PER_SIZE + 16'h0042)) tb_error("====== PUSH (X(Rn) mode): SP value      =====");
@@ -152,7 +148,6 @@ initial begin
   if (mem234 !== 16'h0000) tb_error("====== PUSH (X(Rn) mode): @0x0234 value =====");
   if (mem232 !== 16'h0000) tb_error("====== PUSH (X(Rn) mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (X(Rn) mode): @0x0230 value =====");
-
 
   // Addressing mode: EDE
   @(r15 == 16'h6000);
@@ -175,7 +170,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== PUSH (EDE mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (EDE mode): @0x0230 value =====");
 
-
   // Addressing mode: &EDE
   @(r15 == 16'h7000);
   if (r1 !== (`PER_SIZE + 16'h003A)) tb_error("====== PUSH (&EDE mode): SP value      =====");
@@ -197,7 +191,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== PUSH (&EDE mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (&EDE mode): @0x0230 value =====");
 
-
   // Addressing mode: #N
   @(r15 == 16'h7001);
   if (r1 !== (`PER_SIZE + 16'h0036)) tb_error("====== PUSH (#N mode): SP value      =====");
@@ -218,7 +211,6 @@ initial begin
   if (mem234 !== 16'h0000) tb_error("====== PUSH (#N mode): @0x0234 value =====");
   if (mem232 !== 16'h0000) tb_error("====== PUSH (#N mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH (#N mode): @0x0230 value =====");
-
 
   // -------------- TEST INSTRUCTION IN BYTE MODE -------------------
 
@@ -243,7 +235,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== RAM Initialization (@0x0232 value) =====");
   if (mem230 !== 16'h0000) tb_error("====== RAM Initialization (@0x0230 value) =====");
 
-
   // Addressing mode: Rn
   @(r15 == 16'h9000);
   if (r1 !== (`PER_SIZE + 16'h004E)) tb_error("====== PUSH.B (Rn mode): SP value      =====");
@@ -265,7 +256,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== PUSH.B (Rn mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH.B (Rn mode): @0x0230 value =====");
 
-
   // Addressing mode: @Rn
   @(r15 == 16'hA000);
   if (r1 !== (`PER_SIZE + 16'h004A)) tb_error("====== PUSH.B (@Rn mode): SP value      =====");
@@ -286,7 +276,6 @@ initial begin
   if (mem234 !== 16'h0000) tb_error("====== PUSH.B (@Rn mode): @0x0234 value =====");
   if (mem232 !== 16'h0000) tb_error("====== PUSH.B (@Rn mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH.B (@Rn mode): @0x0230 value =====");
-
 
   // Addressing mode: @Rn+
   @(r15 == 16'hB000);
@@ -310,7 +299,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== PUSH.B (@Rn+ mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH.B (@Rn+ mode): @0x0230 value =====");
 
-
   // Addressing mode: X(Rn)
   @(r15 == 16'hC000);
   if (r1 !== (`PER_SIZE + 16'h0042)) tb_error("====== PUSH.B (X(Rn) mode): SP value      =====");
@@ -331,7 +319,6 @@ initial begin
   if (mem234 !== 16'h0000) tb_error("====== PUSH.B (X(Rn) mode): @0x0234 value =====");
   if (mem232 !== 16'h0000) tb_error("====== PUSH.B (X(Rn) mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH.B (X(Rn) mode): @0x0230 value =====");
-
 
   // Addressing mode: EDE
   @(r15 == 16'hD000);
@@ -354,7 +341,6 @@ initial begin
   if (mem232 !== 16'h0000) tb_error("====== PUSH.B (EDE mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH.B (EDE mode): @0x0230 value =====");
 
-
   // Addressing mode: &EDE
   @(r15 == 16'hE000);
   if (r1 !== (`PER_SIZE + 16'h003A)) tb_error("====== PUSH.B (&EDE mode): SP value      =====");
@@ -375,7 +361,6 @@ initial begin
   if (mem234 !== 16'h0000) tb_error("====== PUSH.B (&EDE mode): @0x0234 value =====");
   if (mem232 !== 16'h0000) tb_error("====== PUSH.B (&EDE mode): @0x0232 value =====");
   if (mem230 !== 16'h0000) tb_error("====== PUSH.B (&EDE mode): @0x0230 value =====");
-
 
   // Addressing mode: #N
   @(r15 == 16'hF000);
@@ -493,7 +478,6 @@ initial begin
   if (mem22C !== 16'h71d9) tb_error("====== PUSH @SR : @0x022C value =====");
   if (mem22A !== 16'h178d) tb_error("====== PUSH @SR : @0x022A value =====");
   if (mem228 !== 16'h0000) tb_error("====== PUSH @SR : @0x0228 value =====");
-
 
   // -------------- TEST POP INSTRUCTION WITH SR AS ARGUMENT -------------------
 

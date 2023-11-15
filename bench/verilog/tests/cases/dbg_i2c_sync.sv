@@ -70,7 +70,6 @@ initial begin
     I2C_PERIOD = 600 + 1 * ii;
     $display("Synchronisation test for DBG_I2C_PERIOD = %5d ns  /  ii = %-d", I2C_PERIOD, ii);
 
-
     // READ CPU_ID
     dbg_i2c_rd(CPU_ID_LO);
     if (dbg_i2c_buf !== dbg_cpu_id[15:0]) begin
@@ -110,7 +109,6 @@ initial begin
       end
     end
   end
-
 
   //--------------------------------------------------------
   // END OF TEST

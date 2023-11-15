@@ -172,7 +172,6 @@ module pu_msp430_alu (
   wire [16:0] alu_swpb = {1'b0, op_src[7:0], op_src[15:8]};
   wire [16:0] alu_sxt = {1'b0, {8{op_src[7]}}, op_src[7:0]};
 
-
   // Combine short paths toghether to simplify final ALU mux
   wire alu_short_thro = ~(inst_alu[`ALU_AND] | inst_alu[`ALU_OR] | inst_alu[`ALU_XOR] | inst_alu[`ALU_SHIFT] | inst_so[`SWPB] | inst_so[`SXT]);
 

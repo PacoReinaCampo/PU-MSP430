@@ -51,7 +51,6 @@ initial begin
   stimulus_done = 0;
   i             = 0;
 
-
   for (i = 0; i < 'h10000; i = i + 1) begin
     @(r15);
     result = r8_s * r9_s;
@@ -76,7 +75,6 @@ initial begin
 
     if (r15[7:0] == 8'h00) $display("OP2 = 0x%h done", r9);
   end
-
 
 
   stimulus_done = 1;

@@ -35,7 +35,6 @@
 // $LastChangedDate: 2011-02-24 21:37:57 +0100 (Thu, 24 Feb 2011) $         
 ////////////////////////////////////////////////////////////////////////////////
 
-
 integer test_nr;
 integer test_var;
 
@@ -44,7 +43,6 @@ always @(negedge dco_clk) dco_clk_counter <= dco_clk_counter + 1;
 
 integer dbg_clk_counter;
 always @(negedge dbg_clk) dbg_clk_counter <= dbg_clk_counter + 1;
-
 
 initial begin
   $display(" ===============================================");
@@ -74,7 +72,6 @@ initial begin
   if (dbg_rst == 1'b0) tb_error("====== DBG_RST signal is not active (test 3) =====");
   test_var = r14;
 
-
   // Make sure that enabling the debug interface after the POR
   // don't stop the cpu
   // Also make sure that the debug interface clock is running
@@ -89,7 +86,6 @@ initial begin
   if (r14 === test_var[15:0]) tb_error("====== CPU is stopped when the debug interface is disabled after POR - test 4 =====");
   if (dbg_clk_counter == 0) tb_error("====== DBG_CLK is not running (test 5) =====");
   if (dbg_rst !== 1'b0) tb_error("====== DBG_RST signal is active (test 6) =====");
-
 
   // Make sure that disabling the CPU with debug enabled
   // will stop the CPU
@@ -111,7 +107,6 @@ initial begin
 
   cpu_en = 1;
   repeat (6) @(negedge dco_clk);
-
 
   // Create POR with debug enable and observe the
   // behavior depending on the DBG_RST_BRK_EN define
@@ -142,7 +137,6 @@ initial begin
   if (dbg_uart_buf !== 16'h0010) tb_error("====== CPU_CTL wrong reset value -  test 4 =====");
 `endif
 
-
   // Make sure that DBG_EN resets the debug interface
   //--------------------------------------------------------
   test_nr = 5;
@@ -158,9 +152,7 @@ initial begin
   dbg_uart_rd(MEM_DATA);
   if (dbg_uart_buf !== 16'haa55) tb_error("====== MEM_DATA write access failed - test 6 =====");
 
-
   test_var = r14;  // Backup the current register value
-
 
   @(posedge dco_clk);  // Resets the debug interface
   dbg_en = 1'b0;
@@ -183,7 +175,6 @@ initial begin
 `endif
   dbg_uart_rd(MEM_DATA);
   if (dbg_uart_buf !== 16'h0000) tb_error("====== MEM_DATA read access failed - test 9 =====");
-
 
   // Make sure that RESET_N resets the debug interface
   //--------------------------------------------------------
@@ -225,7 +216,6 @@ initial begin
 `endif
   dbg_uart_rd(MEM_DATA);
   if (dbg_uart_buf !== 16'h0000) tb_error("====== MEM_DATA read access failed - test 9 =====");
-
 
   // Let the CPU run
   dbg_uart_wr(CPU_CTL, 16'h0002);

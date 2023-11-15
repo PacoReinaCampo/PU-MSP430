@@ -999,7 +999,6 @@ module pu_msp430_frontend (
 
   wire alu_add = inst_to_nxt[`ADD] | inst_to_nxt[`ADDC] | inst_to_nxt[`SUB] | inst_to_nxt[`SUBC] | inst_to_nxt[`CMP] | inst_type_nxt[`INST_JMP] | inst_so_nxt[`RETI];
 
-
   wire alu_and = inst_to_nxt[`ANDX] | inst_to_nxt[`BIC] | inst_to_nxt[`BITC];
 
   wire alu_or = inst_to_nxt[`BIS];

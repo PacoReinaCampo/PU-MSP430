@@ -60,11 +60,9 @@ initial begin
   repeat (30) @(posedge mclk);
   stimulus_done = 0;
 
-
 `ifdef DBG_RST_BRK_EN
   dbg_i2c_wr(CPU_CTL, 16'h0002);  // RUN
 `endif
-
 
   // TEST CPU REGISTERS
   //--------------------------------------------------------
@@ -116,7 +114,6 @@ initial begin
   dbg_i2c_rd(CPU_CTL);
   if (dbg_i2c_buf !== 16'h0000) tb_error("====== CPU_CTL uncorrect =====");
 
-
   // TEST MEMORY CONTROL REGISTERS
   //--------------------------------------------------------
   step = 2;
@@ -148,7 +145,6 @@ initial begin
   dbg_i2c_wr(MEM_CNT, 16'h0000);
   dbg_i2c_rd(MEM_CNT);
   if (dbg_i2c_buf !== 16'h0000) tb_error("====== MEM_CNT uncorrect =====");
-
 
   // TEST HARDWARE BREAKPOINT 0 REGISTERS
   //--------------------------------------------------------
@@ -340,7 +336,6 @@ initial begin
   dbg_i2c_rx16(1);  // read 5th data
   if (dbg_i2c_buf !== 16'h0fed) tb_error("====== 16B WRITE BURSTS (MEMORY) RD ERROR: 5th DATA =====");
 
-
   // TEST 16B WRITE BURSTS (CPU REGISTERS)
   //--------------------------------------------------------
   step = 9;
@@ -382,7 +377,6 @@ initial begin
   if (dbg_i2c_buf !== 16'h0123) tb_error("====== 16B WRITE BURSTS (CPU REGISTERS) RD ERROR: 4th DATA =====");
   dbg_i2c_rx16(1);  // read 5th data
   if (dbg_i2c_buf !== 16'h4567) tb_error("====== 16B WRITE BURSTS (CPU REGISTERS) RD ERROR: 5th DATA =====");
-
 
   // TEST 8B WRITE BURSTS (MEMORY)
   //--------------------------------------------------------
@@ -426,7 +420,6 @@ initial begin
   if (dbg_i2c_buf !== 16'h0064) tb_error("====== 8B WRITE BURSTS (MEMORY) RD ERROR: 4th DATA =====");
   dbg_i2c_rx8(1);  // read 5th data
   if (dbg_i2c_buf !== 16'h0055) tb_error("====== 8B WRITE BURSTS (MEMORY) RD ERROR: 5th DATA =====");
-
 
   dbg_i2c_wr(CPU_CTL, 16'h0002);
   repeat (10) @(posedge mclk);

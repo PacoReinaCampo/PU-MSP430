@@ -92,7 +92,6 @@ initial begin
   repeat (80) @(posedge mclk);
   if (smclk_cnt !== 16'h000a) tb_error("====== SCG1 TEST 5: SMCLK IS NOT RUNNING =====");
 
-
   // OSCOFF  (<=> R2[5]): turn off LFXT1CLK
   //--------------------------------------------------------
 
@@ -140,7 +139,6 @@ initial begin
   repeat (104) @(posedge mclk);
   if (aclk_cnt !== 16'h0003) tb_error("====== OSCOFF TEST 6: ACLK  IS NOT RUNNING =====");
   if (smclk_cnt !== 16'h0068) tb_error("====== OSCOFF TEST 6: SMCLK IS NOT RUNNING ON MCLK =====");
-
 
   // CPUOFF  (<=> R2[4]): turn off CPU
   //--------------------------------------------------------

@@ -255,7 +255,6 @@ module pu_msp430_register_file (
   assign scg0   = r2[6];
   assign scg1   = r2[7];
 
-
   // R3: Constant generator
   // Note: the auto-increment feature is not implemented for R3
   //       because the @R3+ addressing mode is used for constant

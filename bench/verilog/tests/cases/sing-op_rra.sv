@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // RRA (WORD MODE)
   //--------------------------------------------------------
 
@@ -58,7 +57,6 @@ initial begin
 
   if (r10 !== 16'hc199) tb_error("====== RRA (Rn mode): test 4 (result) =====");
   if (r11 !== 16'h0005) tb_error("====== RRA (Rn mode): test 4 (C flag) =====");
-
 
   // Addressing mode: @Rn
   @(r15 == 16'h2000);
@@ -78,7 +76,6 @@ initial begin
   if (r10 !== (`PER_SIZE + 16'h0006)) tb_error("====== RRA (@Rn mode): test 4 (address) =====");
   if (r11 !== 16'h0005) tb_error("====== RRA (@Rn mode): test 4 (C flag)  =====");
 
-
   // Addressing mode: @Rn+
   @(r15 == 16'h3000);
   if (mem208 !== 16'h3999) tb_error("====== RRA (@Rn+ mode): test 1 (result)  =====");
@@ -97,7 +94,6 @@ initial begin
   if (r10 !== (`PER_SIZE + 16'h0010)) tb_error("====== RRA (@Rn+ mode): test 4 (address) =====");
   if (r11 !== 16'h0005) tb_error("====== RRA (@Rn+ mode): test 4 (C flag)  =====");
 
-
   // Addressing mode: X(Rn)
   @(r15 == 16'h4000);
   if (mem210 !== 16'h3999) tb_error("====== RRA (X(Rn) mode): test 1 (result)  =====");
@@ -111,7 +107,6 @@ initial begin
 
   if (mem216 !== 16'hc199) tb_error("====== RRA (X(Rn) mode): test 4 (result)  =====");
   if (r11 !== 16'h0005) tb_error("====== RRA (X(Rn) mode): test 4 (C flag)  =====");
-
 
   // Addressing mode: EDE
   @(r15 == 16'h5000);
@@ -127,7 +122,6 @@ initial begin
   if (mem21E !== 16'hc199) tb_error("====== RRA (EDE mode): test 4 (result)  =====");
   if (r11 !== 16'h0005) tb_error("====== RRA (EDE mode): test 4 (C flag)  =====");
 
-
   // Addressing mode: &EDE
   @(r15 == 16'h6000);
   if (mem220 !== 16'h3999) tb_error("====== RRA (&EDE mode): test 1 (result)  =====");
@@ -142,11 +136,9 @@ initial begin
   if (mem226 !== 16'hc199) tb_error("====== RRA (&EDE mode): test 4 (result)  =====");
   if (r11 !== 16'h0005) tb_error("====== RRA (&EDE mode): test 4 (C flag)  =====");
 
-
   // Clear Memory
   //--------------------------------------------------------
   @(r15 == 16'h7000);
-
 
   // RRA (BYTE MODE)
   //--------------------------------------------------------
@@ -164,7 +156,6 @@ initial begin
 
   if (r10 !== 16'h00c1) tb_error("====== RRA.B (Rn mode): test 4 (result) =====");
   if (r11 !== 16'h0005) tb_error("====== RRA.B (Rn mode): test 4 (C flag) =====");
-
 
   // Addressing mode: @Rn (low byte)
   @(r15 == 16'h9000);
@@ -202,7 +193,6 @@ initial begin
   if (r10 !== (`PER_SIZE + 16'h000F)) tb_error("====== RRA.B (@Rn mode): test 4, high byte (address) =====");
   if (r11 !== 16'h0005) tb_error("====== RRA.B (@Rn mode): test 4, high byte (C flag)  =====");
 
-
   // Addressing mode: @Rn+ (low byte)
   @(r15 == 16'hA000);
   if (mem210 !== 16'h2539) tb_error("====== RRA.B (@Rn+ mode): test 1, low byte (result)  =====");
@@ -238,7 +228,6 @@ initial begin
   if (mem21E !== 16'hc125) tb_error("====== RRA.B (@Rn+ mode): test 4, high byte (result)  =====");
   if (r10 !== (`PER_SIZE + 16'h0020)) tb_error("====== RRA.B (@Rn+ mode): test 4, high byte (address) =====");
   if (r11 !== 16'h0005) tb_error("====== RRA.B (@Rn+ mode): test 4, high byte (C flag)  =====");
-
 
   // Addressing mode: X(Rn) (low byte)
   @(r15 == 16'hB000);
@@ -295,7 +284,6 @@ initial begin
 
   if (mem23E !== 16'hc125) tb_error("====== RRA.B (EDE mode): test 4, high byte (result)  =====");
   if (r11 !== 16'h0005) tb_error("====== RRA.B (EDE mode): test 4, high byte (C flag)  =====");
-
 
   // Addressing mode: &EDE (low byte)
   @(r15 == 16'hD000);

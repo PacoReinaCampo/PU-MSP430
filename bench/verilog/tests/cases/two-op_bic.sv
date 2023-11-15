@@ -41,7 +41,6 @@ initial begin
   repeat (5) @(posedge mclk);
   stimulus_done = 0;
 
-
   // BIC (WORD MODE)
   //--------------------------------------------------------
   @(r15 == 16'h1000);
@@ -49,14 +48,12 @@ initial begin
   if (r5 !== 16'h5555) tb_error("====== BIC Test =====");
   if (r6 !== 16'haaaa) tb_error("====== BIC Test =====");
 
-
   // BIC.B (BYTE MODE)
   //--------------------------------------------------------
   @(r15 == 16'h2000);
 
   if (r5 !== 16'h0088) tb_error("====== BIC.B Test =====");
   if (r6 !== 16'h0022) tb_error("====== BIC.B Test =====");
-
 
   // BIC (WORD MODE): Check Flags
   //--------------------------------------------------------
@@ -69,7 +66,6 @@ initial begin
   if (r2 !== 16'h0102) tb_error("====== BIC FLAG: Flag   check error =====");
   if (r5 !== 16'h0444) tb_error("====== BIC FLAG: Result check error =====");
 
-
   // BIC.B (BYTE MODE): Check Flags
   //--------------------------------------------------------
 
@@ -80,7 +76,6 @@ initial begin
   @(r15 == 16'h4001);
   if (r2 !== 16'h0102) tb_error("====== BIC.B FLAG: Flag   check error =====");
   if (r5 !== 16'h0004) tb_error("====== BIC.B FLAG: Result check error =====");
-
 
   stimulus_done = 1;
 end

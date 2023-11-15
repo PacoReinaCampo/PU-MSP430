@@ -55,7 +55,6 @@ initial begin
   if (mem20A !== 16'h55aa) tb_error("====== P1IE  != 0x55aa =====");
   if (mem20C !== 16'h32cd) tb_error("====== P1SEL != 0x32cd =====");
 
-
   // PORT 2: TEST RD/WR REGISTER ACCESS
   //--------------------------------------------------------
   @(r15 == 16'h0002);
@@ -68,7 +67,6 @@ initial begin
   if (mem21A !== 16'h55aa) tb_error("====== P2IE  != 0x55aa =====");
   if (mem21C !== 16'h32cd) tb_error("====== P2SEL != 0x32cd =====");
 
-
   // PORT 3: TEST RD/WR REGISTER ACCESS
   //--------------------------------------------------------
   @(r15 == 16'h0003);
@@ -77,7 +75,6 @@ initial begin
   if (mem222 !== 16'h55aa) tb_error("====== P3OUT != 0x55aa =====");
   if (mem224 !== 16'ha55a) tb_error("====== P3DIR != 0xa55a =====");
   if (mem226 !== 16'h32cd) tb_error("====== P3SEL != 0x32cd =====");
-
 
   // PORT 4: TEST RD/WR REGISTER ACCESS
   //--------------------------------------------------------
@@ -88,7 +85,6 @@ initial begin
   if (mem234 !== 16'ha55a) tb_error("====== P4DIR != 0xa55a =====");
   if (mem236 !== 16'h32cd) tb_error("====== P4SEL != 0x32cd =====");
 
-
   // PORT 5: TEST RD/WR REGISTER ACCESS
   //--------------------------------------------------------
   @(r15 == 16'h0005);
@@ -98,7 +94,6 @@ initial begin
   if (mem244 !== 16'ha55a) tb_error("====== P5DIR != 0xa55a =====");
   if (mem246 !== 16'h32cd) tb_error("====== P5SEL != 0x32cd =====");
 
-
   // PORT 6: TEST RD/WR REGISTER ACCESS
   //--------------------------------------------------------
   @(r15 == 16'h0006);
@@ -107,7 +102,6 @@ initial begin
   if (mem252 !== 16'h55aa) tb_error("====== P6OUT != 0x55aa =====");
   if (mem254 !== 16'ha55a) tb_error("====== P6DIR != 0xa55a =====");
   if (mem256 !== 16'h32cd) tb_error("====== P6SEL != 0x32cd =====");
-
 
   // PORT 1: TEST I/O FUNCTIONALITY
   //--------------------------------------------------------
@@ -177,7 +171,6 @@ initial begin
   @(r15 == 16'h1307);
   if (p1_sel !== 8'h80) tb_error("====== P1SEL  != 0x80 =====");
 
-
   // PORT 2: TEST I/O FUNCTIONALITY
   //--------------------------------------------------------
 
@@ -245,7 +238,6 @@ initial begin
   if (p2_sel !== 8'h40) tb_error("====== P2SEL  != 0x40 =====");
   @(r15 == 16'h2307);
   if (p2_sel !== 8'h80) tb_error("====== P2SEL  != 0x80 =====");
-
 
   // PORT 3: TEST I/O FUNCTIONALITY
   //--------------------------------------------------------
@@ -315,7 +307,6 @@ initial begin
   @(r15 == 16'h3307);
   if (p3_sel !== 8'h80) tb_error("====== P3SEL  != 0x80 =====");
 
-
   // PORT 4: TEST I/O FUNCTIONALITY
   //--------------------------------------------------------
 
@@ -383,7 +374,6 @@ initial begin
   if (p4_sel !== 8'h40) tb_error("====== P4SEL  != 0x40 =====");
   @(r15 == 16'h4307);
   if (p4_sel !== 8'h80) tb_error("====== P4SEL  != 0x80 =====");
-
 
   // PORT 5: TEST I/O FUNCTIONALITY
   //--------------------------------------------------------
@@ -453,7 +443,6 @@ initial begin
   @(r15 == 16'h5307);
   if (p5_sel !== 8'h80) tb_error("====== P5SEL  != 0x80 =====");
 
-
   // PORT 6: TEST I/O FUNCTIONALITY
   //--------------------------------------------------------
 
@@ -521,7 +510,6 @@ initial begin
   if (p6_sel !== 8'h40) tb_error("====== P6SEL  != 0x40 =====");
   @(r15 == 16'h6307);
   if (p6_sel !== 8'h80) tb_error("====== P6SEL  != 0x80 =====");
-
 
   stimulus_done = 1;
 end

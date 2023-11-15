@@ -114,7 +114,6 @@ initial begin
   dbg_uart_rd(CPU_CTL);
   if (dbg_uart_buf !== 16'h0000) tb_error("====== CPU_CTL uncorrect =====");
 
-
   // TEST MEMORY CONTROL REGISTERS
   //--------------------------------------------------------
 
@@ -145,7 +144,6 @@ initial begin
   dbg_uart_wr(MEM_CNT, 16'h0000);
   dbg_uart_rd(MEM_CNT);
   if (dbg_uart_buf !== 16'h0000) tb_error("====== MEM_CNT uncorrect =====");
-
 
   // TEST HARDWARE BREAKPOINT 0 REGISTERS
   //--------------------------------------------------------
@@ -329,7 +327,6 @@ initial begin
   dbg_uart_rx16;  // read 5th data
   if (dbg_uart_buf !== 16'h0fed) tb_error("====== 16B WRITE BURSTS (MEMORY) RD ERROR: 5th DATA =====");
 
-
   // TEST 16B WRITE BURSTS (CPU REGISTERS)
   //--------------------------------------------------------
 
@@ -368,7 +365,6 @@ initial begin
   dbg_uart_rx16;  // read 5th data
   if (dbg_uart_buf !== 16'h4567) tb_error("====== 16B WRITE BURSTS (CPU REGISTERS) RD ERROR: 5th DATA =====");
 
-
   // TEST 8B WRITE BURSTS (MEMORY)
   //--------------------------------------------------------
 
@@ -406,8 +402,6 @@ initial begin
   if (dbg_uart_buf !== 16'h0064) tb_error("====== 8B WRITE BURSTS (MEMORY) RD ERROR: 4th DATA =====");
   dbg_uart_rx8;  // read 5th data
   if (dbg_uart_buf !== 16'h0055) tb_error("====== 8B WRITE BURSTS (MEMORY) RD ERROR: 5th DATA =====");
-
-
 
 
 
