@@ -535,7 +535,7 @@ begin
       per_addr => per_addr,             -- Peripheral address
       per_din  => per_din,              -- Peripheral data input
       per_en   => per_en,               -- Peripheral enable (high active)
-      per_we   => per_we,         -- Peripheral write enable (high active)
+      per_we   => per_we,               -- Peripheral write enable (high active)
       puc_rst  => puc_rst_omsp);        -- Main system reset
 
   -- Assign LEDs
@@ -550,7 +550,7 @@ begin
     port map (
       -- OUTPUTs
       irq_ta0    => irq_ta0,            -- Timer A interrupt: TACCR0
-      irq_ta1    => irq_ta1,      -- Timer A interrupt: TAIV, TACCR1, TACCR2
+      irq_ta1    => irq_ta1,            -- Timer A interrupt: TAIV, TACCR1, TACCR2
       per_dout   => per_dout_tA,        -- Peripheral data output
       ta_out0    => open,               -- Timer A output 0
       ta_out0_en => open,               -- Timer A output 0 enable
@@ -570,7 +570,7 @@ begin
       per_addr    => per_addr,          -- Peripheral address
       per_din     => per_din,           -- Peripheral data input
       per_en      => per_en,            -- Peripheral enable (high active)
-      per_we      => per_we,        -- Peripheral write enable (high active)
+      per_we      => per_we,            -- Peripheral write enable (high active)
       puc_rst     => puc_rst_omsp,      -- Main system reset
       smclk_en    => smclk_en,          -- SMCLK enable (from CPU)
       ta_cci0a    => '0',               -- Timer A capture 0 input A
@@ -596,14 +596,14 @@ begin
       din      => din_x,                -- SPI Serial Data
       per_dout => per_dout_dac_x,       -- Peripheral data output
       sclk     => sclk_x,               -- SPI Serial Clock
-      sync_n   => sync_n_x,  -- SPI Frame synchronization signal (low active)
+      sync_n   => sync_n_x,             -- SPI Frame synchronization signal (low active)
 
       -- INPUTs
       mclk     => mclk,                 -- Main system clock
       per_addr => per_addr,             -- Peripheral address
       per_din  => per_din,              -- Peripheral data input
       per_en   => per_en,               -- Peripheral enable (high active)
-      per_we   => per_we,    -- Peripheral write enable (high active)
+      per_we   => per_we,               -- Peripheral write enable (high active)
       puc_rst  => puc_rst);             -- Main system reset
 
   msp430_dac_y : pu_msp430_dac
@@ -620,14 +620,14 @@ begin
       din      => din_y,                -- SPI Serial Data
       per_dout => per_dout_dac_y,       -- Peripheral data output
       sclk     => sclk_y,               -- SPI Serial Clock
-      sync_n   => sync_n_y,  -- SPI Frame synchronization signal (low active)
+      sync_n   => sync_n_y,             -- SPI Frame synchronization signal (low active)
 
       -- INPUTs
       mclk     => mclk,                 -- Main system clock
       per_addr => per_addr,             -- Peripheral address
       per_din  => per_din,              -- Peripheral data input
       per_en   => per_en,               -- Peripheral enable (high active)
-      per_we   => per_we,    -- Peripheral write enable (high active)
+      per_we   => per_we,               -- Peripheral write enable (high active)
       puc_rst  => puc_rst);             -- Main system reset
 
   -- Combine peripheral data buses
@@ -635,20 +635,20 @@ begin
 
   -- Assign interrupts
   nmi <= '0';
-  irq_bus <= ('0' &                     -- Vector 13  (0xFFFA)
-              '0' &                     -- Vector 12  (0xFFF8)
-              '0' &                     -- Vector 11  (0xFFF6)
-              '0' &                     -- Vector 10  (0xFFF4) - Watchdog -
-              '0' &  -- Vector  9  (0xFFF2) - Reserved (Timer-A 0 from system 0)
-              '0' &  -- Vector  8  (0xFFF0) - Reserved (Timer-A 1 from system 0)
-              '0' &  -- Vector  7  (0xFFEE) - Reserved (UART RX from system 0)
-              '0' &  -- Vector  6  (0xFFEC) - Reserved (UART TX from system 0)
-              irq_ta0 &                 -- Vector  5  (0xFFEA)
-              irq_ta1 &                 -- Vector  4  (0xFFE8)
-              '0' &  -- Vector  3  (0xFFE6) - Reserved (Port 2 from system 0)
-              '0' &  -- Vector  2  (0xFFE4) - Reserved (Port 1 from system 0)
-              irq_port2 &               -- Vector  1  (0xFFE2)
-              irq_port1);               -- Vector  0  (0xFFE0)
+  irq_bus <= ('0' &        -- Vector 13  (0xFFFA)
+              '0' &        -- Vector 12  (0xFFF8)
+              '0' &        -- Vector 11  (0xFFF6)
+              '0' &        -- Vector 10  (0xFFF4) - Watchdog -
+              '0' &        -- Vector  9  (0xFFF2) - Reserved (Timer-A 0 from system 0)
+              '0' &        -- Vector  8  (0xFFF0) - Reserved (Timer-A 1 from system 0)
+              '0' &        -- Vector  7  (0xFFEE) - Reserved (UART RX from system 0)
+              '0' &        -- Vector  6  (0xFFEC) - Reserved (UART TX from system 0)
+              irq_ta0 &    -- Vector  5  (0xFFEA)
+              irq_ta1 &    -- Vector  4  (0xFFE8)
+              '0' &        -- Vector  3  (0xFFE6) - Reserved (Port 2 from system 0)
+              '0' &        -- Vector  2  (0xFFE4) - Reserved (Port 1 from system 0)
+              irq_port2 &  -- Vector  1  (0xFFE2)
+              irq_port1);  -- Vector  0  (0xFFE0)
 
   mclk    <= mclk_omsp;
   puc_rst <= puc_rst_omsp;
