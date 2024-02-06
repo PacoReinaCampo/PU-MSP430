@@ -389,7 +389,7 @@ module pu_msp430_testbench;
     .GPIO_DIP3(SW3),
     .GPIO_DIP4(SW4),
 
-    // User LEDs			
+    // User LEDs
     .GPIO_LED1(LED1),
     .GPIO_LED2(LED2),
     .GPIO_LED3(LED3),
