@@ -42,8 +42,21 @@ interface peripheral_design_if (
   input logic rst
 );
 
-  logic [7:0] ip1;
-  logic [7:0] ip2;
+  // Core 0: Debug Signals
+  logic [8*32-1:0] omsp0_i_state;
+  logic [8*32-1:0] omsp0_e_state;
+  logic [    31:0] omsp0_inst_cycle;
+  logic [8*32-1:0] omsp0_inst_full;
+  logic [    31:0] omsp0_inst_number;
+  logic [    15:0] omsp0_inst_pc;
+  logic [8*32-1:0] omsp0_inst_short;
 
-  logic [8:0] out;
+  // Core 1: Debug Signals
+  logic [8*32-1:0] omsp1_i_state;
+  logic [8*32-1:0] omsp1_e_state;
+  logic [    31:0] omsp1_inst_cycle;
+  logic [8*32-1:0] omsp1_inst_full;
+  logic [    31:0] omsp1_inst_number;
+  logic [    15:0] omsp1_inst_pc;
+  logic [8*32-1:0] omsp1_inst_short;
 endinterface

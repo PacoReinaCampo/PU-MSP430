@@ -38,17 +38,26 @@
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 class peripheral_uvm_monitor extends uvm_monitor;
-  virtual peripheral_design_if                      vif;
+  // Virtual Interface
+  virtual peripheral_design_if vif;
+
+  // UVM analysis port
   uvm_analysis_port #(peripheral_uvm_sequence_item) item_collect_port;
-  peripheral_uvm_sequence_item                      monitor_item;
+
+  // Sequence Item method instantiation
+  peripheral_uvm_sequence_item monitor_item;
+
+  // Utility declaration
   `uvm_component_utils(peripheral_uvm_monitor)
 
+  // Constructor
   function new(string name = "monitor", uvm_component parent = null);
     super.new(name, parent);
     item_collect_port = new("item_collect_port", this);
     monitor_item      = new();
   endfunction
 
+  // Build phase
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
     if (!uvm_config_db#(virtual peripheral_design_if)::get(this, "", "vif", vif)) begin
@@ -56,16 +65,42 @@ class peripheral_uvm_monitor extends uvm_monitor;
     end
   endfunction
 
+  // Run phase
   task run_phase(uvm_phase phase);
     forever begin
-      wait (!vif.rst);
-      @(posedge vif.clk);
-      monitor_item.ip1 = vif.ip1;
-      monitor_item.ip2 = vif.ip2;
-      `uvm_info(get_type_name, $sformatf("ip1 = %0d, ip2 = %0d", monitor_item.ip1, monitor_item.ip2), UVM_HIGH);
-      @(posedge vif.clk);
-      monitor_item.out = vif.out;
+      // Core 0: Debug Signals
+      degug_phase_0();
+
+      // Core 1: Debug Signals
+      degug_phase_1();
+
       item_collect_port.write(monitor_item);
+    end
+  endtask
+
+  // Task: Core 0: Debug Signals
+  task degug_phase_0;
+    begin
+      monitor_item.omsp0_i_state     <= vif.omsp0_i_state;
+      monitor_item.omsp0_e_state     <= vif.omsp0_e_state;
+      monitor_item.omsp0_inst_cycle  <= vif.omsp0_inst_cycle;
+      monitor_item.omsp0_inst_full   <= vif.omsp0_inst_full;
+      monitor_item.omsp0_inst_number <= vif.omsp0_inst_number;
+      monitor_item.omsp0_inst_pc     <= vif.omsp0_inst_pc;
+      monitor_item.omsp0_inst_short  <= vif.omsp0_inst_short;
+    end
+  endtask
+
+  // Task: Core 1: Debug Signals
+  task degug_phase_1;
+    begin
+      monitor_item.omsp1_i_state     <= vif.omsp1_i_state;
+      monitor_item.omsp1_e_state     <= vif.omsp1_e_state;
+      monitor_item.omsp1_inst_cycle  <= vif.omsp1_inst_cycle;
+      monitor_item.omsp1_inst_full   <= vif.omsp1_inst_full;
+      monitor_item.omsp1_inst_number <= vif.omsp1_inst_number;
+      monitor_item.omsp1_inst_pc     <= vif.omsp1_inst_pc;
+      monitor_item.omsp1_inst_short  <= vif.omsp1_inst_short;
     end
   endtask
 endclass

@@ -38,22 +38,51 @@
 //   Paco Reina Campo <pacoreinacampo@queenfield.tech>
 
 class peripheral_uvm_sequence_item extends uvm_sequence_item;
-  rand bit [7:0] ip1;
-  rand bit [7:0] ip2;
+  // Core 0: Debug Signals
+  bit [8*32-1:0] omsp0_i_state;
+  bit [8*32-1:0] omsp0_e_state;
+  bit [    31:0] omsp0_inst_cycle;
+  bit [8*32-1:0] omsp0_inst_full;
+  bit [    31:0] omsp0_inst_number;
+  bit [    15:0] omsp0_inst_pc;
+  bit [8*32-1:0] omsp0_inst_short;
 
-  bit      [8:0] out;
+  // Core 1: Debug Signals
+  bit [8*32-1:0] omsp1_i_state;
+  bit [8*32-1:0] omsp1_e_state;
+  bit [    31:0] omsp1_inst_cycle;
+  bit [8*32-1:0] omsp1_inst_full;
+  bit [    31:0] omsp1_inst_number;
+  bit [    15:0] omsp1_inst_pc;
+  bit [8*32-1:0] omsp1_inst_short;
 
+  // Constructor
   function new(string name = "peripheral_uvm_sequence_item");
     super.new(name);
   endfunction
 
+  // Utility and Field declarations
   `uvm_object_utils_begin(peripheral_uvm_sequence_item)
-    `uvm_field_int(ip1, UVM_ALL_ON)
-    `uvm_field_int(ip2, UVM_ALL_ON)
+
+  // Core 0: Debug Signals
+  `uvm_field_int(omsp0_i_state, UVM_ALL_ON)
+  `uvm_field_int(omsp0_e_state, UVM_ALL_ON)
+  `uvm_field_int(omsp0_inst_cycle, UVM_ALL_ON)
+  `uvm_field_int(omsp0_inst_full, UVM_ALL_ON)
+  `uvm_field_int(omsp0_inst_number, UVM_ALL_ON)
+  `uvm_field_int(omsp0_inst_pc, UVM_ALL_ON)
+  `uvm_field_int(omsp0_inst_short, UVM_ALL_ON)
+
+  // Core 1: Debug Signals
+  `uvm_field_int(omsp1_i_state, UVM_ALL_ON)
+  `uvm_field_int(omsp1_e_state, UVM_ALL_ON)
+  `uvm_field_int(omsp1_inst_cycle, UVM_ALL_ON)
+  `uvm_field_int(omsp1_inst_full, UVM_ALL_ON)
+  `uvm_field_int(omsp1_inst_number, UVM_ALL_ON)
+  `uvm_field_int(omsp1_inst_pc, UVM_ALL_ON)
+  `uvm_field_int(omsp1_inst_short, UVM_ALL_ON)
+
   `uvm_object_utils_end
 
-  constraint ip_c {
-    ip1 < 100;
-    ip2 < 100;
-  }
+  // Constraints
 endclass
