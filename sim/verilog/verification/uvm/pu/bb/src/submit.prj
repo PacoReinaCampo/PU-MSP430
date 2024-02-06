@@ -42,6 +42,50 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
+sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_d1.sv
+sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_d2.sv
+sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_dp.sv
+sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_p2.sv
+sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_sp.sv
+sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_glbl.sv
+sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_debug.sv
+
 sv work ../../../../../../../verification/uvm/library/pu/bb/peripheral_uvm_testbench.sv
 
-sv work ../../../../../../../verification/uvm/application/pu/bb/peripheral_design.sv
+sv work ../../../../../../../rtl/verilog/soc/pu_msp430_soc.sv
+sv work ../../../../../../../rtl/verilog/soc/pu_msp430_io_cell.sv
+
+sv work ../../../../../../../rtl/verilog/core/fuse/pu_msp430_and_gate.sv
+sv work ../../../../../../../rtl/verilog/core/fuse/pu_msp430_clock_gate.sv
+sv work ../../../../../../../rtl/verilog/core/fuse/pu_msp430_clock_mux.sv
+sv work ../../../../../../../rtl/verilog/core/fuse/pu_msp430_scan_mux.sv
+sv work ../../../../../../../rtl/verilog/core/fuse/pu_msp430_sync_cell.sv
+sv work ../../../../../../../rtl/verilog/core/fuse/pu_msp430_sync_reset.sv
+sv work ../../../../../../../rtl/verilog/core/fuse/pu_msp430_wakeup_cell.sv
+
+sv work ../../../../../../../rtl/verilog/core/omsp/pu_msp430_alu.sv
+sv work ../../../../../../../rtl/verilog/core/omsp/pu_msp430_dbg_hwbrk.sv
+sv work ../../../../../../../rtl/verilog/core/omsp/pu_msp430_dbg_i2c.sv
+sv work ../../../../../../../rtl/verilog/core/omsp/pu_msp430_dbg_uart.sv
+sv work ../../../../../../../rtl/verilog/core/omsp/pu_msp430_register_file.sv
+
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_bcm.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_dac.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_dbg.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_execution.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_gpio.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_memory.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_multiplier.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_template08.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_template16.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_uart.sv
+
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_frontend.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_sfr.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_ta.sv
+sv work ../../../../../../../rtl/verilog/core/main/pu_msp430_watchdog.sv
+
+sv work ../../../../../../../rtl/verilog/pu/pu_msp430_core.sv
+sv work ../../../../../../../rtl/verilog/pu/pu_msp430_pu0.sv
+sv work ../../../../../../../rtl/verilog/pu/pu_msp430_pu1.sv
+

@@ -9,14 +9,14 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              Peripheral for MPSoC                                             ##
-##              Multi-Processor System on Chip                                   ##
+##              Architecture                                                     ##
+##              QueenField                                                       ##
 ##                                                                               ##
 ###################################################################################
 
 ###################################################################################
 ##                                                                               ##
-## Copyright (c) 2015-2016 by the author(s)                                      ##
+## Copyright (c) 2019-2020 by the author(s)                                      ##
 ##                                                                               ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy  ##
 ## of this software and associated documentation files (the "Software"), to deal ##
@@ -42,8 +42,18 @@
 ##                                                                               ##
 ###################################################################################
 
-+incdir+../../../../../../../verification/uvm/src
+#!/bin/bash
+source ../../../../../../../settings64_msim.sh
 
-../../../../../../../verification/uvm/library/pu/bb/peripheral_uvm_testbench.sv
+# Enable/Disable waveform dumping
+OMSP_NODUMP=0
+export OMSP_NODUMP
 
-../../../../../../../verification/uvm/application/pu/bb/peripheral_design.sv
+# Choose simulator:
+#                   - iverilog  : Icarus Verilog  (default)
+#                   - msim      : ModelSim
+#                   - isim      : Xilinx Simulator
+OMSP_SIMULATOR=msim
+export OMSP_SIMULATOR
+
+../bin/msp430sim.sh pu_msp430_leds

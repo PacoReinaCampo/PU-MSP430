@@ -9,14 +9,14 @@
 ##                  |_|                                                          ##
 ##                                                                               ##
 ##                                                                               ##
-##              Peripheral for MPSoC                                             ##
-##              Multi-Processor System on Chip                                   ##
+##              Architecture                                                     ##
+##              QueenField                                                       ##
 ##                                                                               ##
 ###################################################################################
 
 ###################################################################################
 ##                                                                               ##
-## Copyright (c) 2015-2016 by the author(s)                                      ##
+## Copyright (c) 2019-2020 by the author(s)                                      ##
 ##                                                                               ##
 ## Permission is hereby granted, free of charge, to any person obtaining a copy  ##
 ## of this software and associated documentation files (the "Software"), to deal ##
@@ -42,14 +42,16 @@
 ##                                                                               ##
 ###################################################################################
 
-all: build simulate
-
-build:
-	xvlog -prj system.prj -L uvm
-
-simulate:
-	xelab peripheral_uvm_testbench -relax -s top -timescale 1ns/1ps
-	xsim top -testplusarg UVM_TESTNAME=peripheral_uvm_test -testplusarg UVM_VERBOSITY=UVM_LOW -runall
-
-clean:
-	rm -rf *.dir *.jou *.log *.pb *.vcd *.wdb
+rm -rf *.jou
+rm -rf *.log
+rm -rf *.pb
+rm -rf log
+rm -rf *.vcd
+rm -rf *.wdb
+rm -rf pmem_defs.asm
+rm -rf pmem.*
+rm -rf simv
+rm -rf stimulus.sv
+rm -rf transcript
+rm -rf work
+rm -rf xsim.dir
