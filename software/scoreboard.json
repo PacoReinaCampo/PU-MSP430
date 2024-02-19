@@ -36,7 +36,7 @@
     },
     {
         "format": "BR dst",
-        "implementation": "Branch to .......",
+        "implementation": "Branch to ...",
         "status": "- - - -"
     },
     {
@@ -196,28 +196,13 @@
     },
     {
         "format": "RETI",
-        "implementation": "Return from interrupt",
+        "implementation": "Return from interrupt, TOS -> SR, SP + 2 -> SP, TOS -> PC, SP + 2 -> SZ",
         "status": "x x x x"
     },
     {
-        "format": "",
-        "implementation": "TOS -> SR, SP + 2 -> SP",
-        "status": ""
-    },
-    {
-        "format": "",
-        "implementation": "TOS -> PC, SP + 2 -> SZP",
-        "status": ""
-    },
-    {
         "format": "RET",
-        "implementation": "Return from subroutine",
+        "implementation": "Return from subroutine, TOS -> PC, SP + 2 -> SP",
         "status": "- - - -"
-    },
-    {
-        "format": "",
-        "implementation": "TOS -> PC, SP + 2 -> SP",
-        "status": ""
     },
     {
         "format": "RLA(.B)  dst",
