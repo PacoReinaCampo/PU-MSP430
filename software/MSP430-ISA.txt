@@ -1,0 +1,4 @@
+Two Operand Instructions
+Single Operand Instructions
+Conditional Jumps
+Emulated Instructions
