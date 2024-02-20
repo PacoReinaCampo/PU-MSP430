@@ -45,9 +45,9 @@
 // Testbench related
 //=============================================================================
 
-../../../../../../../bench/verilog/tests/main/pu_msp430_testbench.sv
-../../../../../../../bench/verilog/tests/main/pu_msp430_ram.sv
-../../../../../../../bench/verilog/tests/main/pu_msp430_debug.sv
+../../../../../../../validation/tasks/verilog/library/main/pu_msp430_testbench.sv
+../../../../../../../validation/tasks/verilog/library/main/pu_msp430_ram.sv
+../../../../../../../validation/tasks/verilog/library/main/pu_msp430_debug.sv
 
 
 //=============================================================================

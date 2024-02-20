@@ -42,13 +42,13 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_d1.sv
-sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_d2.sv
-sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_dp.sv
-sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_p2.sv
-sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_sp.sv
-sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_glbl.sv
-sv work ../../../../../../../bench/verilog/procedures/main/pu_msp430_debug.sv
+sv work ../../../../../../../verification/tasks/verilog/library/main/pu_msp430_ram_d1.sv
+sv work ../../../../../../../verification/tasks/verilog/library/main/pu_msp430_ram_d2.sv
+sv work ../../../../../../../verification/tasks/verilog/library/main/pu_msp430_ram_dp.sv
+sv work ../../../../../../../verification/tasks/verilog/library/main/pu_msp430_ram_p2.sv
+sv work ../../../../../../../verification/tasks/verilog/library/main/pu_msp430_ram_sp.sv
+sv work ../../../../../../../verification/tasks/verilog/library/main/pu_msp430_glbl.sv
+sv work ../../../../../../../verification/tasks/verilog/library/main/pu_msp430_debug.sv
 
 sv work ../../../../../../../verification/uvm/library/pu/bb/peripheral_uvm_testbench.sv
 

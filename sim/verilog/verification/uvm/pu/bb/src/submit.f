@@ -45,15 +45,15 @@
 // Testbench related
 //=============================================================================
 
-+incdir+../../../../../../../bench/verilog/procedures/main/
++incdir+../../../../../../../verification/tasks/verilog/library/main/
 
-../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_d1.sv
-../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_d2.sv
-../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_dp.sv
-../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_p2.sv
-../../../../../../../bench/verilog/procedures/main/pu_msp430_ram_sp.sv
-../../../../../../../bench/verilog/procedures/main/pu_msp430_glbl.sv
-../../../../../../../bench/verilog/procedures/main/pu_msp430_debug.sv
+../../../../../../../verification/tasks/verilog/library/main/pu_msp430_ram_d1.sv
+../../../../../../../verification/tasks/verilog/library/main/pu_msp430_ram_d2.sv
+../../../../../../../verification/tasks/verilog/library/main/pu_msp430_ram_dp.sv
+../../../../../../../verification/tasks/verilog/library/main/pu_msp430_ram_p2.sv
+../../../../../../../verification/tasks/verilog/library/main/pu_msp430_ram_sp.sv
+../../../../../../../verification/tasks/verilog/library/main/pu_msp430_glbl.sv
+../../../../../../../verification/tasks/verilog/library/main/pu_msp430_debug.sv
 
 ../../../../../../../verification/uvm/library/pu/bb/peripheral_uvm_testbench.sv
 

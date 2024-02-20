@@ -45,12 +45,12 @@
 // Testbench related
 //=============================================================================
 
-+incdir+../../../../../../../bench/verilog/tests/main/
++incdir+../../../../../../../validation/tasks/verilog/library/main/
 
-../../../../../../../bench/verilog/tests/main/pu_msp430_testbench.sv
-../../../../../../../bench/verilog/tests/main/pu_msp430_ram.sv
-../../../../../../../bench/verilog/tests/main/pu_msp430_io_cell.sv
-../../../../../../../bench/verilog/tests/main/pu_msp430_debug.sv
+../../../../../../../validation/tasks/verilog/library/main/pu_msp430_testbench.sv
+../../../../../../../validation/tasks/verilog/library/main/pu_msp430_ram.sv
+../../../../../../../validation/tasks/verilog/library/main/pu_msp430_io_cell.sv
+../../../../../../../validation/tasks/verilog/library/main/pu_msp430_debug.sv
 
 
 //=============================================================================
