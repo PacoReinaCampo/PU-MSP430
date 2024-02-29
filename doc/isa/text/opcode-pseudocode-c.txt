@@ -1,3 +1,6 @@
+# format of a line in this file:
+# <instruction name> "<instruction pseudo code>"
+
 Two Operand Instructions
   format           implementation                                                           status
                                                                                             V N Z C
