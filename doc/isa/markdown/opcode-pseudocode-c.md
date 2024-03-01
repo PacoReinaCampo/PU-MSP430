@@ -1,5 +1,9 @@
 ## Instruction Pseudo Code (C)
 
+Format of a line in the table:
+
+`<instruction name> "<instruction pseudo code>"`
+
 | instruction name    | instruction pseudo code                                                    | status    |
 |---------------------|:---------------------------------------------------------------------------|:----------|
 | `ADC(.B)  dst`      | `dst + C -> dst`                                                           | `x x x x` |
@@ -57,3 +61,4 @@
 | `SXT      dst`      | `Bit7 -> Bit8 ... Bit15`                                                   | `0 x x x` |
 | `TST(.B)  dst`      | `Test destination`                                                         | `x x x x` |
 | `XOR(.B)  src,dst`  | `src .xor. dst -> dst`                                                     | `x x x x` |
+: MSP430 - "MSP430 Base Integer Instruction Set"
