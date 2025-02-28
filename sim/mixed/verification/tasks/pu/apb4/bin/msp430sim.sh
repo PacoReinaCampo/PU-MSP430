@@ -51,7 +51,7 @@ EXPECTED_ARGS=1
 if [ $# -ne $EXPECTED_ARGS ]; then
   echo "ERROR    : wrong number of arguments"
   echo "USAGE    : msp430sim <test name>"
-  echo "Example  : msp430sim c-jump_jge"
+  echo "Example  : msp430sim pu_msp430_leds"
   echo ""
   echo "In order to switch the verilog simulator, the OMSP_SIMULATOR environment"
   echo "variable can be set to the following values:"
@@ -67,11 +67,9 @@ fi
 ###############################################################################
 #                     Check if the required files exist                       #
 ###############################################################################
-asmfile=../../../../../../../software/tests/$1.s43;
+softdir=../../../../../../../software/baremetal/$1;
+elffile=../../../../../../../software/baremetal/$1/$1.elf;
 verfile=../../../../../../../validation/tasks/verilog/library/cases/$1.sv;
-incfile=../../../../../../../rtl/verilog/pkg/pu_msp430_defines.sv;
-linkfile=../bin/template.x;
-headfile=../bin/template_defs.asm;
 if [ $OMSP_SIMULATOR == "msim" ]; then
     submit_verilog=../src/submit.verilog.f;
     submit_vhdl=../src/submit.vhdl.f;
@@ -80,9 +78,10 @@ if [ $OMSP_SIMULATOR == "xsim" ]; then
     submit_verilog=../src/submit.verilog.prj;
     submit_vhdl=../src/submit.vhdl.prj;
 fi
+incfile=../../../../../../../rtl/verilog/pkg/pu_msp430_defines.sv;
 
-if [ ! -e $asmfile ]; then
-    echo "Assembler file $asmfile doesn't exist: $asmfile"
+if [ ! -e $softdir ]; then
+    echo "Software directory doesn't exist: $softdir"
     exit 1
 fi
 if [ ! -e $verfile ]; then
@@ -90,19 +89,11 @@ if [ ! -e $verfile ]; then
     exit 1
 fi
 if [ ! -e $submit_verilog ]; then
-    echo "Verilog submit file $submit_verilog doesn't exist: $submit_verilog"
+    echo "Verilog submit file $submit doesn't exist: $submit_verilog"
     exit 1
 fi
 if [ ! -e $submit_vhdl ]; then
-    echo "VHDL submit file $submit_vhdl doesn't exist: $submit_vhdl"
-    exit 1
-fi
-if [ ! -e $linkfile ]; then
-    echo "Linker definition file template doesn't exist: $linkfile"
-    exit 1
-fi
-if [ ! -e $headfile ]; then
-    echo "Assembler definition file template doesn't exist: $headfile"
+    echo "VHDL submit file $submit doesn't exist: $submit_vhdl"
     exit 1
 fi
 
@@ -115,7 +106,7 @@ rm -rf *.vcd
 rm -rf *.vpd
 rm -rf *.trn
 rm -rf *.dsn
-rm -rf pmem*
+rm -rf pmem.*
 rm -rf stimulus.sv
 
 
@@ -126,26 +117,31 @@ echo " ======================================================="
 echo "| Start simulation:             $1"
 echo " ======================================================="
 
+# Make C program
+cd $softdir
+make clean
+make
+cd ../../../sim/mixed/verification/procedures/pu/bb/run
+
 # Create links
 if [ `uname -o` = "Cygwin" ]
 then
-    cp $asmfile pmem.s43
+    cp $elffile pmem.elf
     cp $verfile stimulus.sv
 else
-    ln -s $asmfile pmem.s43
+    ln -s $elffile pmem.elf
     ln -s $verfile stimulus.sv
 fi
 
 # Make local copy of the openMSP403 configuration file
 # and prepare it for MSPGCC preprocessing
 cp  $incfile  ./pmem.h
-sed -i 's/`ifdef/#ifdef/g'         ./pmem.h 
-sed -i 's/`else/#else/g'           ./pmem.h 
-sed -i 's/`endif/#endif/g'         ./pmem.h 
-sed -i 's/`define/#define/g'       ./pmem.h 
-sed -i 's/`include/\/\/#include/g' ./pmem.h 
-sed -i 's/`//g'                    ./pmem.h 
-sed -i "s/'//g"                    ./pmem.h
+sed -i 's/`ifdef/#ifdef/g'   ./pmem.h 
+sed -i 's/`else/#else/g'     ./pmem.h 
+sed -i 's/`endif/#endif/g'   ./pmem.h 
+sed -i 's/`define/#define/g' ./pmem.h 
+sed -i 's/`//g'              ./pmem.h 
+sed -i "s/'//g"              ./pmem.h
 
 # Use MSPGCC preprocessor to extract the Program, Data
 # and Peripheral memory sizes
@@ -154,9 +150,9 @@ msp430-gcc -E -P -x c ../bin/omsp_config.sh > pmem.sh
 # Source the extracted configuration file
 source pmem.sh
 
-# Compile assembler code
-echo "Compile, link & generate IHEX file (Program Memory: $pmemsize B, Data Memory: $dmemsize B, Peripheral Space: $persize B)..."
-../bin/asm2ihex.sh pmem pmem.s43 $linkfile $headfile $pmemsize $dmemsize $persize
+# Create IHEX file from ELF
+echo "Convert ELF file to IHEX format..."
+msp430-objcopy -O ihex pmem.elf pmem.ihex
 
 # Generate Program memory file
 echo "Convert IHEX file to Verilog MEMH format..."
@@ -164,4 +160,4 @@ echo "Convert IHEX file to Verilog MEMH format..."
 
 # Start verilog simulation
 echo "Start Verilog simulation..."
-../bin/rtlsim.sh stimulus.sv pmem.mem $submit_verilog $submit_vhdl $submit
+../bin/rtlsim.sh stimulus.sv pmem.mem $submit_verilog $submit_vhdl
