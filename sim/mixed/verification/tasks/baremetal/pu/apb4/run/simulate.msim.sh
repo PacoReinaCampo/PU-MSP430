@@ -43,7 +43,7 @@
 ###################################################################################
 
 #!/bin/bash
-source ../../../../../../../settings64_msim.sh
+source ../../../../../../../../settings64_msim.sh
 
 # Enable/Disable waveform dumping
 OMSP_NODUMP=0

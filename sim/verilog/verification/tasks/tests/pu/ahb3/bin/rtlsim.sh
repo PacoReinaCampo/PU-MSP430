@@ -115,7 +115,7 @@ else
         xsim* )
             # Xilinx Simulator
             rm -rf xsim.dir
-            xvlog -i ../../../../../../../rtl/verilog/pkg/ -prj $3
+            xvlog -i ../../../../../../../../rtl/verilog/pkg/ -prj $3
             xelab pu_msp430_testbench
         exec xsim -R pu_msp430_testbench;;
     esac

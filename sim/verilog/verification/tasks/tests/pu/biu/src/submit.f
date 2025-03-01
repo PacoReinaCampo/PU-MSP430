@@ -39,51 +39,51 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-+incdir+../../../../../../../rtl/verilog/pkg/
++incdir+../../../../../../../../rtl/verilog/pkg/
 
 //=============================================================================
 // Testbench related
 //=============================================================================
 
-+incdir+../../../../../../../validation/tasks/verilog/library/main/
++incdir+../../../../../../../../validation/tasks/verilog/library/main/
 
-../../../../../../../validation/tasks/verilog/library/main/pu_msp430_testbench.sv
-../../../../../../../validation/tasks/verilog/library/main/pu_msp430_ram.sv
-../../../../../../../validation/tasks/verilog/library/main/pu_msp430_io_cell.sv
-../../../../../../../validation/tasks/verilog/library/main/pu_msp430_debug.sv
+../../../../../../../../validation/tasks/verilog/library/main/pu_msp430_testbench.sv
+../../../../../../../../validation/tasks/verilog/library/main/pu_msp430_ram.sv
+../../../../../../../../validation/tasks/verilog/library/main/pu_msp430_io_cell.sv
+../../../../../../../../validation/tasks/verilog/library/main/pu_msp430_debug.sv
 
 
 //=============================================================================
 // CPU
 //=============================================================================
 
-../../../../../../../rtl/verilog/core/fuse/pu_msp430_and_gate.sv
-../../../../../../../rtl/verilog/core/fuse/pu_msp430_clock_gate.sv
-../../../../../../../rtl/verilog/core/fuse/pu_msp430_clock_mux.sv
-../../../../../../../rtl/verilog/core/fuse/pu_msp430_scan_mux.sv
-../../../../../../../rtl/verilog/core/fuse/pu_msp430_sync_cell.sv
-../../../../../../../rtl/verilog/core/fuse/pu_msp430_sync_reset.sv
-../../../../../../../rtl/verilog/core/fuse/pu_msp430_wakeup_cell.sv
+../../../../../../../../rtl/verilog/core/fuse/pu_msp430_and_gate.sv
+../../../../../../../../rtl/verilog/core/fuse/pu_msp430_clock_gate.sv
+../../../../../../../../rtl/verilog/core/fuse/pu_msp430_clock_mux.sv
+../../../../../../../../rtl/verilog/core/fuse/pu_msp430_scan_mux.sv
+../../../../../../../../rtl/verilog/core/fuse/pu_msp430_sync_cell.sv
+../../../../../../../../rtl/verilog/core/fuse/pu_msp430_sync_reset.sv
+../../../../../../../../rtl/verilog/core/fuse/pu_msp430_wakeup_cell.sv
 
-../../../../../../../rtl/verilog/core/omsp/pu_msp430_alu.sv
-../../../../../../../rtl/verilog/core/omsp/pu_msp430_dbg_hwbrk.sv
-../../../../../../../rtl/verilog/core/omsp/pu_msp430_dbg_i2c.sv
-../../../../../../../rtl/verilog/core/omsp/pu_msp430_dbg_uart.sv
-../../../../../../../rtl/verilog/core/omsp/pu_msp430_register_file.sv
+../../../../../../../../rtl/verilog/core/omsp/pu_msp430_alu.sv
+../../../../../../../../rtl/verilog/core/omsp/pu_msp430_dbg_hwbrk.sv
+../../../../../../../../rtl/verilog/core/omsp/pu_msp430_dbg_i2c.sv
+../../../../../../../../rtl/verilog/core/omsp/pu_msp430_dbg_uart.sv
+../../../../../../../../rtl/verilog/core/omsp/pu_msp430_register_file.sv
 
-../../../../../../../rtl/verilog/core/main/pu_msp430_bcm.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_dbg.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_execution.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_gpio.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_memory.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_multiplier.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_template08.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_template16.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_uart.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_bcm.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_dbg.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_execution.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_gpio.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_memory.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_multiplier.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_template08.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_template16.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_uart.sv
 
-../../../../../../../rtl/verilog/core/main/pu_msp430_frontend.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_sfr.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_ta.sv
-../../../../../../../rtl/verilog/core/main/pu_msp430_watchdog.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_frontend.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_sfr.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_ta.sv
+../../../../../../../../rtl/verilog/core/main/pu_msp430_watchdog.sv
 
-../../../../../../../rtl/verilog/pu/pu_msp430_core.sv
+../../../../../../../../rtl/verilog/pu/pu_msp430_core.sv

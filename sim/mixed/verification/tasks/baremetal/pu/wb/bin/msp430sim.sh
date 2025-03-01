@@ -67,9 +67,9 @@ fi
 ###############################################################################
 #                     Check if the required files exist                       #
 ###############################################################################
-softdir=../../../../../../../software/baremetal/$1;
-elffile=../../../../../../../software/baremetal/$1/$1.elf;
-verfile=../../../../../../../validation/tasks/verilog/library/cases/$1.sv;
+softdir=../../../../../../../../software/baremetal/$1;
+elffile=../../../../../../../../software/baremetal/$1/$1.elf;
+verfile=../../../../../../../../validation/tasks/verilog/library/cases/$1.sv;
 if [ $OMSP_SIMULATOR == "msim" ]; then
     submit_verilog=../src/submit.verilog.f;
     submit_vhdl=../src/submit.vhdl.f;
@@ -78,7 +78,7 @@ if [ $OMSP_SIMULATOR == "xsim" ]; then
     submit_verilog=../src/submit.verilog.prj;
     submit_vhdl=../src/submit.vhdl.prj;
 fi
-incfile=../../../../../../../rtl/verilog/pkg/pu_msp430_defines.sv;
+incfile=../../../../../../../../rtl/verilog/pkg/pu_msp430_defines.sv;
 
 if [ ! -e $softdir ]; then
     echo "Software directory doesn't exist: $softdir"

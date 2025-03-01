@@ -39,41 +39,41 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-../../../../../../../rtl/vhdl/pkg/pu_msp430_pkg.vhd
+../../../../../../../../rtl/vhdl/pkg/pu_msp430_pkg.vhd
 
 //=============================================================================
 // Testbench related
 //=============================================================================
 
-../../../../../../../validation/tasks/vhdl/library/main/pu_msp430_io_cell.vhd
+../../../../../../../../validation/tasks/vhdl/library/main/pu_msp430_io_cell.vhd
 
 
 //=============================================================================
 // CPU
 //=============================================================================
 
-../../../../../../../rtl/vhdl/core/fuse/pu_msp430_and_gate.vhd
-../../../../../../../rtl/vhdl/core/fuse/pu_msp430_clock_gate.vhd
-../../../../../../../rtl/vhdl/core/fuse/pu_msp430_clock_mux.vhd
-../../../../../../../rtl/vhdl/core/fuse/pu_msp430_scan_mux.vhd
-../../../../../../../rtl/vhdl/core/fuse/pu_msp430_sync_cell.vhd
-../../../../../../../rtl/vhdl/core/fuse/pu_msp430_sync_reset.vhd
-../../../../../../../rtl/vhdl/core/fuse/pu_msp430_wakeup_cell.vhd
+../../../../../../../../rtl/vhdl/core/fuse/pu_msp430_and_gate.vhd
+../../../../../../../../rtl/vhdl/core/fuse/pu_msp430_clock_gate.vhd
+../../../../../../../../rtl/vhdl/core/fuse/pu_msp430_clock_mux.vhd
+../../../../../../../../rtl/vhdl/core/fuse/pu_msp430_scan_mux.vhd
+../../../../../../../../rtl/vhdl/core/fuse/pu_msp430_sync_cell.vhd
+../../../../../../../../rtl/vhdl/core/fuse/pu_msp430_sync_reset.vhd
+../../../../../../../../rtl/vhdl/core/fuse/pu_msp430_wakeup_cell.vhd
 
-../../../../../../../rtl/vhdl/core/omsp/pu_msp430_alu.vhd
-../../../../../../../rtl/vhdl/core/omsp/pu_msp430_dbg_hwbrk.vhd
-../../../../../../../rtl/vhdl/core/omsp/pu_msp430_dbg_i2c.vhd
-../../../../../../../rtl/vhdl/core/omsp/pu_msp430_dbg_uart.vhd
-../../../../../../../rtl/vhdl/core/omsp/msp430_interrupt.vhd
-../../../../../../../rtl/vhdl/core/omsp/pu_msp430_register_file.vhd
-../../../../../../../rtl/vhdl/core/omsp/msp430_state_machine.vhd
+../../../../../../../../rtl/vhdl/core/omsp/pu_msp430_alu.vhd
+../../../../../../../../rtl/vhdl/core/omsp/pu_msp430_dbg_hwbrk.vhd
+../../../../../../../../rtl/vhdl/core/omsp/pu_msp430_dbg_i2c.vhd
+../../../../../../../../rtl/vhdl/core/omsp/pu_msp430_dbg_uart.vhd
+../../../../../../../../rtl/vhdl/core/omsp/msp430_interrupt.vhd
+../../../../../../../../rtl/vhdl/core/omsp/pu_msp430_register_file.vhd
+../../../../../../../../rtl/vhdl/core/omsp/msp430_state_machine.vhd
 
-../../../../../../../rtl/vhdl/core/main/pu_msp430_bcm.vhd
-../../../../../../../rtl/vhdl/core/main/pu_msp430_dbg.vhd
-../../../../../../../rtl/vhdl/core/main/pu_msp430_execution.vhd
-../../../../../../../rtl/vhdl/core/main/pu_msp430_gpio.vhd
-../../../../../../../rtl/vhdl/core/main/pu_msp430_memory.vhd
-../../../../../../../rtl/vhdl/core/main/pu_msp430_multiplier.vhd
-../../../../../../../rtl/vhdl/core/main/pu_msp430_template08.vhd
-../../../../../../../rtl/vhdl/core/main/pu_msp430_template16.vhd
-../../../../../../../rtl/vhdl/core/main/pu_msp430_uart.vhd
+../../../../../../../../rtl/vhdl/core/main/pu_msp430_bcm.vhd
+../../../../../../../../rtl/vhdl/core/main/pu_msp430_dbg.vhd
+../../../../../../../../rtl/vhdl/core/main/pu_msp430_execution.vhd
+../../../../../../../../rtl/vhdl/core/main/pu_msp430_gpio.vhd
+../../../../../../../../rtl/vhdl/core/main/pu_msp430_memory.vhd
+../../../../../../../../rtl/vhdl/core/main/pu_msp430_multiplier.vhd
+../../../../../../../../rtl/vhdl/core/main/pu_msp430_template08.vhd
+../../../../../../../../rtl/vhdl/core/main/pu_msp430_template16.vhd
+../../../../../../../../rtl/vhdl/core/main/pu_msp430_uart.vhd

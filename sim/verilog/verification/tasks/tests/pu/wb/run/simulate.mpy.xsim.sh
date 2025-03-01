@@ -43,7 +43,7 @@
 ###################################################################################
 
 #!/bin/bash
-source ../../../../../../../settings64_vivado.sh
+source ../../../../../../../../settings64_vivado.sh
 
 # Enable/Disable waveform dumping
 OMSP_NODUMP=1
