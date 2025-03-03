@@ -69,7 +69,7 @@ fi
 ###############################################################################
 softdir=../../../../../../../../software/baremetal/$1;
 elffile=../../../../../../../../software/baremetal/$1/$1.elf;
-verfile=../../../../../../../../validation/tasks/baremetal/verilog/library/cases/$1.sv;
+verfile=../../../../../../../../verification/tasks/baremetal/verilog/library/cases/$1.sv;
 if [ $OMSP_SIMULATOR == "iverilog" ]; then
     submit=../src/submit.f;
 fi
@@ -118,7 +118,7 @@ echo " ======================================================="
 cd $softdir
 make clean
 make
-cd ../../../sim/verilog/verification/procedures/pu/bb/run
+cd ../../../sim/verilog/verification/tasks/baremetal/pu/bb/run
 
 # Create links
 if [ `uname -o` = "Cygwin" ]
