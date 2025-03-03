@@ -45,16 +45,16 @@
 // Testbench related
 //=============================================================================
 
-+incdir+../../../../../../../../verification/tasks/tests/baremetal/verilog/library/main/
++incdir+../../../../../../../../verification/tasks/baremetal/verilog/library/main/
 
-../../../../../../../../verification/tasks/tests/baremetal/verilog/library/main/pu_msp430_ram_d1.sv
-../../../../../../../../verification/tasks/tests/baremetal/verilog/library/main/pu_msp430_ram_d2.sv
-../../../../../../../../verification/tasks/tests/baremetal/verilog/library/main/pu_msp430_ram_dp.sv
-../../../../../../../../verification/tasks/tests/baremetal/verilog/library/main/pu_msp430_ram_p2.sv
-../../../../../../../../verification/tasks/tests/baremetal/verilog/library/main/pu_msp430_ram_sp.sv
-../../../../../../../../verification/tasks/tests/baremetal/verilog/library/main/pu_msp430_glbl.sv
-../../../../../../../../verification/tasks/tests/baremetal/verilog/library/main/pu_msp430_debug.sv
-../../../../../../../../verification/tasks/tests/baremetal/verilog/library/main/pu_msp430_testbench.sv
+../../../../../../../../verification/tasks/baremetal/verilog/library/main/pu_msp430_ram_d1.sv
+../../../../../../../../verification/tasks/baremetal/verilog/library/main/pu_msp430_ram_d2.sv
+../../../../../../../../verification/tasks/baremetal/verilog/library/main/pu_msp430_ram_dp.sv
+../../../../../../../../verification/tasks/baremetal/verilog/library/main/pu_msp430_ram_p2.sv
+../../../../../../../../verification/tasks/baremetal/verilog/library/main/pu_msp430_ram_sp.sv
+../../../../../../../../verification/tasks/baremetal/verilog/library/main/pu_msp430_glbl.sv
+../../../../../../../../verification/tasks/baremetal/verilog/library/main/pu_msp430_debug.sv
+../../../../../../../../verification/tasks/baremetal/verilog/library/main/pu_msp430_testbench.sv
 
 
 //=============================================================================

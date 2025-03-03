@@ -69,7 +69,7 @@ fi
 ###############################################################################
 softdir=../../../../../../../../software/baremetal/$1;
 elffile=../../../../../../../../software/baremetal/$1/$1.elf;
-verfile=../../../../../../../../validation/tasks/verilog/library/cases/$1.sv;
+verfile=../../../../../../../../validation/tasks/baremetal/verilog/library/cases/$1.sv;
 if [ $OMSP_SIMULATOR == "iverilog" ]; then
     submit=../src/submit.f;
 fi

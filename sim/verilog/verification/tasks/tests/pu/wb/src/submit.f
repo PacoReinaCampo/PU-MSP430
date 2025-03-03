@@ -45,12 +45,12 @@
 // Testbench related
 //=============================================================================
 
-+incdir+../../../../../../../validation/tasks/verilog/library/main/
++incdir+../../../../../../../validation/tasks/tests/verilog/library/main/
 
-../../../../../../../validation/tasks/verilog/library/main/pu_msp430_testbench.sv
-../../../../../../../validation/tasks/verilog/library/main/pu_msp430_ram.sv
-../../../../../../../validation/tasks/verilog/library/main/pu_msp430_io_cell.sv
-../../../../../../../validation/tasks/verilog/library/main/pu_msp430_debug.sv
+../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_testbench.sv
+../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_ram.sv
+../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_io_cell.sv
+../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_debug.sv
 
 
 //=============================================================================

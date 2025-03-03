@@ -42,10 +42,10 @@
 //                                                                               //
 ///////////////////////////////////////////////////////////////////////////////////
 
-verilog work ../../../../../../../../validation/tasks/verilog/library/main/pu_msp430_testbench.sv
-verilog work ../../../../../../../../validation/tasks/verilog/library/main/pu_msp430_ram.sv
-verilog work ../../../../../../../../validation/tasks/verilog/library/main/pu_msp430_io_cell.sv
-verilog work ../../../../../../../../validation/tasks/verilog/library/main/pu_msp430_debug.sv
+verilog work ../../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_testbench.sv
+verilog work ../../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_ram.sv
+verilog work ../../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_io_cell.sv
+verilog work ../../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_debug.sv
 
 verilog work ../../../../../../../../rtl/verilog/core/fuse/pu_msp430_and_gate.sv
 verilog work ../../../../../../../../rtl/verilog/core/fuse/pu_msp430_clock_gate.sv
