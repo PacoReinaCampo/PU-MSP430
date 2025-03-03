@@ -87,4 +87,3 @@ verilog work ../../../../../../../../rtl/verilog/core/main/pu_msp430_watchdog.sv
 verilog work ../../../../../../../../rtl/verilog/pu/pu_msp430_core.sv
 verilog work ../../../../../../../../rtl/verilog/pu/pu_msp430_pu0.sv
 verilog work ../../../../../../../../rtl/verilog/pu/pu_msp430_pu1.sv
-
