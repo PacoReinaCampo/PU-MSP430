@@ -45,8 +45,8 @@
 // SoC-MSP430
 //=============================================================================
 
-../../../../../../../../rtl/vhdl/soc/pu_msp430_soc.vhd
-../../../../../../../../rtl/vhdl/soc/pu_msp430_io_cell.vhd
+../../../../../../../../rtl/vhdl/pu/pu_msp430_soc.vhd
+../../../../../../../../rtl/vhdl/pu/pu_msp430_io_cell.vhd
 
 
 //=============================================================================
@@ -84,6 +84,6 @@
 ../../../../../../../../rtl/vhdl/core/main/pu_msp430_template16.vhd
 ../../../../../../../../rtl/vhdl/core/main/pu_msp430_uart.vhd
 
-../../../../../../../../rtl/vhdl/pu/pu_msp430_core.vhd
-../../../../../../../../rtl/vhdl/pu/pu_msp430_pu0.vhd
-../../../../../../../../rtl/vhdl/pu/pu_msp430_pu1.vhd
+../../../../../../../../rtl/vhdl/module/pu_msp430_core.vhd
+../../../../../../../../rtl/vhdl/module/pu_msp430_pu0.vhd
+../../../../../../../../rtl/vhdl/module/pu_msp430_pu1.vhd

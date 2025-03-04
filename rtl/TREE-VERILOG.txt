@@ -29,15 +29,15 @@ verilog
 │       ├── pu_msp430_dbg_i2c.sv
 │       ├── pu_msp430_dbg_uart.sv
 │       └── pu_msp430_register_file.sv
+├── module
+│   ├── pu_msp430_core.sv
+│   ├── pu_msp430_pu0.sv
+│   └── pu_msp430_pu1.sv
 ├── pkg
 │   ├── pu_msp430_defines.sv
 │   ├── pu_msp430_timescale.sv
 │   └── pu_msp430_undefines.sv
-├── pu
-│   ├── pu_msp430_core.sv
-│   ├── pu_msp430_pu0.sv
-│   └── pu_msp430_pu1.sv
-└── soc
+└── pu
     ├── pu_msp430_io_cell.sv
     └── pu_msp430_soc.sv
 

@@ -62,8 +62,8 @@
 // SoC-MSP430
 //=============================================================================
 
-../../../../../../../rtl/verilog/soc/pu_msp430_soc.sv
-../../../../../../../rtl/verilog/soc/pu_msp430_io_cell.sv
+../../../../../../../rtl/verilog/pu/pu_msp430_soc.sv
+../../../../../../../rtl/verilog/pu/pu_msp430_io_cell.sv
 
 //=============================================================================
 // PU-MSP430
@@ -98,6 +98,6 @@
 ../../../../../../../rtl/verilog/core/main/pu_msp430_template16.sv
 ../../../../../../../rtl/verilog/core/main/pu_msp430_uart.sv
 
-../../../../../../../rtl/verilog/pu/pu_msp430_core.sv
-../../../../../../../rtl/verilog/pu/pu_msp430_pu0.sv
-../../../../../../../rtl/verilog/pu/pu_msp430_pu1.sv
+../../../../../../../rtl/verilog/module/pu_msp430_core.sv
+../../../../../../../rtl/verilog/module/pu_msp430_pu0.sv
+../../../../../../../rtl/verilog/module/pu_msp430_pu1.sv

@@ -31,13 +31,13 @@ vhdl
 │       ├── pu_msp430_dbg_i2c.vhd
 │       ├── pu_msp430_dbg_uart.vhd
 │       └── pu_msp430_register_file.vhd
-├── pkg
-│   └── pu_msp430_pkg.vhd
-├── pu
+├── module
 │   ├── pu_msp430_core.vhd
 │   ├── pu_msp430_pu0.vhd
 │   └── pu_msp430_pu1.vhd
-└── soc
+├── pkg
+│   └── pu_msp430_pkg.vhd
+└── pu
     ├── pu_msp430_io_cell.vhd
     └── pu_msp430_soc.vhd
 

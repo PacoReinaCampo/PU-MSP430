@@ -51,7 +51,7 @@ verilog work ../../../../../../../../verification/tasks/baremetal/verilog/librar
 verilog work ../../../../../../../../verification/tasks/baremetal/verilog/library/main/pu_msp430_debug.sv
 verilog work ../../../../../../../../verification/tasks/baremetal/verilog/library/main/pu_msp430_testbench.sv
 
-verilog work ../../../../../../../../rtl/verilog/soc/pu_msp430_soc.sv
+verilog work ../../../../../../../../rtl/verilog/pu/pu_msp430_soc.sv
 
 verilog work ../../../../../../../../rtl/verilog/core/fuse/pu_msp430_and_gate.sv
 verilog work ../../../../../../../../rtl/verilog/core/fuse/pu_msp430_clock_gate.sv
@@ -83,6 +83,6 @@ verilog work ../../../../../../../../rtl/verilog/core/main/pu_msp430_sfr.sv
 verilog work ../../../../../../../../rtl/verilog/core/main/pu_msp430_ta.sv
 verilog work ../../../../../../../../rtl/verilog/core/main/pu_msp430_watchdog.sv
 
-verilog work ../../../../../../../../rtl/verilog/pu/pu_msp430_core.sv
-verilog work ../../../../../../../../rtl/verilog/pu/pu_msp430_pu0.sv
-verilog work ../../../../../../../../rtl/verilog/pu/pu_msp430_pu1.sv
+verilog work ../../../../../../../../rtl/verilog/module/pu_msp430_core.sv
+verilog work ../../../../../../../../rtl/verilog/module/pu_msp430_pu0.sv
+verilog work ../../../../../../../../rtl/verilog/module/pu_msp430_pu1.sv
