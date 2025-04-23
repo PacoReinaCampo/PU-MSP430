@@ -67,11 +67,11 @@ echo " ===================================================="
 echo ""
 
 # Hardware multiplier test patterns
-../../../../../../../../bin/msp430sim.sh mpy_basic   | tee  ./log/mpy_basic.log
-../../../../../../../../bin/msp430sim.sh mpy_mpy     | tee  ./log/mpy_mpy.log
-../../../../../../../../bin/msp430sim.sh mpy_mpys    | tee  ./log/mpy_mpys.log
-../../../../../../../../bin/msp430sim.sh mpy_mac     | tee  ./log/mpy_mac.log
-../../../../../../../../bin/msp430sim.sh mpy_macs    | tee  ./log/mpy_macs.log
+../bin/msp430sim.sh mpy_basic   | tee  ./log/mpy_basic.log
+../bin/msp430sim.sh mpy_mpy     | tee  ./log/mpy_mpy.log
+../bin/msp430sim.sh mpy_mpys    | tee  ./log/mpy_mpys.log
+../bin/msp430sim.sh mpy_mac     | tee  ./log/mpy_mac.log
+../bin/msp430sim.sh mpy_macs    | tee  ./log/mpy_macs.log
 
 grep SKIPPED ./log/*.log
 grep FAILED  ./log/*.log
