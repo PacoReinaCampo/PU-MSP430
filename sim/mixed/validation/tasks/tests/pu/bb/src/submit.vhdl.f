@@ -45,7 +45,7 @@
 // Testbench related
 //=============================================================================
 
-../../../../../../../../validation/tasks/vhdl/library/main/pu_msp430_io_cell.vhd
+../../../../../../../../validation/tasks/tests/vhdl/library/main/pu_msp430_io_cell.vhd
 
 
 //=============================================================================

@@ -67,8 +67,8 @@ fi
 ###############################################################################
 #                     Check if the required files exist                       #
 ###############################################################################
-asmfile=../../../../../../../../software/tests/$1.s43;
-verfile=../../../../../../../../verification/tasks/verilog/library/cases/$1.sv;
+asmfile=../../../../../../../../software/tests/asm/$1.s43;
+verfile=../../../../../../../../verification/tasks/tests/verilog/library/cases/$1.sv;
 incfile=../../../../../../../../rtl/verilog/pkg/pu_msp430_defines.sv;
 linkfile=../bin/template.x;
 headfile=../bin/template_defs.asm;
