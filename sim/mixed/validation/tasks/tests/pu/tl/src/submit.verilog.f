@@ -39,15 +39,17 @@
  *   Paco Reina Campo <pacoreinacampo@queenfield.tech>
  */
 
-+incdir+../../../../../../../rtl/verilog/pkg/
++incdir+../../../../../../../../rtl/verilog/pkg/
 
 //=============================================================================
 // Testbench related
 //=============================================================================
 
-../../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_testbench.sv
-../../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_ram.sv
-../../../../../../../../validation/tasks/tests/verilog/library/main/pu_msp430_debug.sv
++incdir+../../../../../../../../verification/tasks/tests/verilog/library/main/
+
+../../../../../../../../verification/tasks/tests/verilog/library/main/pu_msp430_testbench.sv
+../../../../../../../../verification/tasks/tests/verilog/library/main/pu_msp430_ram.sv
+../../../../../../../../verification/tasks/tests/verilog/library/main/pu_msp430_debug.sv
 
 
 //=============================================================================
