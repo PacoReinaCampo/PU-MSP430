@@ -178,7 +178,7 @@ begin
   REGISTER_DECODER : block
   begin
     -- 1.1.      Local register selection
-    reg_sel_s <= per_en and to_stdlogic(per_addr(13 downto DEC_WD_S - 1) = BASE_ADDR_S(14 downto DEC_WD_S));
+    reg_sel_s <= per_en and (per_addr(13 downto DEC_WD_S - 1) = BASE_ADDR_S(14 downto DEC_WD_S));
 
     -- 1.2.      Register local address
     reg_addr_s <= '0' & per_addr(DEC_WD_S - 2 downto 0);
@@ -198,7 +198,7 @@ begin
     -- 1.4.      Read/Write probes
     reg_lo_write_s <= per_we(0) and reg_sel_s;
     reg_hi_write_s <= per_we(1) and reg_sel_s;
-    reg_read_s     <= not reduce_or(per_we) and reg_sel_s;
+    reg_read_s     <= not or per_we and reg_sel_s;
 
     -- 1.5.      Read/Write vectors
     reg_hi_wr_s <= reg_dec_s and (0 to DEC_SZ_S - 1 => reg_hi_write_s);

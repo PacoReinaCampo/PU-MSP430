@@ -162,7 +162,7 @@ begin
     end process;
 
     brk_stat_full <= "00" & brk_stat;
-    brk_pnd       <= reduce_or(brk_stat);
+    brk_pnd       <= or brk_stat;
 
     -- BRK_ADDR0 Register
     brk_addr_wr(0) <= brk_reg_wr(BRK_ADDR0C);

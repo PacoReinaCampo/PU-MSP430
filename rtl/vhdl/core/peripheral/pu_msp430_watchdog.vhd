@@ -199,8 +199,8 @@ begin
     -- 1.3.      Register address decode
     reg_dec_w   <= WDTCTLC_D and (0 to DEC_SZ_W - 1 => to_stdlogic(reg_addr_w = WDTCTLB));
     -- 1.4.      Read/Write probes       
-    reg_write_w <= reduce_or(per_we) and reg_sel_w;
-    reg_read_w  <= not reduce_or(per_we) and reg_sel_w;
+    reg_write_w <= or per_we and reg_sel_w;
+    reg_read_w  <= not (or per_we) and reg_sel_w;
 
     -- 1.5.      Read/Write vectors
     reg_wr_w <= reg_dec_w and (0 to DEC_SZ_W - 1 => reg_write_w);

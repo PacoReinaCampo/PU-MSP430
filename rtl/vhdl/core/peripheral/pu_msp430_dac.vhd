@@ -193,8 +193,8 @@ begin
              (CNTRL1_D and (DEC_SZ-1 downto 0   => to_stdlogic(reg_addr = CNTRL1_X))) or
              (CNTRL2_D and (DEC_SZ-1 downto 0   => to_stdlogic(reg_addr = CNTRL2_X)));
 
-  reg_write  <= reduce_or(per_we) and reg_sel;
-  reg_read   <= reduce_nor(per_we) and reg_sel;
+  reg_write  <= or per_we and reg_sel;
+  reg_read   <= nor per_we and reg_sel;
   reg_wr     <= reg_dec and (DEC_SZ-1 downto 0 => reg_write);
   reg_rd     <= reg_dec and (DEC_SZ-1 downto 0 => reg_read);
   dac_val_wr <= reg_wr(DAC_VALX);

@@ -201,7 +201,7 @@ begin
     r2_n   <= alu_stat(2)                 when alu_stat_wr(2) = '1' else reg_dest_val_in(2);
     r2_nxt <= reg_dest_val_in(7 downto 3) when r2_wr = '1'          else re(2)(7 downto 3);
     r2_v   <= alu_stat(3)                 when alu_stat_wr(3) = '1' else reg_dest_val_in(8);
-    r2_en  <= reduce_or(alu_stat_wr) or r2_wr or reg_sr_clr;
+    r2_en  <= or alu_stat_wr or r2_wr or reg_sr_clr;
 
     clock_gate_r2 : pu_msp430_clock_gate
       port map (

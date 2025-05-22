@@ -771,7 +771,7 @@ begin
 
     -- 6.6.              Run / Halt
     halt_flag_clr <= run_cpu or mem_run_cpu;
-    halt_flag_set <= halt_cpu or halt_rst or dbg_swbrk or mem_halt_cpu or reduce_or(brk_halt);
+    halt_flag_set <= halt_cpu or halt_rst or dbg_swbrk or mem_halt_cpu or or brk_halt;
 
     R_1c_2c_e : process (dbg_clk, dbg_rst)
     begin
@@ -792,8 +792,8 @@ begin
   P7_MEMORY_CONTROL : block
   begin
     -- 7.1.              Control Memory bursts
-    mem_burst_start <= mem_start and reduce_or(mem_cnt_s);
-    mem_burst_end   <= (dbg_wr or dbg_rd_rdy) and not reduce_or(mem_cnt_s);
+    mem_burst_start <= mem_start and or mem_cnt_s;
+    mem_burst_end   <= (dbg_wr or dbg_rd_rdy) and not (or mem_cnt_s);
 
     -- 7.1.1.    Detect when burst is on going
     R_1c_2c_e : process (dbg_clk, dbg_rst)
@@ -824,7 +824,7 @@ begin
     end process R1_1_e;
 
     -- 7.1.4.    Combine single and burst memory start of sequence 
-    mem_seq_start <= (mem_start and not reduce_or(mem_cnt_s)) or mem_startb;
+    mem_seq_start <= (mem_start and not (or mem_cnt_s)) or mem_startb;
 
     -- 7.2.              Memory access state machine
     -- 7.2.1.    State machine definition 

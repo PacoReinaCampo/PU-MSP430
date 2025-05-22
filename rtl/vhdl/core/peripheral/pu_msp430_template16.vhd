@@ -173,9 +173,9 @@ begin
     end process address_decode;
 
     -- 1.4.      Read/Write probes
-    reg_write_p <= reduce_or(per_we) and reg_sel_p16;
+    reg_write_p <= or per_we and reg_sel_p16;
 
-    reg_read_p16 <= not reduce_or(per_we) and reg_sel_p16;
+    reg_read_p16 <= not (or per_we) and reg_sel_p16;
 
     -- 1.5.      Read/Write vectors
     reg_wr_p <= reg_dec_p16 and (0 to DEC_SZ_P16 - 1 => reg_write_p);
