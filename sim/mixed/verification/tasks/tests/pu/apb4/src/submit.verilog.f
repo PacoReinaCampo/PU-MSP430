@@ -56,9 +56,9 @@
 // CPU
 //=============================================================================
 
-../../../../../../../../rtl/verilog/core/main/pu_msp430_frontend.sv
+../../../../../../../../rtl/verilog/core/decode/pu_msp430_frontend.sv
 ../../../../../../../../rtl/verilog/core/main/pu_msp430_sfr.sv
-../../../../../../../../rtl/verilog/core/main/pu_msp430_ta.sv
-../../../../../../../../rtl/verilog/core/main/pu_msp430_watchdog.sv
+../../../../../../../../rtl/verilog/core/peripheral/pu_msp430_ta.sv
+../../../../../../../../rtl/verilog/core/peripheral/pu_msp430_watchdog.sv
 
 ../../../../../../../../rtl/verilog/module/pu_msp430_core.sv

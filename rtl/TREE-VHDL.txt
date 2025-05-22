@@ -1,5 +1,19 @@
 vhdl
 ├── core
+│   ├── debug
+│   │   ├── pu_msp430_dbg_hwbrk.vhd
+│   │   ├── pu_msp430_dbg_i2c.vhd
+│   │   ├── pu_msp430_dbg_uart.vhd
+│   │   └── pu_msp430_dbg.vhd
+│   ├── decode
+│   │   ├── msp430_interrupt.vhd
+│   │   ├── msp430_state_machine.vhd
+│   │   └── pu_msp430_frontend.vhd
+│   ├── execute
+│   │   ├── pu_msp430_alu.vhd
+│   │   ├── pu_msp430_execution.vhd
+│   │   ├── pu_msp430_multiplier.vhd
+│   │   └── pu_msp430_register_file.vhd
 │   ├── fuse
 │   │   ├── pu_msp430_and_gate.vhd
 │   │   ├── pu_msp430_clock_gate.vhd
@@ -10,27 +24,17 @@ vhdl
 │   │   └── pu_msp430_wakeup_cell.vhd
 │   ├── main
 │   │   ├── pu_msp430_bcm.vhd
-│   │   ├── pu_msp430_dac.vhd
-│   │   ├── pu_msp430_dbg.vhd
-│   │   ├── pu_msp430_execution.vhd
-│   │   ├── pu_msp430_frontend.vhd
-│   │   ├── pu_msp430_gpio.vhd
-│   │   ├── pu_msp430_memory.vhd
-│   │   ├── pu_msp430_multiplier.vhd
-│   │   ├── pu_msp430_sfr.vhd
-│   │   ├── pu_msp430_ta.vhd
-│   │   ├── pu_msp430_template08.vhd
-│   │   ├── pu_msp430_template16.vhd
-│   │   ├── pu_msp430_uart.vhd
-│   │   └── pu_msp430_watchdog.vhd
-│   └── omsp
-│       ├── msp430_interrupt.vhd
-│       ├── msp430_state_machine.vhd
-│       ├── pu_msp430_alu.vhd
-│       ├── pu_msp430_dbg_hwbrk.vhd
-│       ├── pu_msp430_dbg_i2c.vhd
-│       ├── pu_msp430_dbg_uart.vhd
-│       └── pu_msp430_register_file.vhd
+│   │   └── pu_msp430_sfr.vhd
+│   ├── memory
+│   │   └── pu_msp430_memory.vhd
+│   └── peripheral
+│       ├── pu_msp430_dac.vhd
+│       ├── pu_msp430_gpio.vhd
+│       ├── pu_msp430_ta.vhd
+│       ├── pu_msp430_template08.vhd
+│       ├── pu_msp430_template16.vhd
+│       ├── pu_msp430_uart.vhd
+│       └── pu_msp430_watchdog.vhd
 ├── module
 │   ├── pu_msp430_core.vhd
 │   ├── pu_msp430_pu0.vhd
@@ -41,4 +45,4 @@ vhdl
     ├── pu_msp430_io_cell.vhd
     └── pu_msp430_soc.vhd
 
-7 directories, 34 files
+11 directories, 34 files

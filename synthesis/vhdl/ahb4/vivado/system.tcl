@@ -56,9 +56,9 @@ read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_alu.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_dbg_hwbrk.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_dbg_i2c.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_dbg_uart.vhd
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_interrupt.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/decode/msp430_interrupt.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_register_file.vhd
-read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/omsp/msp430_state_machine.vhd
+read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/decode/msp430_state_machine.vhd
 
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_bcm.vhd
 read_vhdl -vhdl2008 ../../../../rtl/vhdl/core/main/msp430_dbg.vhd
