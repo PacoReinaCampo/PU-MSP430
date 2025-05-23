@@ -1,10 +1,5 @@
 vhdl
 ├── core
-│   ├── debug
-│   │   ├── pu_msp430_dbg_hwbrk.vhd
-│   │   ├── pu_msp430_dbg_i2c.vhd
-│   │   ├── pu_msp430_dbg_uart.vhd
-│   │   └── pu_msp430_dbg.vhd
 │   ├── decode
 │   │   ├── msp430_interrupt.vhd
 │   │   ├── msp430_state_machine.vhd
@@ -25,20 +20,25 @@ vhdl
 │   ├── main
 │   │   ├── pu_msp430_bcm.vhd
 │   │   └── pu_msp430_sfr.vhd
-│   ├── memory
-│   │   └── pu_msp430_memory.vhd
-│   └── peripheral
-│       ├── pu_msp430_dac.vhd
-│       ├── pu_msp430_gpio.vhd
-│       ├── pu_msp430_ta.vhd
-│       ├── pu_msp430_template08.vhd
-│       ├── pu_msp430_template16.vhd
-│       ├── pu_msp430_uart.vhd
-│       └── pu_msp430_watchdog.vhd
+│   └── memory
+│       └── pu_msp430_memory.vhd
+├── debug
+│   ├── pu_msp430_dbg_hwbrk.vhd
+│   ├── pu_msp430_dbg_i2c.vhd
+│   ├── pu_msp430_dbg_uart.vhd
+│   └── pu_msp430_dbg.vhd
 ├── module
 │   ├── pu_msp430_core.vhd
 │   ├── pu_msp430_pu0.vhd
 │   └── pu_msp430_pu1.vhd
+├── peripheral
+│   ├── pu_msp430_dac.vhd
+│   ├── pu_msp430_gpio.vhd
+│   ├── pu_msp430_ta.vhd
+│   ├── pu_msp430_template08.vhd
+│   ├── pu_msp430_template16.vhd
+│   ├── pu_msp430_uart.vhd
+│   └── pu_msp430_watchdog.vhd
 ├── pkg
 │   └── pu_msp430_pkg.vhd
 └── pu

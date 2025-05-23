@@ -1,10 +1,5 @@
 verilog
 ├── core
-│   ├── debug
-│   │   ├── pu_msp430_dbg_hwbrk.sv
-│   │   ├── pu_msp430_dbg_i2c.sv
-│   │   ├── pu_msp430_dbg.sv
-│   │   └── pu_msp430_dbg_uart.sv
 │   ├── decode
 │   │   └── pu_msp430_frontend.sv
 │   ├── execute
@@ -23,20 +18,25 @@ verilog
 │   ├── main
 │   │   ├── pu_msp430_bcm.sv
 │   │   └── pu_msp430_sfr.sv
-│   ├── memory
-│   │   └── pu_msp430_memory.sv
-│   └── peripheral
-│       ├── pu_msp430_dac.sv
-│       ├── pu_msp430_gpio.sv
-│       ├── pu_msp430_ta.sv
-│       ├── pu_msp430_template08.sv
-│       ├── pu_msp430_template16.sv
-│       ├── pu_msp430_uart.sv
-│       └── pu_msp430_watchdog.sv
+│   └── memory
+│       └── pu_msp430_memory.sv
+├── debug
+│   ├── pu_msp430_dbg_hwbrk.sv
+│   ├── pu_msp430_dbg_i2c.sv
+│   ├── pu_msp430_dbg.sv
+│   └── pu_msp430_dbg_uart.sv
 ├── module
 │   ├── pu_msp430_core.sv
 │   ├── pu_msp430_pu0.sv
 │   └── pu_msp430_pu1.sv
+├── peripheral
+│   ├── pu_msp430_dac.sv
+│   ├── pu_msp430_gpio.sv
+│   ├── pu_msp430_ta.sv
+│   ├── pu_msp430_template08.sv
+│   ├── pu_msp430_template16.sv
+│   ├── pu_msp430_uart.sv
+│   └── pu_msp430_watchdog.sv
 ├── pkg
 │   ├── pu_msp430_defines.sv
 │   ├── pu_msp430_timescale.sv
